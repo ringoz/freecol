@@ -32,7 +32,6 @@
     <property name="miglayout-core.jar"
               value="jars/miglayout-core-5.0.jar"/>
     <property name="cli.jar" value="jars/commons-cli-1.4.jar"/>
-    <property name="cortado.jar" value="jars/cortado-0.6.0.jar"/>
 
 
     <path id="libraries.classpath">
@@ -41,8 +40,6 @@
         <pathelement location="${basedir}/${miglayout-core.jar}"/>
         <!-- Command line processor -->
         <pathelement location="${basedir}/${cli.jar}"/>
-        <!-- Cortado Video Applet -->
-        <pathelement location="${basedir}/${cortado.jar}"/>
         <!-- JOgg/JOrbis libraries -->
         <pathelement location="${basedir}/jars/jogg-0.0.17.jar"/>
         <pathelement location="${basedir}/jars/jorbis-0.0.17.jar"/>
