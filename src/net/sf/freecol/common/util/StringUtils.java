@@ -178,6 +178,7 @@ public class StringUtils {
      * @param width The text width maximum.
      * @return A list of split text.
      */
+    @net.ringoz.GwtIncompatible
     public static List<String> splitText(String text, String delim,
                                          FontMetrics fontMetrics, int width) {
         List<String> result = new ArrayList<>();

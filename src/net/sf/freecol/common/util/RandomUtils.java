@@ -57,7 +57,9 @@ public class RandomUtils {
         }
 
         private void refill() {
-            this.cache = this.random.ints(this.size, 0, this.range).toArray();
+            this.cache = new int[this.size];
+            for (int i = 0; i != this.size; ++i)
+                this.cache[i] = this.random.nextInt(this.range);
             this.index = 0;
             RandomUtils.logArray(logger,
                 logMe + "/" + String.valueOf(generation), this.cache);
@@ -121,7 +123,9 @@ public class RandomUtils {
      */
     public static int[] randomInts(Logger logger, String logMe, Random random,
                                    int range, int n) {
-        int[] ret = random.ints(n, 0, range).toArray();
+        int[] ret = new int[n];
+        for (int i = 0; i != n; ++i)
+            ret[i] = random.nextInt(range);
         logArray(logger, logMe, ret);
         return ret;
     }

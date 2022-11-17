@@ -330,6 +330,7 @@ public class Utils {
      * @param warning If non-null, log this warning message on interrupt,
      *     otherwise propagate the interrupt.
      */
+    @net.ringoz.GwtIncompatible
     public static void delay(long ms, String warning) {
         try {
             TimeUnit.MILLISECONDS.sleep(ms);
@@ -377,6 +378,7 @@ public class Utils {
      * @return A screen device, or null if none available
      *     (as in headless mode).
      */
+    @net.ringoz.GwtIncompatible
     public static GraphicsDevice getGoodGraphicsDevice() {
         try {
             return MouseInfo.getPointerInfo().getDevice();
@@ -396,6 +398,7 @@ public class Utils {
      * @param gd The {@code GraphicsDevice} to determine the DPI for.
      * @return The calculated DPI.
      */
+    @net.ringoz.GwtIncompatible
     public static int determineDpi(GraphicsDevice gd) {
         /*
          * getScreenResolution returns the DPI at maximum resolution -- but we might
