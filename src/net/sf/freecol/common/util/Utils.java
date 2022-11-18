@@ -105,10 +105,11 @@ public class Utils {
     public static synchronized String getRandomState(Random random)
         throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        /* @net.ringoz.GwtIncompatible
         try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             oos.writeObject(random);
             oos.flush();
-        }
+        }*/
         byte[] bytes = bos.toByteArray();
         StringBuilder sb = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {
@@ -134,12 +135,13 @@ public class Utils {
             bytes[i] |= (byte) HEX_DIGITS.indexOf(state.charAt(pos++));
         }
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        /* @net.ringoz.GwtIncompatible
         try {
             ObjectInputStream ois = new ObjectInputStream(bis);
             return (Random) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             logger.log(Level.WARNING, "Unable to restore random state.", e);
-        }
+        }*/
         return null;
     }
 
