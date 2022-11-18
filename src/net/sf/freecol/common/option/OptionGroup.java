@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -236,7 +235,7 @@ public class OptionGroup extends AbstractOption<OptionGroup>
             OptionGroup optionGroup = (OptionGroup)option;
             boolean result = true;
             for (Option o : optionGroup.getOptions()) {
-                // @compat 0.11.6
+                /* @net.ringoz.GwtIncompatible @compat 0.11.6
                 // Placement options move to their own group
                 if (o.getId().startsWith("net.sf.freecol.client.gui.panel.")) {
                     if (etc == null) etc = getOptionGroup(ClientOptions.ETC);
@@ -244,7 +243,7 @@ public class OptionGroup extends AbstractOption<OptionGroup>
                     lb.add(o.getId(), " moved to ", ClientOptions.ETC, ".\n");
                     continue;
                 }
-                // end @compat 0.11.6
+                */// end @compat 0.11.6
                 
                 // Merge from the top level, so that the new
                 // option will end up in the group inherited

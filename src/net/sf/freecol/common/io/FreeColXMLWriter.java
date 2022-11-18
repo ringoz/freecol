@@ -266,7 +266,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
                 } catch (IOException ioe) {
                     logger.log(Level.WARNING, "Flush-write fail:" + str, ioe);
                 }
-            } else {
+            } else {/* @net.ringoz.GwtIncompatible
                 StreamSource source = new StreamSource(new StringReader(str));
                 StreamResult result = new StreamResult(this.outputWriter);
                 try {
@@ -274,7 +274,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
                 } catch (TransformerException te) {
                     logger.log(Level.WARNING, "Transform fail:" + str, te);
                 }
-            }
+            */}
 
             try {
                 this.outputWriter.flush();

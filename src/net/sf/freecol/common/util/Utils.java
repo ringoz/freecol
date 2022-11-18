@@ -245,6 +245,7 @@ public class Utils {
      * @param indent If true, set up the transformer to indent.
      * @return A suitable {@code Transformer}.
      */
+    @net.ringoz.GwtIncompatible
     public static Transformer makeTransformer(boolean declaration,
                                               boolean indent) {
         Transformer tf = null;
