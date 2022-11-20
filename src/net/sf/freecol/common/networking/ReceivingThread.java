@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,8 +42,24 @@ final class ReceivingThread extends Thread {
 
     private static final Logger logger = Logger.getLogger(ReceivingThread.class.getName());
 
+    private static abstract class ThreadWork implements Runnable {
+        private final String name;
+
+        ThreadWork(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public void start() {
+            CompletableFuture.runAsync(this);
+        }
+    };
+
     /** A class to handle questions. */
-    private static class QuestionThread extends Thread {
+    private static class QuestionThread extends ThreadWork {
 
         /** The connection to communicate with. */
         private final Connection conn;
@@ -96,7 +113,7 @@ final class ReceivingThread extends Thread {
         }
     };
 
-    private static class UpdateThread extends Thread {
+    private static class UpdateThread extends ThreadWork {
 
         /** The connection to use for I/O. */
         private final Connection conn;
@@ -262,7 +279,7 @@ final class ReceivingThread extends Thread {
      * @param replyId The network reply.
      * @return A new {@code Thread} to do the work, or null if none required.
      */
-    private Thread messageQuestion(final QuestionMessage qm,
+    private ThreadWork messageQuestion(final QuestionMessage qm,
                                    final int replyId) {
         final Message query = qm.getMessage();
         return (query == null) ? null
@@ -277,7 +294,7 @@ final class ReceivingThread extends Thread {
      * @param message The {@code Message} to handle.
      * @return A new {@code Thread} to do the work, or null if none required.
      */
-    private Thread messageUpdate(final Message message) {
+    private ThreadWork messageUpdate(final Message message) {
         if (message == null) return null;
         final String inTag = message.getType();
 
@@ -305,7 +322,7 @@ final class ReceivingThread extends Thread {
         }
 
         // Read the message, optionally create a thread to handle it
-        Thread t = null;
+        ThreadWork t = null;
         switch (tag) {
         case DisconnectMessage.TAG:
             // Do not actually read the message, it might be a fake one

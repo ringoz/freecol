@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -281,10 +282,8 @@ public abstract class AIPlayer extends AIObject {
      * @param runnable The {@code Runnable} work to do.
      */
     protected void invoke(final Runnable runnable) {
-        Thread thread = new Thread(runnable,
-            FreeCol.SERVER_THREAD + "AIPlayer(" + getPlayer().getName() + ")");
-        thread.start();
-        logger.finest("Started " + thread);
+        CompletableFuture.runAsync(runnable);
+        logger.finest("Started " + FreeCol.SERVER_THREAD + "AIPlayer(" + getPlayer().getName() + ")");
     }
 
     // Message.aiHandler support
