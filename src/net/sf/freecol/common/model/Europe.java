@@ -536,6 +536,7 @@ public class Europe extends UnitLocation
      * {@inheritDoc}
      */
     @Override
+    @net.ringoz.GwtIncompatible
     public JLabel getNameAsJlabel() {
         return Utility.localizedLabel(getLocationName(this));
     }

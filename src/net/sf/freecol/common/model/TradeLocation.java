@@ -71,6 +71,7 @@ public interface TradeLocation {
      * @return The {@code JLabel} with the result of
      *     {@link #getLocationName(TradeLocation)}
      */
+    @net.ringoz.GwtIncompatible
     public default JLabel getNameAsJlabel() {
         return new JLabel(getLocationName(this));
     }
