@@ -779,7 +779,7 @@ public class Colony extends Settlement implements TradeLocation {
                                                                  Class<T> returnClass) {
         WorkLocation wl = getWorkLocationWithAbility(ability);
         try {
-            if (wl != null) return returnClass.cast(wl);
+            if (wl != null) return net.ringoz.GwtCompat.class_cast(returnClass, wl);
         } catch (ClassCastException cce) {};
         return null;
     }
@@ -807,7 +807,7 @@ public class Colony extends Settlement implements TradeLocation {
     public <T extends WorkLocation> T getWorkLocationWithModifier(String modifier,
                                                                   Class<T> returnClass) {
         WorkLocation wl = getWorkLocationWithModifier(modifier);
-        if (wl != null) try { return returnClass.cast(wl); } catch (ClassCastException cce) {}
+        if (wl != null) try { return net.ringoz.GwtCompat.class_cast(returnClass, wl); } catch (ClassCastException cce) {}
         return null;
     }
 

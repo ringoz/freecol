@@ -193,7 +193,7 @@ public class StringTemplate extends FreeColObject {
                                                         Class<T> returnClass) {
         setDefaultId(id);
         try {
-            return returnClass.cast(this);
+            return net.ringoz.GwtCompat.class_cast(returnClass, this);
         } catch (ClassCastException cce) {
             logger.log(Level.WARNING, "Invalid class "
                 + this.getClass() + " referenced.", cce);

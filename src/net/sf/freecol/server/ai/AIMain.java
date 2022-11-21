@@ -267,7 +267,7 @@ public class AIMain extends FreeColObject
     public <T extends AIObject> T getAIObject(String id, Class<T> returnClass) {
         AIObject aio = getAIObject(id);
         try {
-            return returnClass.cast(aio);
+            return net.ringoz.GwtCompat.class_cast(returnClass, aio);
         } catch (ClassCastException e) {
             return null;
         }

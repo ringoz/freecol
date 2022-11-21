@@ -445,7 +445,7 @@ public abstract class Message {
         if (index >= getChildCount()) return (T)null;
         FreeColObject fco = getChildren().get(index);
         try {
-            return returnClass.cast(fco);
+            return net.ringoz.GwtCompat.class_cast(returnClass, fco);
         } catch (ClassCastException cce) {
             logger.log(Level.WARNING, "Cast fail", cce);
             return null;
@@ -463,7 +463,7 @@ public abstract class Message {
         List<T> ret = new ArrayList<>();
         for (FreeColObject fco : getChildren()) {
             try {
-                ret.add(returnClass.cast(fco));
+                ret.add(net.ringoz.GwtCompat.class_cast(returnClass, fco));
             } catch (ClassCastException cce) {}
         }
         return ret;

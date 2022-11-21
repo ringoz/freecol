@@ -422,7 +422,7 @@ public class Introspector {
                                      Class<T> returnClass)
         throws IllegalAccessException, InvocationTargetException,
                NoSuchMethodException {
-        return returnClass.cast(object.getClass().getMethod(methodName)
+        return net.ringoz.GwtCompat.class_cast(returnClass, object.getClass().getMethod(methodName)
             .invoke(object));
     }
 

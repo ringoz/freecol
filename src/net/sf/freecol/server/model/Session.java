@@ -239,7 +239,7 @@ public abstract class Session {
             }
             ts = null;
         }
-        return (ts == null) ? null : type.cast(ts);
+        return (ts == null) ? null : net.ringoz.GwtCompat.class_cast(type, ts);
     }
 }
 

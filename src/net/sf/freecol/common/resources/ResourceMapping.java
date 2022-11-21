@@ -327,7 +327,7 @@ public final class ResourceMapping {
                         + key + "\". The key should have started with: \"" + requiredKeyPrefix + "\".");
                 return false;
             }
-            resources.put(key, clazz.cast(resource));
+            resources.put(key, net.ringoz.GwtCompat.class_cast(clazz, resource));
             return true;
         }
     }

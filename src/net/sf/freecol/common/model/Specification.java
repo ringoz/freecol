@@ -864,7 +864,7 @@ public final class Specification implements OptionContainer {
     private <T extends FreeColSpecObjectType> T getType(String id,
                                                         Class<T> returnClass) {
         FreeColSpecObjectType ret = getType(id);
-        return (ret == null) ? null : returnClass.cast(ret);
+        return (ret == null) ? null : net.ringoz.GwtCompat.class_cast(returnClass, ret);
     }
 
     /**
@@ -1022,7 +1022,7 @@ public final class Specification implements OptionContainer {
         } else {
             AbstractOption op = this.allOptions.get(id);
             try {
-                return returnClass.cast(op);
+                return net.ringoz.GwtCompat.class_cast(returnClass, op);
             } catch (ClassCastException cce) {
                 throw new RuntimeException("Not a " + returnClass.getName()
                     + ": " + id, cce);
@@ -2070,7 +2070,7 @@ public final class Specification implements OptionContainer {
         return transform(allTypes.values(),
                          type -> resultType.isInstance(type)
                              && any(abilities, a -> type.hasAbility(a)),
-                         type -> resultType.cast(type));
+                         type -> net.ringoz.GwtCompat.class_cast(resultType, type));
     }
 
     /**
@@ -2088,7 +2088,7 @@ public final class Specification implements OptionContainer {
         return transform(allTypes.values(),
                          type -> resultType.isInstance(type)
                              && none(abilities, a -> type.hasAbility(a)),
-                         type -> resultType.cast(type));
+                         type -> net.ringoz.GwtCompat.class_cast(resultType, type));
     }
 
 

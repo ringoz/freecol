@@ -287,7 +287,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
         throws XMLStreamException {
         FreeColObject fco = lookup(game, id);
         try {
-            return returnClass.cast(fco);
+            return net.ringoz.GwtCompat.class_cast(returnClass, fco);
         } catch (ClassCastException cce) {
             throw new XMLStreamException(cce);
         }
@@ -909,7 +909,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
             }
         } else {
             try {
-                ret = returnClass.cast(fco);
+                ret = net.ringoz.GwtCompat.class_cast(returnClass, fco);
             } catch (ClassCastException cce) {
                 throw new XMLStreamException(cce);
             }
@@ -1025,7 +1025,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
                 try {
                     Constructor<T> c = returnClass.getConstructor(AIMain.class,
                                                                   String.class);
-                    ret = returnClass.cast(c.newInstance(aiMain, id));
+                    ret = net.ringoz.GwtCompat.class_cast(returnClass, c.newInstance(aiMain, id));
                     if (required && ret == null) {
                         throw new XMLStreamException("Constructed null "
                             + returnClass.getName() + " for " + id

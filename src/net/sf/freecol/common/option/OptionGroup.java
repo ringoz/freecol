@@ -406,7 +406,7 @@ public class OptionGroup extends AbstractOption<OptionGroup>
             throw new RuntimeException("Missing option: " + id);
         } else {
             try {
-                return returnClass.cast(optionMap.get(id));
+                return net.ringoz.GwtCompat.class_cast(returnClass, optionMap.get(id));
             } catch (ClassCastException cce) {
                 throw new RuntimeException("Not a " + returnClass.getName()
                     + ": " + id, cce);

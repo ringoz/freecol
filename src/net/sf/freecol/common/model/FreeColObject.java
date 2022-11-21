@@ -1115,7 +1115,7 @@ public abstract class FreeColObject
             return (R)null;
         }
         try {
-            return returnClass.cast(other);
+            return net.ringoz.GwtCompat.class_cast(returnClass, other);
         } catch (ClassCastException cce) {}
         return (R)null;
     }

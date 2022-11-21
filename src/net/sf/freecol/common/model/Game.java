@@ -420,7 +420,7 @@ public class Game extends FreeColGameObject {
         Class<T> returnClass) {
         FreeColGameObject fcgo = getFreeColGameObject(id);
         try {
-            return returnClass.cast(fcgo);
+            return net.ringoz.GwtCompat.class_cast(returnClass, fcgo);
         } catch (ClassCastException e) {
             return null;
         }
@@ -540,7 +540,7 @@ public class Game extends FreeColGameObject {
         }
         T t;
         try {
-            t = returnClass.cast(fcgo);
+            t = net.ringoz.GwtCompat.class_cast(returnClass, fcgo);
         } catch (ClassCastException cce) {
             // "Can not happen"
             throw new RuntimeException("Update class clash: " + fcgo.getClass()

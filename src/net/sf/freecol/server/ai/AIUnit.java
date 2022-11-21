@@ -310,7 +310,7 @@ public final class AIUnit extends TransportableAIObject {
      */
     public <T extends Mission> T getMission(Class<T> returnClass) {
         try {
-            return returnClass.cast(this.mission);
+            return net.ringoz.GwtCompat.class_cast(returnClass, this.mission);
         } catch (ClassCastException cce) {
             return null;
         }
