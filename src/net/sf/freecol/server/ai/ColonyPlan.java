@@ -19,6 +19,7 @@
 
 package net.sf.freecol.server.ai;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -108,7 +109,7 @@ public class ColonyPlan {
          */
         @Override
         public String toString() {
-            return String.format("%s (%1.3f * %1.3f / %1.3f = %1.3f)",
+            return MessageFormat.format("{0} ({1} * {2} / {3} = {4})",
                                  type.getSuffix(), weight, support,
                                  difficulty, getValue());
         }

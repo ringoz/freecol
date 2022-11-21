@@ -19,6 +19,7 @@
 
 package net.sf.freecol.common.model;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -270,7 +271,7 @@ public class UnitWas extends ObjectWas implements Comparable<UnitWas> {
             : newLoc.getId();
         GoodsType newWork = unit.getWorkType();
         int newWorkAmount = (newWork == null) ? 0 : getAmount(newLoc, newWork);
-        return String.format("%-30s %-25s -> %-25s",
+        return MessageFormat.format("{0} {1} -> {2}",
             unit.getId() + ":" + unit.getType().getSuffix(),
             locStr + ((work == null || workAmount <= 0) ? "" : "("
                 + Integer.toString(workAmount) + " " + work.getSuffix() + ")"),

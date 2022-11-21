@@ -231,7 +231,6 @@ public abstract class Session {
      * @param key The session key.
      * @return A session of the specified type, or null if not found.
      */
-    @SuppressWarnings("unchecked")
     public static <T extends Session> T lookup(Class<T> type, String key) {
         Session ts = getSession(key);
         if (ts != null && ts.isComplete()) {
@@ -240,7 +239,7 @@ public abstract class Session {
             }
             ts = null;
         }
-        return (ts == null) ? null : (T)ts;
+        return (ts == null) ? null : type.cast(ts);
     }
 }
 

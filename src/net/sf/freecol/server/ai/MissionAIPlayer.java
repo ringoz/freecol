@@ -19,6 +19,7 @@
 
 package net.sf.freecol.server.ai;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -249,7 +250,7 @@ public abstract class MissionAIPlayer extends AIPlayer {
             }
 
             lb.add("\n  @",
-                String.format("%-30s%-10s%-40s%-16s",
+                MessageFormat.format("{0}{1}{2}{3}",
                     chop(u.getLocation().toShortString(), 30),
                     chop(reason, 10),
                     chop(u.toShortString(), 40),
