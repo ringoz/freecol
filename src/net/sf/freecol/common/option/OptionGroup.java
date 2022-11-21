@@ -392,7 +392,7 @@ public class OptionGroup extends AbstractOption<OptionGroup>
         if (id == null) return false;
         Option val = this.optionMap.get(id);
         return (val == null) ? false
-            : returnClass.isAssignableFrom(val.getClass());
+            : net.ringoz.GwtCompat.class_isAssignableFrom(returnClass, val.getClass());
     }
 
     /**

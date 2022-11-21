@@ -309,7 +309,7 @@ public class Game extends FreeColGameObject {
         }
 
         if (game != null
-            && FreeColSpecObject.class.isAssignableFrom(returnClass)) {
+            && net.ringoz.GwtCompat.class_isAssignableFrom(FreeColSpecObject.class, returnClass)) {
             try {
                 return Introspector.instantiate(returnClass,
                     new Class[] { Specification.class },

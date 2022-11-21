@@ -1006,7 +1006,7 @@ public final class Specification implements OptionContainer {
         if (id == null) return false;
         AbstractOption val = this.allOptions.get(id);
         return (val == null) ? false
-            : returnClass.isAssignableFrom(val.getClass());
+            : net.ringoz.GwtCompat.class_isAssignableFrom(returnClass, val.getClass());
     }
 
     /**

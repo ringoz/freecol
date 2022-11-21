@@ -108,7 +108,7 @@ public class ClaimLandMessage extends AttributeMessage {
             .getFreeColObjectClassByName(FreeColObject.getIdTypeByName(claimantId));
         Unit unit = null;
         Settlement settlement = null;
-        if (Unit.class.isAssignableFrom(c)) {
+        if (net.ringoz.GwtCompat.class_isAssignableFrom(Unit.class, c)) {
             unit = serverPlayer.getOurFreeColGameObject(claimantId, Unit.class);
             if (unit.getTile() != tile) {
                 return serverPlayer.clientError("Unit not at tile: " + tileId);
@@ -123,7 +123,7 @@ public class ClaimLandMessage extends AttributeMessage {
                     }
                 }
             }
-        } else if (Settlement.class.isAssignableFrom(c)) {
+        } else if (net.ringoz.GwtCompat.class_isAssignableFrom(Settlement.class, c)) {
             settlement = serverPlayer.getOurFreeColGameObject(claimantId,
                                                         Settlement.class);
             if (settlement.getOwner().isEuropean()
