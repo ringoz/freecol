@@ -39,6 +39,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Option for selecting an audio mixer.
  */
+@net.ringoz.GwtIncompatible
 public class AudioMixerOption extends AbstractOption<AudioMixerOption.MixerWrapper> {
 
     private static Logger logger = Logger.getLogger(AudioMixerOption.class.getName());

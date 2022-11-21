@@ -246,10 +246,10 @@ public abstract class AbstractOption<T> extends FreeColSpecObject
         } else if (AbstractUnitOption.TAG.equals(tag)) {
             option = new AbstractUnitOption(spec);
 
-        } else if (AudioMixerOption.TAG.equals(tag)) {
+        /* @net.ringoz.GwtIncompatible } else if (AudioMixerOption.TAG.equals(tag)) {
             option = new AudioMixerOption(spec);
 
-        } else if (BooleanOption.TAG.equals(tag)) {
+        */} else if (BooleanOption.TAG.equals(tag)) {
             option = new BooleanOption(spec);
 
         } else if (FileOption.TAG.equals(tag)) {

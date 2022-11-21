@@ -150,6 +150,7 @@ public class LanguageOption extends AbstractOption<LanguageOption.Language> {
         /**
          * {@inheritDoc}
          */
+        @net.ringoz.GwtIncompatible
         @Override
         public String toString() {
             if (Messages.AUTOMATIC.equals(getKey())) {
