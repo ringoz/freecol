@@ -76,6 +76,7 @@ public class OSUtils {
      *
      * @param url The URL to launch
      */
+    @net.ringoz.GwtIncompatible
     final public static void launchBrowser(String url) {
         // Use Desktop Class first
         try {

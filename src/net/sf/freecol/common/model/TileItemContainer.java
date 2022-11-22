@@ -213,7 +213,7 @@ public class TileItemContainer extends FreeColGameObject {
      */
     public final <T extends TileItem> void removeAll(Class<T> c) {
         synchronized (tileItems) {
-            removeInPlace(tileItems, ti -> c.isInstance(ti));
+            removeInPlace(tileItems, ti -> net.ringoz.GwtCompat.class_isInstance(c, ti));
         }
     }
 

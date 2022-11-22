@@ -2068,7 +2068,7 @@ public final class Specification implements OptionContainer {
                       getTypesWithAbility(Class<T> resultType,
                                           String... abilities) {
         return transform(allTypes.values(),
-                         type -> resultType.isInstance(type)
+                         type -> net.ringoz.GwtCompat.class_isInstance(resultType, type)
                              && any(abilities, a -> type.hasAbility(a)),
                          type -> net.ringoz.GwtCompat.class_cast(resultType, type));
     }
@@ -2086,7 +2086,7 @@ public final class Specification implements OptionContainer {
                       getTypesWithoutAbility(Class<T> resultType,
                                              String... abilities) {
         return transform(allTypes.values(),
-                         type -> resultType.isInstance(type)
+                         type -> net.ringoz.GwtCompat.class_isInstance(resultType, type)
                              && none(abilities, a -> type.hasAbility(a)),
                          type -> net.ringoz.GwtCompat.class_cast(resultType, type));
     }

@@ -604,6 +604,7 @@ public final class UnitType extends BuildableType implements Consumer {
         return Colony.NoBuildReason.NONE;
     }
 
+    @net.ringoz.GwtIncompatible
     @Override
     public int getMinimumIndex(Colony colony, JList<BuildableType> buildQueueList, int UNABLE_TO_BUILD) {
         ListModel<BuildableType> buildQueue = buildQueueList.getModel();
@@ -616,6 +617,7 @@ public final class UnitType extends BuildableType implements Consumer {
         return UNABLE_TO_BUILD;
     }
 
+    @net.ringoz.GwtIncompatible
     @Override
     public int getMaximumIndex(Colony colony, JList<BuildableType> buildQueueList, int UNABLE_TO_BUILD) {
         ListModel<BuildableType> buildQueue = buildQueueList.getModel();

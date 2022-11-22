@@ -365,6 +365,7 @@ public class FreeColDataFile {
      * @param extension The file extension to filter on.
      * @return File filters for the extension.
      */
+    @net.ringoz.GwtIncompatible
     public static FileFilter getFileFilter(String extension) {
         String s = Messages.message("filter." + extension);
         return new FileNameExtensionFilter(s, extension);

@@ -799,6 +799,7 @@ public class FreeColDirectories {
      *
      * @return A string of the log file contents, or null on error.
      */
+    @net.ringoz.GwtIncompatible
     public static String getLogFileContents() {
         return getUTF8Contents(new File(getLogFilePath()));
     }

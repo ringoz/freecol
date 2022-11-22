@@ -169,6 +169,7 @@ public class Utils {
      * @param file The {@code File} to query.
      * @return The contents string, or null on error.
      */
+    @net.ringoz.GwtIncompatible
     public static String getUTF8Contents(File file) {
         String ret = null;
         Reader reader = getFileUTF8Reader(file);
