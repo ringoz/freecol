@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.FileInputStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.List;
@@ -157,7 +157,7 @@ public class Messages {
             // attempt to read grammatical rules
             File cldr = FreeColDirectories.getI18nPluralsFile();
             if (cldr.exists()) {
-                try (InputStream in = Files.newInputStream(cldr.toPath())) {
+                try (InputStream in = new FileInputStream(cldr)) {
                     NumberRules.load(in);
                 } catch (IOException|XMLStreamException e) {
                     System.err.println("Failed to read CLDR rules: "
@@ -175,7 +175,7 @@ public class Messages {
 
         for (File f : FreeColDirectories.getI18nMessageFileList(locale)) {
             if (!f.canRead()) continue;
-            try (InputStream in = Files.newInputStream(f.toPath())) {
+            try (InputStream in = new FileInputStream(f)) {
                 loadMessages(in);
             } catch (IOException ioe) {
                 System.err.println("Failed to load messages from "

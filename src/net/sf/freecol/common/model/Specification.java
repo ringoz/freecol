@@ -34,7 +34,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -2176,7 +2176,7 @@ public final class Specification implements OptionContainer {
         if (compareVersion("0.85") > 0) return false;
 
         File rolf = FreeColDirectories.getCompatibilityFile(ROLES_COMPAT_FILE_NAME);
-        try (InputStream fis = Files.newInputStream(rolf.toPath())) {
+        try (InputStream fis = new FileInputStream(rolf)) {
             load(fis);
         } catch (IOException|XMLStreamException e) {
             logger.log(Level.WARNING, "Failed to load remedial roles.", e);
@@ -2201,7 +2201,7 @@ public final class Specification implements OptionContainer {
         UnitChangeType enter = find(unitChangeTypeList,
             matchKeyEquals(UnitChangeType.ENTER_COLONY, UnitChangeType::getId));
         File uctf = FreeColDirectories.getCompatibilityFile(UNIT_CHANGE_TYPES_COMPAT_FILE_NAME);
-        try (InputStream fis = Files.newInputStream(uctf.toPath())) {
+        try (InputStream fis = new FileInputStream(uctf)) {
             load(fis);
         } catch (IOException|XMLStreamException e) {
             logger.log(Level.WARNING, "Failed to load unit changes.", e);

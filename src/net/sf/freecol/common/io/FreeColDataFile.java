@@ -29,8 +29,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -299,7 +298,7 @@ public class FreeColDataFile {
         }
 
         try {
-            final Path filePath = new File(file, name).toPath();
+            final File filePath = new File(file, name);
             
             /*
              * Using LinkedHashMap to ensure we keep the variations in order.
@@ -307,9 +306,9 @@ public class FreeColDataFile {
             final Map<URI, List<URI>> result = new LinkedHashMap<>();
             result.put(null, findFilesWithVariationOrAlternativeSizeAsUri(filePath, false));
             
-            final List<Path> variations = findFilesWithVariationOrAlternativeSize(filePath, true);
-            for (Path variationPath : variations) {
-                result.put(variationPath.toUri(), findFilesWithVariationOrAlternativeSizeAsUri(variationPath, false));
+            final List<File> variations = findFilesWithVariationOrAlternativeSize(filePath, true);
+            for (File variationPath : variations) {
+                result.put(variationPath.toURI(), findFilesWithVariationOrAlternativeSizeAsUri(variationPath, false));
             }
             
             return result;
@@ -320,19 +319,19 @@ public class FreeColDataFile {
         }
     }
 
-    private List<URI> findFilesWithVariationOrAlternativeSizeAsUri(final Path filePath, boolean findVariation) throws IOException {
+    private List<URI> findFilesWithVariationOrAlternativeSizeAsUri(final File filePath, boolean findVariation) throws IOException {
         return findFilesWithVariationOrAlternativeSize(filePath, findVariation)
                 .stream()
-                .map(p -> p.toUri())
+                .map(p -> p.toURI())
                 .collect(Collectors.toList());
     }
     
-    private List<Path> findFilesWithVariationOrAlternativeSize(final Path filePath, boolean findVariation) throws IOException {
+    private List<File> findFilesWithVariationOrAlternativeSize(final File filePath, boolean findVariation) throws IOException {
         final String variationFileRegex = "[0-9][0-9]?";
         final String sizeFileRegex = "\\.size[0-9][0-9]*";
         
         final String regex = (findVariation) ? variationFileRegex : sizeFileRegex;       
-        final String resourceFilename = filePath.getFileName().toString();
+        final String resourceFilename = filePath.getPath();
         String prefix = resourceFilename.substring(0, resourceFilename.lastIndexOf("."));
         if (findVariation) {
             prefix = prefix.replaceAll("[0-9]*$", "");
@@ -340,9 +339,9 @@ public class FreeColDataFile {
         final String suffix = resourceFilename.substring(resourceFilename.lastIndexOf("."));
         final String completeRegex = Pattern.quote(prefix) + regex + Pattern.quote(suffix);
         
-        final List<Path> paths = Files.list(filePath.getParent())
+        final List<File> paths = Arrays.stream(new File(filePath.getParent()).listFiles())
                 .sorted()
-                .filter(p -> p.getFileName().toString().matches(completeRegex) && (!findVariation || !p.equals(filePath)))
+                .filter(p -> p.getPath().matches(completeRegex) && (!findVariation || !p.equals(filePath)))
                 .collect(Collectors.toList());
         
         return paths;

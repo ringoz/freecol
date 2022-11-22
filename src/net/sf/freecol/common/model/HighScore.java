@@ -23,7 +23,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -432,7 +433,7 @@ public class HighScore extends FreeColObject {
             return scores;
         }
         // Do not crash on high score fail
-        try (InputStream fis = Files.newInputStream(hsf.toPath())) {
+        try (InputStream fis = new FileInputStream(hsf)) {
             try (FreeColXMLReader xr = new FreeColXMLReader(fis)) {
                 xr.nextTag();
 
@@ -464,7 +465,7 @@ public class HighScore extends FreeColObject {
         tidyScores(scores);
 
         File hsf = FreeColDirectories.getHighScoreFile();
-        try (OutputStream fos = Files.newOutputStream(hsf.toPath())) {
+        try (OutputStream fos = new FileOutputStream(hsf)) {
             try (FreeColXMLWriter xw = new FreeColXMLWriter(fos,
                     FreeColXMLWriter.WriteScope.toSave(), true)) {
                 xw.writeStartDocument("UTF-8", "1.0");

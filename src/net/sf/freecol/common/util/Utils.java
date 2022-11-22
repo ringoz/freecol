@@ -19,8 +19,8 @@
 
 package net.sf.freecol.common.util;
 
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
@@ -42,7 +42,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -155,7 +154,7 @@ public class Utils {
      */
     public static Reader getFileUTF8Reader(File file) {
         try {
-            InputStream fis = Files.newInputStream(file.toPath());
+            InputStream fis = new FileInputStream(file);
             return new InputStreamReader(fis, StandardCharsets.UTF_8);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "No input stream for " + file.getPath(),
@@ -211,9 +210,7 @@ public class Utils {
      */
     private static Writer getF8W(File file, boolean append) {
         try {
-            OutputStream fos = (append)
-                ? Files.newOutputStream(file.toPath(), CREATE, APPEND)
-                : Files.newOutputStream(file.toPath());
+            OutputStream fos = new FileOutputStream(file, append);
             return getUTF8Writer(fos);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "No output stream for " + file.getName(),
@@ -281,6 +278,10 @@ public class Utils {
      */
     public static void deleteFile(File file) {
         try {
+            if (file.isDirectory()) {
+                for (File f : file.listFiles())
+                    deleteFile(f);
+            }
             if (!file.delete()) {
                 logger.warning("Failed to delete: " + file.getPath());
             }

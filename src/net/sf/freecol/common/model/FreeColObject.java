@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.file.Files;
+import java.io.FileOutputStream;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -896,7 +896,7 @@ public abstract class FreeColObject
      * @return True if the save proceeded without error.
      */
     public boolean save(File file, WriteScope scope, boolean pretty) {
-        try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+        try (OutputStream fos = new FileOutputStream(file)) {
             return save(fos, scope, pretty);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Error creating output stream", ioe);

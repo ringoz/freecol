@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -159,7 +159,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
      * @exception XMLStreamException can be thrown while creating the reader.
      */
     public FreeColXMLReader(File file) throws IOException, XMLStreamException {
-        this(Files.newInputStream(file.toPath()));
+        this(new FileInputStream(file));
     }
     
     /**

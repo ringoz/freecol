@@ -21,8 +21,6 @@ package net.sf.freecol.common.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.attribute.PosixFilePermission;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -165,13 +163,6 @@ public class FreeColDirectories {
             || directoryAllPresent(f, MOD_DESCRIPTOR_FILE_NAME,
                                    SPECIFICATION_FILE_NAME);
 
-    /** Posix file mode 0700. */
-    private static final Set<PosixFilePermission> mode0700
-        = makeUnmodifiableSet(PosixFilePermission.OWNER_READ,
-                              PosixFilePermission.OWNER_WRITE,
-                              PosixFilePermission.OWNER_EXECUTE);
-        
-    
     /**
      * The directory containing automatically created save games.  At
      * program start, the path of this directory is based on the path
@@ -296,13 +287,6 @@ public class FreeColDirectories {
             if (dir.isDirectory() && dir.canWrite()) return dir;
         } else {
             if (dir.mkdir()) {
-                try {
-                    Files.setPosixFilePermissions(dir.toPath(), mode0700);
-                } catch (IOException|UnsupportedOperationException ex) {
-                    // Just log, error is not fatal
-                    System.err.println("Failed to change permissions of "
-                        + dir.getPath());
-                }
                 return dir;
             }
         }
@@ -484,7 +468,7 @@ public class FreeColDirectories {
      */
     private static File deriveAutosaveDirectory() {
         if (saveDirectory != null
-            && saveDirectory.toPath().endsWith(AUTOSAVE_DIRECTORY)) {
+            && saveDirectory.getPath().endsWith(AUTOSAVE_DIRECTORY)) {
             // Do not create autosave directories inside autosave
             // directories (BR#3276).  However, having save==autosave
             // is not a good idea either.  Lets see who that next

@@ -22,10 +22,8 @@ package net.sf.freecol.common.debug;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static java.nio.file.StandardOpenOption.*;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
@@ -403,10 +401,10 @@ public class FreeColDebugger {
         if (print == null) {
             String tmp = System.getenv("TMPDIR");
             if (tmp == null) tmp = "/tmp";
-            final Path path = Paths.get(tmp, "freecol.debug");
+            final File path = new File(tmp, "freecol.debug");
             try {
                 OutputStream fos
-                    = Files.newOutputStream(path, CREATE, APPEND);
+                    = new FileOutputStream(path, true);
                 print = new PrintStream(fos, true, "UTF-8");
             } catch (IOException ex) {
                 ; // ignored
