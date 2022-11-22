@@ -292,10 +292,12 @@ public abstract class BuildableType extends FreeColSpecObjectType {
     public abstract NoBuildReason canBeBuiltInColony(Colony colony,
         List<BuildableType> assumeBuilt);
 
+    @net.ringoz.GwtIncompatible        
     public int getMinimumIndex(Colony colony, JList<BuildableType> buildQueueList, int UNABLE_TO_BUILD) {
         return UNABLE_TO_BUILD;
     }
 
+    @net.ringoz.GwtIncompatible        
     public int getMaximumIndex(Colony colony, JList<BuildableType> buildQueueList, int UNABLE_TO_BUILD) {
         return UNABLE_TO_BUILD;
     }

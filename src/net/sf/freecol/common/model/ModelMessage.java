@@ -351,6 +351,7 @@ public class ModelMessage extends StringTemplate {
      * @param player The {@code Player} who will see the result.
      * @return A list of strings and buttons.
      */
+    @net.ringoz.GwtIncompatible
     public List<Object> splitLinks(Player player) {
         final FreeColGameObject source = player.getGame()
             .getMessageSource(this);

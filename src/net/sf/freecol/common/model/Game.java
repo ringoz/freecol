@@ -1435,12 +1435,14 @@ public class Game extends FreeColGameObject {
 
         // Memory
         Utils.garbageCollect();
+        /*@net.ringoz.GwtIncompatible
         long free = Runtime.getRuntime().freeMemory()/(1024*1024);
         long total = Runtime.getRuntime().totalMemory()/(1024*1024);
         long max = Runtime.getRuntime().maxMemory()/(1024*1024);
         stats.put("freeMemory", Long.toString(free));
         stats.put("totalMemory", Long.toString(total));
         stats.put("maxMemory", Long.toString(max));
+        */
 
         // Game objects
         java.util.Map<String, Long> objStats = new HashMap<>();

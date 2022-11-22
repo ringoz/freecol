@@ -606,6 +606,7 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @net.ringoz.GwtIncompatible
     @Override
     public String getLocationImageKey() {
         return ImageLibrary.getSettlementKey(this);

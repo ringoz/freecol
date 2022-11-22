@@ -418,6 +418,7 @@ public class Europe extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @net.ringoz.GwtIncompatible
     @Override
     public String getLocationImageKey() {
         return ImageLibrary.getNationKey(this.getOwner().getNation());

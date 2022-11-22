@@ -2681,6 +2681,7 @@ ok:     while (!openMap.isEmpty()) {
     /**
      * {@inheritDoc}
      */
+    @net.ringoz.GwtIncompatible
     @Override
     public String getLocationImageKey() {
         return ImageLibrary.LOST_CITY_RUMOUR;
