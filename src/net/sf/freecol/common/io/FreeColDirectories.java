@@ -247,6 +247,7 @@ public class FreeColDirectories {
      *
      * @return The user home directory.
      */
+    @net.ringoz.GwtIncompatible
     private static File getUserDefaultDirectory() {
         return FileSystemView.getFileSystemView().getDefaultDirectory();
     }
@@ -333,6 +334,7 @@ public class FreeColDirectories {
      *     XDG directory if it is present or created.
      * @return Null on success, an error message on error.
      */
+    @net.ringoz.GwtIncompatible
     private static StringTemplate getXDGDirs(File[] dirs) {
         File home = getUserDefaultDirectory();
         if (home == null) return badHome();
@@ -374,6 +376,7 @@ public class FreeColDirectories {
      *     MacOSX freecol directories.
      * @return Null on success, an error message on failure.
      */
+    @net.ringoz.GwtIncompatible
     private static StringTemplate getMacOSXDirs(File[] dirs) {
         File home = getUserDefaultDirectory();
         if (home == null) return badHome();
@@ -412,6 +415,7 @@ public class FreeColDirectories {
      *     Windows freecol directories.
      * @return Null on success, an error message on failure.
      */
+    @net.ringoz.GwtIncompatible
     private static StringTemplate getWindowsDirs(File[] dirs) {
         File home = getUserDefaultDirectory();
         if (home == null) return badHome();
@@ -537,6 +541,7 @@ public class FreeColDirectories {
      *
      * @return Null on success, otherwise an error message template.
      */
+    @net.ringoz.GwtIncompatible
     public static synchronized StringTemplate setUserDirectories() {
         // Find the OS-specific directories.
         // Check OSX before XDG because OSX is still unix-like.

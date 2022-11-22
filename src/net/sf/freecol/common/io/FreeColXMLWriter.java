@@ -131,7 +131,8 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
     private final StringWriter stringWriter;
 
     /** An optional transformer to handle indentation. */
-    private final Transformer transformer;
+    @net.ringoz.GwtIncompatible
+    private final Transformer transformer = null;
 
     /** The writer that receives the final output. */
     private final Writer outputWriter;
@@ -203,8 +204,8 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-        this.transformer = (indent) ? Utils.makeTransformer(false, true)
-            : null;
+        /*@net.ringoz.GwtIncompatible this.transformer = (indent) ? Utils.makeTransformer(false, true)
+            : null;*/
         this.writeScope = (scope == null) ? WriteScope.toSave() : scope;
     }
 
@@ -260,13 +261,13 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
         StringBuffer sb = this.stringWriter.getBuffer();
         if (sb.length() > 0) {
             String str = sb.toString();
-            if (this.transformer == null) {
+            /* @net.ringoz.GwtIncompatible if (this.transformer == null)*/ {
                 try {
                     this.outputWriter.write(str);
                 } catch (IOException ioe) {
                     logger.log(Level.WARNING, "Flush-write fail:" + str, ioe);
                 }
-            } else {/* @net.ringoz.GwtIncompatible
+            } /* @net.ringoz.GwtIncompatible else {
                 StreamSource source = new StreamSource(new StringReader(str));
                 StreamResult result = new StreamResult(this.outputWriter);
                 try {
@@ -274,7 +275,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
                 } catch (TransformerException te) {
                     logger.log(Level.WARNING, "Transform fail:" + str, te);
                 }
-            */}
+            }*/
 
             try {
                 this.outputWriter.flush();

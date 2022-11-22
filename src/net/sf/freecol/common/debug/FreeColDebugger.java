@@ -396,6 +396,7 @@ public class FreeColDebugger {
      *
      * @param msg The message to log.
      */
+    @net.ringoz.GwtIncompatible
     public static void debugLog(String msg) {
         PrintStream print = debugStream.get();
         if (print == null) {

@@ -31,7 +31,7 @@ import java.util.Properties;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sf.freecol.client.gui.dialog.MapGeneratorOptionsDialog;
+//import net.sf.freecol.client.gui.dialog.MapGeneratorOptionsDialog;
 
 
 /**

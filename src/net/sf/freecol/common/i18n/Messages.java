@@ -229,9 +229,9 @@ public class Messages {
                 String value = line.substring(index + 1).trim()
                     .replace("\\n", "\n").replace("\\t", "\t");
                 messageBundle.put(key, value);
-                if (key.startsWith("FileChooser.")) {
+                /*@net.ringoz.GwtIncompatible if (key.startsWith("FileChooser.")) {
                     UIManager.put(key, value);
-                }
+                }*/
             }
         }
     }
