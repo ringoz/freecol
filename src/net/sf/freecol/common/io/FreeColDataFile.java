@@ -23,12 +23,12 @@ import static net.sf.freecol.common.util.StringUtils.join;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -118,10 +118,7 @@ public class FreeColDataFile {
      * @exception IOException if an error occurs
      */
     public BufferedInputStream getInputStream(String filename) throws IOException {
-        final URLConnection connection = getURI(filename).toURL()
-            .openConnection();
-        connection.setDefaultUseCaches(false);
-        return new BufferedInputStream(connection.getInputStream());
+        return new BufferedInputStream(new FileInputStream(new File(file, filename)));
     }
 
     /**
