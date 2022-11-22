@@ -149,14 +149,14 @@ public class FreeColDirectories {
      * Public for SaveGameValidator.
      */
     public static final Predicate<File> saveGameFilter = f ->
-        f.isFile() && f.canRead()
+        f.isDirectory() && f.canRead()
             && f.getName().endsWith("." + FreeCol.FREECOL_SAVE_EXTENSION);
 
     /**
      * Predicate to select readable files that look like maps.
      */
     private static final Predicate<File> mapFilter = f ->
-        f.isFile() && f.canRead()
+        f.isDirectory() && f.canRead()
             && f.getName().endsWith("." + FreeCol.FREECOL_MAP_EXTENSION);
 
     /** Predicate to filter suitable candidates to be made into TCs. */

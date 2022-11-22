@@ -65,7 +65,7 @@ public final class SaveDialog extends FreeColDialog<File> {
             fileChooser.setAcceptAllFileFilterUsed(false);
         }
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setFileHidingEnabled(false);
         fileChooser.setSelectedFile(new File(defaultName));
         fileChooser.addActionListener((ActionEvent ae) ->

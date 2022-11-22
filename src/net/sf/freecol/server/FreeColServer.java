@@ -30,19 +30,17 @@ import static net.sf.freecol.common.util.Utils.restoreRandomState;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
 import java.util.function.Predicate;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -859,18 +857,20 @@ public final class FreeColServer {
         // here can lead to a corrupt saved game file (BR#3146).
         // Alas, gc is only advisory, but it is all we have got.
         garbageCollect();
-        try (JarOutputStream fos = new JarOutputStream(Files
-                .newOutputStream(file.toPath()))) {
+        try {
+            FileOutputStream fos;
+            file.mkdir();
+
             if (image != null) {
-                fos.putNextEntry(new JarEntry(FreeColSavegameFile.THUMBNAIL_FILE));
+                fos = new FileOutputStream(new File(file, FreeColSavegameFile.THUMBNAIL_FILE));
                 ImageIO.write(image, "png", fos);
-                fos.closeEntry();
+                fos.close();
             }
 
             if (options != null) {
-                fos.putNextEntry(new JarEntry(FreeColSavegameFile.CLIENT_OPTIONS));
+                fos = new FileOutputStream(new File(file, FreeColSavegameFile.CLIENT_OPTIONS));
                 options.save(fos, null, true);
-                fos.closeEntry();
+                fos.close();
             }
 
             Properties properties = new Properties();
@@ -878,12 +878,12 @@ public final class FreeColServer {
                 Integer.toString(this.serverGame.getMap().getWidth()));
             properties.setProperty("map.height",
                 Integer.toString(this.serverGame.getMap().getHeight()));
-            fos.putNextEntry(new JarEntry(FreeColSavegameFile.SAVEGAME_PROPERTIES));
+            fos = new FileOutputStream(new File(file, FreeColSavegameFile.SAVEGAME_PROPERTIES));
             properties.store(fos, null);
-            fos.closeEntry();
+            fos.close();
 
             // save the actual game data
-            fos.putNextEntry(new JarEntry(FreeColSavegameFile.SAVEGAME_FILE));
+            fos = new FileOutputStream(new File(file, FreeColSavegameFile.SAVEGAME_FILE));
             try (
                 // throws IOException                 
                 FreeColXMLWriter xw = new FreeColXMLWriter(fos,
@@ -924,7 +924,7 @@ public final class FreeColServer {
                 xw.writeEndElement();
                 xw.writeEndDocument();
             }
-            fos.closeEntry();
+            fos.close();
         } catch (XMLStreamException e) {
             throw new IOException("Failed to save (XML): " + file.getName(), e);
         }

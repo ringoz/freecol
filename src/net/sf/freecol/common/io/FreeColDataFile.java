@@ -29,8 +29,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLConnection;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -39,8 +37,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -65,19 +61,11 @@ public class FreeColDataFile {
 
     private static final Logger logger = Logger.getLogger(FreeColDataFile.class.getName());
 
-    protected static final String ZIP_FILE_EXTENSION = "zip";
-
     /** A fake URI scheme for resources delegating to other resources. */
     private static final String resourceScheme = "resource:";
 
     /** The file this object represents. */
     private final File file;
-
-    /**
-     * A prefix string for the jar-entries (only if {@link #file} is
-     * a ZIP-file).
-     */
-    private final String jarDirectory;
 
 
     /**
@@ -91,33 +79,6 @@ public class FreeColDataFile {
             throw new IOException("File " + file.getName() + " does not exist");
         }
         this.file = file;
-        this.jarDirectory = (file.isDirectory()) ? null
-            : findJarDirectory(file);
-    }
-
-    /**
-     * Finds the directory within the zip-file in case the data file
-     * has been renamed.
-     *
-     * @param file The zip-file.
-     * @return The name of the base directory in the zip-file or null on error.
-     */
-    private static String findJarDirectory(File file) {
-        try (
-            JarFile jf = new JarFile(file);
-        ) {
-            final JarEntry entry = jf.entries().nextElement();
-            final String en = entry.getName();
-            final int index = en.lastIndexOf('/');
-            String name = "";
-            if (index > 0) {
-                name = en.substring(0, index + 1);
-            }
-            return name;
-        } catch (IOException ioe) {
-            logger.warning("Failed to create jar file: " + file.getName());
-        }
-        return null;
     }
 
     /**
@@ -136,13 +97,10 @@ public class FreeColDataFile {
                         + name, e);
                     return null;
                 }
-            } else if (file.isDirectory()) {
-                return new File(file, name).toURI();
             } else {
-                return new URI("jar:file", file + "!/" + jarDirectory + name,
-                               null);
+                return new File(file, name).toURI();
             }
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             logger.log(Level.WARNING, "Failed to lookup: " + file + "/" + name,
                        e);
             return null;
@@ -340,18 +298,8 @@ public class FreeColDataFile {
             return Map.of();
         }
 
-        FileSystem fileSystem = null;
         try {
-            final Path filePath;
-            if (file.isDirectory()) {
-                filePath = new File(file, name).toPath();
-            } else {
-                /*
-                 * We can use JarEntry instead, if this solution causes problems. 
-                 */
-                fileSystem = FileSystems.newFileSystem(new URI("jar:file", file.getAbsolutePath(), null), Map.of());
-                filePath = fileSystem.getPath(jarDirectory + name);
-            }
+            final Path filePath = new File(file, name).toPath();
             
             /*
              * Using LinkedHashMap to ensure we keep the variations in order.
@@ -365,15 +313,10 @@ public class FreeColDataFile {
             }
             
             return result;
-        } catch (IOException | URISyntaxException e) {
-            logger.log(Level.WARNING, "Failed to read directory from jar/zip file: " + file + " jarDirectory" + jarDirectory, e);
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "Failed to read directory from jar/zip file: " + file, e);
             return Map.of();
         } finally {
-            if (fileSystem != null) {
-                try {
-                    fileSystem.close();
-                } catch (IOException e) {}
-            }
         }
     }
 

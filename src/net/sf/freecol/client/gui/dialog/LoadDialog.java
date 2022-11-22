@@ -65,7 +65,7 @@ public final class LoadDialog extends FreeColDialog<File> {
         fileChooser.setApproveButtonText(Messages.message("ok"));
         //fileChooser.setCancelButtonText(Messages.message("cancel"));
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setFileHidingEnabled(false);
         fileChooser.addActionListener((ActionEvent ae) -> {
                 final String cmd = ae.getActionCommand();
