@@ -104,6 +104,7 @@ public class HighScore extends FreeColObject {
     }
 
     /** The format to use for dates.  Almost ISO8601. */
+    @net.ringoz.GwtIncompatible
     private final SimpleDateFormat dateFormat
         = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
 
@@ -337,9 +338,11 @@ public class HighScore extends FreeColObject {
      * @return The date string.
      */
     public final String getDateString() {
+        /*@net.ringoz.GwtIncompatible
         DateFormat format = DateFormat
             .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-        return format.format(this.date);
+        return format.format(this.date);*/
+        return this.date.toString();
     }
 
 
