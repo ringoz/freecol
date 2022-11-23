@@ -35,6 +35,7 @@ public abstract class MapTransform {
     /**
      * A panel with information about this transformation.
      */
+    @net.ringoz.GwtIncompatible
     private JPanel descriptionPanel = null;
 
     /**
@@ -53,6 +54,7 @@ public abstract class MapTransform {
      * @return The panel or {@code null} if no panel
      *      has been set.
      */
+    @net.ringoz.GwtIncompatible
     public JPanel getDescriptionPanel() {
         return descriptionPanel;
     }
@@ -63,6 +65,7 @@ public abstract class MapTransform {
      *
      * @param descriptionPanel The panel.
      */
+    @net.ringoz.GwtIncompatible
     public void setDescriptionPanel(JPanel descriptionPanel) {
         this.descriptionPanel = descriptionPanel;
     }
