@@ -239,6 +239,7 @@ public class DebugUtils {
      * @param unit The {@code Unit} to add goods to.
      * @param menu The {@code JPopupMenu} to add the entry to.
      */
+    @net.ringoz.GwtIncompatible
     public static void addGoodsAdditionEntry(final FreeColClient fcc,
                                              final Unit unit, JPopupMenu menu) {
         JMenuItem addg = new JMenuItem("Add goods");
@@ -319,6 +320,7 @@ public class DebugUtils {
      * @param menu The menu to add the change listener to.
      * @param item The menu item whose label should change.
      */
+    @net.ringoz.GwtIncompatible
     public static void addSkipChangeListener(final FreeColClient freeColClient,
                                              JMenu menu, final JMenuItem item) {
         final FreeColServer server = freeColClient.getFreeColServer();
