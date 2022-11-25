@@ -171,6 +171,7 @@ public class ImageUtils {
      * @param c The {@code JComponent} that defines the space.
      * @param insets Optional {@code Insets} to apply.
      */
+    @net.ringoz.GwtIncompatible
     public static void drawTiledImage(BufferedImage image, Graphics g,
                                       JComponent c, Insets insets) {
         int width = c.getWidth();
@@ -213,6 +214,7 @@ public class ImageUtils {
      * @param width The width of the rectangle.
      * @param height The height of the rectangle.
      */
+    @net.ringoz.GwtIncompatible
     public static void fillTexture(Graphics2D g2d, BufferedImage img,
                                    int x, int y, int width, int height) {
         Rectangle anchor = new Rectangle(x, y,
@@ -290,6 +292,7 @@ public class ImageUtils {
      * @param target The offset.
      * @return The faded image.
      */
+    @net.ringoz.GwtIncompatible
     public static BufferedImage fadeImage(Image img, float fade, float target) {
         int w = img.getWidth(null);
         int h = img.getHeight(null);
@@ -313,6 +316,7 @@ public class ImageUtils {
      * @param mask The mask. Only the alpha channel from the mask is used.
      * @return An image with the opacity from the mask.
      */
+    @net.ringoz.GwtIncompatible
     public static BufferedImage imageWithAlphaFromMask(BufferedImage image, BufferedImage mask) {
         final BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g2d = result.createGraphics();

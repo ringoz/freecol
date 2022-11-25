@@ -459,6 +459,7 @@ public final class ImageLibrary {
      * @param text Optional text that the font must be able to represent.
      * @return The {@code Font} found.
      */
+    @net.ringoz.GwtIncompatible
     public Font getScaledFont(String spec, String text) {
         return FontLibrary.getScaledFont(spec, this.scaleFactor, text);
     }
@@ -1755,6 +1756,7 @@ public final class ImageLibrary {
      * @param filled Whether the chip is filled or not
      * @return A chip.
      */
+    @net.ringoz.GwtIncompatible
     private BufferedImage createChip(Graphics2D g, String text,
                                      Color border, Color background,
                                      double amount, Color fill,
@@ -1799,6 +1801,7 @@ public final class ImageLibrary {
      * @param font The {@code Font} to display the text with.
      * @return The {@code BufferedImage} found or created.
      */
+    @net.ringoz.GwtIncompatible
     public BufferedImage getStringImage(Graphics g, String text, Color color,
                                         Font font) {
         if (color == null) {
@@ -1828,6 +1831,7 @@ public final class ImageLibrary {
      * @param fm The {@code FontMetrics} to use with the font.
      * @return The image that was created.
      */
+    @net.ringoz.GwtIncompatible
     private BufferedImage createStringImage(String text, Color color,
                                             Font font, FontMetrics fm) {
         final int width = fm.stringWidth(text) + 4;
