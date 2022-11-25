@@ -21,6 +21,7 @@ package net.sf.freecol.common.resources;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -192,7 +193,7 @@ public class ImageCache {
 
     private void debugPrintCacheSizes() {
         if (DEBUG_PRINT_CACHE_SIZES_TO_STDOUT) {
-            System.out.format("Cache: %4sMB   Low priority cache: %4sMB\n", Math.round(cacheSize / (1024 * 1024)), Math.round(lowPriorityCacheSize / (1024 * 1024)));
+            System.out.print(MessageFormat.format("Cache: {0}MB   Low priority cache: {1}MB\n", Math.round(cacheSize / (1024 * 1024)), Math.round(lowPriorityCacheSize / (1024 * 1024))));
         }
     }
 
