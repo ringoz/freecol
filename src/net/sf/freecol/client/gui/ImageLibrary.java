@@ -551,6 +551,7 @@ public final class ImageLibrary {
         return getUnscaledImage("image.background.ColorCellRenderer");
     }
     
+    @net.ringoz.GwtIncompatible
     public JLabel getCompassRose() {
         return new JLabel(new ImageIcon(getScaledImage("image.skin.compass")));
     }
@@ -560,6 +561,7 @@ public final class ImageLibrary {
      *
      * @return A suitable default {@code Cursor}.
      */
+    @net.ringoz.GwtIncompatible
     public static Cursor getCursor() {
         String key = "image.icon.cursor.go";
         if (ResourceManager.getImageResource(key, false) != null) {
@@ -616,6 +618,7 @@ public final class ImageLibrary {
         return getUnscaledImage("image.background.FreeColList");
     }
 
+    @net.ringoz.GwtIncompatible
     public JLabel getLockLabel() {
         BufferedImage img = this.imageCache.getScaledImage(ICON_LOCK,
             this.scaleFactor * SMALLER_SCALE, false);
@@ -1664,6 +1667,7 @@ public final class ImageLibrary {
      * @param player The observing {@code Player}.
      * @return An alarm chip, or null if none suitable.
      */
+    @net.ringoz.GwtIncompatible
     public BufferedImage getAlarmChip(Graphics2D g, IndianSettlement is,
                                       Player player) {
         if (player == null || !is.hasContacted(player)) return null;
@@ -1697,6 +1701,7 @@ public final class ImageLibrary {
      * @param is The {@code IndianSettlement} to check.
      * @return A chip.
      */
+    @net.ringoz.GwtIncompatible
     public BufferedImage getIndianSettlementChip(Graphics2D g,
                                                  IndianSettlement is) {
         final String key = ResourceManager.getString("indianSettlementChip."
@@ -1714,6 +1719,7 @@ public final class ImageLibrary {
      * @param expert True if the unit is an expert.
      * @return A suitable chip, or null if no mission is present.
      */
+    @net.ringoz.GwtIncompatible
     public BufferedImage getMissionChip(Graphics2D g,
                                         Player owner, boolean expert) {
         final Color background = owner.getNationColor();
@@ -1734,6 +1740,7 @@ public final class ImageLibrary {
      * @param text The text for the chip.
      * @return A suitable chip.
      */
+    @net.ringoz.GwtIncompatible
     public BufferedImage getOccupationIndicatorChip(Graphics2D g,
                                                     Unit unit, String text) {
         final Color background = unit.getOwner().getNationColor();

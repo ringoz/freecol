@@ -316,7 +316,6 @@ public class ImageUtils {
      * @param mask The mask. Only the alpha channel from the mask is used.
      * @return An image with the opacity from the mask.
      */
-    @net.ringoz.GwtIncompatible
     public static BufferedImage imageWithAlphaFromMask(BufferedImage image, BufferedImage mask) {
         final BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
         final Graphics2D g2d = result.createGraphics();
