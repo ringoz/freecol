@@ -548,7 +548,7 @@ public class ClientOptions extends OptionGroup {
 	
     /** Compare by name, initialized at run time. */
     private static AtomicReference<Comparator<Colony>> colonyNameComparator
-        = new AtomicReference<Comparator<Colony>>(null);
+        = new AtomicReference<Comparator<Colony>>(Comparator.comparing(Colony::getName));
     
     /** Compare by descending size then liberty. */
     private static final Comparator<Colony> colonySizeComparator
@@ -709,14 +709,14 @@ public class ClientOptions extends OptionGroup {
         case COLONY_COMPARATOR_SOL:
             return colonySoLComparator;
         case COLONY_COMPARATOR_NAME:
-            Comparator<Colony> cnc = colonyNameComparator.get();
+            return colonyNameComparator.get(); /*@net.ringoz.GwtIncompatible Comparator<Colony> cnc = colonyNameComparator.get();
             if (cnc == null) {
                 // Can not be done statically, must wait for CLI parsing
                 cnc = Comparator.comparing(Colony::getName,
                     Collator.getInstance(FreeCol.getLocale()));
                 colonyNameComparator.set(cnc);
             }
-            return cnc;
+            return cnc;*/
         default:
             throw new RuntimeException("Unknown comparator: " + type);
         }
