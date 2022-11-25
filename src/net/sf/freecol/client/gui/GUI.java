@@ -1446,6 +1446,7 @@ public class GUI extends FreeColClientHolder {
      * @param x The menu x coordinate.
      * @param y The menu y coordinate.
      */
+    @net.ringoz.GwtIncompatible
     public void showPopupMenu(JPopupMenu menu, int x, int y) {}
 
 
@@ -1493,6 +1494,7 @@ public class GUI extends FreeColClientHolder {
      * @param tiles The {@code Tile}s to display.
      * @param colony The enclosing {@code Colony}.
      */
+    @net.ringoz.GwtIncompatible
     public void displayColonyTiles(Graphics2D g2d, Tile[][] tiles,
                                    Colony colony) {}
 
@@ -1744,6 +1746,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param component The {@code Component} to remove.
      */
+    @net.ringoz.GwtIncompatible
     public void removeComponent(Component component) {}
 
     /**
@@ -1753,6 +1756,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param fcd The {@code FreeColDialog} to remove.
      */
+    @net.ringoz.GwtIncompatible
     public void removeDialog(FreeColDialog<?> fcd) {}
 
     /**
@@ -1777,6 +1781,7 @@ public class GUI extends FreeColClientHolder {
      * @param comp The {@code Component} to use.
      * @param d The {@code Dimension} to use as default.
      */
+    @net.ringoz.GwtIncompatible
     public void restoreSavedSize(Component comp, Dimension d) {}
 
     /**
@@ -1879,6 +1884,7 @@ public class GUI extends FreeColClientHolder {
      * @param al An {@code ActionListener} to handle panel button presses.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showColorChooserPanel(ActionListener al) { return null; }
 
     /**
@@ -1894,6 +1900,7 @@ public class GUI extends FreeColClientHolder {
      * @param unitData The {@code UnitData} to display.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showCompactLabourReport(UnitData unitData) { return null; }
     
     /**
@@ -2181,6 +2188,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The chosen parameters.
      */
+    @net.ringoz.GwtIncompatible
     public Parameters showParametersDialog() { return null; }
 
     /**
