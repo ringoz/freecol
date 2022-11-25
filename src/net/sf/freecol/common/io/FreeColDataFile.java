@@ -291,7 +291,7 @@ public class FreeColDataFile {
 
     private Map<URI, List<URI>> findVariationsWithAlternateSizes(String name) {
         if (name.indexOf(".") <= 0) {
-            return Map.of();
+            return net.ringoz.GwtCompat.Map_of();
         }
 
         try {
@@ -311,7 +311,7 @@ public class FreeColDataFile {
             return result;
         } catch (IOException e) {
             logger.log(Level.WARNING, "Failed to read directory from jar/zip file: " + file, e);
-            return Map.of();
+            return net.ringoz.GwtCompat.Map_of();
         } finally {
         }
     }
