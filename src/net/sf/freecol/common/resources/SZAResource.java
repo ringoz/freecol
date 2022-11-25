@@ -40,6 +40,7 @@ public class SZAResource extends Resource {
 
     private static final Float DEFAULT_SCALE = 1f;
     
+    @net.ringoz.GwtIncompatible
     private final HashMap<Float, SimpleZippedAnimation> cache
         = new HashMap<>();
 
@@ -58,6 +59,7 @@ public class SZAResource extends Resource {
     /**
      * Preloading the animation.
      */
+    @net.ringoz.GwtIncompatible
     @Override
     public void preload() {
         synchronized (this) {
@@ -80,6 +82,7 @@ public class SZAResource extends Resource {
      *
      * @return The {@code SimpleZippedAnimation} in it's original size.
      */
+    @net.ringoz.GwtIncompatible
     public SimpleZippedAnimation getSimpleZippedAnimation() {
         return getSimpleZippedAnimation(DEFAULT_SCALE);
     }
@@ -90,6 +93,7 @@ public class SZAResource extends Resource {
      * @param scale The scale of the requested animation.
      * @return The {@code SimpleZippedAnimation}.
      */
+    @net.ringoz.GwtIncompatible
     public synchronized SimpleZippedAnimation getSimpleZippedAnimation(float scale) {
         final SimpleZippedAnimation cached = this.cache.get(scale);
         if (cached != null) return cached;

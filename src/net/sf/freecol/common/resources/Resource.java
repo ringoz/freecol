@@ -104,5 +104,5 @@ public abstract class Resource {
     /**
      * Preload the resource if possible/meaningful.
      */
-    public abstract void preload();
+    public void preload() {}
 }

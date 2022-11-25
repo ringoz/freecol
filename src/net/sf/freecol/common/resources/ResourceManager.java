@@ -137,6 +137,7 @@ public class ResourceManager {
      *
      * @param afterPreloadHasCompleted A {@code Runnable} to run when it says.
      */
+    @net.ringoz.GwtIncompatible
     public static synchronized void startPreloading(Runnable afterPreloadHasCompleted) {
         if (FreeCol.getHeadless()) return; // Do not preload in headless mode
         if (preloadThread != null) return;
@@ -434,6 +435,7 @@ public class ResourceManager {
      *      or {@code null} if there is no animation
      *      identified by that name.
      */
+    @net.ringoz.GwtIncompatible
     public static SimpleZippedAnimation getSZA(final String key) {
         final SZAResource r = getSZAResource(key, true);
         return (r != null) ? r.getSimpleZippedAnimation() : null;
@@ -450,6 +452,7 @@ public class ResourceManager {
      *      or {@code null} if there is no animation
      *      identified by that name.
      */
+    @net.ringoz.GwtIncompatible
     public static SimpleZippedAnimation getSZA(final String key,
                                                final float scale) {
         final SZAResource r = getSZAResource(key, true);

@@ -327,7 +327,7 @@ public final class ImageLibrary {
     }
 
     // Animation handling
-
+    @net.ringoz.GwtIncompatible
     public static SimpleZippedAnimation getSZA(String key, float scale) {
         return (ResourceManager.getSZAResource(key, false) == null) ? null
             : ResourceManager.getSZA(key, scale);
