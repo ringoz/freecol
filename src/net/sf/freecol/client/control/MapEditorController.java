@@ -91,6 +91,7 @@ public final class MapEditorController extends FreeColClientHolder {
      *
      * @return The created {@code BufferedImage}.
      */
+    @net.ringoz.GwtIncompatible
     private BufferedImage createMiniMapThumbNail() {
         MiniMap miniMap = new MiniMap(getFreeColClient());
         miniMap.setTileSize(MiniMap.MAX_TILE_SIZE);
@@ -236,6 +237,7 @@ public final class MapEditorController extends FreeColClientHolder {
      * Opens a dialog where the user should specify the filename
      * and saves the game.
      */
+    @net.ringoz.GwtIncompatible
     public void saveMapEditorGame() {
         File dir = FreeColDirectories.getUserMapsDirectory();
         if (dir == null) dir = FreeColDirectories.getSaveDirectory();
@@ -249,6 +251,7 @@ public final class MapEditorController extends FreeColClientHolder {
      *
      * @param file The {@code File}.
      */
+    @net.ringoz.GwtIncompatible
     public void saveMapEditorGame(final File file) {
         final GUI gui = getGUI();
         final Game game = getGame();
@@ -282,6 +285,7 @@ public final class MapEditorController extends FreeColClientHolder {
      * Opens a dialog where the user should specify the filename and loads the
      * game.
      */
+    @net.ringoz.GwtIncompatible
     public void loadGame() {
         File file = getGUI()
             .showLoadSaveFileDialog(FreeColDirectories.getUserMapsDirectory(),
@@ -294,6 +298,7 @@ public final class MapEditorController extends FreeColClientHolder {
      *
      * @param file The {@code File}.
      */
+    @net.ringoz.GwtIncompatible
     private void loadGame(File file) {
         final FreeColClient fcc = getFreeColClient();
         final GUI gui = getGUI();

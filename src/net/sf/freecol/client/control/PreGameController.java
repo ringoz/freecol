@@ -21,6 +21,7 @@ package net.sf.freecol.client.control;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -251,7 +252,7 @@ public final class PreGameController extends FreeColClientHolder {
     public void startGameHandler() {
         final FreeColClient fcc = getFreeColClient();
         final GUI gui = getGUI();
-        new Thread(FreeCol.CLIENT_THREAD + "Starting game") {
+        CompletableFuture.runAsync(new Runnable() {
                 @Override
                 public void run() {
                     logger.info("Client starting game");
@@ -272,7 +273,7 @@ public final class PreGameController extends FreeColClientHolder {
                     gui.closeStatusPanel();
                     gui.showMainPanel(Messages.message(StringTemplate.template(err)));
                 }
-        }.start();
+        });
     }
     
     /**

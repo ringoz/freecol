@@ -4328,10 +4328,10 @@ public final class InGameController extends FreeColClientHolder {
             final FreeColPanel firstLandinPanel = getGUI().showEventPanel(Messages.message(t), "image.flavor.event.firstLanding", null);
             firstLandinPanel.addClosingCallback(() -> {
                 // Add tutorial message.
-                final String key = FreeColActionUI
+                final String key = "B"; /*@net.ringoz.GwtIncompatible FreeColActionUI
                     .getHumanKeyStrokeText(getFreeColClient()
                         .getActionManager().getFreeColAction("buildColonyAction")
-                        .getAccelerator());
+                        .getAccelerator());*/
                 player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "buildColony.tutorial", player)
                     .addName("%colonyKey%", key)
                     .add("%colonyMenuItem%", "buildColonyAction.name")
