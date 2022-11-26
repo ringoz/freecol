@@ -20,7 +20,6 @@
 package net.sf.freecol.common.resources;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -109,8 +108,7 @@ public class ColorResource extends Resource {
             }
         } else {
             try {
-                Field field = Color.class.getField(colorName);
-                return (Color) field.get(null);
+                return net.ringoz.GwtCompat.Color_forName(colorName);
             } catch (IllegalAccessException | IllegalArgumentException
                     | NoSuchFieldException | SecurityException e) {
                 // probably a non-standard color name
