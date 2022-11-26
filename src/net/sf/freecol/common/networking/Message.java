@@ -21,9 +21,7 @@ package net.sf.freecol.common.networking;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.reflect.Constructor;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -55,14 +52,6 @@ import net.sf.freecol.server.model.ServerPlayer;
 public abstract class Message {
 
     protected static final Logger logger = Logger.getLogger(Message.class.getName());
-
-    /**
-     * A map of message name to message constructors, built on the fly
-     * as new messages are encountered and suitable constructors found.
-     */
-    private final static Map<String, Constructor<? extends Message>> builders
-        = Collections.synchronizedMap(new HashMap<String,
-            Constructor<? extends Message>>());
 
     /** Classes used by Message.read() */
     private static final Class[] readClasses = {
@@ -630,28 +619,10 @@ public abstract class Message {
         throws FreeColException {
         final String tag = xr.getLocalName();
         Message ret = null;
-        Constructor<? extends Message> mb = builders.get(tag);
-        if (mb == null) {
+        try {
             final String className = "net.sf.freecol.common.networking."
                 + capitalize(tag) + "Message";
-            @SuppressWarnings("unchecked")
-            final Class<? extends Message> cl
-                = (Class<? extends Message>)Introspector.getClassByName(className);
-            if (cl == null) {
-                throw new FreeColException("No class for: " + tag)
-                    .preserveDebug();
-            }
-
-            mb = Introspector.getConstructor(cl, readClasses);
-            if (mb == null) {
-                throw new FreeColException("No constructor for: " + tag)
-                    .preserveDebug();
-            }
-            builders.put(tag, mb);
-        }
-
-        try {
-            ret = Introspector.construct(mb, new Object[] { game, xr });
+            ret = (Message)Introspector.instantiate(className, readClasses, new Object[] { game, xr });
         } catch (Introspector.IntrospectorException ie) {
             throw new FreeColException(ie);
         }

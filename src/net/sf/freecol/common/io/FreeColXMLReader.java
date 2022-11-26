@@ -25,8 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import net.sf.freecol.common.util.Introspector;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1023,17 +1022,16 @@ public class FreeColXMLReader extends StreamReaderDelegate
             ret = aiMain.getAIObject(id, returnClass);
             if (ret == null) {
                 try {
-                    Constructor<T> c = returnClass.getConstructor(AIMain.class,
-                                                                  String.class);
-                    ret = net.ringoz.GwtCompat.class_cast(returnClass, c.newInstance(aiMain, id));
+                    final Object obj = Introspector.instantiate(returnClass, new Class[] { AIMain.class, String.class }, new Object[] { aiMain, id });
+                    ret = net.ringoz.GwtCompat.class_cast(returnClass, obj);
                     if (required && ret == null) {
                         throw new XMLStreamException("Constructed null "
                             + returnClass.getName() + " for " + id
                             + ": " + currentTag());
                     }
-                } catch (NoSuchMethodException | SecurityException 
-                        | InstantiationException | IllegalAccessException 
-                        | IllegalArgumentException | InvocationTargetException 
+                } catch (SecurityException 
+                        | Introspector.IntrospectorException
+                        | IllegalArgumentException 
                         | XMLStreamException e) {
                     if (required) {
                         throw new XMLStreamException(e);

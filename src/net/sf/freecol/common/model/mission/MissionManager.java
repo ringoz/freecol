@@ -19,7 +19,7 @@
 
 package net.sf.freecol.common.model.mission;
 
-import java.lang.reflect.Constructor;
+import net.sf.freecol.common.util.Introspector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,21 +40,16 @@ public class MissionManager {
 
     private static final Logger logger = Logger.getLogger(MissionManager.class.getName());
 
-    private static final Map<String, Constructor<? extends Mission>> missionMap
+    private static final Map<String, Class<? extends Mission>> missionMap
                                                      = new HashMap<>();
 
     static {
-        try {
             missionMap.put(CompoundMission.TAG,
-                           CompoundMission.class.getConstructor(Game.class, FreeColXMLReader.class));
+                           CompoundMission.class);
             missionMap.put(GoToMission.TAG,
-                           GoToMission.class.getConstructor(Game.class, FreeColXMLReader.class));
+                           GoToMission.class);
             missionMap.put(ImprovementMission.TAG,
-                           ImprovementMission.class.getConstructor(Game.class, FreeColXMLReader.class));
-
-        } catch (NoSuchMethodException e) {
-            logger.log(Level.WARNING, "Missing constructor", e);
-        }
+                           ImprovementMission.class);
     }
 
 
@@ -80,14 +75,14 @@ public class MissionManager {
     public static Mission getMission(Game game,
                                      FreeColXMLReader xr) throws XMLStreamException {
         String tag = xr.getLocalName();
-        Constructor<? extends Mission> c = missionMap.get(tag);
+        Class<? extends Mission> c = missionMap.get(tag);
         if (c == null) {
             logger.warning("Unknown type of mission: '" + tag + "'.");
             xr.nextTag();
             return null;
         } else {
             try {
-                return c.newInstance(game, xr);
+                return Introspector.instantiate(c, new Class[] { Game.class, FreeColXMLReader.class }, new Object[] { game, xr });
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Failed to instatiate mission with tag: "
                     + tag, e);
