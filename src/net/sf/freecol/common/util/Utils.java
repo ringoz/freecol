@@ -337,10 +337,9 @@ public class Utils {
      * @param warning If non-null, log this warning message on interrupt,
      *     otherwise propagate the interrupt.
      */
-    @net.ringoz.GwtIncompatible
     public static void delay(long ms, String warning) {
         try {
-            TimeUnit.MILLISECONDS.sleep(ms);
+            Thread.sleep(ms);
         } catch (InterruptedException ie) {
             if (warning == null) {
                 Thread.currentThread().interrupt();
