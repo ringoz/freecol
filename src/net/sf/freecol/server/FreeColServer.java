@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -652,9 +652,9 @@ public final class FreeColServer {
      * @exception IOException if the socket was already broken.
      * @exception XMLStreamException on stream problem.
      */
-    public void addNewUserConnection(Socket socket)
+    public void addNewUserConnection(AsynchronousSocketChannel socket)
         throws FreeColException, IOException, XMLStreamException {
-        final String name = socket.getInetAddress() + ":" + socket.getPort();
+        final String name = socket.getRemoteAddress().toString();
         Connection c = new Connection(socket, FreeCol.SERVER_THREAD + name)
             .setMessageHandler(this.userConnectionHandler);
         getServer().addConnection(c);

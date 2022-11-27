@@ -20,8 +20,9 @@
 package net.sf.freecol.metaserver;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,10 +45,10 @@ public final class MetaServer extends Thread {
     private static final Logger logger = Logger.getLogger(MetaServer.class.getName());
 
     /** The public "well-known" socket to which clients may connect. */
-    private final ServerSocket serverSocket;
+    private final AsynchronousServerSocketChannel serverSocket;
 
     /** A map of Connection objects, keyed by the Socket they relate to. */
-    private final Map<Socket, Connection> connections = new HashMap<>();
+    private final Map<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
 
     /**
      * Whether to keep running the main loop that is awaiting new client
@@ -72,7 +73,7 @@ public final class MetaServer extends Thread {
         this.port = port;
         final MetaRegister mr = new MetaRegister();
         this.metaServerHandler = new MetaServerHandler(this, mr);
-        this.serverSocket = new ServerSocket(port);
+        this.serverSocket = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(port));
     }
 
     /**
@@ -117,7 +118,7 @@ public final class MetaServer extends Thread {
      *            {@code Connection}
      * @return The {@code Connection}.
      */
-    public Connection getConnection(Socket socket) {
+    public Connection getConnection(AsynchronousSocketChannel socket) {
         return this.connections.get(socket);
     }
 
@@ -143,17 +144,17 @@ public final class MetaServer extends Thread {
         // new client connects to the server a new {@link Connection}
         // is made, with {@link MetaServerHandler} as the input handler.
         while (this.running) {
-            Socket clientSocket = null;
+            AsynchronousSocketChannel clientSocket = null;
             try {
-                clientSocket = serverSocket.accept();
+                clientSocket = serverSocket.accept().get();
                 logger.info("Client connection from: "
-                    + clientSocket.getInetAddress().toString());
+                    + clientSocket.getRemoteAddress().toString());
                 Connection connection = new Connection(clientSocket,
                     FreeCol.METASERVER_THREAD)
                     .setMessageHandler(getMetaServerHandler());
                 this.connections.put(clientSocket, connection);
                 connection.startReceiving();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.log(Level.WARNING, "Meta-run", e);
             }
         }

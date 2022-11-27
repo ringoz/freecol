@@ -25,7 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.Channels;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
@@ -76,7 +77,7 @@ public class Connection implements Closeable {
     /** A lock for access to the socket. */
     private final Object socketLock = new Object();
     /** The socket connected to the other end of the connection. */
-    private Socket socket = null;
+    private AsynchronousSocketChannel socket = null;
 
     /** A lock for the input side. */
     private final Object inputLock = new Object();
@@ -132,13 +133,13 @@ public class Connection implements Closeable {
      * @param name The connection name.
      * @exception IOException if streams can not be derived from the socket.
      */
-    public Connection(Socket socket, String name) throws IOException {
+    public Connection(AsynchronousSocketChannel socket, String name) throws IOException {
         this(name);
 
         setSocket(socket);
-        this.br = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        this.br = new BufferedReader(new InputStreamReader(Channels.newInputStream(socket), StandardCharsets.UTF_8));
         this.receivingThread = new ReceivingThread(this, name);
-        this.xw = new FreeColXMLWriter(socket.getOutputStream(),
+        this.xw = new FreeColXMLWriter(Channels.newOutputStream(socket),
             FreeColXMLWriter.WriteScope.toSave(), false);
         this.connected = true;
     }
@@ -165,11 +166,11 @@ public class Connection implements Closeable {
      * @return A new socket.
      * @exception IOException on failure to create/connect the socket.
      */
-    private static Socket createSocket(String host, int port)
+    private static AsynchronousSocketChannel createSocket(String host, int port)
         throws IOException {
-        Socket socket = new Socket();
+        AsynchronousSocketChannel socket = AsynchronousSocketChannel.open();
         SocketAddress addr = new InetSocketAddress(host, port);
-        socket.connect(addr, TIMEOUT);
+        socket.connect(addr);
         return socket;
     }
 
@@ -185,7 +186,7 @@ public class Connection implements Closeable {
      *
      * @return The current {@code Socket}.
      */
-    public Socket getSocket() {
+    public AsynchronousSocketChannel getSocket() {
         synchronized (this.socketLock) {
             return this.socket;
         }
@@ -196,7 +197,7 @@ public class Connection implements Closeable {
      *
      * @param socket The new {@code Socket}.
      */
-    private void setSocket(Socket socket) {
+    private void setSocket(AsynchronousSocketChannel socket) {
         synchronized (this.socketLock) {
             this.socket = socket;
         }
@@ -264,9 +265,12 @@ public class Connection implements Closeable {
      * @return The host address, or an empty string on error.
      */
     public String getHostAddress() {
-        Socket socket = getSocket();
-        return (socket == null) ? ""
-            : socket.getInetAddress().getHostAddress();
+        try {
+            return ((InetSocketAddress)getSocket().getRemoteAddress()).getHostString();
+        }
+        catch (Throwable t) {
+            return "";
+        }
     }
 
     /**
@@ -275,8 +279,12 @@ public class Connection implements Closeable {
      * @return The port number, or negative on error.
      */
     public int getPort() {
-        Socket socket = getSocket();
-        return (socket == null) ? -1 : socket.getPort();
+        try {
+            return ((InetSocketAddress)getSocket().getRemoteAddress()).getPort();
+        }
+        catch (Throwable t) {
+            return -1;
+        }
     }
 
     /**

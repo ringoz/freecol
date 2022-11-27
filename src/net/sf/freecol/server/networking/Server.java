@@ -20,9 +20,11 @@
 package net.sf.freecol.server.networking;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
+import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +49,7 @@ import net.sf.freecol.server.FreeColServer;
  *
  * @see net.sf.freecol.common.networking
  */
-public final class Server extends Thread {
+public final class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class.getName());
 
@@ -55,10 +57,10 @@ public final class Server extends Thread {
     private static final int BACKLOG_DEFAULT = 10;
 
     /** The public "well-known" socket to which clients may connect. */
-    private final ServerSocket serverSocket;
+    private final AsynchronousServerSocketChannel serverSocket;
 
     /** A map of Connection objects, keyed by their Socket. */
-    private final HashMap<Socket, Connection> connections = new HashMap<>();
+    private final HashMap<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
 
     /**
      * Whether to keep running the main loop that is awaiting new
@@ -90,14 +92,12 @@ public final class Server extends Thread {
      */
     public Server(FreeColServer freeColServer, String host, int port)
         throws IOException {
-        super(FreeCol.SERVER_THREAD + "Server");
 
         this.freeColServer = freeColServer;
         this.host = host;
         this.port = port;
-        this.serverSocket = new ServerSocket(port, BACKLOG_DEFAULT,
-                                             InetAddress.getByName(host));
-        this.serverSocket.setReuseAddress(true);
+        this.serverSocket = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(host, port), BACKLOG_DEFAULT);
+        this.serverSocket.setOption(StandardSocketOptions.SO_REUSEADDR, true);
     }
 
 
@@ -126,7 +126,7 @@ public final class Server extends Thread {
      *               {@code Connection}
      * @return The {@code Connection}.
      */
-    public Connection getConnection(Socket socket) {
+    public Connection getConnection(AsynchronousSocketChannel socket) {
         return this.connections.get(socket);
     }
 
@@ -137,7 +137,11 @@ public final class Server extends Thread {
      */
     public void addDummyConnection(Connection connection) {
         if (!this.running) return;
-        this.connections.put(new Socket(), connection);
+        try {
+            this.connections.put(AsynchronousSocketChannel.open(), connection);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -221,39 +225,24 @@ public final class Server extends Thread {
      * {@link net.sf.freecol.server.control.UserConnectionHandler} as
      * the control object.
      */
-    @Override
-    public void run() {
-        // This method's entire body is synchronized to shutdownLock.
-        // The reason why this is done is to prevent the shutdown
-        // method from finishing before this thread is finished
-        // working.  We have to do this because the
-        // ServerSocket::close method keeps the server alive for
-        // several milliseconds *even after the close method is
-        // finished*.  Because of this a new server can't be created
-        // on the same port as this server right after closing this
-        // server.
-        //
-        // Now that the shutdown method 'hangs' until the entire
-        // server thread is finished you can be certain that the
-        // ServerSocket is REALLY closed after execution of shutdown.
-        synchronized (this.shutdownLock) {
-            while (this.running) {
-                try {
-                    Socket sock = serverSocket.accept();
-                    if (sock != null) {
-                        // Undocumented null return has been seen
-                        this.freeColServer.addNewUserConnection(sock);
-                    }
-                } catch (Exception ex) {
-                    // Catch all exceptions.  There have been
-                    // sightings of spurious NPEs and other fail in
-                    // the Java libraries.
-                    if (this.running) {
+    public void start() {
+        serverSocket.accept(null, new CompletionHandler<AsynchronousSocketChannel, Void>() {
+            public void completed(AsynchronousSocketChannel sock, Void att) {
+                serverSocket.accept(null, this); // accept the next connection
+                synchronized (shutdownLock) {
+                    if (!running) return;
+                    try {
+                        freeColServer.addNewUserConnection(sock);
+                    } catch (Exception ex) {
                         logger.log(Level.WARNING, "Connection failed: ", ex);
                     }
                 }
             }
-        }
+
+            public void failed(Throwable ex, Void att) {
+                logger.log(Level.WARNING, "Connection failed: ", ex);
+            }
+        });
     }
 
     /**
