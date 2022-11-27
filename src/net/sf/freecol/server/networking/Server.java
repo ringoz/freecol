@@ -62,12 +62,6 @@ public final class Server {
     /** A map of Connection objects, keyed by their Socket. */
     private final HashMap<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
 
-    /**
-     * Whether to keep running the main loop that is awaiting new
-     * client connections.
-     */
-    private boolean running = true;
-
     /** The owner of this {@code Server}. */
     private final FreeColServer freeColServer;
 
@@ -136,7 +130,7 @@ public final class Server {
      * @param connection The connection to add.
      */
     public void addDummyConnection(Connection connection) {
-        if (!this.running) return;
+        if (!this.serverSocket.isOpen()) return;
         try {
             this.connections.put(AsynchronousSocketChannel.open(), connection);
         } catch (IOException e) {
@@ -150,7 +144,7 @@ public final class Server {
      * @param connection The connection to add.
      */
     public void addConnection(Connection connection) {
-        if (!this.running) return;
+        if (!this.serverSocket.isOpen()) return;
         this.connections.put(connection.getSocket(), connection);
     }
 
@@ -230,7 +224,7 @@ public final class Server {
             public void completed(AsynchronousSocketChannel sock, Void att) {
                 serverSocket.accept(null, this); // accept the next connection
                 synchronized (shutdownLock) {
-                    if (!running) return;
+                    if (!serverSocket.isOpen()) return;
                     try {
                         freeColServer.addNewUserConnection(sock);
                     } catch (Exception ex) {
@@ -240,6 +234,7 @@ public final class Server {
             }
 
             public void failed(Throwable ex, Void att) {
+                if (!serverSocket.isOpen()) return;
                 logger.log(Level.WARNING, "Connection failed: ", ex);
             }
         });
@@ -249,8 +244,6 @@ public final class Server {
      * Shuts down the server thread.
      */
     public void shutdown() {
-        this.running = false;
- 
         try {
             this.serverSocket.close();
             logger.fine("Closed server socket.");

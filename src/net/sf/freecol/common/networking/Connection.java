@@ -99,9 +99,6 @@ public class Connection implements Closeable {
 
     /** The message handler to process incoming messages with. */
     private MessageHandler messageHandler = null;
-
-    /** Is there an active connection. */
-    private boolean connected = false;
     
 
     /**
@@ -122,7 +119,6 @@ public class Connection implements Closeable {
         // Make a (pretty printing) transformer, but only make the log
         // writer in COMMS-debug mode.
         setCommsLogging(FreeColDebugger.isInDebugMode(FreeColDebugger.DebugMode.COMMS));
-        this.connected = false;
     }
 
     /**
@@ -141,7 +137,6 @@ public class Connection implements Closeable {
         this.receivingThread = new ReceivingThread(this, name);
         this.xw = new FreeColXMLWriter(Channels.newOutputStream(socket),
             FreeColXMLWriter.WriteScope.toSave(), false);
-        this.connected = true;
     }
 
     /**
@@ -384,7 +379,6 @@ public class Connection implements Closeable {
      * Disconnect this connection.
      */
     public void disconnect() {
-        this.connected = false;
         sendDisconnect();
         close();
     }
@@ -457,7 +451,7 @@ public class Connection implements Closeable {
         // Block waiting for the reply to occur.  Expect a reply
         // message, except on shutdown.
         Object response = nro.getResponse(timeout);
-        if (response == null && !this.connected) {
+        if (response == null && !this.socket.isOpen()) {
             return null;
         } else if (!(response instanceof ReplyMessage)) {
             throw new FreeColException("Bad response to " + replyId + "/" + tag

@@ -40,7 +40,7 @@ import net.sf.freecol.common.networking.Connection;
  * 
  * @see net.sf.freecol.common.networking
  */
-public final class MetaServer extends Thread {
+public final class MetaServer {
 
     private static final Logger logger = Logger.getLogger(MetaServer.class.getName());
 
@@ -49,12 +49,6 @@ public final class MetaServer extends Thread {
 
     /** A map of Connection objects, keyed by the Socket they relate to. */
     private final Map<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
-
-    /**
-     * Whether to keep running the main loop that is awaiting new client
-     * connections.
-     */
-    private boolean running = true;
 
     /** The TCP port that is beeing used for the public socket. */
     private final int port;
@@ -98,8 +92,6 @@ public final class MetaServer extends Thread {
      * Shuts down the server thread.
      */
     public void shutdown() {
-        this.running = false;
-
         try {
             this.serverSocket.close();
         } catch (IOException e) {
@@ -137,13 +129,12 @@ public final class MetaServer extends Thread {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void run() {
+    public void start() {
         // Starts the thread's processing. Contains the loop that is
         // waiting for new connections to the public socket. When a
         // new client connects to the server a new {@link Connection}
         // is made, with {@link MetaServerHandler} as the input handler.
-        while (this.running) {
+        while (this.serverSocket.isOpen()) {
             AsynchronousSocketChannel clientSocket = null;
             try {
                 clientSocket = serverSocket.accept().get();
