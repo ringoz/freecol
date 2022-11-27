@@ -29,6 +29,8 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.Channels;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -356,31 +358,30 @@ public class Connection implements Closeable {
     /**
      * Signal that this connection is disconnecting.
      */
-    public void sendDisconnect() {
-        try {
-            send(TrivialMessage.disconnectMessage);
-        } catch (FreeColException|IOException|XMLStreamException ex) {
+    public CompletableFuture<Void> sendDisconnect() {
+        return send(TrivialMessage.disconnectMessage).exceptionally((ex) -> {
             logger.log(Level.WARNING, "Failed to send disconnect", ex);
-        }
+            return null;
+        });
     }
 
     /**
      * Send a reconnect message.
      */
-    public void sendReconnect() {
-        try {
-            send(TrivialMessage.reconnectMessage);
-        } catch (FreeColException|IOException|XMLStreamException ex) {
+    public CompletableFuture<Void> sendReconnect() {
+        return send(TrivialMessage.reconnectMessage).exceptionally((ex) -> {
             logger.log(Level.WARNING, "Failed to send reconnect", ex);
-        }
+            return null;
+        });
     }
 
     /**
      * Disconnect this connection.
      */
-    public void disconnect() {
-        sendDisconnect();
-        close();
+    public CompletableFuture<Void> disconnect() {
+        return sendDisconnect().thenAccept((v) -> {
+            close();
+        });
     }
 
 
@@ -432,13 +433,9 @@ public class Connection implements Closeable {
      * @exception XMLStreamException on stream write error.
      * @exception TimeoutException when the timeout is reached.
      */
-    public Message askMessage(Message message, long timeout)
-        throws FreeColException, IOException, XMLStreamException, TimeoutException {
+    public CompletableFuture<Message> askMessage(Message message, long timeout) {
         if (message == null) return null;
         final String tag = message.getType();
-        if (Thread.currentThread() == this.receivingThread) {
-            throw new IOException("wait(ReceivingThread) for: " + tag);
-        }
 
         // Build the question message and establish an NRO for it.
         // *Then* send the message.
@@ -446,20 +443,25 @@ public class Connection implements Closeable {
         QuestionMessage qm = new QuestionMessage(replyId, message);
         NetworkReplyObject nro
             = this.receivingThread.waitForNetworkReply(replyId);
-        sendMessage(qm);
+        try {
+            sendMessage(qm);
 
-        // Block waiting for the reply to occur.  Expect a reply
-        // message, except on shutdown.
-        Object response = nro.getResponse(timeout);
-        if (response == null && !this.socket.isOpen()) {
-            return null;
-        } else if (!(response instanceof ReplyMessage)) {
-            throw new FreeColException("Bad response to " + replyId + "/" + tag
-                + ": " + response);
+            // Block waiting for the reply to occur.  Expect a reply
+            // message, except on shutdown.
+            Object response = nro.getResponse(timeout);
+            if (response == null && !this.socket.isOpen()) {
+                return null;
+            } else if (!(response instanceof ReplyMessage)) {
+                throw new FreeColException("Bad response to " + replyId + "/" + tag
+                    + ": " + response);
+            }
+            ReplyMessage reply = (ReplyMessage)response;
+            logMessage(reply, false);
+            return CompletableFuture.completedFuture(reply.getMessage());
         }
-        ReplyMessage reply = (ReplyMessage)response;
-        logMessage(reply, false);
-        return reply.getMessage();
+        catch (Exception e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
     
     /**
@@ -554,18 +556,18 @@ public class Connection implements Closeable {
      * @exception IOException if there is a problem sending messages.
      * @exception XMLStreamException if there is a message format problem.
      */
-    public void request(Message message)
-        throws FreeColException, IOException, XMLStreamException {
-        if (message == null) return;
-        try {
-            Message response = askMessage(message, DEFAULT_REPLY_TIMEOUT);
-            if (response != null) {
-                Message reply = handle(response);
-                assert reply == null;
+    public CompletableFuture<Void> request(Message message) {
+        if (message == null) return CompletableFuture.completedFuture(null);
+        return askMessage(message, DEFAULT_REPLY_TIMEOUT).thenAcceptAsync((Message response) -> {
+            try {
+                if (response != null) {
+                    Message reply = handle(response);
+                    assert reply == null;
+                }
+            } catch (Exception e) {
+                throw new CompletionException(e);
             }
-        } catch (TimeoutException e) {
-            throw new IOException(e);
-        }
+        }, (Runnable command) -> java.awt.EventQueue.invokeLater(command));
     }
         
     /**
@@ -576,9 +578,14 @@ public class Connection implements Closeable {
      * @exception IOException on write error.
      * @exception XMLStreamException if there is a message format problem.
      */
-    public void send(Message message)
-        throws FreeColException, IOException, XMLStreamException {
-        if (message != null) sendMessage(message);
+    public CompletableFuture<Void> send(Message message) {
+        if (message == null) return CompletableFuture.completedFuture(null);
+        try {
+            sendMessage(message);
+            return CompletableFuture.completedFuture(null);
+        } catch (Exception e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
     
 

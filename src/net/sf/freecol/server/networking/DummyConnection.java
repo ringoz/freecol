@@ -19,7 +19,7 @@
 
 package net.sf.freecol.server.networking;
 
-import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import net.sf.freecol.common.FreeColException;
@@ -89,25 +89,28 @@ public final class DummyConnection extends Connection {
      * {@inheritDoc}
      */
     @Override
-    public void sendMessage(Message message)
-        throws FreeColException, IOException {
-        Message reply = askMessage(message, Connection.DEFAULT_REPLY_TIMEOUT);
-        assert reply == null;
+    public void sendMessage(Message message) {
+        askMessage(message, Connection.DEFAULT_REPLY_TIMEOUT).thenAccept((Message reply) -> {
+            assert reply == null;
+        });
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Message askMessage(Message message, long timeout)
-        throws FreeColException, IOException {
+    public CompletableFuture<Message> askMessage(Message message, long timeout) {
         DummyConnection other = getOtherConnection();
         if (other == null) return null;
         if (message == null) return null;
         logMessage(message, true);
-        Message reply = other.handle(message);
-        logMessage(reply, false);
-        return reply;
+        try {
+            Message reply = other.handle(message);
+            logMessage(reply, false);
+            return CompletableFuture.completedFuture(reply);
+        } catch (FreeColException e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
 
 
