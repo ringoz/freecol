@@ -164,11 +164,11 @@ public final class MarketLabel extends AbstractGoodsLabel
         int loadable = carrier.getLoadableAmount(label.getType());
         if (loadable <= 0) return false;
         if (loadable > label.getAmount()) loadable = label.getAmount();
-        if (cargoPanel.igc().buyGoods(label.getType(), loadable, carrier)) {
+        cargoPanel.igc().buyGoods(label.getType(), loadable, carrier).thenAccept((ret) -> {
+            if (!ret) return;
             cargoPanel.igc().nextModelMessage();
             cargoPanel.update();
-            return true;
-        }
-        return false;
+        });
+        return true;
     }
 }

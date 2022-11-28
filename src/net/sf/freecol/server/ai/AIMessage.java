@@ -60,7 +60,7 @@ public class AIMessage {
      */
     public static boolean askAttack(AIUnit aiUnit, Direction direction) {
         return aiUnit.getAIOwner().askServer()
-            .attack(aiUnit.getUnit(), direction);
+            .attack(aiUnit.getUnit(), direction).join();
     }
 
     /**
@@ -72,7 +72,7 @@ public class AIMessage {
      */
     public static boolean askBuildColony(AIUnit aiUnit, String name) {
         return aiUnit.getAIOwner().askServer()
-            .buildColony(name, aiUnit.getUnit());
+            .buildColony(name, aiUnit.getUnit()).join();
     }
 
     /**
@@ -83,7 +83,7 @@ public class AIMessage {
      */
     public static boolean askCashInTreasureTrain(AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .cashInTreasureTrain(aiUnit.getUnit());
+            .cashInTreasureTrain(aiUnit.getUnit()).join();
     }
 
     /**
@@ -95,7 +95,7 @@ public class AIMessage {
      */
     public static boolean askChangeState(AIUnit aiUnit, UnitState state) {
         return aiUnit.getAIOwner().askServer()
-            .changeState(aiUnit.getUnit(), state);
+            .changeState(aiUnit.getUnit(), state).join();
     }
 
     /**
@@ -107,7 +107,7 @@ public class AIMessage {
      */
     public static boolean askChangeWorkType(AIUnit aiUnit, GoodsType type) {
         return aiUnit.getAIOwner().askServer()
-            .changeWorkType(aiUnit.getUnit(), type);
+            .changeWorkType(aiUnit.getUnit(), type).join();
     }
 
    /**
@@ -120,7 +120,7 @@ public class AIMessage {
     public static boolean askChangeWorkImprovementType(AIUnit aiUnit,
         TileImprovementType type) {
         return aiUnit.getAIOwner().askServer()
-            .changeWorkImprovementType(aiUnit.getUnit(), type);
+            .changeWorkImprovementType(aiUnit.getUnit(), type).join();
     }
 
     /**
@@ -135,7 +135,7 @@ public class AIMessage {
                                                   List<FoundingFather> fathers,
                                                   FoundingFather father) {
         return aiPlayer.askServer()
-            .chooseFoundingFather(fathers, father);
+            .chooseFoundingFather(fathers, father).join();
     }
                                   
     /**
@@ -148,7 +148,7 @@ public class AIMessage {
      */
     public static boolean askClaimLand(Tile tile, AIColony aic, int price) {
         return aic.getAIOwner().askServer()
-            .claimTile(tile, aic.getColony(), price);
+            .claimTile(tile, aic.getColony(), price).join();
     }
 
     /**
@@ -161,7 +161,7 @@ public class AIMessage {
      */
     public static boolean askClaimLand(Tile tile, AIUnit aiUnit, int price) {
         return aiUnit.getAIOwner().askServer()
-            .claimTile(tile, aiUnit.getUnit(), price);
+            .claimTile(tile, aiUnit.getUnit(), price).join();
     }
 
     /**
@@ -172,7 +172,7 @@ public class AIMessage {
      */
     public static boolean askClearSpeciality(AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .clearSpeciality(aiUnit.getUnit());
+            .clearSpeciality(aiUnit.getUnit()).join();
     }
  
     /**
@@ -190,7 +190,7 @@ public class AIMessage {
                                        FreeColGameObject other,
                                        DiplomaticTrade dt) {
         return aiPlayer.askServer()
-            .diplomacy(our, other, dt);
+            .diplomacy(our, other, dt).join();
     }
 
     /**
@@ -201,7 +201,7 @@ public class AIMessage {
      */
     public static boolean askDisband(AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .disbandUnit(aiUnit.getUnit());
+            .disbandUnit(aiUnit.getUnit()).join();
     }
 
     /**
@@ -212,7 +212,7 @@ public class AIMessage {
      */
     public static boolean askDisembark(AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .disembark(aiUnit.getUnit());
+            .disembark(aiUnit.getUnit()).join();
     }
 
     /**
@@ -226,7 +226,7 @@ public class AIMessage {
     public static boolean askEmbark(AIUnit aiUnit, Unit unit,
                                     Direction direction) {
         return aiUnit.getAIOwner().askServer()
-            .embark(unit, aiUnit.getUnit(), direction);
+            .embark(unit, aiUnit.getUnit(), direction).join();
     }
 
     /**
@@ -238,7 +238,7 @@ public class AIMessage {
      */
     public static boolean askEmigrate(AIPlayer aiPlayer, int slot) {
         return aiPlayer.askServer()
-            .emigrate(slot);
+            .emigrate(slot).join();
     }
 
     /**
@@ -249,7 +249,7 @@ public class AIMessage {
      */
     public static boolean askEndTurn(AIPlayer aiPlayer) {
         return aiPlayer.askServer()
-            .endTurn();
+            .endTurn().join();
     }
 
     /**
@@ -263,7 +263,7 @@ public class AIMessage {
     public static boolean askEquipForRole(AIUnit aiUnit, Role role,
                                           int roleCount) {
         return aiUnit.getAIOwner().askServer()
-            .equipUnitForRole(aiUnit.getUnit(), role, roleCount);
+            .equipUnitForRole(aiUnit.getUnit(), role, roleCount).join();
     }
 
     /**
@@ -278,7 +278,7 @@ public class AIMessage {
                                               Direction direction,
                                               boolean denounce) {
         return aiUnit.getAIOwner().askServer()
-            .missionary(aiUnit.getUnit(), direction, denounce);
+            .missionary(aiUnit.getUnit(), direction, denounce).join();
     }
 
     /**
@@ -295,7 +295,7 @@ public class AIMessage {
                                           Player contactee, Tile tile,
                                           boolean ack) {
         return aiPlayer.askServer()
-            .firstContact(contactor, contactee, tile, ack);
+            .firstContact(contactor, contactee, tile, ack).join();
     }
 
     /**
@@ -316,7 +316,7 @@ public class AIMessage {
                                           int amount,
                                           IndianDemandAction result) {
         return aiPlayer.askServer()
-            .indianDemand(unit, colony, type, amount, result);
+            .indianDemand(unit, colony, type, amount, result).join();
     }
 
     /**
@@ -331,7 +331,7 @@ public class AIMessage {
     public static boolean askLoadGoods(Location loc, GoodsType type,
                                        int amount, AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .loadGoods(loc, type, amount, aiUnit.getUnit());
+            .loadGoods(loc, type, amount, aiUnit.getUnit()).join();
     }
 
     /**
@@ -345,7 +345,7 @@ public class AIMessage {
     public static boolean askLoot(AIUnit aiUnit, String defenderId,
                                   List<Goods> goods) {
         return aiUnit.getAIOwner().askServer()
-            .loot(aiUnit.getUnit(), defenderId, goods);
+            .loot(aiUnit.getUnit(), defenderId, goods).join();
     }
 
     /**
@@ -360,7 +360,7 @@ public class AIMessage {
                                            MonarchAction action,
                                            boolean accept) {
         return aiPlayer.askServer()
-            .answerMonarch(action, accept);
+            .answerMonarch(action, accept).join();
     }
 
     /**
@@ -372,7 +372,7 @@ public class AIMessage {
      */
     public static boolean askMove(AIUnit aiUnit, Direction direction) {
         return aiUnit.getAIOwner().askServer()
-            .move(aiUnit.getUnit(), direction);
+            .move(aiUnit.getUnit(), direction).join();
     }
 
     /**
@@ -384,7 +384,7 @@ public class AIMessage {
      */
     public static boolean askMoveTo(AIUnit aiUnit, Location destination) {
         return aiUnit.getAIOwner().askServer()
-            .moveTo(aiUnit.getUnit(), destination);
+            .moveTo(aiUnit.getUnit(), destination).join();
     }
 
     /**
@@ -396,7 +396,7 @@ public class AIMessage {
      */
     public static boolean askNationSummary(AIPlayer owner, Player player) {
         return owner.askServer()
-            .nationSummary(owner.getPlayer(), player);
+            .nationSummary(owner.getPlayer(), player).join();
     }
 
     /**
@@ -408,7 +408,7 @@ public class AIMessage {
      */
     public static boolean askNativeGift(AIUnit aiUnit, Colony colony) {
         return aiUnit.getAIOwner().askServer()
-            .nativeGift(aiUnit.getUnit(), colony);
+            .nativeGift(aiUnit.getUnit(), colony).join();
     }
 
     /**
@@ -422,7 +422,7 @@ public class AIMessage {
     public static boolean askNativeTrade(AIPlayer aiPlayer,
         NativeTradeAction action, NativeTrade nt) {
         return aiPlayer.askServer()
-            .nativeTrade(action, nt);
+            .nativeTrade(action, nt).join();
     }
 
     /**
@@ -436,7 +436,7 @@ public class AIMessage {
     public static boolean askNewLandName(AIPlayer aiPlayer, Unit unit,
                                          String name) {
         return aiPlayer.askServer()
-            .newLandName(unit, name);
+            .newLandName(unit, name).join();
     }
 
     /**
@@ -452,7 +452,7 @@ public class AIMessage {
     public static boolean askNewRegionName(AIPlayer aiPlayer, Region region,
                                            Tile tile, Unit unit, String name) {
         return aiPlayer.askServer()
-            .newRegionName(region, tile, unit, name);
+            .newRegionName(region, tile, unit, name).join();
     }
 
     /**
@@ -463,7 +463,7 @@ public class AIMessage {
      */
     public static boolean askPutOutsideColony(AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .putOutsideColony(aiUnit.getUnit());
+            .putOutsideColony(aiUnit.getUnit()).join();
     }
 
     /**
@@ -479,7 +479,7 @@ public class AIMessage {
                                              List<Unit> workers,
                                              Colony scratch) {
         return aiColony.getAIOwner().askServer()
-            .rearrangeColony(aiColony.getColony(), workers, scratch);
+            .rearrangeColony(aiColony.getColony(), workers, scratch).join();
     }
 
     /**
@@ -492,7 +492,7 @@ public class AIMessage {
     public static boolean askScoutSpeakToChief(AIUnit aiUnit,
                                                IndianSettlement is) {
         return aiUnit.getAIOwner().askServer()
-            .scoutSpeakToChief(aiUnit.getUnit(), is);
+            .scoutSpeakToChief(aiUnit.getUnit(), is).join();
     }
 
     /**
@@ -505,7 +505,7 @@ public class AIMessage {
     public static boolean askSetBuildQueue(AIColony aiColony,
                                            List<BuildableType> queue) {
         return aiColony.getAIOwner().askServer()
-            .setBuildQueue(aiColony.getColony(), queue);
+            .setBuildQueue(aiColony.getColony(), queue).join();
     }
 
     /**
@@ -518,7 +518,7 @@ public class AIMessage {
     public static boolean askTrainUnitInEurope(AIPlayer aiPlayer,
                                                UnitType type) {
         return aiPlayer.askServer()
-            .trainUnitInEurope(type);
+            .trainUnitInEurope(type).join();
     }
 
 
@@ -533,7 +533,7 @@ public class AIMessage {
     public static boolean askUnloadGoods(GoodsType type, int amount,
                                          AIUnit aiUnit) {
         return aiUnit.getAIOwner().askServer()
-            .unloadGoods(type, amount, aiUnit.getUnit());
+            .unloadGoods(type, amount, aiUnit.getUnit()).join();
     }
 
     /**
@@ -545,6 +545,6 @@ public class AIMessage {
      */
     public static boolean askWork(AIUnit aiUnit, WorkLocation workLocation) {
         return aiUnit.getAIOwner().askServer()
-            .work(aiUnit.getUnit(), workLocation);
+            .work(aiUnit.getUnit(), workLocation).join();
     }
 }

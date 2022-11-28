@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,10 +117,10 @@ public final class ConnectController extends FreeColClientHolder {
      * @return True if the player is already logged out,
      *     or a logout request was sent.
      */
-    public boolean requestLogout(LogoutReason reason) {
+    public CompletableFuture<Boolean> requestLogout(LogoutReason reason) {
         final FreeColClient fcc = getFreeColClient();
         final Player player = fcc.getMyPlayer();
-        if (!fcc.isLoggedIn()) return true;
+        if (!fcc.isLoggedIn()) return CompletableFuture.completedFuture(true);
 
         // Save our active unit on reconnect.
         if (reason == LogoutReason.RECONNECT) {
@@ -185,12 +186,18 @@ public final class ConnectController extends FreeColClientHolder {
             SwingUtilities.invokeLater(() -> {
                 final String name = player.getName();
                 try {
-                    if (askServer().reconnect() != null
-                        && askServer().login(name, player.getNationId(),
+                    if (askServer().reconnect() != null) {
+                        askServer().login(name, player.getNationId(),
                                              FreeCol.getVersion(),
                                              fcc.getSinglePlayer(),
-                                             fcc.currentPlayerIsMyPlayer())) {
-                        logger.info("Reconnected for client " + name);
+                                             fcc.currentPlayerIsMyPlayer()).thenAccept((result) -> {
+                            if (result)
+                                logger.info("Reconnected for client " + name);
+                            else {
+                                logger.severe("Reconnect failed for client " + name);
+                                fcc.askToQuit();
+                            }
+                        });
                     } else {
                         logger.severe("Reconnect failed for client " + name);
                         fcc.askToQuit();
@@ -218,30 +225,32 @@ public final class ConnectController extends FreeColClientHolder {
      * @return True if the player was already logged in, or if the login
      *     message was sent.
      */
-    public boolean requestLogin(String user, String nationId, String host, int port) {
+    public CompletableFuture<Boolean> requestLogin(String user, String nationId, String host, int port) {
         final FreeColClient fcc = getFreeColClient();
-        if (fcc.isLoggedIn()) return true;
+        if (fcc.isLoggedIn()) return CompletableFuture.completedFuture(true);
         fcc.setMapEditor(false);
 
         // Clean up any old connections
         askServer().disconnect();
 
         // Establish the full connection here
-        StringTemplate err = connect(user, host, port);
-        if (err == null) {
+        return CompletableFuture.completedFuture(connect(user, host, port)).thenCompose((StringTemplate err) -> {
+            if (err != null) return CompletableFuture.completedFuture(err);
             // Ask the server to log in a player with the given user
             // name.  Control effectively transfers through the server
             // back to PGIH.login() and then to login() below.
             logger.info("Login request for client " + FreeCol.getName());
-            if (askServer().login(user, nationId, FreeCol.getVersion(),
-                                  fcc.getSinglePlayer(),
-                                  fcc.currentPlayerIsMyPlayer())) {
-                return true;
-            }
-            err = StringTemplate.template("server.couldNotLogin");
-        }
-        getGUI().showErrorPanel(err);
-        return false;
+            return askServer().login(user, nationId, FreeCol.getVersion(),
+                                    fcc.getSinglePlayer(),
+                                    fcc.currentPlayerIsMyPlayer()).thenApply((result) -> {
+                if (result) return null;
+                return StringTemplate.template("server.couldNotLogin");
+            });
+        }).thenApply((StringTemplate err) -> {
+            if (err == null) return false;
+            getGUI().showErrorPanel(err);
+            return false;
+        });
     }
 
     /**
@@ -326,11 +335,11 @@ public final class ConnectController extends FreeColClientHolder {
      * @param spec The {@code Specification} for the game.
      * @return True if the game starts successfully.
      */
-    public boolean startSinglePlayerGame(Specification spec) {
+    public CompletableFuture<Boolean> startSinglePlayerGame(Specification spec) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);
 
-        if (!fcc.unblockServer(FreeCol.getServerPort())) return false;
+        if (!fcc.unblockServer(FreeCol.getServerPort())) return CompletableFuture.completedFuture(false);
 
         if (fcc.isLoggedIn()) { // Should not happen, warn and suppress
             logger.warning("startSinglePlayer while logged in!");
@@ -347,7 +356,7 @@ public final class ConnectController extends FreeColClientHolder {
         Messages.loadActiveModMessageBundle(mods, FreeCol.getLocale());
 
         FreeColServer fcs = fcc.startServer(false, true, spec, null, -1);
-        return (fcs == null) ? false
+        return (fcs == null) ? CompletableFuture.completedFuture(false)
             : requestLogin(FreeCol.getName(), null,
                            fcs.getHost(), fcs.getPort());
     }
@@ -358,7 +367,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param file The saved game.
      * @return True if the game starts successully.
      */
-    public boolean startSavedGame(File file) {
+    public CompletableFuture<Boolean> startSavedGame(File file) {
         final FreeColClient fcc = getFreeColClient();
         final GUI gui = getGUI();
         fcc.setMapEditor(false);
@@ -377,13 +386,13 @@ public final class ConnectController extends FreeColClientHolder {
                        fnfe);
             gui.showErrorPanel(fnfe,
                 FreeCol.badFile("error.couldNotFind", file));
-            return false;
+            return CompletableFuture.completedFuture(false);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Could not load file: " + file.getName(),
                        ioe);
             gui.showErrorPanel(ioe,
                 FreeCol.badFile("error.couldNotLoad", file));
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
         options.merge(fis);
         options.fixClientOptions();       
@@ -396,7 +405,7 @@ public final class ConnectController extends FreeColClientHolder {
                        ex);
             gui.showErrorPanel(ex,
                 FreeCol.badFile("error.couldNotLoad", file));
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
         if (values != null && values.size() == savedKeys.size()) {
             String str = values.get(0);
@@ -422,7 +431,7 @@ public final class ConnectController extends FreeColClientHolder {
             LoadingSavegameInfo lsi = getGUI()
                 .showLoadingSavegameDialog(defaultPublicServer,
                                            defaultSinglePlayer);
-            if (lsi == null) return false;
+            if (lsi == null) return CompletableFuture.completedFuture(false);
             singlePlayer = lsi.isSinglePlayer();
             serverName = lsi.getServerName();
             address = lsi.getAddress();
@@ -438,7 +447,7 @@ public final class ConnectController extends FreeColClientHolder {
 
         FreeColServer fcs = fcc.startServer(publicServer, singlePlayer, file,
                 address, port, serverName);
-        if (fcs == null) return false;
+        if (fcs == null) return CompletableFuture.completedFuture(false);
 
         /*
          * TODO: The choice of active mods with a specification should be stored in the savegame.
@@ -463,14 +472,14 @@ public final class ConnectController extends FreeColClientHolder {
      * @param port The port in which the server should listen for new clients.
      * @return True if the game is started successfully.
      */
-    public boolean startMultiplayerGame(Specification specification,
+    public CompletableFuture<Boolean> startMultiplayerGame(Specification specification,
                                         boolean publicServer,
                                         InetAddress address,
                                         int port) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);
 
-        if (!fcc.unblockServer(port)) return false;
+        if (!fcc.unblockServer(port)) return CompletableFuture.completedFuture(false);
 
         if (fcc.isLoggedIn()) { // Should not happen, warn and suppress
             logger.warning("startMultiPlayer while logged in!");
@@ -479,7 +488,7 @@ public final class ConnectController extends FreeColClientHolder {
 
         FreeColServer fcs = fcc.startServer(publicServer, false,
                                             specification, address, port);
-        if (fcs == null) return false;
+        if (fcs == null) return CompletableFuture.completedFuture(false);
         fcc.setFreeColServer(fcs);
         fcc.setSinglePlayer(false);
         return requestLogin(FreeCol.getName(), null, fcs.getHost(), fcs.getPort());
@@ -492,7 +501,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param port The port to use when connecting to the host.
      * @return True if the game starts successfully.
      */
-    public boolean joinMultiplayerGame(String host, int port) {
+    public CompletableFuture<Boolean> joinMultiplayerGame(String host, int port) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);
 
@@ -506,7 +515,7 @@ public final class ConnectController extends FreeColClientHolder {
         StringTemplate err = connect(name, host, port);
         if (err != null) {
             getGUI().showErrorPanel(err);
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
         while (fcc.getServerState() == null) Utils.delay(1000, null);
         askServer().disconnect();
@@ -528,7 +537,7 @@ public final class ConnectController extends FreeColClientHolder {
             */
             // Find the players, choose one.
             List<String> names = fcc.getVacantPlayerNames();
-            if (names.isEmpty()) return false;
+            if (names.isEmpty()) return CompletableFuture.completedFuture(false);
             if (names.contains(name)) break; // Already there, use it
             StringTemplate tmpl = StringTemplate.template("client.choicePlayer");
             nationId = getGUI().getChoice(tmpl, "cancel",
@@ -536,12 +545,12 @@ public final class ConnectController extends FreeColClientHolder {
                         new ChoiceItem<>(Messages.message(StringTemplate
                                 .template("countryName")
                                 .add("%nation%", Messages.nameKey(n))), n)));
-            if (nationId == null) return false; // User cancelled
+            if (nationId == null) return CompletableFuture.completedFuture(false); // User cancelled
             break;
 
         case END_GAME: default:
             getGUI().showErrorPanel(StringTemplate.template("client.ending"));
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
         return requestLogin(name, nationId, host, port);
     }

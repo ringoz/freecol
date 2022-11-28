@@ -251,12 +251,13 @@ public final class UnitLabel extends FreeColLabel
         final Unit u = ((UnitLabel)comp).getUnit();
         if (carrier.canAdd(u)) {
             Container oldParent = comp.getParent();
-            if (cargoPanel.igc().boardShip(u, carrier)) {
+            cargoPanel.igc().boardShip(u, carrier).thenAccept((ret) -> {
+                if (!ret) return;
                 ((UnitLabel)comp).setSmall(false);
                 if (oldParent != null) oldParent.remove(comp);
                 cargoPanel.update();
-                return true;
-            }
+            });
+            return true;
         }
         return false;
     }
@@ -306,8 +307,8 @@ public final class UnitLabel extends FreeColLabel
                     = game.getFreeColGameObject(args[1], ColonyTile.class);
                 if (args.length >= 4 && "!".equals(args[3])) {
                     // Claim tile if needed
-                    if (!igc.claimTile(colonyTile.getWorkTile(),
-                                       this.unit.getColony())) break;
+                    igc.claimTile(colonyTile.getWorkTile(),
+                                       this.unit.getColony());
                 }
                 if (colonyTile != this.unit.getLocation()) {
                     igc.work(this.unit, colonyTile);

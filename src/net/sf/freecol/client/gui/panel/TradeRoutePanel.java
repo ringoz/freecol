@@ -225,24 +225,25 @@ public final class TradeRoutePanel extends FreeColPanel {
     private void newRoute() {
         final Player player = getMyPlayer();
         final Unit u = this.unit;
-        final TradeRoute newRoute = igc().newTradeRoute(player);
-        getGUI().showTradeRouteInputPanel(newRoute)
-            .addClosingCallback(() -> {
-                    StringTemplate template = null;
-                    String name = newRoute.getName();
-                    if (name == null) { // Cancelled
-                        igc().deleteTradeRoute(newRoute);
-                        updateList(null);
-                    } else if ((template = newRoute.verify()) != null
-                        && (template = newRoute.verifyUniqueName()) != null) {
-                        updateList(null);
-                        getGUI().showInformationPanel(template);
-                    } else {
-                        igc().updateTradeRoute(newRoute);
-                        if (u != null) igc().assignTradeRoute(u, newRoute);
-                        updateList(newRoute);
-                    }
-                });
+        igc().newTradeRoute(player).thenAccept((final TradeRoute newRoute) -> {
+            getGUI().showTradeRouteInputPanel(newRoute)
+                .addClosingCallback(() -> {
+                        StringTemplate template = null;
+                        String name = newRoute.getName();
+                        if (name == null) { // Cancelled
+                            igc().deleteTradeRoute(newRoute);
+                            updateList(null);
+                        } else if ((template = newRoute.verify()) != null
+                            && (template = newRoute.verifyUniqueName()) != null) {
+                            updateList(null);
+                            getGUI().showInformationPanel(template);
+                        } else {
+                            igc().updateTradeRoute(newRoute);
+                            if (u != null) igc().assignTradeRoute(u, newRoute);
+                            updateList(newRoute);
+                        }
+                    });
+            });
     }
 
     /**

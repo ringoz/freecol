@@ -309,8 +309,8 @@ public final class FreeColClient {
             
             if (savedGame != null) { // Restore from saved
                 gui.showStatusPanel(Messages.message("status.loadingGame"));
-                SwingUtilities.invokeLater(() -> {
-                    if (connectController.startSavedGame(savedGame)) {
+                connectController.startSavedGame(savedGame).thenAccept((ret) -> {
+                    if (ret) {
                         gui.closeStatusPanel();
                         if (userMsg != null) {
                             gui.showInformationPanel(userMsg);
@@ -324,9 +324,10 @@ public final class FreeColClient {
     
             } else if (spec != null) { // Debug or fast start
                 gui.playSound("sound.intro.general");
-                if (!connectController.startSinglePlayerGame(spec)) {
-                    gui.showMainPanel(userMsg);
-                }
+                connectController.startSinglePlayerGame(spec).thenAccept((ret) -> {
+                    if (!ret)
+                        gui.showMainPanel(userMsg);
+                });
             } else if (showOpeningVideo) { // Video first
                 gui.showOpeningVideo(userMsg, () -> {
                         gui.playSound("sound.intro.general");

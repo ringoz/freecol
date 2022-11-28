@@ -63,9 +63,10 @@ public class ContinueAction extends FreeColAction {
                 getFreeColClient().getConnectController().requestLogout(LogoutReason.LOGIN);
             }
             getFreeColClient().stopServer();
-            if (!getConnectController().startSavedGame(lastSave)) {
-                getGUI().showMainPanel(null);
-            }
+            getConnectController().startSavedGame(lastSave).thenAccept((ret) -> {
+                if (!ret)
+                    getGUI().showMainPanel(null);
+            });
         }
     }
 }

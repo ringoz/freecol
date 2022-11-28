@@ -577,14 +577,14 @@ public final class NewPanel extends FreeColPanel implements ItemListener {
             case SINGLE:
                 this.specification.prepare(getSelectedAdvantages(),
                                            this.difficulty);
-                if (cc.startSinglePlayerGame(this.specification)) return;
-                break;
+                cc.startSinglePlayerGame(this.specification);
+                return;
             case JOIN:
                 int joinPort = getSelectedPort(this.joinPortField);
                 if (joinPort < 0) break;
-                if (cc.joinMultiplayerGame(this.joinNameField.getText(),
-                                           joinPort)) return;
-                break;
+                cc.joinMultiplayerGame(this.joinNameField.getText(),
+                                           joinPort);
+                return;
             case START:
                 int serverPort = getSelectedPort(this.serverPortField);
                 if (serverPort < 0) break;
@@ -593,9 +593,9 @@ public final class NewPanel extends FreeColPanel implements ItemListener {
                 final InetAddress serverAddress = (InetAddress) this.serverAddressBox.getSelectedItem();
                 final boolean publicServerValue = this.publicServer.isSelected()
                         && !serverAddress.isLoopbackAddress();
-                if (cc.startMultiplayerGame(this.specification,
-                        publicServerValue, serverAddress, serverPort)) return;
-                break;
+                cc.startMultiplayerGame(this.specification,
+                        publicServerValue, serverAddress, serverPort);
+                return;
             case META_SERVER:
                 List<ServerInfo> servers = MetaServerUtils.getServerList();
                 if (servers != null) gui.showServerListPanel(servers);

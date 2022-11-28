@@ -183,8 +183,8 @@ public final class EuropePanel extends PortPanel {
                 final Unit unit = ((UnitLabel)comp).getUnit();
 
                 if (unit.getTradeRoute() != null) {
-                    if (!getGUI().confirmClearTradeRoute(unit)
-                        || !igc().assignTradeRoute(unit, null)) return null;
+                    if (!getGUI().confirmClearTradeRoute(unit)) return null;
+                    igc().assignTradeRoute(unit, null);
                 }
 
                 Location dest = destination;

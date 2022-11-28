@@ -23,6 +23,7 @@ package net.sf.freecol.common.networking;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -158,18 +159,17 @@ public abstract class ServerAPI {
      * @param message The {@code Message} to send.
      * @return True if the send succeeded.
      */
-    private boolean send(Message message) {
-        if (message == null) return true;
+    private CompletableFuture<Boolean> send(Message message) {
+        if (message == null) return CompletableFuture.completedFuture(true);
         final Connection c = check("send", message.getType());
         if (c != null) {
-            try {
-                c.send(message);
-                return true;
-            } catch (FreeColException|IOException|XMLStreamException ex) {
-                logger.log(Level.WARNING, "Failed to send", ex);
-            }
+            return c.send(message).handle((v, e) -> {
+                if (e == null) return true;
+                logger.log(Level.WARNING, "Failed to send", e);
+                return false;
+            });
         }
-        return false;
+        return CompletableFuture.completedFuture(false);
     }
 
     /**
@@ -186,18 +186,17 @@ public abstract class ServerAPI {
      * @return True if the server interaction succeeded, that is, there was
      *     no I/O problem and the reply was not an error message.
      */
-    private boolean ask(Message message) {
-        if (message == null) return true;
+    private CompletableFuture<Boolean> ask(Message message) {
+        if (message == null) return CompletableFuture.completedFuture(true);
         final Connection c = check("ask", message.getType());
         if (c != null) {
-            try {
-                c.request(message);
-                return true;
-            } catch (FreeColException|IOException|XMLStreamException ex) {
-                logger.log(Level.WARNING, "Failed to ask", ex);
-            }
+            return c.request(message).handle((v, e) -> {
+                if (e == null) return true;
+                logger.log(Level.WARNING, "Failed to ask", e);
+                return false;
+            });
         }
-        return false;
+        return CompletableFuture.completedFuture(false);
     }
 
 
@@ -209,7 +208,7 @@ public abstract class ServerAPI {
      * @param colony The {@code Colony} to abandon.
      * @return True if the server interaction succeeded.
      */
-    public boolean abandonColony(Colony colony) {
+    public CompletableFuture<Boolean> abandonColony(Colony colony) {
         return ask(new AbandonColonyMessage(colony));
     }
 
@@ -220,7 +219,7 @@ public abstract class ServerAPI {
      * @param accept Accept or reject the offer.
      * @return True if the server interaction succeeded.
      */
-    public boolean answerMonarch(MonarchAction action, boolean accept) {
+    public CompletableFuture<Boolean> answerMonarch(MonarchAction action, boolean accept) {
         return ask(new MonarchActionMessage(action, null, "")
                        .setResult(accept));
     }
@@ -232,7 +231,7 @@ public abstract class ServerAPI {
      * @param direction The direction to a settlement to ask.
      * @return True if the server interaction succeeded.
      */
-    public boolean askSkill(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> askSkill(Unit unit, Direction direction) {
         return ask(new AskSkillMessage(unit, direction));
     }
 
@@ -243,7 +242,7 @@ public abstract class ServerAPI {
      * @param teacher The teacher {@code Unit}.
      * @return True if the server interaction succeeded.
      */
-    public boolean assignTeacher(Unit student, Unit teacher) {
+    public CompletableFuture<Boolean> assignTeacher(Unit student, Unit teacher) {
         return ask(new AssignTeacherMessage(student, teacher));
     }
 
@@ -254,7 +253,7 @@ public abstract class ServerAPI {
      * @param tradeRoute The {@code TradeRoute} to assign.
      * @return True if the server interaction succeeded.
      */
-    public boolean assignTradeRoute(Unit unit, TradeRoute tradeRoute) {
+    public CompletableFuture<Boolean> assignTradeRoute(Unit unit, TradeRoute tradeRoute) {
         return ask(new AssignTradeRouteMessage(unit, tradeRoute));
     }
 
@@ -265,7 +264,7 @@ public abstract class ServerAPI {
      * @param direction The direction in which to attack.
      * @return True if the server interaction succeeded.
      */
-    public boolean attack(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> attack(Unit unit, Direction direction) {
         return ask(new AttackMessage(unit, direction));
     }
 
@@ -276,7 +275,7 @@ public abstract class ServerAPI {
      * @param unit The {@code Unit} that will build.
      * @return True if the server interaction succeeded.
      */
-    public boolean buildColony(String name, Unit unit) {
+    public CompletableFuture<Boolean> buildColony(String name, Unit unit) {
         return ask(new BuildColonyMessage(name, unit));
     }
 
@@ -286,7 +285,7 @@ public abstract class ServerAPI {
      * @param unit The treasure train {@code Unit} to cash in.
      * @return True if the server interaction succeeded.
      */
-    public boolean cashInTreasureTrain(Unit unit) {
+    public CompletableFuture<Boolean> cashInTreasureTrain(Unit unit) {
         return ask(new CashInTreasureTrainMessage(unit));
     }
 
@@ -297,7 +296,7 @@ public abstract class ServerAPI {
      * @param state The new {@code UnitState}.
      * @return boolean <b>true</b> if the server interaction succeeded.
      */
-    public boolean changeState(Unit unit, UnitState state) {
+    public CompletableFuture<Boolean> changeState(Unit unit, UnitState state) {
         return ask(new ChangeStateMessage(unit, state));
     }
 
@@ -308,7 +307,7 @@ public abstract class ServerAPI {
      * @param type The new {@code TileImprovementType} to work on.
      * @return True if the server interaction succeeded.
      */
-    public boolean changeWorkImprovementType(Unit unit,
+    public CompletableFuture<Boolean> changeWorkImprovementType(Unit unit,
                                              TileImprovementType type) {
         return ask(new ChangeWorkImprovementTypeMessage(unit, type));
     }
@@ -320,7 +319,7 @@ public abstract class ServerAPI {
      * @param workType The new {@code GoodsType} to produce.
      * @return True if the server interaction succeeded.
      */
-    public boolean changeWorkType(Unit unit, GoodsType workType) {
+    public CompletableFuture<Boolean> changeWorkType(Unit unit, GoodsType workType) {
         return ask(new ChangeWorkTypeMessage(unit, workType));
     }
 
@@ -331,7 +330,7 @@ public abstract class ServerAPI {
      * @param chat The text of the message.
      * @return True if the send succeeded.
      */
-    public boolean chat(Player player, String chat) {
+    public CompletableFuture<Boolean> chat(Player player, String chat) {
         return send(new ChatMessage(player, chat, false));
     }
 
@@ -342,7 +341,7 @@ public abstract class ServerAPI {
      * @param ff The chosen {@code FoundingFather} (may be null).
      * @return True if the send succeeded.
      */
-    public boolean chooseFoundingFather(List<FoundingFather> ffs,
+    public CompletableFuture<Boolean> chooseFoundingFather(List<FoundingFather> ffs,
                                         FoundingFather ff) {
         return ask(new ChooseFoundingFatherMessage(ffs, ff));
     }
@@ -356,7 +355,7 @@ public abstract class ServerAPI {
      * @param price The amount to pay.
      * @return True if the server interaction succeeded.
      */
-    public boolean claimTile(Tile tile, FreeColGameObject claimant, int price) {
+    public CompletableFuture<Boolean> claimTile(Tile tile, FreeColGameObject claimant, int price) {
         return ask(new ClaimLandMessage(tile, claimant, price));
     }
 
@@ -366,7 +365,7 @@ public abstract class ServerAPI {
      * @param unit The {@code Unit} to operate on.
      * @return True if the server interaction succeeded.
      */
-    public boolean clearSpeciality(Unit unit) {
+    public CompletableFuture<Boolean> clearSpeciality(Unit unit) {
         return ask(new ClearSpecialityMessage(unit));
     }
 
@@ -375,7 +374,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean continuePlaying() {
+    public CompletableFuture<Boolean> continuePlaying() {
         return send(TrivialMessage.continueMessage);
     }
 
@@ -386,7 +385,7 @@ public abstract class ServerAPI {
      * @param country The name for the new country.
      * @return True if the server interaction succeeded.
      */
-    public boolean declareIndependence(String nation, String country) {
+    public CompletableFuture<Boolean> declareIndependence(String nation, String country) {
         return ask(new DeclareIndependenceMessage(nation, country));
     }
 
@@ -399,7 +398,7 @@ public abstract class ServerAPI {
      * @param direction The {@code Direction} to move.
      * @return True if the server interaction succeeded.
      */
-    public boolean declineMounds(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> declineMounds(Unit unit, Direction direction) {
         return ask(new DeclineMoundsMessage(unit, direction));
     }
 
@@ -409,7 +408,7 @@ public abstract class ServerAPI {
      * @param tradeRoute The {@code TradeRoute} to delete.
      * @return True if the server interaction succeeded.
      */
-    public boolean deleteTradeRoute(TradeRoute tradeRoute) {
+    public CompletableFuture<Boolean> deleteTradeRoute(TradeRoute tradeRoute) {
         return ask(new DeleteTradeRouteMessage(tradeRoute));
     }
 
@@ -421,7 +420,7 @@ public abstract class ServerAPI {
      * @param goods The {@code Goods} to give.
      * @return True if the server interaction succeeded.
      */
-    public boolean deliverGiftToSettlement(Unit unit, IndianSettlement is,
+    public CompletableFuture<Boolean> deliverGiftToSettlement(Unit unit, IndianSettlement is,
                                            Goods goods) {
         return ask(new DeliverGiftMessage(unit, is, goods));
     }
@@ -434,7 +433,7 @@ public abstract class ServerAPI {
      * @param direction The direction to demand in.
      * @return True if the server interaction succeeded.
      */
-    public boolean demandTribute(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> demandTribute(Unit unit, Direction direction) {
         return ask(new DemandTributeMessage(unit, direction));
     }
 
@@ -448,7 +447,7 @@ public abstract class ServerAPI {
      * @param dt The {@code DiplomaticTrade} agreement to propose.
      * @return The resulting agreement or null if none present.
      */
-    public boolean diplomacy(FreeColGameObject our, FreeColGameObject other, 
+    public CompletableFuture<Boolean> diplomacy(FreeColGameObject our, FreeColGameObject other, 
                              DiplomaticTrade dt) {
         return ask(new DiplomacyMessage(our, other, dt));
     }
@@ -459,7 +458,7 @@ public abstract class ServerAPI {
      * @param unit The {@code Unit} to operate on.
      * @return True if the server interaction succeeded.
      */
-    public boolean disbandUnit(Unit unit) {
+    public CompletableFuture<Boolean> disbandUnit(Unit unit) {
         return ask(new DisbandUnitMessage(unit));
     }
 
@@ -469,7 +468,7 @@ public abstract class ServerAPI {
      * @param unit The {@code Unit} that is disembarking.
      * @return True if the server interaction succeeded.
      */
-    public boolean disembark(Unit unit) {
+    public CompletableFuture<Boolean> disembark(Unit unit) {
         return ask(new DisembarkMessage(unit));
     }
 
@@ -482,7 +481,7 @@ public abstract class ServerAPI {
      *        an adjacent tile, or null if from the same tile.
      * @return True if the server interaction succeeded.
      */
-    public boolean embark(Unit unit, Unit carrier, Direction direction) {
+    public CompletableFuture<Boolean> embark(Unit unit, Unit carrier, Direction direction) {
         return ask(new EmbarkMessage(unit, carrier, direction));
     }
 
@@ -493,7 +492,7 @@ public abstract class ServerAPI {
      *             a specific one, otherwise the server will choose one.
      * @return True if the client-server interaction succeeded.
      */
-    public boolean emigrate(int slot) {
+    public CompletableFuture<Boolean> emigrate(int slot) {
         return ask(new EmigrateUnitMessage(slot));
     }
 
@@ -502,7 +501,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean endTurn() {
+    public CompletableFuture<Boolean> endTurn() {
         return ask(TrivialMessage.endTurnMessage);
     }
 
@@ -511,7 +510,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean enterRevengeMode() {
+    public CompletableFuture<Boolean> enterRevengeMode() {
         return ask(TrivialMessage.enterRevengeModeMessage);
     }
 
@@ -523,7 +522,7 @@ public abstract class ServerAPI {
      * @param roleCount The role count.
      * @return True if the server interaction succeeded.
      */
-    public boolean equipUnitForRole(Unit unit, Role role, int roleCount) {
+    public CompletableFuture<Boolean> equipUnitForRole(Unit unit, Role role, int roleCount) {
         return ask(new EquipForRoleMessage(unit, role, roleCount));
     }
 
@@ -537,7 +536,7 @@ public abstract class ServerAPI {
      * @param result Whether the initial peace treaty was accepted.
      * @return True if the server interaction succeeded.
      */
-    public boolean firstContact(Player player, Player other, Tile tile,
+    public CompletableFuture<Boolean> firstContact(Player player, Player other, Tile tile,
                                 boolean result) {
         return ask(new FirstContactMessage(player, other, tile)
                        .setResult(result));
@@ -549,7 +548,7 @@ public abstract class ServerAPI {
      * @param key The high score key to query.
      * @return True if the server interaction succeeded.
      */
-    public boolean getHighScores(String key) {
+    public CompletableFuture<Boolean> getHighScores(String key) {
         return ask(new HighScoresMessage(key, null));
     }
 
@@ -560,7 +559,7 @@ public abstract class ServerAPI {
      * @param player The {@code Player} to summarize.
      * @return True if the server interaction succeeded.
      */
-    public boolean nationSummary(Player self, Player player) {
+    public CompletableFuture<Boolean> nationSummary(Player self, Player player) {
         return ask(new NationSummaryMessage(player, null));
     }
 
@@ -573,7 +572,7 @@ public abstract class ServerAPI {
      * @param gold The amount of bribe, negative to enquire.
      * @return True if the server interaction succeeded.
      */
-    public boolean incite(Unit unit, IndianSettlement is, Player enemy,
+    public CompletableFuture<Boolean> incite(Unit unit, IndianSettlement is, Player enemy,
                           int gold) {
         return ask(new InciteMessage(unit, is, enemy, gold));
     }
@@ -588,7 +587,7 @@ public abstract class ServerAPI {
      * @param result The result of the demand.
      * @return True if the server interaction succeeded.
      */
-    public boolean indianDemand(Unit unit, Colony colony,
+    public CompletableFuture<Boolean> indianDemand(Unit unit, Colony colony,
                                 GoodsType type, int amount,
                                 IndianDemandAction result) {
         return ask(new IndianDemandMessage(unit, colony, type, amount)
@@ -602,7 +601,7 @@ public abstract class ServerAPI {
      * @param colony The {@code Colony} to join.
      * @return True if the server interaction succeeded.
      */
-    public boolean joinColony(Unit unit, Colony colony) {
+    public CompletableFuture<Boolean> joinColony(Unit unit, Colony colony) {
         return ask(new JoinColonyMessage(colony, unit));
     }
 
@@ -613,7 +612,7 @@ public abstract class ServerAPI {
      * @param direction The direction to a settlement to ask.
      * @return True if the server interaction succeeded.
      */
-    public boolean learnSkill(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> learnSkill(Unit unit, Direction direction) {
         return ask(new LearnSkillMessage(unit, direction));
     }
 
@@ -626,7 +625,7 @@ public abstract class ServerAPI {
      * @param carrier The {@code Unit} to load onto.
      * @return True if the server interaction succeeded.
      */
-    public boolean loadGoods(Location loc, GoodsType type, int amount,
+    public CompletableFuture<Boolean> loadGoods(Location loc, GoodsType type, int amount,
                              Unit carrier) {
         return ask(new LoadGoodsMessage(loc, type, amount, carrier));
     }
@@ -642,7 +641,7 @@ public abstract class ServerAPI {
      *     current player.
      * @return True if the server interaction succeeded.
      */
-    public boolean login(String userName, String nationId, String version,
+    public CompletableFuture<Boolean> login(String userName, String nationId, String version,
                          boolean single, boolean current) {
         return ask(new LoginMessage(null, userName, nationId, version, null,
                                     single, current, null));
@@ -655,7 +654,7 @@ public abstract class ServerAPI {
      * @param reason The reason for logging out.
      * @return True if the server interaction succeeded.
      */
-    public boolean logout(Player player, LogoutReason reason) {
+    public CompletableFuture<Boolean> logout(Player player, LogoutReason reason) {
         return ask(new LogoutMessage(player, reason));
     }
 
@@ -670,7 +669,7 @@ public abstract class ServerAPI {
      *     if non-empty, then the list of goods to loot.
      * @return True if the server interaction succeeded.
      */
-    public boolean loot(Unit winner, String defenderId, List<Goods> goods) {
+    public CompletableFuture<Boolean> loot(Unit winner, String defenderId, List<Goods> goods) {
         return ask(new LootCargoMessage(winner, defenderId, goods));
     }
 
@@ -682,7 +681,7 @@ public abstract class ServerAPI {
      * @param denounce True if this is a denouncement.
      * @return True if the server interaction succeeded.
      */
-    public boolean missionary(Unit unit, Direction direction,
+    public CompletableFuture<Boolean> missionary(Unit unit, Direction direction,
                               boolean denounce) {
         return ask(new MissionaryMessage(unit, direction, denounce));
     }
@@ -694,7 +693,7 @@ public abstract class ServerAPI {
      * @param direction The direction to move in.
      * @return True if the server interaction succeeded.
      */
-    public boolean move(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> move(Unit unit, Direction direction) {
         return ask(new MoveMessage(unit, direction));
     }
 
@@ -705,7 +704,7 @@ public abstract class ServerAPI {
      * @param destination The {@code Location} to move to.
      * @return True if the server interaction succeeded.
      */
-    public boolean moveTo(Unit unit, Location destination) {
+    public CompletableFuture<Boolean> moveTo(Unit unit, Location destination) {
         return ask(new MoveToMessage(unit, destination));
     }
 
@@ -716,7 +715,7 @@ public abstract class ServerAPI {
      * @param colony The {@code Colony} to give to.
      * @return True if the server interaction succeeded.
      */
-    public boolean nativeGift(Unit unit, Colony colony) {
+    public CompletableFuture<Boolean> nativeGift(Unit unit, Colony colony) {
         return ask(new NativeGiftMessage(unit, colony));
     }
 
@@ -727,7 +726,7 @@ public abstract class ServerAPI {
      * @param name The new land name.
      * @return True if the server interaction succeeded.
      */
-    public boolean newLandName(Unit unit, String name) {
+    public CompletableFuture<Boolean> newLandName(Unit unit, String name) {
         return ask(new NewLandNameMessage(unit, name));
     }
 
@@ -738,7 +737,7 @@ public abstract class ServerAPI {
      * @param action The {@code NativeTradeAction} to perform.
      * @return True if the server interaction succeeded.
      */
-    public boolean nativeTrade(NativeTradeAction action, NativeTrade nt) {
+    public CompletableFuture<Boolean> nativeTrade(NativeTradeAction action, NativeTrade nt) {
         return ask(new NativeTradeMessage(action, nt));
     }
 
@@ -749,7 +748,7 @@ public abstract class ServerAPI {
      * @param is The {@code IndianSettlement} that is trading.
      * @return True if the server interaction succeeded.
      */
-    public boolean newNativeTradeSession(Unit unit, IndianSettlement is) {
+    public CompletableFuture<Boolean> newNativeTradeSession(Unit unit, IndianSettlement is) {
         return ask(new NativeTradeMessage(unit, is));
     }
 
@@ -762,7 +761,7 @@ public abstract class ServerAPI {
      * @param name The new region name.
      * @return True if the server interaction succeeded.
      */
-    public boolean newRegionName(Region region, Tile tile, Unit unit, 
+    public CompletableFuture<Boolean> newRegionName(Region region, Tile tile, Unit unit, 
                                  String name) {
         return ask(new NewRegionNameMessage(region, tile, unit, name));
     }
@@ -772,7 +771,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean newTradeRoute() {
+    public CompletableFuture<Boolean> newTradeRoute() {
         return ask(new NewTradeRouteMessage(null));
     }
 
@@ -782,7 +781,7 @@ public abstract class ServerAPI {
      * @param type The {@code GoodsType} to pay the arrears for.
      * @return True if the server interaction succeeded.
      */
-    public boolean payArrears(GoodsType type) {
+    public CompletableFuture<Boolean> payArrears(GoodsType type) {
         return ask(new PayArrearsMessage(type));
     }
 
@@ -792,7 +791,7 @@ public abstract class ServerAPI {
      * @param colony The {@code Colony} that is building.
      * @return True if the server interaction succeeded.
      */
-    public boolean payForBuilding(Colony colony) {
+    public CompletableFuture<Boolean> payForBuilding(Colony colony) {
         return ask(new PayForBuildingMessage(colony));
     }
 
@@ -802,7 +801,7 @@ public abstract class ServerAPI {
      * @param unit The {@code Unit} to put out.
      * @return True if the server interaction succeeded.
      */
-    public boolean putOutsideColony(Unit unit) {
+    public CompletableFuture<Boolean> putOutsideColony(Unit unit) {
         return ask(new PutOutsideColonyMessage(unit));
     }
 
@@ -815,11 +814,11 @@ public abstract class ServerAPI {
      *     workers arranged as required.
      * @return True if the server interaction succeeds.
      */
-    public boolean rearrangeColony(Colony colony, List<Unit> workers,
+    public CompletableFuture<Boolean> rearrangeColony(Colony colony, List<Unit> workers,
                                    Colony scratch) {
         RearrangeColonyMessage message
             = new RearrangeColonyMessage(colony, workers, scratch);
-        return (message.isEmpty()) ? true : ask(message);
+        return (message.isEmpty()) ? CompletableFuture.completedFuture(true) : ask(message);
     }
 
     /**
@@ -829,7 +828,7 @@ public abstract class ServerAPI {
      * @param name The name to apply.
      * @return True if the server interaction succeeded.
      */
-    public boolean rename(FreeColGameObject object, String name) {
+    public CompletableFuture<Boolean> rename(FreeColGameObject object, String name) {
         return ask(new RenameMessage(object, name));
     }
 
@@ -838,7 +837,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean requestLaunch() {
+    public CompletableFuture<Boolean> requestLaunch() {
         return send(TrivialMessage.requestLaunchMessage);
     }
 
@@ -847,7 +846,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean retire() {
+    public CompletableFuture<Boolean> retire() {
         return ask(TrivialMessage.retireMessage);
     }
 
@@ -860,7 +859,7 @@ public abstract class ServerAPI {
      * @param direction The direction to a settlement to ask.
      * @return True if the server interaction succeeded.
      */
-    public boolean scoutSettlement(Unit unit, Direction direction) {
+    public CompletableFuture<Boolean> scoutSettlement(Unit unit, Direction direction) {
         return ask(new ScoutIndianSettlementMessage(unit, direction));
     }
    
@@ -871,7 +870,7 @@ public abstract class ServerAPI {
      * @param is The {@code IndianSettlement} to ask.
      * @return True if the server interaction succeeded.
      */
-    public boolean scoutSpeakToChief(Unit unit, IndianSettlement is) {
+    public CompletableFuture<Boolean> scoutSpeakToChief(Unit unit, IndianSettlement is) {
         return ask(new ScoutSpeakToChiefMessage(unit, is, null));
     }
 
@@ -882,7 +881,7 @@ public abstract class ServerAPI {
      * @param state The {@code NationState} defining the availability.
      * @return True if the server interaction succeeded.
      */
-    public boolean setAvailable(Nation nation, NationState state) {
+    public CompletableFuture<Boolean> setAvailable(Nation nation, NationState state) {
         return ask(new SetAvailableMessage(nation, state));
     }
 
@@ -893,7 +892,7 @@ public abstract class ServerAPI {
      * @param buildQueue the new values for the build queue
      * @return True if the server interaction succeeded.
      */
-    public boolean setBuildQueue(Colony colony,
+    public CompletableFuture<Boolean> setBuildQueue(Colony colony,
                                  List<BuildableType> buildQueue) {
         return ask(new SetBuildQueueMessage(colony, buildQueue));
     }
@@ -906,7 +905,7 @@ public abstract class ServerAPI {
      * @param color The {@code Color} selected.
      * @return True if the server interaction succeeded.
      */
-    public boolean setColor(Nation nation, Color color) {
+    public CompletableFuture<Boolean> setColor(Nation nation, Color color) {
         return ask(new SetColorMessage(nation, color));
     }
 
@@ -917,7 +916,7 @@ public abstract class ServerAPI {
      * @param index The stop index.
      * @return True if the query-response succeeds.
      */
-    public boolean setCurrentStop(Unit unit, int index) {
+    public CompletableFuture<Boolean> setCurrentStop(Unit unit, int index) {
         return ask(new SetCurrentStopMessage(unit, index));
     }
 
@@ -929,7 +928,7 @@ public abstract class ServerAPI {
      * @return True if the server interaction succeeded.
      * @see Unit#setDestination(Location)
      */
-    public boolean setDestination(Unit unit, Location destination) {
+    public CompletableFuture<Boolean> setDestination(Unit unit, Location destination) {
         return ask(new SetDestinationMessage(unit, destination));
     }
 
@@ -940,7 +939,7 @@ public abstract class ServerAPI {
      * @param data The {@code ExportData} setting.
      * @return True if the server interaction succeeded.
      */
-    public boolean setGoodsLevels(Colony colony, ExportData data) {
+    public CompletableFuture<Boolean> setGoodsLevels(Colony colony, ExportData data) {
         return ask(new SetGoodsLevelsMessage(colony, data));
     }
 
@@ -951,7 +950,7 @@ public abstract class ServerAPI {
      * @param nation The {@code Nation} selected.
      * @return True if the server interaction succeeded.
      */
-    public boolean setNation(Nation nation) {
+    public CompletableFuture<Boolean> setNation(Nation nation) {
         return ask(new SetNationMessage(null, nation));
     }
 
@@ -962,7 +961,7 @@ public abstract class ServerAPI {
      * @param nationType The {@code NationType} selected.
      * @return True if the server interaction succeeded.
      */
-    public boolean setNationType(NationType nationType) {
+    public CompletableFuture<Boolean> setNationType(NationType nationType) {
         return ask(new SetNationTypeMessage(null, nationType));
     }
 
@@ -973,7 +972,7 @@ public abstract class ServerAPI {
      * @param ready The readiness state to signal.
      * @return True if the server interaction succeeded.
      */
-    public boolean setReady(boolean ready) {
+    public CompletableFuture<Boolean> setReady(boolean ready) {
         return send(new ReadyMessage(null, ready));
     }
 
@@ -984,7 +983,7 @@ public abstract class ServerAPI {
      * @param settlement The {@code Settlement} to spy on.
      * @return True if the client/server interaction succeeded.
      */
-    public boolean spy(Unit unit, Settlement settlement) {
+    public CompletableFuture<Boolean> spy(Unit unit, Settlement settlement) {
         return ask(new SpySettlementMessage(unit, settlement));
     }
 
@@ -993,7 +992,7 @@ public abstract class ServerAPI {
      *
      * @return True if the server interaction succeeded.
      */
-    public boolean startSkipping() {
+    public CompletableFuture<Boolean> startSkipping() {
         return send(TrivialMessage.endTurnMessage);
     }
 
@@ -1003,7 +1002,7 @@ public abstract class ServerAPI {
      * @param type The {@code UnitType} to train.
      * @return True if the server interaction succeeded.
      */
-    public boolean trainUnitInEurope(UnitType type) {
+    public CompletableFuture<Boolean> trainUnitInEurope(UnitType type) {
         return ask(new TrainUnitInEuropeMessage(type));
     }
 
@@ -1015,7 +1014,7 @@ public abstract class ServerAPI {
      * @param carrier The {@code Unit} to unload from.
      * @return True if the query-response succeeds.
      */
-    public boolean unloadGoods(GoodsType type, int amount, Unit carrier) {
+    public CompletableFuture<Boolean> unloadGoods(GoodsType type, int amount, Unit carrier) {
         return ask(new UnloadGoodsMessage(type, amount, carrier));
     }
 
@@ -1027,7 +1026,7 @@ public abstract class ServerAPI {
      *     game options.
      * @return True if the server interaction succeeded.
      */
-    public boolean updateGameOptions(OptionGroup gameOptions) {
+    public CompletableFuture<Boolean> updateGameOptions(OptionGroup gameOptions) {
         return send(new UpdateGameOptionsMessage(gameOptions));
     }
 
@@ -1039,7 +1038,7 @@ public abstract class ServerAPI {
      *     map generator options.
      * @return True if the server interaction succeeded.
      */
-    public boolean updateMapGeneratorOptions(OptionGroup mapOptions) {
+    public CompletableFuture<Boolean> updateMapGeneratorOptions(OptionGroup mapOptions) {
         return send(new UpdateMapGeneratorOptionsMessage(mapOptions));
     }
 
@@ -1049,7 +1048,7 @@ public abstract class ServerAPI {
      * @param route The trade route to update.
      * @return True if the server interaction succeeded.
      */
-    public boolean updateTradeRoute(TradeRoute route) {
+    public CompletableFuture<Boolean> updateTradeRoute(TradeRoute route) {
         return ask(new UpdateTradeRouteMessage(route));
     }
 
@@ -1060,7 +1059,7 @@ public abstract class ServerAPI {
      * @param workLocation The {@code WorkLocation} to change to.
      * @return True if the server interaction succeeded.
      */
-    public boolean work(Unit unit, WorkLocation workLocation) {
+    public CompletableFuture<Boolean> work(Unit unit, WorkLocation workLocation) {
         return ask(new WorkMessage(unit, workLocation));
     }
 }

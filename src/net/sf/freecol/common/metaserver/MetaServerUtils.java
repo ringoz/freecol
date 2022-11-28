@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -251,7 +251,7 @@ public class MetaServerUtils {
                 startTimer(si);
                 if (mc != null) {
                     final ConnectionVerificationMessage reply = (ConnectionVerificationMessage) mc.askMessage(
-                            new RegisterServerMessage(si), METASERVER_REPLY_TIMEOUT);
+                            new RegisterServerMessage(si), METASERVER_REPLY_TIMEOUT).get();
                     return reply.isConnectable();
                 }
             case REMOVE:
@@ -270,7 +270,7 @@ public class MetaServerUtils {
                 logger.log(Level.WARNING, "Wrong metaMessage type: " + type);
                 break;
             }
-        } catch (FreeColException|IOException|XMLStreamException|TimeoutException ex) {
+        } catch (FreeColException|IOException|XMLStreamException|InterruptedException|ExecutionException ex) {
             logger.log(Level.WARNING, "Meta message " + type + " failure.", ex);
             // Do not fail: Try registering again later:
             return true;

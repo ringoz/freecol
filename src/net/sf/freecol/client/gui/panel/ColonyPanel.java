@@ -639,7 +639,8 @@ public final class ColonyPanel extends PortPanel
                     (check || !wl.produces(u.getWorkType())))) {
                 GoodsType workType = wl.getWorkFor(unit);
                 if (workType != null && workType != unit.getWorkType()) {
-                    change |= igc().changeWorkType(unit, workType);
+                    igc().changeWorkType(unit, workType);
+                    change |= true;
                 }
             }
             if (change) wl.updateProductionType();
@@ -2195,8 +2196,8 @@ public final class ColonyPanel extends PortPanel
                         = player.canClaimForSettlementReason(tile);
                     switch (claim) {
                     case NONE: case NATIVES:
-                        if (igc().claimTile(tile, colony)
-                            && tile.getOwningSettlement() == colony) {
+                        igc().claimTile(tile, colony);
+                        if (tile.getOwningSettlement() == colony) {
                             logger.info("Colony " + colony.getName()
                                 + " claims tile " + tile
                                 + " with unit " + unit.getId());

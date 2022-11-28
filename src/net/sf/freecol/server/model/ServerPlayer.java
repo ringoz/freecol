@@ -292,12 +292,7 @@ public class ServerPlayer extends Player implements TurnTaker {
     @Override
     public boolean send(ChangeSet cs) {
         if (!isConnected()) return false;
-        try {
-            this.connection.request(cs.build(this));
-        } catch (FreeColException|IOException|XMLStreamException ex) {
-            logger.log(Level.WARNING, "send fail", ex);
-            return false;
-        }
+        this.connection.request(cs.build(this));
         return true;
     }
 
