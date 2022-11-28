@@ -34,29 +34,38 @@ import org.xml.sax.SAXException;
 
 import net.sf.freecol.common.FreeColException;
 
+abstract class ThreadWork implements Runnable {
+    private final String name;
+    private CompletableFuture<Void> work;
+
+    ThreadWork(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ThreadWork[" + getName() + "]";
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void start() {
+        this.work = CompletableFuture.runAsync(this);
+    }
+
+    public void interrupt() {
+        this.work.cancel(true);
+    }
+};
 
 /**
  * The thread that checks for incoming messages.
  */
-final class ReceivingThread extends Thread {
+final class ReceivingThread extends ThreadWork {
 
     private static final Logger logger = Logger.getLogger(ReceivingThread.class.getName());
-
-    private static abstract class ThreadWork implements Runnable {
-        private final String name;
-
-        ThreadWork(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public void start() {
-            CompletableFuture.runAsync(this);
-        }
-    };
 
     /** A class to handle questions. */
     private static class QuestionThread extends ThreadWork {
@@ -385,35 +394,36 @@ final class ReceivingThread extends Thread {
 
 
     // Override Thread
+    int timesFailed = 0;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void run() {
+        if (!shouldRun()) {
+            askToStop("run complete");
+            return;
+        }
+
         // Receive messages from the network in a loop. This method is
         // invoked when the thread starts and the thread will stop when
         // this method returns.
-        int timesFailed = 0;
         try {
-            while (shouldRun()) {
-                try {
-                    listen();
-                    timesFailed = 0;
-                } catch (SAXException|XMLStreamException ex) {
-                    if (!shouldRun()) break;
-                    logger.log(Level.WARNING, getName() + ": XML fail", ex);
-                    if (++timesFailed > MAXIMUM_RETRIES) {
-                        disconnect();
-                    }
-                } catch (IOException ioe) {
-                    if (!shouldRun()) break;
-                    logger.log(Level.WARNING, getName() + ": IO fail", ioe);
-                    disconnect();
-                }
+            listen();
+            timesFailed = 0;
+        } catch (SAXException|XMLStreamException ex) {
+            if (!shouldRun()) return;
+            logger.log(Level.WARNING, getName() + ": XML fail", ex);
+            if (++timesFailed > MAXIMUM_RETRIES) {
+                disconnect();
             }
+        } catch (IOException ioe) {
+            if (!shouldRun()) return;
+            logger.log(Level.WARNING, getName() + ": IO fail", ioe);
+            disconnect();
         } finally {
-            askToStop("run complete");
+            this.start();
         }
     }
 }
