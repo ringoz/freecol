@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -555,7 +556,7 @@ public class Connection implements Closeable {
      */
     public CompletableFuture<Void> request(Message message) {
         if (message == null) return CompletableFuture.completedFuture(null);
-        return askMessage(message, DEFAULT_REPLY_TIMEOUT).thenAcceptAsync((Message response) -> {
+        final Consumer<Message> action = (Message response) -> {
             try {
                 if (response != null) {
                     Message reply = handle(response);
@@ -564,7 +565,11 @@ public class Connection implements Closeable {
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
-        }, java.awt.EventQueue::invokeLater);
+        };
+        final var result = askMessage(message, DEFAULT_REPLY_TIMEOUT);
+        return java.awt.EventQueue.isDispatchThread() 
+            ? result.thenAcceptAsync(action, java.awt.EventQueue::invokeLater) 
+            : result.thenAccept(action);
     }
         
     /**
