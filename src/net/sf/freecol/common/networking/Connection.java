@@ -31,6 +31,8 @@ import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -168,7 +170,12 @@ public class Connection implements Closeable {
         throws IOException {
         AsynchronousSocketChannel socket = AsynchronousSocketChannel.open();
         SocketAddress addr = new InetSocketAddress(host, port);
-        socket.connect(addr);
+        final var conn = socket.connect(addr);
+        try {
+            conn.get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new IOException(e.getMessage());
+        }
         return socket;
     }
 
@@ -392,21 +399,27 @@ public class Connection implements Closeable {
         return this.xr;
     }
 
-    public String startListen() throws XMLStreamException {
-        String line;
-        try {
-            line = this.br.readLine();
-        } catch (IOException ioe) {
-            line = null;
-        }
-        if (line == null) return DisconnectMessage.TAG;
-        try {
-            this.xr = new FreeColXMLReader(new StringReader(line));
-        } catch (Exception ex) {
-            return DisconnectMessage.TAG;
-        }
-        this.xr.nextTag();
-        return this.xr.getLocalName();
+    public CompletableFuture<String> startListen() {
+        return CompletableFuture.supplyAsync(() -> {
+            String line;
+            try {
+                line = this.br.readLine();
+            } catch (IOException ioe) {
+                line = null;
+            }
+            if (line == null) return DisconnectMessage.TAG;
+            try {
+                this.xr = new FreeColXMLReader(new StringReader(line));
+            } catch (Exception ex) {
+                return DisconnectMessage.TAG;
+            }
+            try {
+                this.xr.nextTag();
+            } catch (XMLStreamException e) {
+                throw new CompletionException(e);
+            }
+            return this.xr.getLocalName();
+        });
     }
 
     public int getReplyId() {

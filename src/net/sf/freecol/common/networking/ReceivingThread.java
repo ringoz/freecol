@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,6 +59,10 @@ abstract class ThreadWork implements Runnable {
     public void interrupt() {
         this.work.cancel(true);
     }
+
+    public boolean isInterrupted() {
+        return this.work.isCancelled();
+    }    
 };
 
 /**
@@ -177,9 +182,6 @@ final class ReceivingThread extends ThreadWork {
     /** The connection to receive on. */
     private final Connection connection;
 
-    /** Whether the thread should run. */
-    private boolean shouldRun;
-
     /** A counter for reply ids. */
     private int nextNetworkReplyId;
 
@@ -195,7 +197,6 @@ final class ReceivingThread extends ThreadWork {
         super("ReceivingThread-" + threadName);
 
         this.connection = connection;
-        this.shouldRun = true;
         this.nextNetworkReplyId = 1;
     }
 
@@ -225,32 +226,12 @@ final class ReceivingThread extends ThreadWork {
     }
 
     /**
-     * Checks if this thread should run.
-     *
-     * @return True if the thread should run.
-     */
-    private synchronized boolean shouldRun() {
-        return this.shouldRun;
-    }
-
-    /**
-     * Set the shouldRun state to false.
-     *
-     * @return The old value of shouldRun.
-     */
-    private synchronized boolean stopRun() {
-        if (!this.shouldRun) return false;
-        this.shouldRun = false;
-        return true;
-    }
-        
-    /**
      * Stop this thread.
      *
      * @return True if the thread was previously running and is now stopped.
      */
     private boolean stopThread() {
-        if (!stopRun()) return false;
+        if (isInterrupted()) return false; interrupt();
         // Explicit extraction from waitingThreads before iterating
         Collection<NetworkReplyObject> nros;
         synchronized (this.waitingThreads) {
@@ -317,79 +298,81 @@ final class ReceivingThread extends ThreadWork {
      * @exception SAXException if a problem occured during parsing.
      * @exception XMLStreamException if a problem occured during parsing.
      */
-    private void listen() throws IOException, SAXException, XMLStreamException {
-        String tag;
-        int replyId = -1;
-        try {
-            tag = this.connection.startListen();
-        } catch (XMLStreamException xse) {
-            if (!shouldRun()) return; // Connection shutdown, fail expected
+    private CompletableFuture<Void> listen() {
+        CompletableFuture<String> start = this.connection.startListen().exceptionally((xse) -> {
             logger.log(Level.WARNING, getName() + ": listen fail", xse);
-            tag = DisconnectMessage.TAG;
-        }
+            return DisconnectMessage.TAG;
+        });
 
-        // Read the message, optionally create a thread to handle it
-        ThreadWork t = null;
-        switch (tag) {
-        case DisconnectMessage.TAG:
-            // Do not actually read the message, it might be a fake one
-            // due to end-of-stream.
-            askToStop("listen-disconnect");
-            t = messageUpdate(TrivialMessage.disconnectMessage);
-            break;
+        return start.thenAccept((String tag) -> {
+            if (tag == null) return;
+            int replyId = -1;
 
-        case Connection.REPLY_TAG:
-            // A reply.  Always respond, even when failing, so as to
-            // unblock the waiting thread.
-
-            replyId = this.connection.getReplyId();
-            Message rm;
-            try {
-                rm = this.connection.reader();
-            } catch (Exception ex) {
-                rm = null;
-                logger.log(Level.WARNING, getName() + ": reply fail", ex);
+            // Read the message, optionally create a thread to handle it
+            ThreadWork t = null;
+            switch (tag) {
+            case DisconnectMessage.TAG:
+                // Do not actually read the message, it might be a fake one
+                // due to end-of-stream.
+                askToStop("listen-disconnect");
+                t = messageUpdate(TrivialMessage.disconnectMessage);
+                break;
+    
+            case Connection.REPLY_TAG:
+                // A reply.  Always respond, even when failing, so as to
+                // unblock the waiting thread.
+    
+                replyId = this.connection.getReplyId();
+                Message rm;
+                try {
+                    rm = this.connection.reader();
+                } catch (Exception ex) {
+                    rm = null;
+                    logger.log(Level.WARNING, getName() + ": reply fail", ex);
+                }
+                NetworkReplyObject nro = this.waitingThreads.remove(replyId);
+                if (nro == null) {
+                    logger.warning(getName() + ": did not find reply " + replyId);
+                } else {
+                    nro.setResponse(rm);
+                }
+                break;
+    
+            case Connection.QUESTION_TAG:
+                // A question.  Build a thread to handle it and send a reply.
+    
+                replyId = this.connection.getReplyId();
+                Message m = null;
+                try {
+                    m = this.connection.reader();
+                    assert m instanceof QuestionMessage;
+                    t = messageQuestion((QuestionMessage)m, replyId);
+                } catch (FreeColException fce) {
+                    logger.log(Level.WARNING, "No reader for " + replyId, fce);
+                    t = null;
+                } catch (XMLStreamException e) {
+                    throw new CompletionException(e);
+                }
+                break;
+                
+            default:
+                // An ordinary update message.
+                // Build a thread to handle it and possibly respond.
+    
+                try {
+                    t = messageUpdate(this.connection.reader());
+                } catch (Exception ex) {
+                    logger.log(Level.FINEST, getName() + ": fail", ex);
+                    askToStop("listen-update-fail");
+                }
+                break;
             }
-            NetworkReplyObject nro = this.waitingThreads.remove(replyId);
-            if (nro == null) {
-                logger.warning(getName() + ": did not find reply " + replyId);
-            } else {
-                nro.setResponse(rm);
-            }
-            break;
-
-        case Connection.QUESTION_TAG:
-            // A question.  Build a thread to handle it and send a reply.
-
-            replyId = this.connection.getReplyId();
-            Message m = null;
-            try {
-                m = this.connection.reader();
-                assert m instanceof QuestionMessage;
-                t = messageQuestion((QuestionMessage)m, replyId);
-            } catch (FreeColException fce) {
-                logger.log(Level.WARNING, "No reader for " + replyId, fce);
-                t = null;
-            }                
-            break;
-            
-        default:
-            // An ordinary update message.
-            // Build a thread to handle it and possibly respond.
-
-            try {
-                t = messageUpdate(this.connection.reader());
-            } catch (Exception ex) {
-                logger.log(Level.FINEST, getName() + ": fail", ex);
-                askToStop("listen-update-fail");
-            }
-            break;
-        }
-
-        // Start the thread
-        if (t != null) t.start();
-
-        this.connection.endListen(); // Clean up
+    
+            // Start the thread
+            if (t != null) t.start();
+    
+            this.connection.endListen(); // Clean up
+        });
     }
 
 
@@ -401,29 +384,18 @@ final class ReceivingThread extends ThreadWork {
      */
     @Override
     public void run() {
-        if (!shouldRun()) {
-            askToStop("run complete");
-            return;
-        }
-
-        // Receive messages from the network in a loop. This method is
-        // invoked when the thread starts and the thread will stop when
-        // this method returns.
-        try {
-            listen();
-            timesFailed = 0;
-        } catch (SAXException|XMLStreamException ex) {
-            if (!shouldRun()) return;
-            logger.log(Level.WARNING, getName() + ": XML fail", ex);
-            if (++timesFailed > MAXIMUM_RETRIES) {
-                disconnect();
+        // Receive messages from the network in a loop.
+        listen().whenComplete((v, ex) -> {
+            if (ex == null) {
+                timesFailed = 0;
             }
-        } catch (IOException ioe) {
-            if (!shouldRun()) return;
-            logger.log(Level.WARNING, getName() + ": IO fail", ioe);
-            disconnect();
-        } finally {
-            this.start();
-        }
+            else {
+                logger.log(Level.WARNING, getName() + ": fail", ex);
+                if (++timesFailed > MAXIMUM_RETRIES) {
+                    disconnect();
+                }
+            }
+            this.run();
+        });
     }
 }
