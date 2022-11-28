@@ -89,8 +89,8 @@ public final class DummyConnection extends Connection {
      * {@inheritDoc}
      */
     @Override
-    public void sendMessage(Message message) {
-        askMessage(message, Connection.DEFAULT_REPLY_TIMEOUT).thenAccept((Message reply) -> {
+    public CompletableFuture<Void> sendMessage(Message message) {
+        return askMessage(message, Connection.DEFAULT_REPLY_TIMEOUT).thenAccept((Message reply) -> {
             assert reply == null;
         });
     }

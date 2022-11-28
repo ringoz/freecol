@@ -19,6 +19,8 @@
 
 package net.sf.freecol.common.networking;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -28,19 +30,11 @@ import java.util.concurrent.TimeoutException;
  */
 public class NetworkReplyObject {
 
-    private static int ONE_SECOND = 1000; // 1000ms
-
     /** A unique identifier for the message to wait for. */
     private final int networkReplyId;
 
     /** The response from the network. */
-    private Object response;
-
-    /**
-     * A gating flag that shows when the response is valid.  Starts false,
-     * becomes true in {@link #setResponse}.
-     */
-    private volatile boolean responseGiven;
+    private CompletableFuture<Object> response;
 
 
     /**
@@ -51,8 +45,7 @@ public class NetworkReplyObject {
      */
     public NetworkReplyObject(int networkReplyId) {
         this.networkReplyId = networkReplyId;
-        this.response = null;
-        this.responseGiven = false;
+        this.response = new CompletableFuture<Object>();
     }
 
     /**
@@ -75,17 +68,8 @@ public class NetworkReplyObject {
      * @return the response.
      * @throws TimeoutException when the timeout is reached.
      */
-    public synchronized Object getResponse(long timeout) throws TimeoutException {
-        final long end = System.currentTimeMillis() + timeout;
-        while (!this.responseGiven) {
-            if (System.currentTimeMillis() > end) {
-                throw new TimeoutException("The network request timed out: " + timeout);
-            }
-            try {
-                wait(ONE_SECOND);
-            } catch (InterruptedException ie) {}
-        }
-        return this.response;
+    public CompletableFuture<Object> getResponse(long timeout) {
+        return this.response.orTimeout(timeout, TimeUnit.MILLISECONDS);
     }
     
     /**
@@ -94,18 +78,14 @@ public class NetworkReplyObject {
      * @param response The response.
      * @see #getResponse
      */
-    public synchronized void setResponse(Object response) {
-        if (!this.responseGiven) {
-            this.response = response;
-            this.responseGiven = true;
-            notifyAll();
-        }
+    public void setResponse(Object response) {
+        this.response.complete(response);
     }
 
     /**
      * Interrupt the wait for response.
      */
     public void interrupt() {
-        setResponse(null);
+        this.response.cancel(true);
     }
 }

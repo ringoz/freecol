@@ -103,13 +103,12 @@ final class ReceivingThread extends Thread {
 
             final String replyTag = (reply == null) ? "null"
                 : reply.getType();
-            try {
-                this.conn.sendMessage(new ReplyMessage(this.replyId, reply));
+            this.conn.sendMessage(new ReplyMessage(this.replyId, reply)).thenAccept((v) -> {
                 logger.log(Level.FINEST, getName() + " -> " + replyTag);
-            } catch (FreeColException|IOException|XMLStreamException ex) {
-                logger.log(Level.WARNING, getName() + " -> " + replyTag
-                    + " failed", ex);
-            }                
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, getName() + " -> " + replyTag + " failed", ex);
+                return null;
+            });
         }
     };
 
@@ -150,13 +149,12 @@ final class ReceivingThread extends Thread {
             }
 
             final String outTag = (reply == null) ? "null" : reply.getType();
-            try {
-                this.conn.sendMessage(reply);
+            this.conn.sendMessage(reply).thenAccept((v) -> {
                 logger.log(Level.FINEST, getName() + " -> " + outTag);
-            } catch (FreeColException|IOException|XMLStreamException ex) {
-                logger.log(Level.WARNING, getName() + " -> " + outTag
-                    + " failed", ex);
-            }                
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, getName() + " -> " + outTag + " failed", ex);
+                return null;
+            });
         }
     };
 

@@ -270,7 +270,7 @@ public class MetaServerUtils {
                 logger.log(Level.WARNING, "Wrong metaMessage type: " + type);
                 break;
             }
-        } catch (FreeColException|IOException|XMLStreamException|InterruptedException|ExecutionException ex) {
+        } catch (InterruptedException|ExecutionException ex) {
             logger.log(Level.WARNING, "Meta message " + type + " failure.", ex);
             // Do not fail: Try registering again later:
             return true;
@@ -307,7 +307,7 @@ public class MetaServerUtils {
                 delay(SLEEP_TIME, "Delay interrupted");
             }
             if (ret == null) logger.warning("No response from metaserver.");
-        } catch (FreeColException|IOException|XMLStreamException ex) {
+        } catch (Throwable ex) {
             logger.log(Level.WARNING, "Get server list failure", ex);
         } finally {
             mc.close();

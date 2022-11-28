@@ -441,27 +441,19 @@ public class Connection implements Closeable {
         // *Then* send the message.
         final int replyId = this.receivingThread.getNextNetworkReplyId();
         QuestionMessage qm = new QuestionMessage(replyId, message);
-        NetworkReplyObject nro
-            = this.receivingThread.waitForNetworkReply(replyId);
-        try {
-            sendMessage(qm);
+        NetworkReplyObject nro = this.receivingThread.waitForNetworkReply(replyId);
 
-            // Block waiting for the reply to occur.  Expect a reply
-            // message, except on shutdown.
-            Object response = nro.getResponse(timeout);
+        return sendMessage(qm).thenCompose((v) -> nro.getResponse(timeout)).thenApply((response) -> {
             if (response == null && !this.socket.isOpen()) {
                 return null;
             } else if (!(response instanceof ReplyMessage)) {
-                throw new FreeColException("Bad response to " + replyId + "/" + tag
-                    + ": " + response);
+                throw new CompletionException(new FreeColException("Bad response to " + replyId + "/" + tag
+                        + ": " + response));
             }
-            ReplyMessage reply = (ReplyMessage)response;
+            ReplyMessage reply = (ReplyMessage) response;
             logMessage(reply, false);
-            return CompletableFuture.completedFuture(reply.getMessage());
-        }
-        catch (Exception e) {
-            return CompletableFuture.failedFuture(e);
-        }
+            return reply.getMessage();
+        });
     }
     
     /**
@@ -474,17 +466,22 @@ public class Connection implements Closeable {
      * @exception IOException on failure to send.
      * @exception XMLStreamException on stream problem.
      */
-    public void sendMessage(Message message)
-        throws FreeColException, IOException, XMLStreamException {
-        if (message == null) return;
-        synchronized (this.outputLock) {
-            if (this.xw == null) return;
-            message.toXML(this.xw);
-            this.xw.writeCharacters(END_OF_STREAM_ARRAY, 0,
-                                    END_OF_STREAM_ARRAY.length);
-            this.xw.flush();
-        }
-        logMessage(message, true);
+    public CompletableFuture<Void> sendMessage(Message message) {
+        if (message == null) return CompletableFuture.completedFuture(null);
+        return CompletableFuture.runAsync(() -> {
+            synchronized (this.outputLock) {
+                if (this.xw == null) return;
+                try {
+                    message.toXML(this.xw);
+                    this.xw.writeCharacters(END_OF_STREAM_ARRAY, 0,
+                                            END_OF_STREAM_ARRAY.length);
+                    this.xw.flush();
+                    logMessage(message, true);
+                } catch (XMLStreamException e) {
+                    throw new CompletionException(e);
+                }
+            }
+        });
     }
 
     /**
@@ -567,7 +564,7 @@ public class Connection implements Closeable {
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
-        }, (Runnable command) -> java.awt.EventQueue.invokeLater(command));
+        }, java.awt.EventQueue::invokeLater);
     }
         
     /**
