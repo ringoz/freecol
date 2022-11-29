@@ -19,14 +19,17 @@
 
 package net.sf.freecol.common.networking;
 
-import java.io.BufferedReader;
+import static com.ea.async.Async.await;
+
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.Channels;
+import java.nio.channels.CompletionHandler;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
@@ -84,10 +87,8 @@ public class Connection implements Closeable {
     /** The socket connected to the other end of the connection. */
     private AsynchronousSocketChannel socket = null;
 
-    /** A lock for the input side. */
-    private final Object inputLock = new Object();
     /** The wrapped version of the input side of the socket. */
-    private BufferedReader br;
+    private ByteBuffer br;
     /** An XML stream wrapping of an input line. */
     private FreeColXMLReader xr;
 
@@ -104,7 +105,7 @@ public class Connection implements Closeable {
 
     /** The message handler to process incoming messages with. */
     private MessageHandler messageHandler = null;
-    
+
 
     /**
      * Trivial constructor.
@@ -138,10 +139,22 @@ public class Connection implements Closeable {
         this(name);
 
         setSocket(socket);
-        this.br = new BufferedReader(new InputStreamReader(Channels.newInputStream(socket), StandardCharsets.UTF_8));
+        this.br = ByteBuffer.allocate(BUFFER_SIZE);
         this.receivingThread = new ReceivingThread(this, name);
-        this.xw = new FreeColXMLWriter(Channels.newOutputStream(socket),
-            FreeColXMLWriter.WriteScope.toSave(), false);
+        this.xw = new FreeColXMLWriter(new Writer() {
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException {
+                socket.write(StandardCharsets.UTF_8.encode(CharBuffer.wrap(cbuf, off, len)));
+            }
+    
+            @Override
+            public void flush() throws IOException {
+            }
+    
+            @Override
+            public void close() throws IOException {
+            }
+        }, FreeColXMLWriter.WriteScope.toSave());
     }
 
     /**
@@ -241,18 +254,7 @@ public class Connection implements Closeable {
      * Close and clear the input stream.
      */
     private void closeInputStream() {
-        synchronized (this.inputLock) {
-            if (this.br != null) {
-                try {
-                    this.br.close();
-                } catch (IOException ioe) {
-                    logger.log(Level.WARNING, "Error closing buffered input",
-                        ioe);
-                } finally {
-                    this.br = null;
-                }
-            }
-        }
+        this.br = null;
     }
 
     /**
@@ -399,14 +401,40 @@ public class Connection implements Closeable {
         return this.xr;
     }
 
-    public CompletableFuture<String> startListen() {
-        return CompletableFuture.supplyAsync(() -> {
-            String line;
-            try {
-                line = this.br.readLine();
-            } catch (IOException ioe) {
-                line = null;
+    private CompletableFuture<ByteBuffer> readBytesAsync(final ByteBuffer buf) {
+        final var result = new CompletableFuture<ByteBuffer>();
+        socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
+            @Override
+            public void completed(Integer len, ByteBuffer buf) {
+                result.complete((len != -1) ? buf.flip() : null);
             }
+
+            @Override
+            public void failed(Throwable exc, ByteBuffer buf) {
+                result.completeExceptionally(exc);
+            }
+        });
+        return result;
+    }
+
+    private CompletableFuture<String> readLineAsync() {
+        final var all = ByteBuffer.allocate(1 << 20);
+        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync(buf.clear()))) {
+            while (buf.hasRemaining()) {
+                final byte b = buf.get();
+                if (b == '\n') {
+                    final String line = StandardCharsets.UTF_8.decode(all.flip()).toString();
+                    return CompletableFuture.completedFuture(line);
+                }
+                if (b != '\0')
+                    all.put(b);
+            }
+        }
+        return CompletableFuture.completedFuture(null);
+    }
+
+    public CompletableFuture<String> startListen() {
+        return readLineAsync().thenApply((line) -> {
             if (line == null) return DisconnectMessage.TAG;
             try {
                 this.xr = new FreeColXMLReader(new StringReader(line));
