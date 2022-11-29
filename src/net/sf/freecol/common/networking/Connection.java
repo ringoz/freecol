@@ -242,8 +242,12 @@ public class Connection implements Closeable {
      * Close and clear the output stream.
      */
     private void closeOutputStream() {
-        synchronized (this.outputLock) {
-            if (this.xw != null) {
+        if (this.xw != null) {
+            try {
+                this.socket.shutdownOutput();
+            } catch (IOException ioe) {
+                logger.log(Level.WARNING, "Error closing output", ioe);
+            } finally {
                 this.xw.close();
                 this.xw = null;
             }
@@ -254,7 +258,15 @@ public class Connection implements Closeable {
      * Close and clear the input stream.
      */
     private void closeInputStream() {
-        this.br = null;
+        if (this.br != null) {
+            try {
+                this.socket.shutdownInput();
+            } catch (IOException ioe) {
+                logger.log(Level.WARNING, "Error closing input", ioe);
+            } finally {
+                this.br = null;
+            }
+        }
     }
 
     /**
