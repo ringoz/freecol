@@ -21,6 +21,7 @@ package net.sf.freecol.common.networking;
 
 import static com.ea.async.Async.await;
 
+import java.awt.EventQueue;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.StringReader;
@@ -37,7 +38,6 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -609,7 +609,9 @@ public class Connection implements Closeable {
      */
     public CompletableFuture<Void> request(Message message) {
         if (message == null) return CompletableFuture.completedFuture(null);
-        final Consumer<Message> action = (Message response) -> {
+       
+        final boolean wasDispatchThread = EventQueue.isDispatchThread();
+        return askMessage(message, DEFAULT_REPLY_TIMEOUT).thenAcceptAsync((Message response) -> {
             try {
                 if (response != null) {
                     Message reply = handle(response);
@@ -618,11 +620,12 @@ public class Connection implements Closeable {
             } catch (Exception e) {
                 throw new CompletionException(e);
             }
-        };
-        final var result = askMessage(message, DEFAULT_REPLY_TIMEOUT);
-        return java.awt.EventQueue.isDispatchThread() 
-            ? result.thenAcceptAsync(action, java.awt.EventQueue::invokeLater) 
-            : result.thenAccept(action);
+        }, (command) -> {
+            if (!wasDispatchThread || EventQueue.isDispatchThread())
+                command.run();
+            else
+                EventQueue.invokeLater(command);
+        });
     }
         
     /**
