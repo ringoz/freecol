@@ -69,7 +69,7 @@ public class NetworkReplyObject {
      * @throws TimeoutException when the timeout is reached.
      */
     public CompletableFuture<Object> getResponse(long timeout) {
-        return this.response.orTimeout(timeout, TimeUnit.MILLISECONDS);
+        return this.response;//.orTimeout(timeout, TimeUnit.MILLISECONDS);
     }
     
     /**
