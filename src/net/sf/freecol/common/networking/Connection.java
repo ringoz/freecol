@@ -418,7 +418,7 @@ public class Connection implements Closeable {
         socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
             @Override
             public void completed(Integer len, ByteBuffer buf) {
-                result.complete((len != -1) ? buf.flip() : null);
+                result.complete((len != -1) ? (ByteBuffer)buf.flip() : null);
             }
 
             @Override
@@ -431,11 +431,11 @@ public class Connection implements Closeable {
 
     private CompletableFuture<String> readLineAsync() {
         final var all = ByteBuffer.allocate(1 << 20);
-        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync(buf.clear()))) {
+        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
             while (buf.hasRemaining()) {
                 final byte b = buf.get();
                 if (b == '\n') {
-                    final String line = StandardCharsets.UTF_8.decode(all.flip()).toString();
+                    final String line = StandardCharsets.UTF_8.decode((ByteBuffer)all.flip()).toString();
                     return CompletableFuture.completedFuture(line);
                 }
                 if (b != '\0')
