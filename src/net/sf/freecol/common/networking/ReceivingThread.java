@@ -35,142 +35,12 @@ import org.xml.sax.SAXException;
 
 import net.sf.freecol.common.FreeColException;
 
-abstract class ThreadWork implements Runnable {
-    private final String name;
-    private CompletableFuture<Void> work;
-
-    ThreadWork(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "ThreadWork[" + getName() + "]";
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void start() {
-        this.work = CompletableFuture.runAsync(this);
-    }
-
-    public void interrupt() {
-        this.work.cancel(true);
-    }
-
-    public boolean isInterrupted() {
-        return this.work.isCancelled();
-    }    
-};
-
 /**
  * The thread that checks for incoming messages.
  */
-final class ReceivingThread extends ThreadWork {
+final class ReceivingThread {
 
     private static final Logger logger = Logger.getLogger(ReceivingThread.class.getName());
-
-    /** A class to handle questions. */
-    private static class QuestionThread extends ThreadWork {
-
-        /** The connection to communicate with. */
-        private final Connection conn;
-
-        /** The message to handle. */
-        private final Message query;
-
-        /** The reply identifier to use when sending a reply. */
-        private final int replyId;
-
-
-        /**
-         * Build a new thread to respond to a question message.
-         *
-         * @param name The thread name.
-         * @param conn The {@code Connection} to use for I/O.
-         * @param query The {@code Message} to handle.
-         * @param replyId The network reply identifier 
-         */
-        public QuestionThread(String name, Connection conn, Message query,
-            int replyId) {
-            super(name);
-
-            this.conn = conn;
-            this.query = query;
-            this.replyId = replyId;
-        }
-            
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            Message reply;
-            try {
-                reply = this.conn.handle(this.query);
-            } catch (FreeColException fce) {
-                logger.log(Level.WARNING, getName() + ": handler fail", fce);
-                return;
-            }
-
-            final String replyTag = (reply == null) ? "null"
-                : reply.getType();
-            this.conn.sendMessage(new ReplyMessage(this.replyId, reply)).thenAccept((v) -> {
-                logger.log(Level.FINEST, getName() + " -> " + replyTag);
-            }).exceptionally((ex) -> {
-                logger.log(Level.WARNING, getName() + " -> " + replyTag + " failed", ex);
-                return null;
-            });
-        }
-    };
-
-    private static class UpdateThread extends ThreadWork {
-
-        /** The connection to use for I/O. */
-        private final Connection conn;
-
-        /** The message to handle. */
-        private final Message message;
-
-
-        /**
-         * Build a new thread to handle an update.
-         *
-         * @param name The thread name.
-         * @param conn The {@code Connection} to use to send messsages.
-         * @param message The {@code Message} to handle.
-         */
-        public UpdateThread(String name, Connection conn, Message message) {
-            super(name);
-
-            this.conn = conn;
-            this.message = message;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            Message reply;
-            try {
-                reply = this.conn.handle(this.message);
-            } catch (FreeColException fce) {
-                logger.log(Level.WARNING, getName() + ": handler fail", fce);
-                return;
-            }
-
-            final String outTag = (reply == null) ? "null" : reply.getType();
-            this.conn.sendMessage(reply).thenAccept((v) -> {
-                logger.log(Level.FINEST, getName() + " -> " + outTag);
-            }).exceptionally((ex) -> {
-                logger.log(Level.WARNING, getName() + " -> " + outTag + " failed", ex);
-                return null;
-            });
-        }
-    };
 
     /** Maximum number of retries before closing the connection. */
     private static final int MAXIMUM_RETRIES = 5;
@@ -180,11 +50,12 @@ final class ReceivingThread extends ThreadWork {
         = Collections.synchronizedMap(new HashMap<Integer, NetworkReplyObject>());
 
     /** The connection to receive on. */
-    private final Connection connection;
+    private Connection connection;
 
     /** A counter for reply ids. */
     private int nextNetworkReplyId;
 
+    private final String threadName;
 
     /**
      * The constructor to use.
@@ -194,8 +65,7 @@ final class ReceivingThread extends ThreadWork {
      * @param threadName The base name for the thread.
      */
     public ReceivingThread(Connection connection, String threadName) {
-        super("ReceivingThread-" + threadName);
-
+        this.threadName = "ReceivingThread-" + threadName;
         this.connection = connection;
         this.nextNetworkReplyId = 1;
     }
@@ -231,7 +101,7 @@ final class ReceivingThread extends ThreadWork {
      * @return True if the thread was previously running and is now stopped.
      */
     private boolean stopThread() {
-        if (isInterrupted()) return false; interrupt();
+        //if (isInterrupted()) return false; interrupt();
         // Explicit extraction from waitingThreads before iterating
         Collection<NetworkReplyObject> nros;
         synchronized (this.waitingThreads) {
@@ -248,7 +118,7 @@ final class ReceivingThread extends ThreadWork {
      */
     public void askToStop(String reason) {
         if (stopThread()) {
-            logger.info(getName() + ": stopped receiving thread: " + reason);
+            logger.info(threadName + ": stopped receiving thread: " + reason);
         }
     }
 
@@ -257,7 +127,10 @@ final class ReceivingThread extends ThreadWork {
      */
     private void disconnect() {
         askToStop("disconnect");
-        this.connection.sendDisconnect();
+        if (this.connection != null) {
+            this.connection.sendDisconnect();
+            this.connection = null;
+        }
     }
 
     /**
@@ -267,13 +140,29 @@ final class ReceivingThread extends ThreadWork {
      * @param replyId The network reply.
      * @return A new {@code Thread} to do the work, or null if none required.
      */
-    private ThreadWork messageQuestion(final QuestionMessage qm,
-                                   final int replyId) {
+    private CompletableFuture<Void> messageQuestion(final Connection conn, final QuestionMessage qm, final int replyId) {
         final Message query = qm.getMessage();
-        return (query == null) ? null
-            : new QuestionThread(getName() + "-question-" + replyId + "-"
-                                     + query.getType(),
-                                 this.connection, query, replyId);
+        if (query == null) return null;
+
+        final String task = threadName + "-question-" + replyId + "-" + query.getType();
+        return CompletableFuture.runAsync(() -> {
+            Message reply;
+            try {
+                reply = conn.handle(query);
+            } catch (FreeColException fce) {
+                logger.log(Level.WARNING, task + ": handler fail", fce);
+                return;
+            }
+
+            final String replyTag = (reply == null) ? "null"
+                : reply.getType();
+            conn.sendMessage(new ReplyMessage(replyId, reply)).thenAccept((v) -> {
+                logger.log(Level.FINEST, task + " -> " + replyTag);
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, task + " -> " + replyTag + " failed", ex);
+                return null;
+            });
+        });
     }
 
     /**
@@ -282,12 +171,27 @@ final class ReceivingThread extends ThreadWork {
      * @param message The {@code Message} to handle.
      * @return A new {@code Thread} to do the work, or null if none required.
      */
-    private ThreadWork messageUpdate(final Message message) {
+    private CompletableFuture<Void> messageUpdate(final Connection conn, final Message message) {
         if (message == null) return null;
-        final String inTag = message.getType();
 
-        return new UpdateThread(getName() + "-update-" + inTag,
-                                this.connection, message);
+        final String task = threadName + "-update-" + message.getType();
+        return CompletableFuture.runAsync(() -> {
+            Message reply;
+            try {
+                reply = conn.handle(message);
+            } catch (FreeColException fce) {
+                logger.log(Level.WARNING, task + ": handler fail", fce);
+                return;
+            }
+
+            final String outTag = (reply == null) ? "null" : reply.getType();
+            conn.sendMessage(reply).thenAccept((v) -> {
+                logger.log(Level.FINEST, task + " -> " + outTag);
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, task + " -> " + outTag + " failed", ex);
+                return null;
+            });
+        });
     }
 
     /**
@@ -299,8 +203,9 @@ final class ReceivingThread extends ThreadWork {
      * @exception XMLStreamException if a problem occured during parsing.
      */
     private CompletableFuture<Void> listen() {
-        CompletableFuture<String> start = this.connection.startListen().exceptionally((xse) -> {
-            logger.log(Level.WARNING, getName() + ": listen fail", xse);
+        final Connection conn = this.connection;
+        CompletableFuture<String> start = conn.startListen().exceptionally((xse) -> {
+            logger.log(Level.WARNING, threadName + ": listen fail", xse);
             return DisconnectMessage.TAG;
         });
 
@@ -309,30 +214,29 @@ final class ReceivingThread extends ThreadWork {
             int replyId = -1;
 
             // Read the message, optionally create a thread to handle it
-            ThreadWork t = null;
             switch (tag) {
             case DisconnectMessage.TAG:
                 // Do not actually read the message, it might be a fake one
                 // due to end-of-stream.
                 askToStop("listen-disconnect");
-                t = messageUpdate(TrivialMessage.disconnectMessage);
+                messageUpdate(conn, TrivialMessage.disconnectMessage);
                 break;
     
             case Connection.REPLY_TAG:
                 // A reply.  Always respond, even when failing, so as to
                 // unblock the waiting thread.
     
-                replyId = this.connection.getReplyId();
+                replyId = conn.getReplyId();
                 Message rm;
                 try {
-                    rm = this.connection.reader();
+                    rm = conn.reader();
                 } catch (Exception ex) {
                     rm = null;
-                    logger.log(Level.WARNING, getName() + ": reply fail", ex);
+                    logger.log(Level.WARNING, threadName + ": reply fail", ex);
                 }
                 NetworkReplyObject nro = this.waitingThreads.remove(replyId);
                 if (nro == null) {
-                    logger.warning(getName() + ": did not find reply " + replyId);
+                    logger.warning(threadName + ": did not find reply " + replyId);
                 } else {
                     nro.setResponse(rm);
                 }
@@ -341,15 +245,14 @@ final class ReceivingThread extends ThreadWork {
             case Connection.QUESTION_TAG:
                 // A question.  Build a thread to handle it and send a reply.
     
-                replyId = this.connection.getReplyId();
+                replyId = conn.getReplyId();
                 Message m = null;
                 try {
-                    m = this.connection.reader();
+                    m = conn.reader();
                     assert m instanceof QuestionMessage;
-                    t = messageQuestion((QuestionMessage)m, replyId);
+                    messageQuestion(conn, (QuestionMessage)m, replyId);
                 } catch (FreeColException fce) {
                     logger.log(Level.WARNING, "No reader for " + replyId, fce);
-                    t = null;
                 } catch (XMLStreamException e) {
                     throw new CompletionException(e);
                 }
@@ -360,18 +263,15 @@ final class ReceivingThread extends ThreadWork {
                 // Build a thread to handle it and possibly respond.
     
                 try {
-                    t = messageUpdate(this.connection.reader());
+                    messageUpdate(conn, conn.reader());
                 } catch (Exception ex) {
-                    logger.log(Level.FINEST, getName() + ": fail", ex);
+                    logger.log(Level.FINEST, threadName + ": fail", ex);
                     askToStop("listen-update-fail");
                 }
                 break;
             }
     
-            // Start the thread
-            if (t != null) t.start();
-    
-            this.connection.endListen(); // Clean up
+            conn.endListen(); // Clean up
         });
     }
 
@@ -379,23 +279,20 @@ final class ReceivingThread extends ThreadWork {
     // Override Thread
     int timesFailed = 0;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void run() {
-        // Receive messages from the network in a loop.
+    // Receive messages from the network in a loop.
+    public void start() {
+        if (this.connection == null) return;
         listen().whenComplete((v, ex) -> {
             if (ex == null) {
                 timesFailed = 0;
             }
             else {
-                logger.log(Level.WARNING, getName() + ": fail", ex);
+                logger.log(Level.WARNING, threadName + ": fail", ex);
                 if (++timesFailed > MAXIMUM_RETRIES) {
                     disconnect();
                 }
             }
-            this.run();
+            this.start();
         });
     }
 }

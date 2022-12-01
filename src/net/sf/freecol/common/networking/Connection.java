@@ -93,8 +93,6 @@ public class Connection implements Closeable {
     /** An XML stream wrapping of an input line. */
     private FreeColXMLReader xr;
 
-    /** A lock for the output side. */
-    private final Object outputLock = new Object();
     /** Main message writer. */
     private FreeColXMLWriter xw;
 
@@ -343,9 +341,7 @@ public class Connection implements Closeable {
      * @param ws The new write scope.
      */
     public void setWriteScope(FreeColXMLWriter.WriteScope ws) {
-        synchronized (this.outputLock) {
-            if (this.xw != null) this.xw.setWriteScope(ws);
-        }
+        if (this.xw != null) this.xw.setWriteScope(ws);
     }
 
     /**
@@ -435,7 +431,7 @@ public class Connection implements Closeable {
         for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
             while (buf.hasRemaining()) {
                 final byte b = buf.get();
-                if (b == '\n') {
+                if (b == END_OF_STREAM) {
                     final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
                     return CompletableFuture.completedFuture(line);
                 }
@@ -523,20 +519,17 @@ public class Connection implements Closeable {
      */
     public CompletableFuture<Void> sendMessage(Message message) {
         if (message == null) return CompletableFuture.completedFuture(null);
-        return CompletableFuture.runAsync(() -> {
-            synchronized (this.outputLock) {
-                if (this.xw == null) return;
-                try {
-                    message.toXML(this.xw);
-                    this.xw.writeCharacters(END_OF_STREAM_ARRAY, 0,
-                                            END_OF_STREAM_ARRAY.length);
-                    this.xw.flush();
-                    logMessage(message, true);
-                } catch (XMLStreamException e) {
-                    throw new CompletionException(e);
-                }
-            }
-        });
+        if (this.xw == null) return CompletableFuture.completedFuture(null);
+        try {
+            message.toXML(this.xw);
+            this.xw.writeCharacters(END_OF_STREAM_ARRAY, 0,
+                                    END_OF_STREAM_ARRAY.length);
+            this.xw.flush();
+            logMessage(message, true);
+        } catch (XMLStreamException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**
@@ -650,7 +643,6 @@ public class Connection implements Closeable {
     public void close() {
         if (this.receivingThread != null) {
             this.receivingThread.askToStop("connection closing");
-            this.receivingThread.interrupt();
             this.receivingThread = null;
         }
 
