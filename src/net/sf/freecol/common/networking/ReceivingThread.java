@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -134,67 +133,6 @@ final class ReceivingThread {
     }
 
     /**
-     * Create a thread to handle an incoming question message.
-     *
-     * @param qm The {@code QuestionMessage} to handle.
-     * @param replyId The network reply.
-     * @return A new {@code Thread} to do the work, or null if none required.
-     */
-    private CompletableFuture<Void> messageQuestion(final Connection conn, final QuestionMessage qm, final int replyId) {
-        final Message query = qm.getMessage();
-        if (query == null) return null;
-
-        final String task = threadName + "-question-" + replyId + "-" + query.getType();
-        return CompletableFuture.runAsync(() -> {
-            Message reply;
-            try {
-                reply = conn.handle(query);
-            } catch (FreeColException fce) {
-                logger.log(Level.WARNING, task + ": handler fail", fce);
-                return;
-            }
-
-            final String replyTag = (reply == null) ? "null"
-                : reply.getType();
-            conn.sendMessage(new ReplyMessage(replyId, reply)).thenAccept((v) -> {
-                logger.log(Level.FINEST, task + " -> " + replyTag);
-            }).exceptionally((ex) -> {
-                logger.log(Level.WARNING, task + " -> " + replyTag + " failed", ex);
-                return null;
-            });
-        });
-    }
-
-    /**
-     * Create a thread to handle an incoming ordinary message.
-     *
-     * @param message The {@code Message} to handle.
-     * @return A new {@code Thread} to do the work, or null if none required.
-     */
-    private CompletableFuture<Void> messageUpdate(final Connection conn, final Message message) {
-        if (message == null) return null;
-
-        final String task = threadName + "-update-" + message.getType();
-        return CompletableFuture.runAsync(() -> {
-            Message reply;
-            try {
-                reply = conn.handle(message);
-            } catch (FreeColException fce) {
-                logger.log(Level.WARNING, task + ": handler fail", fce);
-                return;
-            }
-
-            final String outTag = (reply == null) ? "null" : reply.getType();
-            conn.sendMessage(reply).thenAccept((v) -> {
-                logger.log(Level.FINEST, task + " -> " + outTag);
-            }).exceptionally((ex) -> {
-                logger.log(Level.WARNING, task + " -> " + outTag + " failed", ex);
-                return null;
-            });
-        });
-    }
-
-    /**
      * Listens to the InputStream and calls the message handler for
      * each message received.
      * 
@@ -211,66 +149,49 @@ final class ReceivingThread {
 
         return start.thenAccept((String tag) -> {
             if (tag == null) return;
-            int replyId = -1;
+            final int replyId = conn.getReplyId();
 
-            // Read the message, optionally create a thread to handle it
-            switch (tag) {
-            case DisconnectMessage.TAG:
-                // Do not actually read the message, it might be a fake one
-                // due to end-of-stream.
-                askToStop("listen-disconnect");
-                messageUpdate(conn, TrivialMessage.disconnectMessage);
-                break;
-    
-            case Connection.REPLY_TAG:
-                // A reply.  Always respond, even when failing, so as to
-                // unblock the waiting thread.
-    
-                replyId = conn.getReplyId();
-                Message rm;
-                try {
-                    rm = conn.reader();
-                } catch (Exception ex) {
-                    rm = null;
-                    logger.log(Level.WARNING, threadName + ": reply fail", ex);
-                }
+            Message message;
+            try {
+                message = tag.equals(DisconnectMessage.TAG) ? TrivialMessage.disconnectMessage : conn.reader();
+            } catch (Exception ex) {
+                logger.log(Level.WARNING, threadName + ": read message fail", ex);
+                return;
+            }
+
+            if (tag.equals(Connection.REPLY_TAG)) {
                 NetworkReplyObject nro = this.waitingThreads.remove(replyId);
                 if (nro == null) {
                     logger.warning(threadName + ": did not find reply " + replyId);
                 } else {
-                    nro.setResponse(rm);
+                    nro.setResponse(message);
                 }
-                break;
-    
-            case Connection.QUESTION_TAG:
-                // A question.  Build a thread to handle it and send a reply.
-    
-                replyId = conn.getReplyId();
-                Message m = null;
-                try {
-                    m = conn.reader();
-                    assert m instanceof QuestionMessage;
-                    messageQuestion(conn, (QuestionMessage)m, replyId);
-                } catch (FreeColException fce) {
-                    logger.log(Level.WARNING, "No reader for " + replyId, fce);
-                } catch (XMLStreamException e) {
-                    throw new CompletionException(e);
-                }
-                break;
-                
-            default:
-                // An ordinary update message.
-                // Build a thread to handle it and possibly respond.
-    
-                try {
-                    messageUpdate(conn, conn.reader());
-                } catch (Exception ex) {
-                    logger.log(Level.FINEST, threadName + ": fail", ex);
-                    askToStop("listen-update-fail");
-                }
-                break;
+                return;
+            }
+
+            if (tag.equals(Connection.QUESTION_TAG))
+                message = ((QuestionMessage)message).getMessage();
+            final String subTag = threadName + "-" + message.getType();
+
+            Message reply;
+            try {
+                reply = conn.handle(message);
+            } catch (FreeColException fce) {
+                logger.log(Level.WARNING, subTag + ": handler fail", fce);
+                return;
             }
     
+            final String replyTag = (reply == null) ? "null" : reply.getType();
+            if (tag.equals(Connection.QUESTION_TAG))
+                reply = new ReplyMessage(replyId, reply);
+
+            conn.sendMessage(reply).thenAccept((v) -> {
+                logger.log(Level.FINEST, subTag + " -> " + replyTag);
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, subTag + " -> " + replyTag + " failed", ex);
+                return null;
+            });
+        }).whenComplete((v, e) -> {
             conn.endListen(); // Clean up
         });
     }
