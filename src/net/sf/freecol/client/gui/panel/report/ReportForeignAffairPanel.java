@@ -21,6 +21,7 @@ package net.sf.freecol.client.gui.panel.report;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.util.concurrent.CompletableFuture;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -79,7 +80,7 @@ public final class ReportForeignAffairPanel extends ReportPanel {
 
         int n;
         for (Player enemy : getGame().getLiveEuropeanPlayerList()) {
-            NationSummary ns = igc().nationSummary(enemy).join();
+            NationSummary ns = CompletableFuture.supplyAsync(() -> igc().nationSummary(enemy)).join().join(); // $FIXME
             if (ns == null) continue;
 
             JPanel enemyPanel = new MigPanel(new MigLayout("gapy 0",
