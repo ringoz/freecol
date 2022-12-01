@@ -48,6 +48,7 @@ import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.io.FreeColDirectories;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
+import net.sf.freecol.common.util.CharsetCompat;
 
 
 /**
@@ -144,7 +145,7 @@ public class Connection implements Closeable {
         this.xw = new FreeColXMLWriter(new Writer() {
             @Override
             public void write(char[] cbuf, int off, int len) throws IOException {
-                socket.write(StandardCharsets.UTF_8.encode(CharBuffer.wrap(cbuf, off, len)));
+                socket.write(CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(cbuf, off, len)));
             }
     
             @Override
@@ -435,7 +436,7 @@ public class Connection implements Closeable {
             while (buf.hasRemaining()) {
                 final byte b = buf.get();
                 if (b == '\n') {
-                    final String line = StandardCharsets.UTF_8.decode((ByteBuffer)all.flip()).toString();
+                    final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
                     return CompletableFuture.completedFuture(line);
                 }
                 if (b != '\0')
