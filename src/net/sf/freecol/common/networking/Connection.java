@@ -485,7 +485,7 @@ public class Connection implements Closeable {
      * @exception TimeoutException when the timeout is reached.
      */
     public CompletableFuture<Message> askMessage(Message message, long timeout) {
-        if (message == null) return null;
+        if (message == null) return CompletableFuture.completedFuture(null);
         final String tag = message.getType();
 
         // Build the question message and establish an NRO for it.
