@@ -140,10 +140,33 @@ public class Connection implements Closeable {
         setSocket(socket);
         this.br = ByteBuffer.allocate(BUFFER_SIZE);
         this.receivingThread = new ReceivingThread(this, name);
+        
         this.xw = new FreeColXMLWriter(new Writer() {
+            private CompletableFuture<Void> writeBytesAsync(final ByteBuffer buf) {
+                final var result = new CompletableFuture<Void>();
+                socket.write(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
+                    @Override
+                    public void completed(Integer len, ByteBuffer buf) {
+                        assert(buf.remaining() == 0);
+                        result.complete(null);
+                    }
+        
+                    @Override
+                    public void failed(Throwable exc, ByteBuffer buf) {
+                        result.completeExceptionally(exc);
+                    }
+                });
+                return result;
+            }
+
+            private CompletableFuture<Void> pending = CompletableFuture.completedFuture(null);
+            
             @Override
             public void write(char[] cbuf, int off, int len) throws IOException {
-                socket.write(CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(cbuf, off, len)));
+                final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(cbuf, off, len));
+                synchronized (this) {
+                    pending = pending.thenCompose((v) -> writeBytesAsync(buf));
+                }
             }
     
             @Override
