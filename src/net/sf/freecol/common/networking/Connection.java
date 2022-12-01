@@ -638,13 +638,7 @@ public class Connection implements Closeable {
      * @exception XMLStreamException if there is a message format problem.
      */
     public CompletableFuture<Void> send(Message message) {
-        if (message == null) return CompletableFuture.completedFuture(null);
-        try {
-            sendMessage(message);
-            return CompletableFuture.completedFuture(null);
-        } catch (Exception e) {
-            return CompletableFuture.failedFuture(e);
-        }
+        return sendMessage(message);
     }
     
 
