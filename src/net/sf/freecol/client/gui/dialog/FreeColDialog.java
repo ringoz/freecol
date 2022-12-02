@@ -362,7 +362,6 @@ public class FreeColDialog<T> extends JDialog implements PropertyChangeListener 
      * @return The pane value.
      */
     protected Object getValue() {
-        if (null == pane) return null;
         Object value = pane.getValue();
         dispose(); // Pane will now be null following removeNotify().
         return value;
@@ -463,7 +462,7 @@ public class FreeColDialog<T> extends JDialog implements PropertyChangeListener 
      */
     @Override
     public void setVisible(boolean val) {
-        if (val && this.pane != null) this.pane.selectInitialValue();
+        if (val) this.pane.selectInitialValue();
         super.setVisible(val); // This is where the thread blocks when modal.
     }
 
