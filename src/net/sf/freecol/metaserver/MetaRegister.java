@@ -140,7 +140,7 @@ public final class MetaRegister {
     }
 
     private boolean canConnectToServer(ServerInfo serverInfo) {
-        try (Connection mc = new Connection(serverInfo.getAddress(), serverInfo.getPort(), FreeCol.METASERVER_THREAD)) {
+        try (Connection mc = Connection.open(serverInfo.getAddress(), serverInfo.getPort(), FreeCol.METASERVER_THREAD).join()) {
             mc.startReceiving();
             mc.disconnect();
             return true;

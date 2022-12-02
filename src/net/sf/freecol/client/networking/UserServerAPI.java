@@ -20,6 +20,7 @@
 package net.sf.freecol.client.networking;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -117,26 +118,15 @@ public class UserServerAPI extends ServerAPI {
      * @return The new <code>Connection</code>.
      * @exception IOException on failure to connect.
      */
-    private static Connection newConnection(String name, String host, int port)
+    private static CompletableFuture<Connection> newConnection(String name, String host, int port)
         throws IOException {
-        int tries;
         if (port < 0) {
             port = FreeCol.getServerPort();
-            tries = 10;
-        } else {
-            tries = 1;
         }
-        Connection conn = null;
-        for (int i = tries; i > 0; i--) {
-            try {
-                conn = new Connection(host, port, name);
-                conn.startReceiving();
-                break;
-            } catch (IOException e) {
-                if (i <= 1) throw e;
-            }
-        }
-        return conn;
+        return Connection.open(host, port, name).thenApply((c) -> {
+            c.startReceiving();
+            return c;
+        });
     }
 
 
@@ -145,13 +135,13 @@ public class UserServerAPI extends ServerAPI {
     /**
      * {@inheritDoc}
      */
-    public Connection connect(String name, String host, int port)
+    public CompletableFuture<Connection> connect(String name, String host, int port)
         throws IOException {
-        Connection c = newConnection(name, host, port);
-        if (c == null) return null;
-        updateConnection(c);
-        updateParameters(name, host, port);
-        return c;
+        return newConnection(name, host, port).thenApply((c) -> {
+            updateConnection(c);
+            updateParameters(name, host, port);
+            return c;
+        });
     }
 
     /**
@@ -168,10 +158,11 @@ public class UserServerAPI extends ServerAPI {
     /**
      * {@inheritDoc}
      */
-    public Connection reconnect() throws IOException {
-        Connection c = newConnection(getName(), getHost(), getPort());
-        if (c != null) updateConnection(c);
-        return c;
+    public CompletableFuture<Connection> reconnect() throws IOException {
+        return newConnection(getName(), getHost(), getPort()).thenApply((c) -> {
+            if (c != null) updateConnection(c);
+            return c;
+        });
     }
 
     /**

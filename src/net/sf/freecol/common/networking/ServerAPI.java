@@ -87,7 +87,7 @@ public abstract class ServerAPI {
      * @return True if the connection succeeded.
      * @exception IOException on connection failure.
      */
-    public abstract Connection connect(String name, String host, int port)
+    public abstract CompletableFuture<Connection> connect(String name, String host, int port)
         throws IOException;
 
     /**
@@ -103,7 +103,7 @@ public abstract class ServerAPI {
      * @return The reestablished {@code Connection}.
      * @exception IOException on failure to connect.
      */
-    public abstract Connection reconnect() throws IOException;
+    public abstract CompletableFuture<Connection> reconnect() throws IOException;
 
     /**
      * Get the connection to communicate with the server.

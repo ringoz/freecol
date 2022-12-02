@@ -226,7 +226,7 @@ public class MetaServerUtils {
         String host = FreeCol.getMetaServerAddress();
         int port = FreeCol.getMetaServerPort();
         try {
-            Connection c = new Connection(host, port, "MetaServer")
+            Connection c = Connection.open(host, port, "MetaServer").join()
                 .setMessageHandler(new MetaInputHandler(consumer));
             c.startReceiving();
             return c;

@@ -35,7 +35,6 @@ import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -188,30 +187,26 @@ public class Connection implements Closeable {
      * @param name The name for the connection.
      * @exception IOException if the socket creation is problematic.
      */
-    public Connection(String host, int port, String name) throws IOException {
-        this(createSocket(host, port), name);
-    }
+    public static CompletableFuture<Connection> open(String host, int port, String name) throws IOException {
+        final AsynchronousSocketChannel socket = AsynchronousSocketChannel.open();
+        final SocketAddress addr = new InetSocketAddress(host, port);
+        final var result = new CompletableFuture<Connection>();
+        socket.connect(addr, result, new CompletionHandler<Void,CompletableFuture<Connection>>() {
+            @Override
+            public void completed(Void v, CompletableFuture<Connection> result) {
+                try {
+                    result.complete(new Connection(socket, name));
+                } catch (IOException e) {
+                    result.completeExceptionally(e);
+                }
+            }
 
-
-    /**
-     * Creates a socket to communication with a given host, port pair.
-     *
-     * @param host The host to connect to.
-     * @param port The port to connect to.
-     * @return A new socket.
-     * @exception IOException on failure to create/connect the socket.
-     */
-    private static AsynchronousSocketChannel createSocket(String host, int port)
-        throws IOException {
-        AsynchronousSocketChannel socket = AsynchronousSocketChannel.open();
-        SocketAddress addr = new InetSocketAddress(host, port);
-        final var conn = socket.connect(addr);
-        try {
-            conn.get(TIMEOUT, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            throw new IOException(e.getMessage());
-        }
-        return socket;
+            @Override
+            public void failed(Throwable exc, CompletableFuture<Connection> result) {
+                result.completeExceptionally(exc);
+            }
+        });
+        return result.orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     /**

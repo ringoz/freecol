@@ -20,6 +20,7 @@
 package net.sf.freecol.server.ai;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.ServerAPI;
@@ -59,9 +60,9 @@ public class AIServerAPI extends ServerAPI {
     /**
      * {@inheritDoc}
      */
-    public Connection connect(String name, String host, int port)
+    public CompletableFuture<Connection> connect(String name, String host, int port)
         throws IOException {
-        return getConnection(); // Noop
+        return CompletableFuture.completedFuture(getConnection()); // Noop
     }
 
     /**
@@ -74,7 +75,7 @@ public class AIServerAPI extends ServerAPI {
     /**
      * {@inheritDoc}
      */
-    public Connection reconnect() throws IOException {
-        return getConnection(); // Noop
+    public CompletableFuture<Connection> reconnect() throws IOException {
+        return CompletableFuture.completedFuture(getConnection()); // Noop
     }
 }

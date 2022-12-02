@@ -93,7 +93,7 @@ public final class ConnectController extends FreeColClientHolder {
         StringTemplate err = null;
         try {
             if (askServer().connect(FreeCol.CLIENT_THREAD + user,
-                                    host, port) != null) {
+                                    host, port).join() != null) {
                 getFreeColClient().changeClientState(false);
                 logger.info("Connected to " + host + ":" + port
                     + " as " + user);
@@ -186,7 +186,7 @@ public final class ConnectController extends FreeColClientHolder {
             SwingUtilities.invokeLater(() -> {
                 final String name = player.getName();
                 try {
-                    if (askServer().reconnect() != null) {
+                    if (askServer().reconnect().join() != null) {
                         askServer().login(name, player.getNationId(),
                                              FreeCol.getVersion(),
                                              fcc.getSinglePlayer(),
