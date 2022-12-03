@@ -146,8 +146,10 @@ public class Connection implements Closeable {
                 socket.write(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
                     @Override
                     public void completed(Integer len, ByteBuffer buf) {
-                        assert(buf.remaining() == 0);
-                        result.complete(null);
+                        if (buf.hasRemaining())
+                            socket.write(buf, buf, this);
+                        else
+                            result.complete(null);
                     }
         
                     @Override
