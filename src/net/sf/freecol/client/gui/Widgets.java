@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -151,55 +152,6 @@ public final class Widgets {
     private final Canvas canvas;
 
 
-    /** A wrapper class for non-modal dialogs. */
-    private class DialogCallback<T> implements Runnable {
-        
-        /** The dialog to show. */
-        private final FreeColDialog<T> fcd;
-
-        /** A rough position for the dialog. */
-        private final PopupPosition pos;
-
-        /** The handler for the dialog response. */
-        private final DialogHandler<T> handler;
-
-
-        /**
-         * Constructor.
-         *
-         * @param fcd The parent {@code FreeColDialog}.
-         * @param pos A {@code PopupPosition} for the dialog.
-         * @param handler The {@code DialogHandler} to call when run.
-         */
-        public DialogCallback(FreeColDialog<T> fcd, PopupPosition pos,
-                              DialogHandler<T> handler) {
-            this.fcd = fcd;
-            this.pos = pos;
-            this.handler = handler;
-            SwingUtilities.invokeLater(this);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            Widgets.this.canvas.viewFreeColDialog(fcd, pos);
-            // ...and use another thread to wait for a dialog response...
-            new Thread(fcd.toString()) {
-                @Override
-                public void run() {
-                    while (!fcd.responded()) {
-                        Utils.delay(500, "Dialog interrupted.");
-                    }
-                    // ...before handling the result.
-                    handler.handle(fcd.getResponse());
-                }
-            }.start();
-        }
-    };
-
-
     /**
      * Create this wrapper class.
      *
@@ -229,7 +181,7 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @return True if the user clicked the "ok"-button.
      */
-    public boolean confirm(StringTemplate tmpl, ImageIcon icon,
+    public CompletableFuture<Boolean> confirm(StringTemplate tmpl, ImageIcon icon,
                            String okKey, String cancelKey, PopupPosition pos) {
         FreeColConfirmDialog dialog
             = new FreeColConfirmDialog(this.freeColClient, getFrame(), true,
@@ -250,7 +202,7 @@ public final class Widgets {
      * @return The corresponding member of the values array to the selected
      *     option, or null if no choices available.
      */
-    public <T> T getChoice(StringTemplate tmpl, ImageIcon icon,
+    public <T> CompletableFuture<T> getChoice(StringTemplate tmpl, ImageIcon icon,
                            String cancelKey, List<ChoiceItem<T>> choices,
                            PopupPosition pos) {
         if (choices.isEmpty()) return null;
@@ -271,7 +223,7 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @return The text the user entered, or null if cancelled.
      */
-    public String getInput(StringTemplate tmpl, String defaultValue,
+    public CompletableFuture<String> getInput(StringTemplate tmpl, String defaultValue,
                            String okKey, String cancelKey,
                            PopupPosition pos) {
         FreeColStringInputDialog dialog
@@ -320,11 +272,10 @@ public final class Widgets {
      * @param gl The list of {@code Goods} to choose from.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showCaptureGoodsDialog(Unit unit, List<Goods> gl,
-                                       DialogHandler<List<Goods>> handler) {
-        new DialogCallback<>(new CaptureGoodsDialog(this.freeColClient,
-                                                    getFrame(), unit, gl),
-                             null, handler);
+    public CompletableFuture<List<Goods>> showCaptureGoodsDialog(Unit unit, List<Goods> gl) {
+        CaptureGoodsDialog dialog = new CaptureGoodsDialog(this.freeColClient,
+                                                    getFrame(), unit, gl);
+        return this.canvas.showFreeColDialog(dialog, null);
     }
 
     /**
@@ -346,11 +297,10 @@ public final class Widgets {
      * @param ffs The {@code FoundingFather}s to choose from.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showChooseFoundingFatherDialog(List<FoundingFather> ffs,
-                                               DialogHandler<FoundingFather> handler) {
-        new DialogCallback<>(new ChooseFoundingFatherDialog(this.freeColClient,
-                                                            getFrame(), ffs),
-                             null, handler);
+    public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(List<FoundingFather> ffs) {
+        ChooseFoundingFatherDialog dialog =  new ChooseFoundingFatherDialog(this.freeColClient,
+                                                            getFrame(), ffs);
+        return this.canvas.showFreeColDialog(dialog, null);
     }
 
     /**
@@ -413,7 +363,7 @@ public final class Widgets {
      *
      * @return A list of names for a new nation.
      */
-    public List<String> showConfirmDeclarationDialog() {
+    public CompletableFuture<List<String>> showConfirmDeclarationDialog() {
         ConfirmDeclarationDialog dialog
             = new ConfirmDeclarationDialog(this.freeColClient, getFrame());
         return this.canvas.showFreeColDialog(dialog, null);
@@ -439,13 +389,14 @@ public final class Widgets {
      * @param dialogHandler Callback executed when the dialog gets closed.
      * @return The resulting {@code OptionGroup}.
      */
-    public void showDifficultyDialog(Specification spec,
+    public CompletableFuture<OptionGroup> showDifficultyDialog(Specification spec,
                                             OptionGroup group,
-                                            boolean editable,
-                                            DialogHandler<OptionGroup> dialogHandler) {
+                                            boolean editable) {
         final DifficultyDialog dialog = new DifficultyDialog(this.freeColClient, getFrame(), spec, group, editable);
-        dialog.setDialogHandler(dialogHandler);
+        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
+        dialog.setDialogHandler((response) -> result.complete(response));
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
+        return result;
     }
 
     /**
@@ -455,11 +406,10 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showDumpCargoDialog(Unit unit, PopupPosition pos,
-                                    DialogHandler<List<Goods>> handler) {
-        new DialogCallback<>(new DumpCargoDialog(this.freeColClient,
-                                                 getFrame(), unit),
-                             pos, handler);
+    public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit, PopupPosition pos) {
+        DumpCargoDialog dialog = new DumpCargoDialog(this.freeColClient,
+                                                 getFrame(), unit);
+        return this.canvas.showFreeColDialog(dialog, pos);
     }
 
     /**
@@ -468,8 +418,8 @@ public final class Widgets {
      * @param op The {@code Option} to edit.
      * @return The response returned by the dialog.
      */
-    public boolean showEditOptionDialog(Option op) {
-        if (op == null) return false;
+    public CompletableFuture<Boolean> showEditOptionDialog(Option op) {
+        if (op == null) return CompletableFuture.completedFuture(false);
         EditOptionDialog dialog
             = new EditOptionDialog(this.freeColClient, getFrame(), op);
         return this.canvas.showFreeColDialog(dialog, null);
@@ -481,7 +431,7 @@ public final class Widgets {
      * @param is The {@code IndianSettlement} to edit.
      * @return The response returned by the dialog.
      */
-    public IndianSettlement showEditSettlementDialog(IndianSettlement is) {
+    public CompletableFuture<IndianSettlement> showEditSettlementDialog(IndianSettlement is) {
         EditSettlementDialog dialog
             = new EditSettlementDialog(this.freeColClient, getFrame(), is);
         return this.canvas.showFreeColDialog(dialog, null);
@@ -496,13 +446,12 @@ public final class Widgets {
      *     fountain of youth.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showEmigrationDialog(Player player, boolean fountainOfYouth,
-                                     DialogHandler<Integer> handler) {
-        new DialogCallback<>(new EmigrationDialog(this.freeColClient,
+    public CompletableFuture<Integer> showEmigrationDialog(Player player, boolean fountainOfYouth) {
+        EmigrationDialog dialog = new EmigrationDialog(this.freeColClient,
                                                   getFrame(),
                                                   player.getEurope(),
-                                                  fountainOfYouth),
-                             null, handler);
+                                                  fountainOfYouth);
+        return this.canvas.showFreeColDialog(dialog, null);
     }
 
     /**
@@ -511,11 +460,10 @@ public final class Widgets {
      * @param units A list of {@code Unit}s that could still move.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showEndTurnDialog(List<Unit> units,
-                                  DialogHandler<Boolean> handler) {
-        new DialogCallback<>(new EndTurnDialog(this.freeColClient,
-                                               getFrame(), units),
-                             null, handler);
+    public CompletableFuture<Boolean> showEndTurnDialog(List<Unit> units) {
+        EndTurnDialog dialog = new EndTurnDialog(this.freeColClient,
+                                               getFrame(), units);
+        return this.canvas.showFreeColDialog(dialog, null);                                               
     }
 
     /**
@@ -592,14 +540,13 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showFirstContactDialog(Player player, Player other,
+    public CompletableFuture<Boolean> showFirstContactDialog(Player player, Player other,
                                        Tile tile, int settlementCount,
-                                       PopupPosition pos,
-                                       DialogHandler<Boolean> handler) {
-        new DialogCallback<>(new FirstContactDialog(this.freeColClient,
+                                       PopupPosition pos) {
+        FirstContactDialog dialog = new FirstContactDialog(this.freeColClient,
                                                     getFrame(), player, other,
-                                                    tile, settlementCount),
-                             pos, handler);
+                                                    tile, settlementCount);
+        return this.canvas.showFreeColDialog(dialog, pos);
     }
 
     /**
@@ -608,10 +555,12 @@ public final class Widgets {
      * @param editable Should the game options be editable?
      * @param dialogHandler A callback for handling the closing of the dialog.
      */
-    public void showGameOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) {
+    public CompletableFuture<OptionGroup> showGameOptionsDialog(boolean editable) {
         final GameOptionsDialog dialog = new GameOptionsDialog(this.freeColClient, getFrame(), editable);
-        dialog.setDialogHandler(dialogHandler);
+        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
+        dialog.setDialogHandler((response) -> result.complete(response));
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
+        return result;
     }
 
     /**
@@ -670,7 +619,7 @@ public final class Widgets {
      * @param filters {@code FileFilter}s for suitable files.
      * @return The selected {@code File}.
      */
-    public File showLoadDialog(File directory, FileFilter[] filters) {
+    public CompletableFuture<File> showLoadDialog(File directory, FileFilter[] filters) {
         LoadDialog dialog
             = new LoadDialog(this.freeColClient, getFrame(), directory,
                              filters);
@@ -688,12 +637,12 @@ public final class Widgets {
      * @return The {@code LoadingSavegameInfo} if the dialog was accepted,
      *     or null otherwise.
      */
-    public LoadingSavegameInfo showLoadingSavegameDialog(boolean pubSer,
+    public CompletableFuture<LoadingSavegameInfo> showLoadingSavegameDialog(boolean pubSer,
                                                          boolean single) {
         LoadingSavegameDialog dialog
             = new LoadingSavegameDialog(this.freeColClient, getFrame());
-        return (this.canvas.showFreeColDialog(dialog, null)) ? dialog.getInfo()
-            : null;
+        return this.canvas.showFreeColDialog(dialog, null).thenApply((ret) -> ret ? dialog.getInfo()
+            : null);
     }
 
     /**
@@ -713,10 +662,12 @@ public final class Widgets {
      *
      * @param editable Should these options be editable.
      */
-    public void showMapGeneratorOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) {
+    public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) {
         final MapGeneratorOptionsDialog dialog = new MapGeneratorOptionsDialog(this.freeColClient, getFrame(), editable);
-        dialog.setDialogHandler(dialogHandler);
+        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
+        dialog.setDialogHandler((response) -> result.complete(response));
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
+        return result;
     }
 
     /**
@@ -724,7 +675,7 @@ public final class Widgets {
      * 
      * @return The response returned by the dialog.
      */
-    public Dimension showMapSizeDialog() {
+    public CompletableFuture<Dimension> showMapSizeDialog() {
         MapSizeDialog dialog
             = new MapSizeDialog(this.freeColClient, getFrame());
         return this.canvas.showFreeColDialog(dialog, null);
@@ -739,13 +690,11 @@ public final class Widgets {
      * @param monarchKey The resource key for the monarch image.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showMonarchDialog(MonarchAction action,
-                                  StringTemplate tmpl, String monarchKey,
-                                  DialogHandler<Boolean> handler) {
-        new DialogCallback<>(new MonarchDialog(this.freeColClient,
-                                               getFrame(), action,
-                                               tmpl, monarchKey),
-                             null, handler);
+    public CompletableFuture<Boolean> showMonarchDialog(MonarchAction action,
+                                  StringTemplate tmpl, String monarchKey) {
+        MonarchDialog dialog 
+            = new MonarchDialog(this.freeColClient, getFrame(), action, tmpl, monarchKey);
+        return this.canvas.showFreeColDialog(dialog, null);
     }
 
     /**
@@ -757,14 +706,13 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showNamingDialog(StringTemplate tmpl, String defaultName,
-                                 PopupPosition pos,
-                                 DialogHandler<String> handler) {
-        new DialogCallback<>(new FreeColStringInputDialog(this.freeColClient,
+    public CompletableFuture<String> showNamingDialog(StringTemplate tmpl, String defaultName,
+                                 PopupPosition pos) {
+        FreeColStringInputDialog dialog = new FreeColStringInputDialog(this.freeColClient,
                                                           getFrame(), false,
                                                           tmpl, defaultName,
-                                                          "ok", null),
-                             pos, handler);
+                                                          "ok", null);
+        return this.canvas.showFreeColDialog(dialog, pos);
     }
 
     /**
@@ -777,14 +725,13 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showNativeDemandDialog(Unit unit, Colony colony,
+    public CompletableFuture<Boolean> showNativeDemandDialog(Unit unit, Colony colony,
                                        GoodsType type, int amount,
-                                       PopupPosition pos,
-                                       DialogHandler<Boolean> handler) {
-        new DialogCallback<>(new NativeDemandDialog(this.freeColClient,
+                                       PopupPosition pos) {
+        NativeDemandDialog dialog = new NativeDemandDialog(this.freeColClient,
                                                     getFrame(), unit, colony,
-                                                    type, amount),
-                             pos, handler);
+                                                    type, amount);
+        return this.canvas.showFreeColDialog(dialog, pos);
     }
 
     /**
@@ -798,7 +745,7 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @return An updated agreement.
      */
-    public DiplomaticTrade showNegotiationDialog(FreeColGameObject our,
+    public CompletableFuture<DiplomaticTrade> showNegotiationDialog(FreeColGameObject our,
                                                  FreeColGameObject other,
                                                  DiplomaticTrade agreement,
                                                  StringTemplate comment,
@@ -827,7 +774,7 @@ public final class Widgets {
      * 
      * @return The response returned by the dialog.
      */
-    public Parameters showParametersDialog() {
+    public CompletableFuture<Parameters> showParametersDialog() {
         ParametersDialog dialog
             = new ParametersDialog(this.freeColClient, getFrame());
         return this.canvas.showFreeColDialog(dialog, null);
@@ -841,7 +788,7 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @return True if the combat is to proceed.
      */
-    public boolean showPreCombatDialog(Unit attacker,
+    public CompletableFuture<Boolean> showPreCombatDialog(Unit attacker,
                                        FreeColGameObject defender,
                                        PopupPosition pos) {
         PreCombatDialog dialog
@@ -907,7 +854,7 @@ public final class Widgets {
      * @param styles The river styles a choice is made from.
      * @return The response returned by the dialog.
      */
-    public String showRiverStyleDialog(List<String> styles) {
+    public CompletableFuture<String> showRiverStyleDialog(List<String> styles) {
         RiverStyleDialog dialog
             = new RiverStyleDialog(this.freeColClient, getFrame(), styles);
         return this.canvas.showFreeColDialog(dialog, null);
@@ -922,7 +869,7 @@ public final class Widgets {
      * @param defaultName Default filename for the savegame.
      * @return The selected {@code File}.
      */
-    public File showSaveDialog(File directory, FileFilter[] filters,
+    public CompletableFuture<File> showSaveDialog(File directory, FileFilter[] filters,
                                String defaultName) {
         SaveDialog dialog
             = new SaveDialog(this.freeColClient, getFrame(),
@@ -935,7 +882,7 @@ public final class Widgets {
      * 
      * @return The response returned by the dialog.
      */
-    public Dimension showScaleMapSizeDialog() {
+    public CompletableFuture<Dimension> showScaleMapSizeDialog() {
         ScaleMapSizeDialog dialog
             = new ScaleMapSizeDialog(this.freeColClient, getFrame());
         return this.canvas.showFreeColDialog(dialog, null);
@@ -950,14 +897,14 @@ public final class Widgets {
      * @param needToPay If true, check the player has sufficient funds.
      * @return The amount selected.
      */
-    public int showSelectAmountDialog(GoodsType goodsType, int available,
+    public CompletableFuture<Integer> showSelectAmountDialog(GoodsType goodsType, int available,
                                       int defaultAmount, boolean needToPay) {
         FreeColDialog<Integer> dialog
             = new SelectAmountDialog(this.freeColClient, getFrame(),
                                      goodsType, available,
                                      defaultAmount, needToPay);
-        Integer result = this.canvas.showFreeColDialog(dialog, null);
-        return (result == null) ? -1 : result;
+        return this.canvas.showFreeColDialog(dialog, null).thenApply((Integer result) ->
+            (result == null) ? -1 : result);
     }
 
     /**
@@ -968,7 +915,7 @@ public final class Widgets {
      * @param pos A {@code PopupPosition} for the dialog.
      * @return A destination for the unit, or null.
      */
-    public Location showSelectDestinationDialog(Unit unit, PopupPosition pos) {
+    public CompletableFuture<Location> showSelectDestinationDialog(Unit unit, PopupPosition pos) {
         SelectDestinationDialog dialog
             = new SelectDestinationDialog(this.freeColClient, getFrame(),
                                           unit);
@@ -999,13 +946,13 @@ public final class Widgets {
      * @param maximum The maximum amount available.
      * @return The amount selected.
      */
-    public int showSelectTributeAmountDialog(StringTemplate question,
+    public CompletableFuture<Integer> showSelectTributeAmountDialog(StringTemplate question,
                                              int maximum) {
         FreeColDialog<Integer> dialog
             = new SelectTributeAmountDialog(this.freeColClient, getFrame(),
                                             question, maximum);
-        Integer result = this.canvas.showFreeColDialog(dialog, null);
-        return (result == null) ? -1 : result;
+        return this.canvas.showFreeColDialog(dialog, null).thenApply((Integer result) ->
+            (result == null) ? -1 : result);
     }
 
     /**
@@ -1085,9 +1032,9 @@ public final class Widgets {
      *
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showVictoryDialog(DialogHandler<Boolean> handler) {
-        new DialogCallback<>(new VictoryDialog(this.freeColClient, getFrame()),
-                             null, handler);
+    public CompletableFuture<Boolean> showVictoryDialog() {
+        VictoryDialog dialog = new VictoryDialog(this.freeColClient, getFrame());
+        return this.canvas.showFreeColDialog(dialog, null);
     }
 
     /**
@@ -1098,7 +1045,7 @@ public final class Widgets {
      * @param colony The {@code Colony} to display.
      * @return The response returned by the dialog.
      */
-    public boolean showWarehouseDialog(Colony colony) {
+    public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) {
         WarehouseDialog dialog
             = new WarehouseDialog(this.freeColClient, getFrame(), colony);
         return this.canvas.showFreeColDialog(dialog, null);

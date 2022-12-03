@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -805,14 +806,15 @@ public final class FreeColClient {
      * @param port The port to unblock.
      * @return True if there should be no blocking server remaining.
      */
-    public boolean unblockServer(int port) {
+    public CompletableFuture<Boolean> unblockServer(int port) {
         final FreeColServer freeColServer = getFreeColServer();
-        if (freeColServer != null ) {
-            if (!getGUI().confirm("stopServer.text", "stopServer.yes",
-                                  "stopServer.no")) return false;
+        if (freeColServer == null) return CompletableFuture.completedFuture(true);
+        return getGUI().confirm("stopServer.text", "stopServer.yes",
+                                  "stopServer.no").thenApply((ret) -> {
+            if (!ret) return false;
             stopServer();
-        }
-        return true;
+            return true;
+        });
     }
 
     /**
@@ -972,7 +974,8 @@ public final class FreeColClient {
      * Quits the application.
      */
     public void askToQuit() {
-        if (gui.confirm("quitDialog.areYouSure.text", "ok", "cancel")) {
+        gui.confirm("quitDialog.areYouSure.text", "ok", "cancel").thenAccept((ret) -> {
+            if (!ret) return;
             Player player = getMyPlayer();
             if (player == null) { // If no player, must be already logged out
                 quit();
@@ -980,19 +983,20 @@ public final class FreeColClient {
                 getConnectController().requestLogout(LogoutReason.QUIT);
                 quit();
             }
-        }
+        });
     }
 
     /**
      * Retire from the game.
      */
     public void retire() {
-        if (gui.confirm("retireDialog.areYouSure.text", "ok", "cancel")) {
+        gui.confirm("retireDialog.areYouSure.text", "ok", "cancel").thenAccept((ret) -> {
+            if (!ret) return;
             final Player player = getMyPlayer();
             player.changePlayerType(Player.PlayerType.RETIRED);
             getInGameController().highScore(null);
             askServer().retire();
-        }
+        });
     }
 
     /**

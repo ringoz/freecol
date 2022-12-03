@@ -390,7 +390,7 @@ public final class MapEditorTransformPanel extends FreeColPanel {
                         boolean all = rst.getType() != RiverStyleTransform.CHANGE_CONNECTIONS;
                         String style = getGUI()
                             .showRiverStyleDialog(ImageLibrary
-                                .getRiverStyleKeys(all));
+                                .getRiverStyleKeys(all)).join();
                         if (style != null) rst.setStyle(style);
                     }
                     newMapTransform = mt;
@@ -421,6 +421,6 @@ public final class MapEditorTransformPanel extends FreeColPanel {
         StringTemplate tmpl = StringTemplate
             .template("mapEditorTransformPanel.chooseResource");
         return getGUI().getChoice(tmpl, "cancel",
-                                  transform(resources, alwaysTrue(), mapper));
+                                  transform(resources, alwaysTrue(), mapper)).join();
     }
 }

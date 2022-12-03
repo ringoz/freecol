@@ -23,6 +23,8 @@ import static net.sf.freecol.common.util.CollectionUtils.dump;
 import static net.sf.freecol.common.util.CollectionUtils.sort;
 import static net.sf.freecol.common.util.CollectionUtils.transform;
 
+import static com.ea.async.Async.await;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -41,6 +43,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -209,9 +212,9 @@ public final class ColonyPanel extends PortPanel
     };
 
     private final ActionListener warehouseCmd = ae -> {
-        if (getGUI().showWarehouseDialog(getColony())) {
+        getGUI().showWarehouseDialog(getColony()).thenAccept((ret) -> { if (ret) {
             updateWarehousePanel();
-        }
+        }});
     };
 
     private final ActionListener buildQueueCmd = ae -> {
@@ -488,8 +491,8 @@ public final class ColonyPanel extends PortPanel
         this.nameBox.setEnabled(isEditable());
         this.nameBox.addActionListener((ActionEvent ae) -> {
                 final Colony newColony = (Colony)nameBox.getSelectedItem();
-                closeColonyPanel();
-                gui.showColonyPanel(newColony, null);
+                closeColonyPanel().thenAccept((v) -> 
+                    gui.showColonyPanel(newColony, null));
             });
         updateNetProductionPanel();
 
@@ -947,7 +950,7 @@ public final class ColonyPanel extends PortPanel
     /**
      * Close this {@code ColonyPanel}.
      */
-    public void closeColonyPanel() {
+    public CompletableFuture<Void> closeColonyPanel() {
         final Colony colony = getColony();
         final Player player = getMyPlayer();
         boolean abandon = false;
@@ -959,18 +962,18 @@ public final class ColonyPanel extends PortPanel
                     && colony.isConnectedPort())
                     ? "abandonColony.lastPort.text"
                     : "abandonColony.text";
-                if (!getGUI().confirm(null, StringTemplate.key(key), colony,
-                        "abandonColony.yes", "abandonColony.no")) return;
+                if (!await(getGUI().confirm(null, StringTemplate.key(key), colony,
+                        "abandonColony.yes", "abandonColony.no"))) return CompletableFuture.completedFuture(null);
                 abandon = true;
             } else if ((buildable = colony.getCurrentlyBuilding()) != null) {
                 int required = buildable.getRequiredPopulation();
                 if (required > colony.getUnitCount()
-                    && !getGUI().confirm(null, StringTemplate
+                    && !await(getGUI().confirm(null, StringTemplate
                         .template("colonyPanel.reducePopulation")
                             .addName("%colony%", colony.getName())
                             .addAmount("%number%", required)
                             .addNamed("%buildable%", buildable),
-                        colony, "ok", "cancel")) return;
+                        colony, "ok", "cancel"))) return CompletableFuture.completedFuture(null);
             }
         }
 
@@ -978,6 +981,7 @@ public final class ColonyPanel extends PortPanel
         getGUI().removeComponent(this);
         // Abandon colony and active unit handling is in IGC
         igc().closeColony(colony, abandon);
+        return CompletableFuture.completedFuture(null);
     }
 
 

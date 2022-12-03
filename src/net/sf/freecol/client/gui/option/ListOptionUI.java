@@ -130,7 +130,7 @@ public final class ListOptionUI<T> extends OptionUI<ListOption<T>>
         addButton.addActionListener((ActionEvent ae) -> {
                 try {
                     AbstractOption<T> ao = option.getTemplate().cloneOption();
-                    if (gui.showEditOptionDialog(ao) && option.canAdd(ao)) {
+                    gui.showEditOptionDialog(ao).thenAccept((ret) -> { if (ret && option.canAdd(ao)) {
                         if (!option.getAllowDuplicates() && getValue().contains(ao)) {
                             /*
                              * Ignore when trying to add the same element twice. Note that
@@ -146,7 +146,7 @@ public final class ListOptionUI<T> extends OptionUI<ListOption<T>>
                         this.model.addElement(ao);
                         this.list.setSelectedValue(ao, true);
                         this.list.repaint();
-                    }
+                    }});
                 } catch (CloneNotSupportedException cnse) {
                     logger.log(Level.WARNING, "Can not clone: "
                         + option.getTemplate(), cnse);
@@ -154,9 +154,9 @@ public final class ListOptionUI<T> extends OptionUI<ListOption<T>>
             });
         editButton.addActionListener((ActionEvent ae) -> {
                 AbstractOption<T> ao = this.list.getSelectedValue();
-                if (gui.showEditOptionDialog(ao)) {
+                gui.showEditOptionDialog(ao).thenAccept((ret) -> { if (ret) {
                     this.list.repaint();
-                }
+                }});
             });
         removeButton.addActionListener((ActionEvent ae) -> {
                 if (!canModifyChoice(this.list.getSelectedValue())) {

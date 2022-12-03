@@ -107,7 +107,7 @@ public final class StartGamePanel extends FreeColPanel {
 
     private final ActionListener gameOptionsCmd = ae -> {
         final FreeColClient fcc = getFreeColClient();
-        getGUI().showGameOptionsDialog(fcc.isAdmin(), (gameOptions) -> {
+        getGUI().showGameOptionsDialog(fcc.isAdmin()).thenAccept((gameOptions) -> {
             if (gameOptions != null) {
                 fcc.getGame().setGameOptions(gameOptions);
                 fcc.getPreGameController().updateGameOptions();                
@@ -117,7 +117,7 @@ public final class StartGamePanel extends FreeColPanel {
 
     private final ActionListener mapGeneratorOptionsCmd = ae -> {
         final FreeColClient fcc = getFreeColClient();
-        getGUI().showMapGeneratorOptionsDialog(fcc.isAdmin(), mgo -> {
+        getGUI().showMapGeneratorOptionsDialog(fcc.isAdmin()).thenAccept(mgo -> {
             if (mgo != null) {
                 fcc.getGame().setMapGeneratorOptions(mgo);
                 fcc.getPreGameController().updateMapGeneratorOptions();

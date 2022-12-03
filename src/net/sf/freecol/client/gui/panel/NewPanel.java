@@ -271,7 +271,7 @@ public final class NewPanel extends FreeColPanel implements ItemListener {
         this.difficultyBox.addItemListener(this);
         this.difficultyButton = Utility.localizedButton("newPanel.showDifficulty");
         this.difficultyButton.addActionListener(ae -> {
-            getGUI().showDifficultyDialog(this.specification, this.difficulty, this.difficulty.isEditable(), (group) -> {
+            getGUI().showDifficultyDialog(this.specification, this.difficulty, this.difficulty.isEditable()).thenAccept((group) -> {
                 if (group != null) {
                     update(true);
                 }

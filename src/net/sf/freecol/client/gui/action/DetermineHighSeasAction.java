@@ -66,9 +66,10 @@ public class DetermineHighSeasAction extends FreeColAction {
     public void actionPerformed(ActionEvent ae) {
         final Map map = getMap();
         
-        Parameters p = getGUI().showParametersDialog();
-        if (p != null) {
-            map.resetHighSeas(p.distToLandFromHighSeas, p.maxDistanceToEdge);
-        }
+        getGUI().showParametersDialog().thenAccept((Parameters p) -> {
+            if (p != null) {
+                map.resetHighSeas(p.distToLandFromHighSeas, p.maxDistanceToEdge);
+            }
+        });
     }
 }

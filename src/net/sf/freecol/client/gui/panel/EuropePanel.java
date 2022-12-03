@@ -183,13 +183,13 @@ public final class EuropePanel extends PortPanel {
                 final Unit unit = ((UnitLabel)comp).getUnit();
 
                 if (unit.getTradeRoute() != null) {
-                    if (!getGUI().confirmClearTradeRoute(unit)) return null;
+                    if (!getGUI().confirmClearTradeRoute(unit).join()) return null;
                     igc().assignTradeRoute(unit, null);
                 }
 
                 Location dest = destination;
                 if (unit.isInEurope()) {
-                    dest = getGUI().showSelectDestinationDialog(unit);
+                    dest = getGUI().showSelectDestinationDialog(unit).join();
                     if (dest == null) return null; // user aborted
                 }
                 
@@ -204,7 +204,7 @@ public final class EuropePanel extends PortPanel {
                     if (!getGUI().confirm(null, StringTemplate
                             .template("europePanel.leaveColonists")
                             .addStringTemplate("%newWorld%", locName),
-                            unit, "ok", "cancel")) return null;
+                            unit, "ok", "cancel").join()) return null;
                 }
 
                 igc().moveTo(unit, dest);
@@ -467,7 +467,7 @@ public final class EuropePanel extends PortPanel {
                     igc().sellGoods(goods);
                 } else {
                     BoycottAction act = getGUI()
-                        .getBoycottChoice(goods, europe);
+                        .getBoycottChoice(goods, europe).join();
                     if (act != null) {
                         switch (act) {
                         case BOYCOTT_PAY_ARREARS:

@@ -317,7 +317,7 @@ public final class DefaultTransferHandler extends TransferHandler {
                           int defaultAmount, boolean needToPay) {
         return this.freeColClient.getGUI()
             .showSelectAmountDialog(goodsType, available, defaultAmount,
-                                    needToPay);
+                                    needToPay).join();
     }
 
     /**

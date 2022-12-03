@@ -78,9 +78,10 @@ public class ScaleMapAction extends FreeColAction {
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
-        Dimension ms = getGUI().showScaleMapSizeDialog();
-        if (ms != null) {
-            scaleMapTo(ms.width, ms.height);
-        }
+        getGUI().showScaleMapSizeDialog().thenAccept((Dimension ms) -> {
+            if (ms != null) {
+                scaleMapTo(ms.width, ms.height);
+            }
+        });
     }
 }

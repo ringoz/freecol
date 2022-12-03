@@ -77,8 +77,9 @@ public final class FileOptionUI extends OptionUI<FileOption>  {
                     final String extension = (isMap)
                         ? FreeCol.FREECOL_MAP_EXTENSION
                         : FreeCol.FREECOL_SAVE_EXTENSION;
-                    File f = gui.showLoadSaveFileDialog(root, extension);
-                    if (f != null) setValue(f);
+                    gui.showLoadSaveFileDialog(root, extension).thenAccept((File f) -> {
+                        if (f != null) setValue(f);
+                    });
                 });
         }
         panel.add(browse);

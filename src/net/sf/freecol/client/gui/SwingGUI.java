@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -876,7 +877,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public boolean confirm(Tile tile, StringTemplate tmpl, ImageIcon icon,
+    public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate tmpl, ImageIcon icon,
                            String okKey, String cancelKey) {
         return this.widgets.confirm(tmpl, icon, okKey, cancelKey,
                                     getPopupPosition(tile));
@@ -886,7 +887,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    protected <T> T getChoice(Tile tile, StringTemplate tmpl, ImageIcon icon,
+    protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate tmpl, ImageIcon icon,
                               String cancelKey, List<ChoiceItem<T>> choices) {
         return this.widgets.getChoice(tmpl, icon, cancelKey, choices,
                                       getPopupPosition(tile));
@@ -896,7 +897,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public String getInput(Tile tile, StringTemplate tmpl, String defaultValue,
+    public CompletableFuture<String> getInput(Tile tile, StringTemplate tmpl, String defaultValue,
                            String okKey, String cancelKey) {
         return this.widgets.getInput(tmpl, defaultValue, okKey, cancelKey,
                                      getPopupPosition(tile));
@@ -1673,9 +1674,8 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showCaptureGoodsDialog(final Unit unit, List<Goods> gl,
-                                       DialogHandler<List<Goods>> handler) {
-        this.widgets.showCaptureGoodsDialog(unit, gl, handler);
+    public CompletableFuture<List<Goods>> showCaptureGoodsDialog(final Unit unit, List<Goods> gl) {
+        return this.widgets.showCaptureGoodsDialog(unit, gl);
     }
 
     /**
@@ -1691,9 +1691,8 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showChooseFoundingFatherDialog(final List<FoundingFather> ffs,
-                                               DialogHandler<FoundingFather> handler) {
-        this.widgets.showChooseFoundingFatherDialog(ffs, handler);
+    public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) {
+        return this.widgets.showChooseFoundingFatherDialog(ffs);
     }
 
     /**
@@ -1885,7 +1884,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public List<String> showConfirmDeclarationDialog() {
+    public CompletableFuture<List<String>> showConfirmDeclarationDialog() {
         return this.widgets.showConfirmDeclarationDialog();
     }
 
@@ -1901,28 +1900,25 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showDifficultyDialog(Specification spec,
+    public CompletableFuture<OptionGroup> showDifficultyDialog(Specification spec,
                                             OptionGroup group,
-                                            boolean editable,
-                                            DialogHandler<OptionGroup> dialogHandler) {
-        this.widgets.showDifficultyDialog(spec, group, editable, dialogHandler);
+                                            boolean editable) {
+        return this.widgets.showDifficultyDialog(spec, group, editable);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void showDumpCargoDialog(Unit unit,
-                                    DialogHandler<List<Goods>> handler) {
-        this.widgets.showDumpCargoDialog(unit, getPopupPosition(unit.getTile()),
-                                         handler);
+    public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit) {
+        return this.widgets.showDumpCargoDialog(unit, getPopupPosition(unit.getTile()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean showEditOptionDialog(Option option) {
+    public CompletableFuture<Boolean> showEditOptionDialog(Option option) {
         return this.widgets.showEditOptionDialog(option);
     }
 
@@ -1930,7 +1926,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public IndianSettlement showEditSettlementDialog(IndianSettlement is) {
+    public CompletableFuture<IndianSettlement> showEditSettlementDialog(IndianSettlement is) {
         return this.widgets.showEditSettlementDialog(is);
     }
 
@@ -1938,19 +1934,17 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showEmigrationDialog(final Player player,
-                                     final boolean fountainOfYouth,
-                                     DialogHandler<Integer> handler) {
-        this.widgets.showEmigrationDialog(player, fountainOfYouth, handler);
+    public CompletableFuture<Integer> showEmigrationDialog(final Player player,
+                                     final boolean fountainOfYouth) {
+        return this.widgets.showEmigrationDialog(player, fountainOfYouth);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void showEndTurnDialog(final List<Unit> units,
-                                  DialogHandler<Boolean> handler) {
-        this.widgets.showEndTurnDialog(units, handler);
+    public CompletableFuture<Boolean> showEndTurnDialog(final List<Unit> units) {
+        return this.widgets.showEndTurnDialog(units);
     }
 
     /**
@@ -1996,20 +1990,19 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showFirstContactDialog(final Player player, final Player other,
-                                       final Tile tile, int settlementCount,
-                                       DialogHandler<Boolean> handler) {
-        this.widgets.showFirstContactDialog(player, other, tile,
+    public CompletableFuture<Boolean> showFirstContactDialog(final Player player, final Player other,
+                                       final Tile tile, int settlementCount) {
+        return this.widgets.showFirstContactDialog(player, other, tile,
                                             settlementCount,
-                                            getPopupPosition(tile), handler);
+                                            getPopupPosition(tile));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void showGameOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) {
-        this.widgets.showGameOptionsDialog(editable, dialogHandler);
+    public CompletableFuture<OptionGroup> showGameOptionsDialog(boolean editable) {
+        return this.widgets.showGameOptionsDialog(editable);
     }
 
     /**
@@ -2056,26 +2049,24 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public File showLoadDialog(File directory, String extension) {
+    public CompletableFuture<File> showLoadDialog(File directory, String extension) {
         FileFilter[] filters = new FileFilter[] {
             FreeColDataFile.getFileFilter(extension)
         };
-        File file = null;
-        for (;;) {
-            file = this.widgets.showLoadDialog(directory, filters);
-            if (file == null || file.isFile()) break;
-            String err = Messages.message(FreeCol.badFile("error.noSuchFile",
-                                                          file));
-            showErrorPanel(err, null);
-        }
-        return file;
+        return this.widgets.showLoadDialog(directory, filters).thenApply((File file) -> {
+            if (file != null && !file.isFile()) {
+                showErrorPanel(FreeCol.badFile("error.noSuchFile", file));
+                file = null;
+            }
+            return file;
+        });
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public LoadingSavegameInfo showLoadingSavegameDialog(boolean publicServer,
+    public CompletableFuture<LoadingSavegameInfo> showLoadingSavegameDialog(boolean publicServer,
                                                          boolean singlePlayer) {
         return this.widgets.showLoadingSavegameDialog(publicServer,
                                                       singlePlayer);
@@ -2112,15 +2103,15 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showMapGeneratorOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) {
-        this.widgets.showMapGeneratorOptionsDialog(editable, dialogHandler);
+    public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) {
+        return this.widgets.showMapGeneratorOptionsDialog(editable);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Dimension showMapSizeDialog() {
+    public CompletableFuture<Dimension> showMapSizeDialog() {
         return this.widgets.showMapSizeDialog();
     }
 
@@ -2156,45 +2147,40 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showMonarchDialog(final MonarchAction action,
-                                  StringTemplate template, String monarchKey,
-                                  DialogHandler<Boolean> handler) {
-        this.widgets.showMonarchDialog(action, template, monarchKey, handler);
+    public CompletableFuture<Boolean> showMonarchDialog(final MonarchAction action,
+                                  StringTemplate template, String monarchKey) {
+        return this.widgets.showMonarchDialog(action, template, monarchKey);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void showNamingDialog(StringTemplate template,
+    public CompletableFuture<String> showNamingDialog(StringTemplate template,
                                       final String defaultName,
-                                      final Unit unit,
-                                      DialogHandler<String> handler) {
-        this.widgets.showNamingDialog(template, defaultName,
-                                      getPopupPosition(unit.getTile()),
-                                      handler);
+                                      final Unit unit) {
+        return this.widgets.showNamingDialog(template, defaultName,
+                                      getPopupPosition(unit.getTile()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void showNativeDemandDialog(Unit unit, Colony colony,
-                                       GoodsType type, int amount,
-                                       DialogHandler<Boolean> handler) {
-        this.widgets.showNativeDemandDialog(unit, colony, type, amount,
-                                            getPopupPosition(unit.getTile()),
-                                            handler);
+    public CompletableFuture<Boolean> showNativeDemandDialog(Unit unit, Colony colony,
+                                       GoodsType type, int amount) {
+        return this.widgets.showNativeDemandDialog(unit, colony, type, amount,
+                                            getPopupPosition(unit.getTile()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DiplomaticTrade showNegotiationDialog(FreeColGameObject our,
-                                                 FreeColGameObject other,
-                                                 DiplomaticTrade agreement,
-                                                 StringTemplate comment) {
+    public CompletableFuture<DiplomaticTrade> showNegotiationDialog(FreeColGameObject our,
+                                      FreeColGameObject other,
+                                      DiplomaticTrade agreement,
+                                      StringTemplate comment) {
         if ((!(our instanceof Unit) && !(our instanceof Colony))
             || (!(other instanceof Unit) && !(other instanceof Colony))
             || (our instanceof Colony && other instanceof Colony)) {
@@ -2216,7 +2202,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public Parameters showParametersDialog() {
+    public CompletableFuture<Parameters> showParametersDialog() {
         return this.widgets.showParametersDialog();
     }
 
@@ -2224,7 +2210,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public boolean showPreCombatDialog(Unit attacker,
+    public CompletableFuture<Boolean> showPreCombatDialog(Unit attacker,
                                        FreeColGameObject defender, Tile tile) {
         return this.widgets.showPreCombatDialog(attacker, defender,
                                                 getPopupPosition(tile));
@@ -2397,7 +2383,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public String showRiverStyleDialog(List<String> styles) {
+    public CompletableFuture<String> showRiverStyleDialog(List<String> styles) {
         return this.widgets.showRiverStyleDialog(styles);
     }
 
@@ -2405,7 +2391,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public File showSaveDialog(File directory, String defaultName) {
+    public CompletableFuture<File> showSaveDialog(File directory, String defaultName) {
         String extension = lastPart(defaultName, ".");
         FileFilter[] filters = new FileFilter[] {
             FreeColDataFile.getFileFilter(extension)
@@ -2417,7 +2403,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public Dimension showScaleMapSizeDialog() {
+    public CompletableFuture<Dimension> showScaleMapSizeDialog() {
         return this.widgets.showScaleMapSizeDialog();
     }
 
@@ -2425,7 +2411,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public int showSelectAmountDialog(GoodsType goodsType, int available,
+    public CompletableFuture<Integer> showSelectAmountDialog(GoodsType goodsType, int available,
                                       int defaultAmount, boolean needToPay) {
         return this.widgets.showSelectAmountDialog(goodsType, available,
                                                    defaultAmount, needToPay);
@@ -2435,7 +2421,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public Location showSelectDestinationDialog(Unit unit) {
+    public CompletableFuture<Location> showSelectDestinationDialog(Unit unit) {
         return this.widgets.showSelectDestinationDialog(unit,
             getPopupPosition(unit.getTile()));
     }
@@ -2444,7 +2430,7 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public int showSelectTributeAmountDialog(StringTemplate question,
+    public CompletableFuture<Integer> showSelectTributeAmountDialog(StringTemplate question,
                                              int maximum) {
         return this.widgets.showSelectTributeAmountDialog(question, maximum);
     }
@@ -2545,15 +2531,15 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void showVictoryDialog(DialogHandler<Boolean> handler) {
-        this.widgets.showVictoryDialog(handler);
+    public CompletableFuture<Boolean> showVictoryDialog() {
+        return this.widgets.showVictoryDialog();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean showWarehouseDialog(Colony colony) {
+    public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) {
         return this.widgets.showWarehouseDialog(colony);
     }
 

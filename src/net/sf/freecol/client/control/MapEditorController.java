@@ -219,7 +219,7 @@ public final class MapEditorController extends FreeColClientHolder {
         final ServerGame serverGame = freeColServer.getGame();
 
         getGUI().removeInGameComponents();
-        getGUI().showMapGeneratorOptionsDialog(true, mgo -> {
+        getGUI().showMapGeneratorOptionsDialog(true).thenAccept(mgo -> {
             if (mgo != null) {
                 serverGame.setMapGeneratorOptions(mgo);
                 freeColServer.generateMap(false);
@@ -241,9 +241,9 @@ public final class MapEditorController extends FreeColClientHolder {
     public void saveMapEditorGame() {
         File dir = FreeColDirectories.getUserMapsDirectory();
         if (dir == null) dir = FreeColDirectories.getSaveDirectory();
-        File file = getGUI()
-            .showSaveDialog(dir, FreeColDirectories.MAP_EDITOR_FILE_NAME);
-        if (file != null) saveMapEditorGame(file);
+        getGUI().showSaveDialog(dir, FreeColDirectories.MAP_EDITOR_FILE_NAME).thenAccept((File file) -> {
+            if (file != null) saveMapEditorGame(file);
+        });
     }
 
     /**
@@ -287,10 +287,10 @@ public final class MapEditorController extends FreeColClientHolder {
      */
     @net.ringoz.GwtIncompatible
     public void loadGame() {
-        File file = getGUI()
-            .showLoadSaveFileDialog(FreeColDirectories.getUserMapsDirectory(),
-                                    FreeCol.FREECOL_MAP_EXTENSION);
-        if (file != null) loadGame(file);
+        getGUI().showLoadSaveFileDialog(FreeColDirectories.getUserMapsDirectory(),
+                                    FreeCol.FREECOL_MAP_EXTENSION).thenAccept((File file) -> {
+            if (file != null) loadGame(file);
+        });
     }
 
     /**

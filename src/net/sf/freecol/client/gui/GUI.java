@@ -27,9 +27,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -135,7 +135,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the message on the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final boolean confirm(String textKey,
+    public final CompletableFuture<Boolean> confirm(String textKey,
                                  String okKey, String cancelKey) {
         return confirm(null, StringTemplate.key(textKey), (ImageIcon)null,
                        okKey, cancelKey);
@@ -149,7 +149,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final boolean confirm(StringTemplate template,
+    public final CompletableFuture<Boolean> confirm(StringTemplate template,
                                  String okKey, String cancelKey) {
         return confirm(null, template, (ImageIcon)null,
                        okKey, cancelKey);
@@ -165,7 +165,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final boolean confirm(Tile tile, StringTemplate template,
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  GoodsType goodsType,
                                  String okKey, String cancelKey) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -183,7 +183,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final boolean confirm(Tile tile, StringTemplate template,
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  Settlement settlement,
                                  String okKey, String cancelKey) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -201,7 +201,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final boolean confirm(Tile tile, StringTemplate template, Unit unit,
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template, Unit unit,
                                  String okKey, String cancelKey) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
             .getScaledUnitImage(unit));
@@ -216,13 +216,13 @@ public class GUI extends FreeColClientHolder {
      *     not just the education building.
      * @return True if the unit can proceed.
      */
-    public boolean confirmAbandonEducation(Unit unit, boolean leaveColony) {
-        if (!unit.isInColony()) return true;
+    public CompletableFuture<Boolean> confirmAbandonEducation(Unit unit, boolean leaveColony) {
+        if (!unit.isInColony()) return CompletableFuture.completedFuture(true);
         boolean teacher = unit.getStudent() != null;
         // if leaving the colony, the student loses learning spot, so
         // check with player
         boolean student = leaveColony && unit.getTeacher() != null;
-        if (!teacher && !student) return true;
+        if (!teacher && !student) return CompletableFuture.completedFuture(true);
 
         Building school = (Building)((teacher) ? unit.getLocation()
             : unit.getTeacher().getLocation());
@@ -240,8 +240,8 @@ public class GUI extends FreeColClientHolder {
                 .addStringTemplate("%unit%", label)
                 .addNamed("%building%", school)
             : null;
-        return template == null
-            || confirm(unit.getTile(), template, unit,
+        return template == null ? CompletableFuture.completedFuture(true)
+            : confirm(unit.getTile(), template, unit,
                        "abandonEducation.yes", "abandonEducation.no");
     }
 
@@ -252,9 +252,9 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} to check.
      * @return Whether it is acceptable to set a destination for this unit.
      */
-    public boolean confirmClearTradeRoute(Unit unit) {
+    public CompletableFuture<Boolean> confirmClearTradeRoute(Unit unit) {
         TradeRoute tr = unit.getTradeRoute();
-        if (tr == null) return true;
+        if (tr == null) return CompletableFuture.completedFuture(true);
         StringTemplate template = StringTemplate
             .template("clearTradeRoute.text")
             .addStringTemplate("%unit%",
@@ -272,7 +272,7 @@ public class GUI extends FreeColClientHolder {
      * @return The amount of tribute to demand, positive if the demand
      *     should proceed.
      */
-    public int confirmEuropeanTribute(Unit attacker, Colony colony,
+    public CompletableFuture<Integer> confirmEuropeanTribute(Unit attacker, Colony colony,
                                       NationSummary ns) {
         Player player = attacker.getOwner();
         Player other = colony.getOwner();
@@ -288,7 +288,7 @@ public class GUI extends FreeColClientHolder {
             t = StringTemplate.template("confirmTribute.broke")
                 .addStringTemplate("%nation%", other.getNationLabel());
             showInformationPanel(t);
-            return -1;
+            return CompletableFuture.completedFuture(-1);
         }
 
         int fin = (gold <= 100) ? 0 : (gold <= 1000) ? 1 : 2;
@@ -309,10 +309,10 @@ public class GUI extends FreeColClientHolder {
      * @param target The target {@code Tile}.
      * @return True to attack, false to abort.
      */
-    public boolean confirmHostileAction(Unit attacker, Tile target) {
+    public CompletableFuture<Boolean> confirmHostileAction(Unit attacker, Tile target) {
         if (attacker.hasAbility(Ability.PIRACY)) {
             // Privateers can attack and remain at peace
-            return true;
+            return CompletableFuture.completedFuture(true);
         }
 
         Player enemy;
@@ -321,16 +321,16 @@ public class GUI extends FreeColClientHolder {
         } else if (target == attacker.getTile()) {
             // Fortify on tile owned by another nation
             enemy = target.getOwner();
-            if (enemy == null) return true;
+            if (enemy == null) return CompletableFuture.completedFuture(true);
         } else {
             Unit defender = target.getDefendingUnit(attacker);
             if (defender == null) {
                 logger.warning("Attacking, but no defender - will try!");
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
             if (defender.hasAbility(Ability.PIRACY)) {
                 // Privateers can be attacked and remain at peace
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
             enemy = defender.getOwner();
         }
@@ -339,7 +339,7 @@ public class GUI extends FreeColClientHolder {
         switch (attacker.getOwner().getStance(enemy)) {
         case WAR:
             logger.finest("Player at war, no confirmation needed");
-            return true;
+            return CompletableFuture.completedFuture(true);
         case CEASE_FIRE:
             messageId = "confirmHostile.ceaseFire";
             break;
@@ -364,12 +364,12 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} that is leaving the colony.
      * @return True if the unit is allowed to leave.
      */
-    public boolean confirmLeaveColony(Unit unit) {
+    public CompletableFuture<Boolean> confirmLeaveColony(Unit unit) {
         Colony colony = unit.getColony();
         StringTemplate message = colony.getReducePopulationMessage();
         if (message != null) {
             showInformationPanel(message);
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
         return confirmAbandonEducation(unit, true);
     }
@@ -383,7 +383,7 @@ public class GUI extends FreeColClientHolder {
      * @return The amount of tribute to demand, positive if the demand
      *     should proceed.
      */
-    public int confirmNativeTribute(Unit attacker, IndianSettlement is) {
+    public CompletableFuture<Integer> confirmNativeTribute(Unit attacker, IndianSettlement is) {
         Player player = attacker.getOwner();
         Player other = is.getOwner();
         int strength = player.calculateStrength(false);
@@ -398,7 +398,7 @@ public class GUI extends FreeColClientHolder {
             .addStringTemplate("%settlement%", is.getLocationLabelFor(player))
             .addStringTemplate("%nation%", other.getNationLabel());
         return (confirm(is.getTile(), t, attacker,
-                        "confirmTribute.yes", "confirmTribute.no")) ? 1 : -1;
+                        "confirmTribute.yes", "confirmTribute.no")).thenApply((ret) -> ret ? 1 : -1);
     }
 
     /**
@@ -409,7 +409,7 @@ public class GUI extends FreeColClientHolder {
      * @param tile The target {@code Tile}.
      * @return True to attack, false to abort.
      */
-    public boolean confirmPreCombat(Unit attacker, Tile tile) {
+    public CompletableFuture<Boolean> confirmPreCombat(Unit attacker, Tile tile) {
         if (getClientOptions().getBoolean(ClientOptions.SHOW_PRECOMBAT)) {
             Settlement settlement = tile.getSettlement();
             // Don't tell the player how a settlement is defended!
@@ -417,7 +417,7 @@ public class GUI extends FreeColClientHolder {
                 : tile.getDefendingUnit(attacker);
             return showPreCombatDialog(attacker, defender, tile);
         }
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
     /**
@@ -425,7 +425,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if confirmation was given.
      */
-    public boolean confirmStopGame() {
+    public CompletableFuture<Boolean> confirmStopGame() {
         return confirm("stopCurrentGame.text",
                        "stopCurrentGame.yes", "stopCurrentGame.no");
     }
@@ -437,7 +437,7 @@ public class GUI extends FreeColClientHolder {
      * @param settlement The {@code Settlement} to consider.
      * @return The chosen action, tribute, attack or cancel.
      */
-    public ArmedUnitSettlementAction
+    public CompletableFuture<ArmedUnitSettlementAction>
         getArmedUnitSettlementChoice(Settlement settlement) {
         final Player player = getMyPlayer();
 
@@ -462,7 +462,7 @@ public class GUI extends FreeColClientHolder {
      * @param europe The player {@code Europe} where the boycott is in force.
      * @return The chosen {@code BoycottAction}.
      */
-    public BoycottAction getBoycottChoice(Goods goods, Europe europe) {
+    public CompletableFuture<BoycottAction> getBoycottChoice(Goods goods, Europe europe) {
         int arrears = europe.getOwner().getArrears(goods.getType());
         StringTemplate template = StringTemplate
             .template("boycottedGoods.text")
@@ -490,7 +490,7 @@ public class GUI extends FreeColClientHolder {
      * @param canBuy True if buy is a valid option.
      * @return The chosen action, buy, haggle, or cancel.
      */
-    public TradeBuyAction getBuyChoice(Unit unit, Settlement settlement,
+    public CompletableFuture<TradeBuyAction> getBuyChoice(Unit unit, Settlement settlement,
                                        Goods goods, int gold, boolean canBuy) {
         // Get Buy price on Europe Market for comparison
         int euroPrice = unit.getOwner().getMarket()
@@ -522,7 +522,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> T getChoice(StringTemplate explain, String cancelKey,
+    public final <T> CompletableFuture<T> getChoice(StringTemplate explain, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
             .getPlaceholderImage());
@@ -541,7 +541,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    private final <T> T getChoice(Tile tile, StringTemplate template,
+    private final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   GoodsType goodsType, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -561,7 +561,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    private final <T> T getChoice(Tile tile, StringTemplate template,
+    private final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   Nation nation, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -581,7 +581,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> T getChoice(Tile tile, StringTemplate template,
+    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Settlement settlement, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -601,7 +601,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> T getChoice(Tile tile, StringTemplate template,
+    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Unit unit, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
         ImageIcon icon = new ImageIcon(getFixedImageLibrary()
@@ -618,7 +618,7 @@ public class GUI extends FreeColClientHolder {
      * @param owner The {@code Player} that owns the land.
      * @return The chosen action, accept, steal or cancel.
      */
-    public ClaimAction getClaimChoice(Tile tile, Player player, int price,
+    public CompletableFuture<ClaimAction> getClaimChoice(Tile tile, Player player, int price,
                                       Player owner) {
         List<ChoiceItem<ClaimAction>> choices = new ArrayList<>();
         StringTemplate template;
@@ -651,7 +651,7 @@ public class GUI extends FreeColClientHolder {
      * @param canGift Show a "gift" option.
      * @return The chosen action, buy, sell, gift or cancel.
      */
-    public TradeAction getIndianSettlementTradeChoice(Settlement settlement,
+    public CompletableFuture<TradeAction> getIndianSettlementTradeChoice(Settlement settlement,
                                                       StringTemplate template,
                                                       boolean canBuy,
                                                       boolean canSell,
@@ -687,7 +687,7 @@ public class GUI extends FreeColClientHolder {
      * @return The chosen action, establish mission, denounce, incite
      *     or cancel.
      */
-    public MissionaryAction getMissionaryChoice(Unit unit,
+    public CompletableFuture<MissionaryAction> getMissionaryChoice(Unit unit,
                                                 IndianSettlement is,
                                                 boolean canEstablish,
                                                 boolean canDenounce) {
@@ -733,24 +733,25 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} for the new colony.
      * @return A colony name, or null if the user has reconsidered.
      */
-    public String getNewColonyName(Player player, Tile tile) {
+    public CompletableFuture<String> getNewColonyName(Player player, Tile tile) {
         String suggested = player.getSettlementName(null);
         StringTemplate t = StringTemplate.template("nameColony.text");
-        String name = getInput(tile, t, suggested, "accept", "cancel");
-        if (name == null) {
-            // Cancelled
-        } else if (name.isEmpty()) {
-            showInformationPanel("enterSomeText"); // 0-length is invalid
-        } else if (player.getSettlementByName(name) != null) {
-            // Must be unique
-            showInformationPanel(tile,
-                StringTemplate.template("nameColony.notUnique")
-                    .addName("%name%", name));
-        } else {
-            return name;
-        }
-        player.putSettlementName(suggested);
-        return null;
+        return getInput(tile, t, suggested, "accept", "cancel").thenApply((String name) -> {
+            if (name == null) {
+                // Cancelled
+            } else if (name.isEmpty()) {
+                showInformationPanel("enterSomeText"); // 0-length is invalid
+            } else if (player.getSettlementByName(name) != null) {
+                // Must be unique
+                showInformationPanel(tile,
+                    StringTemplate.template("nameColony.notUnique")
+                        .addName("%name%", name));
+            } else {
+                return name;
+            }
+            player.putSettlementName(suggested);
+            return null;
+        });
     }
 
     /**
@@ -761,7 +762,7 @@ public class GUI extends FreeColClientHolder {
      * @param neg True if negotation is a valid choice.
      * @return The selected action, either negotiate, spy, attack or cancel.
      */
-    public ScoutColonyAction getScoutForeignColonyChoice(Colony colony,
+    public CompletableFuture<ScoutColonyAction> getScoutForeignColonyChoice(Colony colony,
                                                          Unit unit,
                                                          boolean neg) {
         StringTemplate u = unit.getLabel(Unit.UnitLabelType.NATIONAL);
@@ -790,7 +791,7 @@ public class GUI extends FreeColClientHolder {
      *     owner nation.
      * @return The chosen action, speak, tribute, attack or cancel.
      */
-    public ScoutIndianSettlementAction
+    public CompletableFuture<ScoutIndianSettlementAction>
         getScoutIndianSettlementChoice(IndianSettlement is,
                                        String numberString) {
         final Player player = getMyPlayer();
@@ -850,7 +851,7 @@ public class GUI extends FreeColClientHolder {
      * @param gold The current negotiated price.
      * @return The chosen action, sell, gift or haggle, or null.
      */
-    public TradeSellAction getSellChoice(Unit unit, Settlement settlement,
+    public CompletableFuture<TradeSellAction> getSellChoice(Unit unit, Settlement settlement,
                                          Goods goods, int gold) {
         //Get Sale price on Europe Market for comparison
         int euroPrice = unit.getOwner().getMarket()
@@ -880,9 +881,9 @@ public class GUI extends FreeColClientHolder {
     /**
      * Shows the current difficulty as an uneditable dialog.
      */
-    public final void showDifficultyDialog() {
+    public final CompletableFuture<OptionGroup> showDifficultyDialog() {
         final Specification spec = getSpecification();
-        showDifficultyDialog(spec, spec.getDifficultyOptionGroup(), false, null);
+        return showDifficultyDialog(spec, spec.getDifficultyOptionGroup(), false);
     }
 
     /**
@@ -984,13 +985,14 @@ public class GUI extends FreeColClientHolder {
      * @param extension The file extension to look for.
      * @return The {@code File} selected, or null on error.
      */
-    public final File showLoadSaveFileDialog(File root, String extension) {
-        File file = showLoadDialog(root, extension);
-        if (file != null && !file.isFile()) {
-            showErrorPanel(FreeCol.badFile("error.noSuchFile", file));
-            file = null;
-        }
-        return file;
+    public final CompletableFuture<File> showLoadSaveFileDialog(File root, String extension) {
+        return showLoadDialog(root, extension).thenApply((File file) -> {
+            if (file != null && !file.isFile()) {
+                showErrorPanel(FreeCol.badFile("error.noSuchFile", file));
+                file = null;
+            }
+            return file;
+        });
     }
 
     /**
@@ -1197,10 +1199,10 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the message on the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public boolean confirm(Tile tile, StringTemplate template,
+    public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                            ImageIcon icon,
                            String okKey, String cancelKey) {
-        return false;
+        return CompletableFuture.completedFuture(false);
     }
 
     /**
@@ -1215,7 +1217,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    protected <T> T getChoice(Tile tile, StringTemplate template,
+    protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                               ImageIcon icon, String cancelKey,
                               List<ChoiceItem<T>> choices) {
         return null;
@@ -1231,7 +1233,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the message on the "cancel" button.
      * @return The chosen value.
      */
-    public String getInput(Tile tile, StringTemplate template,
+    public CompletableFuture<String> getInput(Tile tile, StringTemplate template,
                            String defaultValue,
                            String okKey, String cancelKey) {
         return null;
@@ -1832,8 +1834,7 @@ public class GUI extends FreeColClientHolder {
      * @param gl The list of {@code Goods} to choose from.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
-    public void showCaptureGoodsDialog(final Unit unit, List<Goods> gl,
-                                       DialogHandler<List<Goods>> handler) {}
+    public CompletableFuture<List<Goods>> showCaptureGoodsDialog(final Unit unit, List<Goods> gl) { return null; }
 
     /**
      * Show the chat panel.
@@ -1848,8 +1849,7 @@ public class GUI extends FreeColClientHolder {
      * @param ffs The list of {@code FoundingFather}s to choose from.
      * @param handler The callback to pass the choice to.
      */
-    public void showChooseFoundingFatherDialog(final List<FoundingFather> ffs,
-                                               DialogHandler<FoundingFather> handler) {}
+    public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) { return null; }
 
     /**
      * Show the client options dialog.
@@ -1908,7 +1908,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return A list of new nation and country names.
      */
-    public List<String> showConfirmDeclarationDialog() { return Collections.<String>emptyList(); }
+    public CompletableFuture<List<String>> showConfirmDeclarationDialog() { return null; }
 
     /**
      * Show the declaration panel with the declaration of independence and
@@ -1926,10 +1926,9 @@ public class GUI extends FreeColClientHolder {
      * @param editable If true, the option group can be edited.
      * @return The (possibly modified) {@code OptionGroup}.
      */
-    public void showDifficultyDialog(Specification spec,
+    public CompletableFuture<OptionGroup> showDifficultyDialog(Specification spec,
                                             OptionGroup group,
-                                            boolean editable,
-                                            DialogHandler<OptionGroup> dialogHandler) {  }
+                                            boolean editable) { return null; }
 
     /**
      * Show a dialog to choose what goods to dump.
@@ -1937,8 +1936,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} that is dumping goods.
      * @param handler A callback to pass the dumped goods list to.
      */
-    public void showDumpCargoDialog(Unit unit,
-                                    DialogHandler<List<Goods>> handler) {}
+    public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit) { return null; }
 
     /**
      * Show a dialog for editing an individual option.
@@ -1946,7 +1944,7 @@ public class GUI extends FreeColClientHolder {
      * @param option The {@code Option} to edit.
      * @return True if the option edit was accepted.
      */
-    public boolean showEditOptionDialog(Option option) { return false; }
+    public CompletableFuture<Boolean> showEditOptionDialog(Option option) { return null; }
 
     /**
      * Show a dialog for editing a settlmeent.
@@ -1954,7 +1952,7 @@ public class GUI extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to edit.
      * @return The settlement post-edit.
      */
-    public IndianSettlement showEditSettlementDialog(IndianSettlement is) { return null; }
+    public CompletableFuture<IndianSettlement> showEditSettlementDialog(IndianSettlement is) { return null; }
 
     /**
      * Show a dialog to handle emigration.
@@ -1963,9 +1961,8 @@ public class GUI extends FreeColClientHolder {
      * @param fountainOfYouth True if a Fountain of Youth event occurred.
      * @param handler A callback to pass a selected emigration index to.
      */
-    public void showEmigrationDialog(final Player player,
-                                     final boolean fountainOfYouth,
-                                     DialogHandler<Integer> handler) {}
+    public CompletableFuture<Integer> showEmigrationDialog(final Player player,
+                                     final boolean fountainOfYouth) { return null; }
 
     /**
      * Show a dialog for the end of turn.
@@ -1973,8 +1970,7 @@ public class GUI extends FreeColClientHolder {
      * @param units A list of {@code Unit}s that can still move.
      * @param handler A callback to handle the user selected end turn state.
      */
-    public void showEndTurnDialog(final List<Unit> units,
-                                  DialogHandler<Boolean> handler) {}
+    public CompletableFuture<Boolean> showEndTurnDialog(final List<Unit> units) { return null; }
 
     /**
      * Show an error panel.
@@ -2020,9 +2016,8 @@ public class GUI extends FreeColClientHolder {
      *     other player.
      * @param handler A callback to handle the player decision to be friendly.
      */
-    public void showFirstContactDialog(final Player player, final Player other,
-                                       final Tile tile, int settlementCount,
-                                       DialogHandler<Boolean> handler) {}
+    public CompletableFuture<Boolean> showFirstContactDialog(final Player player, final Player other,
+                                       final Tile tile, int settlementCount) { return null; }
 
     /**
      * Show the Game options dialog.
@@ -2030,7 +2025,7 @@ public class GUI extends FreeColClientHolder {
      * @param editable True if the options can be edited.
      * @param dialogHandler A callback for handling the closing of the dialog.
      */
-    public void showGameOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) { }
+    public CompletableFuture<OptionGroup> showGameOptionsDialog(boolean editable) { return null; }
 
     /**
      * Show the high scores panel.
@@ -2067,7 +2062,7 @@ public class GUI extends FreeColClientHolder {
      * @param extension An extension to select with.
      * @return The selected {@code File}.
      */
-    public File showLoadDialog(File directory, String extension) { return null; }
+    public CompletableFuture<File> showLoadDialog(File directory, String extension) { return null; }
 
     /**
      * Show the LoadingSavegameDialog.
@@ -2076,7 +2071,7 @@ public class GUI extends FreeColClientHolder {
      * @param singlePlayer FIXME
      * @return The {@code LoadingSavegameInfo} from the dialog.
      */
-    public LoadingSavegameInfo showLoadingSavegameDialog(boolean publicServer,
+    public CompletableFuture<LoadingSavegameInfo> showLoadingSavegameDialog(boolean publicServer,
                                                          boolean singlePlayer) { return null; }
 
     /**
@@ -2104,14 +2099,14 @@ public class GUI extends FreeColClientHolder {
      *
      * @param editable If true, allow edits.
      */
-    public void showMapGeneratorOptionsDialog(boolean editable, DialogHandler<OptionGroup> dialogHandler) { }
+    public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) { return null; }
 
     /**
      * Show the map size dialog.
      *
      * @return The selected map size as a {@code Dimension}.
      */
-    public Dimension showMapSizeDialog() { return null; }
+    public CompletableFuture<Dimension> showMapSizeDialog() { return null; }
 
     /**
      * Show model messages.
@@ -2130,9 +2125,8 @@ public class GUI extends FreeColClientHolder {
      * @param handler A callback to handle the user response to the
      *     monarch action.
      */
-    public void showMonarchDialog(final MonarchAction action,
-                                  StringTemplate template, String monarchKey,
-                                  DialogHandler<Boolean> handler) {}
+    public CompletableFuture<Boolean> showMonarchDialog(final MonarchAction action,
+                                  StringTemplate template, String monarchKey) { return null; }
 
     /**
      * Show the naming dialog.
@@ -2142,10 +2136,9 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} that is naming.
      * @param handler A callback to handle the user response.
      */
-    public void showNamingDialog(StringTemplate template,
+    public CompletableFuture<String> showNamingDialog(StringTemplate template,
                                  final String defaultName,
-                                 final Unit unit,
-                                 DialogHandler<String> handler) {}
+                                 final Unit unit) { return null; }
 
     /**
      * Show the native demand dialog.
@@ -2156,9 +2149,8 @@ public class GUI extends FreeColClientHolder {
      * @param amount The amount of goods or gold demanded.
      * @param handler A callback to handle the user response.
      */
-    public void showNativeDemandDialog(Unit unit, Colony colony,
-                                       GoodsType type, int amount,
-                                       DialogHandler<Boolean> handler) {}
+    public CompletableFuture<Boolean> showNativeDemandDialog(Unit unit, Colony colony,
+                                       GoodsType type, int amount) { return null; }
 
     /**
      * Show the negotiation dialog.
@@ -2170,10 +2162,10 @@ public class GUI extends FreeColClientHolder {
      *     commentary message.
      * @return The negotiated {@code DiplomaticTrade} agreement.
      */
-    public DiplomaticTrade showNegotiationDialog(FreeColGameObject our,
-                                                 FreeColGameObject other,
-                                                 DiplomaticTrade agreement,
-                                                 StringTemplate comment) { return null; }
+    public CompletableFuture<DiplomaticTrade> showNegotiationDialog(FreeColGameObject our,
+                                      FreeColGameObject other,
+                                      DiplomaticTrade agreement,
+                                      StringTemplate comment) { return null; }
 
     /**
      * Show the NewPanel.
@@ -2189,7 +2181,7 @@ public class GUI extends FreeColClientHolder {
      * @return The chosen parameters.
      */
     @net.ringoz.GwtIncompatible
-    public Parameters showParametersDialog() { return null; }
+    public CompletableFuture<Parameters> showParametersDialog() { return null; }
 
     /**
      * Show the pre-combat dialog.
@@ -2199,9 +2191,9 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} where the attack occurs.
      * @return True if the player decided to attack.
      */
-    public boolean showPreCombatDialog(Unit attacker,
+    public CompletableFuture<Boolean> showPreCombatDialog(Unit attacker,
                                        FreeColGameObject defender,
-                                       Tile tile) { return false; }
+                                       Tile tile) { return null; }
 
     /**
      * Displays the purchase panel.
@@ -2349,7 +2341,7 @@ public class GUI extends FreeColClientHolder {
      * @param styles The river styles a choice is made from.
      * @return The response returned by the dialog.
      */
-    public String showRiverStyleDialog(List<String> styles) { return null; }
+    public CompletableFuture<String> showRiverStyleDialog(List<String> styles) { return null; }
 
     /**
      * Show the save dialog.
@@ -2358,14 +2350,14 @@ public class GUI extends FreeColClientHolder {
      * @param defaultName The default game to save.
      * @return The selected file.
      */
-    public File showSaveDialog(File directory, String defaultName) { return null; }
+    public CompletableFuture<File> showSaveDialog(File directory, String defaultName) { return null; }
 
     /**
      * Show the map scale dialog.
      *
      * @return The map scale as a {@code Dimension}.
      */
-    public Dimension showScaleMapSizeDialog() { return null; }
+    public CompletableFuture<Dimension> showScaleMapSizeDialog() { return null; }
 
     /**
      * Show a dialog allowing selecting an amount of goods.
@@ -2376,9 +2368,9 @@ public class GUI extends FreeColClientHolder {
      * @param needToPay If true, check the player has sufficient funds.
      * @return The amount selected.
      */
-    public int showSelectAmountDialog(GoodsType goodsType, int available,
+    public CompletableFuture<Integer> showSelectAmountDialog(GoodsType goodsType, int available,
                                       int defaultAmount,
-                                      boolean needToPay) { return -1; }
+                                      boolean needToPay) { return null; }
 
     /**
      * Show a dialog allowing the user to select a destination for
@@ -2387,7 +2379,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} to select a destination for.
      * @return A destination for the unit, or null.
      */
-    public Location showSelectDestinationDialog(Unit unit) { return null; }
+    public CompletableFuture<Location> showSelectDestinationDialog(Unit unit) { return null; }
 
     /**
      * Show the select-tribute-amount dialog.
@@ -2397,8 +2389,8 @@ public class GUI extends FreeColClientHolder {
      * @param maximum The maximum amount available.
      * @return The amount selected.
      */
-    public int showSelectTributeAmountDialog(StringTemplate question,
-                                             int maximum) { return -1; }
+    public CompletableFuture<Integer> showSelectTributeAmountDialog(StringTemplate question,
+                                             int maximum) { return null; }
 
     /**
      * Show the {@code ServerListPanel}.
@@ -2474,7 +2466,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param handler A callback to handle the continuation decision.
      */
-    public void showVictoryDialog(DialogHandler<Boolean> handler) {}
+    public CompletableFuture<Boolean> showVictoryDialog() { return null; }
 
     /**
      * Show the warehouse dialog for a colony.
@@ -2484,7 +2476,7 @@ public class GUI extends FreeColClientHolder {
      * @param colony The {@code Colony} to display.
      * @return The response returned by the dialog.
      */
-    public boolean showWarehouseDialog(Colony colony) { return false; }
+    public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) { return null; }
 
     /**
      * Show the production of a unit.

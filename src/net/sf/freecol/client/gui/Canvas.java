@@ -40,6 +40,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1032,12 +1033,29 @@ public final class Canvas extends JDesktopPane {
      * @return The {@link FreeColDialog#getResponse reponse} returned by
      *     the dialog.
      */
-    public <T> T showFreeColDialog(FreeColDialog<T> dialog, PopupPosition pos) {
+    public <T> CompletableFuture<T> showFreeColDialog(FreeColDialog<T> dialog, PopupPosition pos) {
         viewFreeColDialog(dialog, pos);
-        T response = dialog.getResponse();
-        remove(dialog);
-        dialogRemove(dialog);
-        return response;
+
+        final var promise = new CompletableFuture<T>();
+        final var listener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!dialog.responded()) {
+                    final var timer = new javax.swing.Timer(100, this);
+                    timer.setRepeats(false);
+                    timer.start();
+                }
+                else
+                    promise.complete(dialog.getResponse());
+            }
+        };
+
+        listener.actionPerformed(null);
+        return promise.thenApply((response) -> {
+            remove(dialog);
+            dialogRemove(dialog);
+            return response;
+        });
     }
 
     /**

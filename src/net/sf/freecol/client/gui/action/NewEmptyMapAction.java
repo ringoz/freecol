@@ -63,13 +63,14 @@ public class NewEmptyMapAction extends MapboardAction {
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
-        Dimension size = getGUI().showMapSizeDialog();
-        if (size == null) return;
-        Map map = getFreeColClient().getFreeColServer()
-            .generateEmptyMap(size.width, size.height);
-        Tile tile = map.getTile(size.width/2, size.height/2);
-        getGUI().setFocus(tile);
-        getGUI().updateMenuBar();
-        getGUI().refresh();
+        getGUI().showMapSizeDialog().thenAccept((Dimension size) -> {
+            if (size == null) return;
+            Map map = getFreeColClient().getFreeColServer()
+                .generateEmptyMap(size.width, size.height);
+            Tile tile = map.getTile(size.width/2, size.height/2);
+            getGUI().setFocus(tile);
+            getGUI().updateMenuBar();
+            getGUI().refresh();
+        });
     }
 }

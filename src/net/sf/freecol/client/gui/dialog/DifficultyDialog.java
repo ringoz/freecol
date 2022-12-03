@@ -134,17 +134,18 @@ public final class DifficultyDialog extends OptionsDialog
     private void addLoadAction(JButton button) {
         button.addActionListener((ActionEvent ae) -> {
                 File dir = FreeColDirectories.getOptionsDirectory();
-                File file = getGUI().showLoadDialog(dir, "xml");
-                if (file != null) {
-                    if (load(file)) {
-                        ; // OptionsDialog.load should update the GUI
-                    } else {
-                        StringTemplate err = StringTemplate
-                            .template("error.couldNotLoadDifficulty")
-                            .addName("%name%", file.getPath());
-                        getGUI().showErrorPanel(err);
+                getGUI().showLoadDialog(dir, "xml").thenAccept((File file) -> {
+                    if (file != null) {
+                        if (load(file)) {
+                            ; // OptionsDialog.load should update the GUI
+                        } else {
+                            StringTemplate err = StringTemplate
+                                .template("error.couldNotLoadDifficulty")
+                                .addName("%name%", file.getPath());
+                            getGUI().showErrorPanel(err);
+                        }
                     }
-                }
+                });
             });
     }
 
@@ -156,11 +157,12 @@ public final class DifficultyDialog extends OptionsDialog
     private void addSaveAction(JButton button) {
         button.addActionListener((ActionEvent ae) -> {
                 File dir = FreeColDirectories.getOptionsDirectory();
-                File file = getGUI().showSaveDialog(dir, getDefaultFileName());
-                if (file != null) {
-                    getOptionUI().updateOption();
-                    save(file);
-                }
+                getGUI().showSaveDialog(dir, getDefaultFileName()).thenAccept((File file) -> {
+                    if (file != null) {
+                        getOptionUI().updateOption();
+                        save(file);
+                    }
+                });
             });
     }
 

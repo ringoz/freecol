@@ -52,7 +52,6 @@ import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.ChoiceItem;
-import net.sf.freecol.client.gui.DialogHandler;
 import net.sf.freecol.client.gui.GUI;
 import net.sf.freecol.client.gui.option.FreeColActionUI;
 import net.sf.freecol.client.gui.panel.FreeColPanel;
@@ -363,15 +362,14 @@ public final class InGameController extends FreeColClientHolder {
      * @param foy True if this is a fountain of youth event.
      * @param n The number of migrants available.
      */
-    private void showEmigrationDialog(final Player player, final boolean foy,
+    private CompletableFuture<Void> showEmigrationDialog(final Player player, final boolean foy,
                                       final int n) {
-        invokeLater(() ->
-            getGUI().showEmigrationDialog(player, foy,
-                (Integer value) -> { // Value is a valid slot
-                    emigrate(player,
-                        Europe.MigrationType.convertToMigrantSlot(value),
-                        n-1, foy);
-                }));
+        return getGUI().showEmigrationDialog(player, foy).thenAccept(
+            (Integer value) -> { // Value is a valid slot
+                emigrate(player,
+                    Europe.MigrationType.convertToMigrantSlot(value),
+                    n-1, foy);
+            });
     }
 
     /**
@@ -414,7 +412,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to check.
      * @param direction The {@code Direction} to move the unit.
      */
-    private void getMissionaryChoice(final Unit unit,
+    private CompletableFuture<Void> getMissionaryChoice(final Unit unit,
         final IndianSettlement is, final Direction direction) {
         final Player player = unit.getOwner();
         final boolean canEstablish = !is.hasMissionary();
@@ -422,34 +420,33 @@ public final class InGameController extends FreeColClientHolder {
             && !is.hasMissionary(player);
 
         // Offer the choices.
-        invokeLater(() -> {
-                MissionaryAction act = getGUI().getMissionaryChoice(unit, is,
-                    canEstablish, canDenounce);
-                if (act == null) return;
-                switch (act) {
-                case MISSIONARY_ESTABLISH_MISSION: case MISSIONARY_DENOUNCE_HERESY:
-                    askServer().missionary(unit, direction,
-                            act == MissionaryAction.MISSIONARY_DENOUNCE_HERESY)
-                    .thenAccept((result) -> { if (result 
-                            && is.hasMissionary(player)) {
-                            sound("sound.event.missionEstablished");
-                            player.invalidateCanSeeTiles();
-                        }
-                    });
-                    break;
-                case MISSIONARY_INCITE_INDIANS:
-                    Player enemy = getGUI().getChoice(unit.getTile(),
-                        StringTemplate.key("missionarySettlement.inciteQuestion"),
-                        unit, "missionarySettlement.cancel",
-                        transform(getGame().getLiveEuropeanPlayers(player), alwaysTrue(),
-                            p -> new ChoiceItem<>(Messages.message(p.getCountryLabel()), p)));
-                    if (enemy != null) askServer().incite(unit, is, enemy, -1);
-                    break;
-                default:
-                    logger.warning("showUseMissionaryDialog fail");
-                    break;
+        MissionaryAction act = await(getGUI().getMissionaryChoice(unit, is,
+            canEstablish, canDenounce));
+        if (act == null) return CompletableFuture.completedFuture(null);
+        switch (act) {
+        case MISSIONARY_ESTABLISH_MISSION: case MISSIONARY_DENOUNCE_HERESY:
+            askServer().missionary(unit, direction,
+                    act == MissionaryAction.MISSIONARY_DENOUNCE_HERESY)
+            .thenAccept((result) -> { if (result 
+                    && is.hasMissionary(player)) {
+                    sound("sound.event.missionEstablished");
+                    player.invalidateCanSeeTiles();
                 }
             });
+            break;
+        case MISSIONARY_INCITE_INDIANS:
+            Player enemy = await(getGUI().getChoice(unit.getTile(),
+                StringTemplate.key("missionarySettlement.inciteQuestion"),
+                unit, "missionarySettlement.cancel",
+                transform(getGame().getLiveEuropeanPlayers(player), alwaysTrue(),
+                    p -> new ChoiceItem<>(Messages.message(p.getCountryLabel()), p))));
+            if (enemy != null) askServer().incite(unit, is, enemy, -1);
+            break;
+        default:
+            logger.warning("showUseMissionaryDialog fail");
+            break;
+        }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**
@@ -460,11 +457,9 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} that is naming.
      * @param handler A callback to handle the user response.
      */
-    private void showNamingDialog(final StringTemplate template,
-        final String defaultName, final Unit unit,
-        final DialogHandler<String> handler) {
-        invokeLater(() ->
-            getGUI().showNamingDialog(template, defaultName, unit, handler));
+    private CompletableFuture<String> showNamingDialog(final StringTemplate template,
+        final String defaultName, final Unit unit) {
+        return getGUI().showNamingDialog(template, defaultName, unit);
     }
 
     /**
@@ -478,18 +473,16 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction An optional {@code Direction} to move the unit
      *     to the settlement on success.
      */
-    private void showNegotiationDialog(final Unit unit,
+    private CompletableFuture<Void> showNegotiationDialog(final Unit unit,
         final Settlement settlement, final DiplomaticTrade agreement,
         final StringTemplate comment, final Direction direction) {
         final Player player = unit.getOwner();
-        invokeLater(() -> {
-                DiplomaticTrade dt = getGUI()
-                    .showNegotiationDialog(unit, settlement, agreement, comment);
-                if (direction != null && dt != null
-                    && dt.getStatus() != TradeStatus.REJECT_TRADE) {
-                    moveDiplomacy(unit, direction, dt);
-                }
-            });
+        return getGUI().showNegotiationDialog(unit, settlement, agreement, comment).thenAccept((DiplomaticTrade dt) -> {
+            if (direction != null && dt != null
+                && dt.getStatus() != TradeStatus.REJECT_TRADE) {
+                moveDiplomacy(unit, direction, dt);
+            }
+        });
     }
 
     /**
@@ -619,7 +612,7 @@ public final class InGameController extends FreeColClientHolder {
         if (tradeRoute == unit.getTradeRoute()) return CompletableFuture.completedFuture(true);
 
         if (tradeRoute != null && unit.getTradeRoute() != null) {
-            if (!getGUI().confirmClearTradeRoute(unit)) return CompletableFuture.completedFuture(false);
+            if (!await(getGUI().confirmClearTradeRoute(unit))) return CompletableFuture.completedFuture(false);
         }
 
         return CompletableFuture.completedFuture(await(askServer().assignTradeRoute(unit, tradeRoute))
@@ -642,7 +635,7 @@ public final class InGameController extends FreeColClientHolder {
             return CompletableFuture.completedFuture(false);
         } else if (price > 0) { // for sale
             ClaimAction act
-                = getGUI().getClaimChoice(tile, player, price, owner);
+                = await(getGUI().getClaimChoice(tile, player, price, owner));
             if (act == null) return CompletableFuture.completedFuture(false); // Cancelled
             switch (act) {
             case CLAIM_ACCEPT: // accepted price
@@ -1115,7 +1108,7 @@ public final class InGameController extends FreeColClientHolder {
             List<Unit> units = transform(player.getUnits(), Unit::couldMove);
             if (!units.isEmpty()) {
                 // Modal dialog takes over
-                getGUI().showEndTurnDialog(units,
+                getGUI().showEndTurnDialog(units).thenAccept(
                     (Boolean value) -> {
                         if (value != null && value) {
                             endTurn(false);
@@ -1130,11 +1123,11 @@ public final class InGameController extends FreeColClientHolder {
 
         changeView(null);
         final List<Unit> units = transform(player.getUnits(), Unit::couldMove);
-        units.stream().forEach(unit -> {
+        for (final Unit unit : units) {
             if (unit.getState() != Unit.UnitState.SKIPPED) {
                 await(changeState(unit, Unit.UnitState.SKIPPED));
             }
-        });
+        }
         
         // Make sure all goto orders are complete before ending turn, and
         // that nothing (like a LCR exploration) has cancelled the end turn.
@@ -1558,8 +1551,8 @@ public final class InGameController extends FreeColClientHolder {
         if (u == null || unit.getOwner().owns(u)) return CompletableFuture.completedFuture(false);
 
         if (await(askClearGotoOrders(unit))
-            && getGUI().confirmHostileAction(unit, target)
-            && getGUI().confirmPreCombat(unit, target)) {
+            && await(getGUI().confirmHostileAction(unit, target))
+            && await(getGUI().confirmPreCombat(unit, target))) {
             await(askServer().attack(unit, direction));
             // Immediately display resulting message, allowing
             // next updateGUI to select another unit.
@@ -1587,12 +1580,12 @@ public final class InGameController extends FreeColClientHolder {
             || unit.getOwner().owns(settlement)) return CompletableFuture.completedFuture(false);
 
         ArmedUnitSettlementAction act
-            = getGUI().getArmedUnitSettlementChoice(settlement);
+            = await(getGUI().getArmedUnitSettlementChoice(settlement));
         if (act == null) return CompletableFuture.completedFuture(false); // Cancelled
         switch (act) {
         case SETTLEMENT_ATTACK:
-            if (getGUI().confirmHostileAction(unit, target)
-                && getGUI().confirmPreCombat(unit, target)) {
+            if (await(getGUI().confirmHostileAction(unit, target))
+                && await(getGUI().confirmPreCombat(unit, target))) {
                 await(askServer().attack(unit, direction));
                 Colony col = target.getColony();
                 if (col != null && unit.getOwner().owns(col)) {
@@ -1606,10 +1599,10 @@ public final class InGameController extends FreeColClientHolder {
 
         case SETTLEMENT_TRIBUTE:
             int amount = (settlement instanceof Colony)
-                ? getGUI().confirmEuropeanTribute(unit, (Colony)settlement,
-                    await(nationSummary(settlement.getOwner())))
+                ? await(getGUI().confirmEuropeanTribute(unit, (Colony)settlement,
+                    await(nationSummary(settlement.getOwner()))))
                 : (settlement instanceof IndianSettlement)
-                ? getGUI().confirmNativeTribute(unit, (IndianSettlement)settlement)
+                ? await(getGUI().confirmNativeTribute(unit, (IndianSettlement)settlement))
                 : -1;
             if (amount > 0) return moveTribute(unit, amount, direction);
             break;
@@ -1692,9 +1685,9 @@ public final class InGameController extends FreeColClientHolder {
         if (disembarkable.isEmpty()) return CompletableFuture.completedFuture(false); // Fail, did not find one
         for (Unit u : disembarkable) await(changeState(u, UnitState.ACTIVE));
         if (disembarkable.size() == 1) {
-            if (getGUI().confirm(tile, StringTemplate.key("disembark.text"),
-                                 disembarkable.get(0), "ok", "cancel")) {
-                moveDirection(disembarkable.get(0), direction, false);
+            if (await(getGUI().confirm(tile, StringTemplate.key("disembark.text"),
+                                 disembarkable.get(0), "ok", "cancel"))) {
+                await(moveDirection(disembarkable.get(0), direction, false));
             }
         } else {
             List<ChoiceItem<Unit>> choices
@@ -1706,9 +1699,9 @@ public final class InGameController extends FreeColClientHolder {
             // destination tile is known to be clear of other player
             // units or settlements, it may have a rumour or need
             // other special handling.
-            Unit u = getGUI().getChoice(unit.getTile(),
+            Unit u = await(getGUI().getChoice(unit.getTile(),
                                         StringTemplate.key("disembark.text"),
-                                        unit, "none", choices);
+                                        unit, "none", choices));
             if (u == null) {
                 // Cancelled, done.
             } else if (u == unit) {
@@ -1733,7 +1726,7 @@ public final class InGameController extends FreeColClientHolder {
      */
     private CompletableFuture<Boolean> moveEmbark(Unit unit, Direction direction) {
         if (unit.getColony() != null
-            && !getGUI().confirmLeaveColony(unit)) return CompletableFuture.completedFuture(false);
+            && !await(getGUI().confirmLeaveColony(unit))) return CompletableFuture.completedFuture(false);
 
         final Tile sourceTile = unit.getTile();
         final Tile destinationTile = sourceTile.getNeighbourOrNull(direction);
@@ -1748,9 +1741,9 @@ public final class InGameController extends FreeColClientHolder {
         } else if (choices.size() == 1) {
             carrier = choices.get(0).getObject();
         } else {
-            carrier = getGUI().getChoice(unit.getTile(),
+            carrier = await(getGUI().getChoice(unit.getTile(),
                                          StringTemplate.key("embark.text"),
-                                         unit, "none", choices);
+                                         unit, "none", choices));
             if (carrier == null) return CompletableFuture.completedFuture(false); // User cancelled
         }
 
@@ -1777,18 +1770,18 @@ public final class InGameController extends FreeColClientHolder {
         // Confirm the move.
         final Tile now = unit.getTile();
         final Tile tile = now.getNeighbourOrNull(direction);
-        if (!getGUI().confirm(now,
+        if (!await(getGUI().confirm(now,
                 StringTemplate.key("exploreLostCityRumour.text"), unit,
-                "exploreLostCityRumour.yes", "exploreLostCityRumour.no")) {
+                "exploreLostCityRumour.yes", "exploreLostCityRumour.no"))) {
             if (unit.getDestination() != null) askClearGotoOrders(unit);
             return CompletableFuture.completedFuture(false);
         }
 
         // Handle the mounds decision.
         if (tile.getLostCityRumour().getType() == LostCityRumour.RumourType.MOUNDS
-            && !getGUI().confirm(now,
+            && !await(getGUI().confirm(now,
                 StringTemplate.key("exploreMoundsRumour.text"), unit,
-                "exploreLostCityRumour.yes", "exploreLostCityRumour.no")) {
+                "exploreLostCityRumour.yes", "exploreLostCityRumour.no"))) {
             await(askServer().declineMounds(unit, direction)); // LCR goes away
             return CompletableFuture.completedFuture(false);
         }
@@ -1824,10 +1817,10 @@ public final class InGameController extends FreeColClientHolder {
                 return moveTowardEurope(unit, (Europe)stop.getLocation());
             } else if (unit.getDestination() instanceof Europe) {
                 return moveTowardEurope(unit, (Europe)unit.getDestination());
-            } else if (getGUI().confirm(oldTile, StringTemplate
+            } else if (await(getGUI().confirm(oldTile, StringTemplate
                     .template("highseas.text")
                     .addAmount("%number%", unit.getSailTurns()),
-                    unit, "highseas.yes", "highseas.no")) {
+                    unit, "highseas.yes", "highseas.no"))) {
                 return moveTowardEurope(unit, unit.getOwner().getEurope());
             }
         }
@@ -1860,10 +1853,10 @@ public final class InGameController extends FreeColClientHolder {
                     .addStringTemplate("%unit%",
                         unit.getLabel(Unit.UnitLabelType.NATIONAL))
                     .addNamed("%skill%", skill));
-            } else if (getGUI().confirm(unit.getTile(), StringTemplate
+            } else if (await(getGUI().confirm(unit.getTile(), StringTemplate
                     .template("learnSkill.text")
                     .addNamed("%skill%", skill),
-                    unit, "learnSkill.yes", "learnSkill.no")) {
+                    unit, "learnSkill.yes", "learnSkill.no"))) {
                 if (await(askServer().learnSkill(unit, direction))) {
                     if (unit.isDisposed()) {
                         showInformationPanel(is, "learnSkill.die");
@@ -1956,7 +1949,7 @@ public final class InGameController extends FreeColClientHolder {
         if (!await(askClearGotoOrders(unit))) return CompletableFuture.completedFuture(false);
 
         ScoutColonyAction act
-            = getGUI().getScoutForeignColonyChoice(colony, unit, canNeg);
+            = await(getGUI().getScoutForeignColonyChoice(colony, unit, canNeg));
         if (act == null) return CompletableFuture.completedFuture(true); // Cancelled
         switch (act) {
         case SCOUT_COLONY_ATTACK:
@@ -2001,12 +1994,12 @@ public final class InGameController extends FreeColClientHolder {
         final int count = player.getNationSummary(is.getOwner())
             .getNumberOfSettlements();
         ScoutIndianSettlementAction act
-            = getGUI().getScoutIndianSettlementChoice(is, (count <= 0)
-                ? Messages.message("many") : Integer.toString(count));
+            = await(getGUI().getScoutIndianSettlementChoice(is, (count <= 0)
+                ? Messages.message("many") : Integer.toString(count)));
         if (act == null) return CompletableFuture.completedFuture(false); // Cancelled
         switch (act) {
         case SCOUT_SETTLEMENT_ATTACK:
-            if (getGUI().confirmPreCombat(unit, tile)) {
+            if (await(getGUI().confirmPreCombat(unit, tile))) {
                 await(askServer().attack(unit, direction));
             }
             break;
@@ -2539,8 +2532,8 @@ public final class InGameController extends FreeColClientHolder {
                         .addStringTemplate("%colony%", locName)
                         .addAmount("%amount%", toUnload - atStop)
                         .addNamed("%goods%", goods);
-                    if (!getGUI().confirm(unit.getTile(), template,
-                                          unit, "yes", "no")) {
+                    if (!await(getGUI().confirm(unit.getTile(), template,
+                                          unit, "yes", "no"))) {
                         if (atStop == 0) continue;
                         amount = atStop;
                     }
@@ -2800,14 +2793,14 @@ public final class InGameController extends FreeColClientHolder {
         if (getClientOptions().getBoolean(ClientOptions.SHOW_COLONY_WARNINGS)) {
             StringTemplate warnings = tile.getBuildColonyWarnings(unit);
             if (!warnings.isEmpty()
-                && !getGUI().confirm(tile, warnings, unit,
-                                     "buildColony.yes", "buildColony.no")) {
+                && !await(getGUI().confirm(tile, warnings, unit,
+                                     "buildColony.yes", "buildColony.no"))) {
                 return CompletableFuture.completedFuture(false);
             }
         }
 
         // Get and check the name.
-        String name = getGUI().getNewColonyName(player, tile);
+        String name = await(getGUI().getNewColonyName(player, tile));
         if (name == null) return CompletableFuture.completedFuture(false);
 
         // Claim tile from other owners before founding a settlement.
@@ -2922,7 +2915,7 @@ public final class InGameController extends FreeColClientHolder {
                 Player enemy = tile.getOwningSettlement().getOwner();
                 if (player != enemy
                     && player.getStance(enemy) != Stance.ALLIANCE
-                    && !getGUI().confirmHostileAction(unit, tile))
+                    && !await(getGUI().confirmHostileAction(unit, tile)))
                     return CompletableFuture.completedFuture(false); // Aborted
             }
         }
@@ -3025,8 +3018,8 @@ public final class InGameController extends FreeColClientHolder {
                 template = StringTemplate.template("cashInTreasureTrain.pay")
                     .addAmount("%fee%", percent);
             }
-            if (!getGUI().confirm(unit.getTile(), template, unit,
-                                  "accept", "reject")) return CompletableFuture.completedFuture(false);
+            if (!await(getGUI().confirm(unit.getTile(), template, unit,
+                                  "accept", "reject"))) return CompletableFuture.completedFuture(false);
         }
 
         UnitWas unitWas = new UnitWas(unit);
@@ -3063,9 +3056,8 @@ public final class InGameController extends FreeColClientHolder {
     public void chooseFoundingFatherHandler(List<FoundingFather> ffs) {
         if (ffs == null || ffs.isEmpty()) return;
        
-        invokeLater(() ->
-            getGUI().showChooseFoundingFatherDialog(ffs,
-                (FoundingFather ff) -> chooseFoundingFather(ffs, ff)));
+        getGUI().showChooseFoundingFatherDialog(ffs).thenAccept(
+            (FoundingFather ff) -> chooseFoundingFather(ffs, ff));
     }
 
     /**
@@ -3132,10 +3124,10 @@ public final class InGameController extends FreeColClientHolder {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
         if (unit.getState() == UnitState.IMPROVING
-            && !getGUI().confirm(unit.getTile(), StringTemplate
+            && !await(getGUI().confirm(unit.getTile(), StringTemplate
                 .template("clearOrders.text")
                 .addAmount("%turns%", unit.getWorkTurnsLeft()),
-                unit, "ok", "cancel")) {
+                unit, "ok", "cancel"))) {
             return CompletableFuture.completedFuture(false);
         }
 
@@ -3171,12 +3163,12 @@ public final class InGameController extends FreeColClientHolder {
         }
 
         final Tile tile = (getGUI().isPanelShowing()) ? null : unit.getTile();
-        if (!getGUI().confirm(tile, StringTemplate
+        if (!await(getGUI().confirm(tile, StringTemplate
                 .template("clearSpeciality.areYouSure")
                 .addStringTemplate("%oldUnit%",
                     unit.getLabel(Unit.UnitLabelType.NATIONAL))
                 .addNamed("%unit%", newType),
-                unit, "ok", "cancel")) {
+                unit, "ok", "cancel"))) {
             return CompletableFuture.completedFuture(false);
         }
 
@@ -3239,7 +3231,7 @@ public final class InGameController extends FreeColClientHolder {
         }
 
         // Confirm intention, and collect nation+country names.
-        List<String> names = getGUI().showConfirmDeclarationDialog();
+        List<String> names = await(getGUI().showConfirmDeclarationDialog());
         if (names == null
             || names.get(0) == null || names.get(0).isEmpty()
             || names.get(1) == null || names.get(1).isEmpty()) {
@@ -3310,13 +3302,13 @@ public final class InGameController extends FreeColClientHolder {
         case PROPOSE_TRADE:
             invokeLater(() -> {
                     StringTemplate template = agreement.getReceiveMessage(otherPlayer);
-                    DiplomaticTrade ourAgreement = getGUI()
-                        .showNegotiationDialog(our, other, agreement, template);
-                    if (ourAgreement == null) {
-                        ourAgreement = agreement;
-                        ourAgreement.setStatus(TradeStatus.REJECT_TRADE);
-                    }
-                    askServer().diplomacy(our, other, ourAgreement);
+                    getGUI().showNegotiationDialog(our, other, agreement, template).thenAccept((DiplomaticTrade ourAgreement) -> {
+                        if (ourAgreement == null) {
+                            ourAgreement = agreement;
+                            ourAgreement.setStatus(TradeStatus.REJECT_TRADE);
+                        }
+                        askServer().diplomacy(our, other, ourAgreement);
+                    });
                 });
             break;
         default:
@@ -3337,10 +3329,10 @@ public final class InGameController extends FreeColClientHolder {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
         if (unit.getColony() != null
-            && !getGUI().confirmLeaveColony(unit)) return CompletableFuture.completedFuture(false);
+            && !await(getGUI().confirmLeaveColony(unit))) return CompletableFuture.completedFuture(false);
         final Tile tile = (getGUI().isPanelShowing()) ? null : unit.getTile();
-        if (!getGUI().confirm(tile, StringTemplate.key("disbandUnit.text"),
-                              unit, "disbandUnit.yes", "cancel"))
+        if (!await(getGUI().confirm(tile, StringTemplate.key("disbandUnit.text"),
+                              unit, "disbandUnit.yes", "cancel")))
             return CompletableFuture.completedFuture(false);
 
         // Try to disband
@@ -3576,9 +3568,8 @@ public final class InGameController extends FreeColClientHolder {
      */
     public void firstContactHandler(Player player, Player other, Tile tile,
                                     int n) {
-        invokeLater(() ->
-            getGUI().showFirstContactDialog(player, other, tile, n,
-                (Boolean b) -> firstContact(player, other, tile, b)));
+        getGUI().showFirstContactDialog(player, other, tile, n).thenAccept(
+            (Boolean b) -> firstContact(player, other, tile, b));
     }
 
     /**
@@ -3596,10 +3587,8 @@ public final class InGameController extends FreeColClientHolder {
      * @param score If "true", a new high score was reached.
      */
     public void gameEndedHandler(String score) {
-        invokeLater(() -> {
-                highScore("true".equalsIgnoreCase(score));
-                getGUI().showVictoryDialog((Boolean result) -> victory(result));
-            });
+        highScore("true".equalsIgnoreCase(score)).thenAccept((ret) ->
+            getGUI().showVictoryDialog().thenAccept((Boolean result) -> victory(result)));
     }
 
     /**
@@ -3616,7 +3605,7 @@ public final class InGameController extends FreeColClientHolder {
             || path == null
             || !requireOurTurn()) return CompletableFuture.completedFuture(false);
 
-        if (!getGUI().confirmClearTradeRoute(unit)) return CompletableFuture.completedFuture(false);
+        if (!await(getGUI().confirmClearTradeRoute(unit))) return CompletableFuture.completedFuture(false);
 
         // FIXME: should follow path directly rather than delegating
         UnitWas unitWas = new UnitWas(unit);
@@ -3699,15 +3688,13 @@ public final class InGameController extends FreeColClientHolder {
                 .add("%player%", enemy.getName())
                 .addAmount("%amount%", gold));
         } else {
-            invokeLater(() -> {
-                    if (getGUI().confirm(unit.getTile(), StringTemplate
-                            .template("missionarySettlement.inciteConfirm")
-                            .addStringTemplate("%enemy%", enemy.getNationLabel())
-                            .addAmount("%amount%", gold),
-                            unit, "yes", "no")) {
-                        askServer().incite(unit, is, enemy, gold);
-                    }
-                });
+            if (await(getGUI().confirm(unit.getTile(), StringTemplate
+                    .template("missionarySettlement.inciteConfirm")
+                    .addStringTemplate("%enemy%", enemy.getNationLabel())
+                    .addAmount("%amount%", gold),
+                    unit, "yes", "no"))) {
+                askServer().incite(unit, is, enemy, gold);
+            }
         }
     }
 
@@ -3727,12 +3714,11 @@ public final class InGameController extends FreeColClientHolder {
         int opt = getClientOptions().getInteger(ClientOptions.INDIAN_DEMAND_RESPONSE);
         switch (opt) {
         case ClientOptions.INDIAN_DEMAND_RESPONSE_ASK:
-            invokeLater(() ->
-                getGUI().showNativeDemandDialog(unit, colony, type, amount,
-                    (Boolean accept) ->
-                        askServer().indianDemand(unit, colony, type, amount,
-                            ((accept) ? IndianDemandAction.INDIAN_DEMAND_ACCEPT
-                                : IndianDemandAction.INDIAN_DEMAND_REJECT))));
+            getGUI().showNativeDemandDialog(unit, colony, type, amount).thenAccept(
+                (Boolean accept) ->
+                    askServer().indianDemand(unit, colony, type, amount,
+                        ((accept) ? IndianDemandAction.INDIAN_DEMAND_ACCEPT
+                            : IndianDemandAction.INDIAN_DEMAND_REJECT)));
             return;
         case ClientOptions.INDIAN_DEMAND_RESPONSE_ACCEPT:
             accepted = true;
@@ -3859,27 +3845,27 @@ public final class InGameController extends FreeColClientHolder {
      *
      * Returns no status as this game is stopped.
      */
-    public void loadGame() {
-        File file = getGUI()
+    public CompletableFuture<Void> loadGame() {
+        File file = await(getGUI()
             .showLoadSaveFileDialog(FreeColDirectories.getSaveDirectory(),
-                                    FreeCol.FREECOL_SAVE_EXTENSION);
-        if (file == null) return;
+                                    FreeCol.FREECOL_SAVE_EXTENSION));
+        if (file == null) return CompletableFuture.completedFuture(null);
 
         final FreeColClient fcc = getFreeColClient();
-        if (fcc.isInGame() && !getGUI().confirmStopGame()) {
+        if (fcc.isInGame() && !await(getGUI().confirmStopGame())) {
             // User aborted.
-            return;
+            return CompletableFuture.completedFuture(null);
         }
 
         if (fcc.isLoggedIn()) {
-            fcc.getConnectController().requestLogout(LogoutReason.LOGIN);
+            await(fcc.getConnectController().requestLogout(LogoutReason.LOGIN));
         }
         fcc.stopServer();
         getGUI().prepareShowingMainMenu();
         getGUI().repaint();
 
         FreeColDirectories.setSavegameFile(file.getPath());
-        getConnectController().startSavedGame(file).thenAccept((ret) -> {
+        return getConnectController().startSavedGame(file).thenAccept((ret) -> {
             if (!ret)
                 getGUI().showMainPanel(null);
         });
@@ -3934,9 +3920,8 @@ public final class InGameController extends FreeColClientHolder {
      * @param loserId The identifier of the defender unit (may have sunk).
      */
     public void lootCargoHandler(Unit unit, List<Goods> goods, String loserId) {
-        invokeLater(() ->
-            getGUI().showCaptureGoodsDialog(unit, goods,
-                (List<Goods> gl) -> lootCargo(unit, gl, loserId)));
+        getGUI().showCaptureGoodsDialog(unit, goods).thenAccept(
+            (List<Goods> gl) -> lootCargo(unit, gl, loserId));
     }
 
     /**
@@ -3976,9 +3961,8 @@ public final class InGameController extends FreeColClientHolder {
     public void monarchActionHandler(MonarchAction action,
                                      StringTemplate template,
                                      String monarchKey) {
-        invokeLater(() ->
-            getGUI().showMonarchDialog(action, template, monarchKey,
-                (Boolean b) -> monarchAction(action, b)));
+        getGUI().showMonarchDialog(action, template, monarchKey).thenAccept(
+            (Boolean b) -> monarchAction(action, b));
     }
 
     /**
@@ -4239,8 +4223,8 @@ public final class InGameController extends FreeColClientHolder {
         while (!nt.getDone()) {
             if (act == null) {
                 if (prompt == null) prompt = base;
-                act = getGUI().getIndianSettlementTradeChoice(is, prompt,
-                    nt.canBuy(), nt.canSell(), nt.canGift());
+                act = await(getGUI().getIndianSettlementTradeChoice(is, prompt,
+                    nt.canBuy(), nt.canSell(), nt.canGift()));
                 if (act == null) break;
                 prompt = base; // Revert to base after first time through
             }
@@ -4248,17 +4232,17 @@ public final class InGameController extends FreeColClientHolder {
             case BUY:
                 act = null;
                 if (nti == null) {
-                    nti = getGUI().getChoice(unit.getTile(),
+                    nti = await(getGUI().getChoice(unit.getTile(),
                         StringTemplate.key("buyProposition.text"),
                         is, "nothing",
                         transform(nt.getSettlementToUnit(),
-                                  NativeTradeItem::priceIsValid, goodsMapper));
+                                  NativeTradeItem::priceIsValid, goodsMapper)));
                     if (nti == null) break;
                     nt.setItem(nti);
                 }
-                TradeBuyAction tba = getGUI().getBuyChoice(unit, is,
+                TradeBuyAction tba = await(getGUI().getBuyChoice(unit, is,
                     nti.getGoods(), nti.getPrice(),
-                    unit.getOwner().checkGold(nti.getPrice()));
+                    unit.getOwner().checkGold(nti.getPrice())));
                 if (tba == TradeBuyAction.BUY) {
                     return askServer().nativeTrade(NativeTradeAction.BUY, nt);
                 } else if (tba == TradeBuyAction.HAGGLE) {
@@ -4269,16 +4253,16 @@ public final class InGameController extends FreeColClientHolder {
             case SELL:
                 act = null;
                 if (nti == null) {
-                    nti = getGUI().getChoice(unit.getTile(),
+                    nti = await(getGUI().getChoice(unit.getTile(),
                         StringTemplate.key("sellProposition.text"),
                         is, "nothing",
                         transform(nt.getUnitToSettlement(),
-                                  NativeTradeItem::priceIsValid, goodsMapper));
+                                  NativeTradeItem::priceIsValid, goodsMapper)));
                     if (nti == null) break;
                     nt.setItem(nti);
                 }
-                TradeSellAction tsa = getGUI().getSellChoice(unit, is,
-                    nti.getGoods(), nti.getPrice());
+                TradeSellAction tsa = await(getGUI().getSellChoice(unit, is,
+                    nti.getGoods(), nti.getPrice()));
                 if (tsa == TradeSellAction.SELL) {
                     return askServer().nativeTrade(NativeTradeAction.SELL, nt);
                 } else if (tsa == TradeSellAction.HAGGLE) {
@@ -4288,11 +4272,11 @@ public final class InGameController extends FreeColClientHolder {
                 break;
             case GIFT:
                 act = null;
-                nti = getGUI().getChoice(unit.getTile(),
+                nti = await(getGUI().getChoice(unit.getTile(),
                     StringTemplate.key("gift.text"),
                     is, "cancel",
                     transform(nt.getUnitToSettlement(), alwaysTrue(),
-                              goodsMapper));
+                              goodsMapper)));
                 if (nti != null) {
                     nt.setItem(nti);
                     return askServer().nativeTrade(NativeTradeAction.GIFT, nt);
@@ -4355,7 +4339,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param defaultName The default name to use.
      */
     public void newLandNameHandler(Unit unit, String defaultName) {
-        showNamingDialog(StringTemplate.key("newLand.text"), defaultName, unit,
+        showNamingDialog(StringTemplate.key("newLand.text"), defaultName, unit).thenAccept(
             (String name) -> newLandName(unit,
                 (name == null || name.isEmpty()) ? defaultName : name));
     }
@@ -4398,7 +4382,7 @@ public final class InGameController extends FreeColClientHolder {
                         showNamingDialog(StringTemplate
                             .template("nameRegion.text")
                             .addStringTemplate("%type%", region.getLabel()),
-                            name, unit,
+                            name, unit).thenAccept(
                             (String n) -> newRegionName(region, tile, unit,
                                 (n == null || n.isEmpty()) ? name : n));
                     } else {
@@ -4544,7 +4528,7 @@ public final class InGameController extends FreeColClientHolder {
 
         StringTemplate t = StringTemplate.template("payArrears.text")
             .addAmount("%amount%", arrears);
-        if (!getGUI().confirm(null, t, type, "ok", "cancel")) return CompletableFuture.completedFuture(false);
+        if (!await(getGUI().confirm(null, t, type, "ok", "cancel"))) return CompletableFuture.completedFuture(false);
 
         boolean ret = await(askServer().payArrears(type)) && player.canTrade(type);
         if (ret) {
@@ -4579,7 +4563,7 @@ public final class InGameController extends FreeColClientHolder {
         final int price = colony.getPriceForBuilding();
         StringTemplate t = StringTemplate.template("payForBuilding.text")
             .addAmount("%amount%", price);
-        if (!getGUI().confirm(null, t, colony, "yes", "no")) return CompletableFuture.completedFuture(false);
+        if (!await(getGUI().confirm(null, t, colony, "yes", "no"))) return CompletableFuture.completedFuture(false);
 
         ColonyWas colonyWas = new ColonyWas(colony);
         boolean ret = await(askServer().payForBuilding(colony))
@@ -4605,7 +4589,7 @@ public final class InGameController extends FreeColClientHolder {
             || (colony = unit.getColony()) == null
             || !requireOurTurn()) return CompletableFuture.completedFuture(false);
 
-        if (!getGUI().confirmLeaveColony(unit)) return CompletableFuture.completedFuture(false);
+        if (!await(getGUI().confirmLeaveColony(unit))) return CompletableFuture.completedFuture(false);
 
         ColonyWas colonyWas = new ColonyWas(colony);
         UnitWas unitWas = new UnitWas(unit);
@@ -4627,16 +4611,16 @@ public final class InGameController extends FreeColClientHolder {
      */
     public void reconnect() {
         final FreeColClient fcc = getFreeColClient();
-        invokeLater(() -> {
-                if (getGUI().confirm("reconnect.text",
-                                     "reconnect.no", "reconnect.yes")) {
-                    logger.finest("Reconnect quit.");
-                    fcc.getConnectController().requestLogout(LogoutReason.QUIT);
-                } else {
-                    logger.finest("Reconnect accepted.");
-                    fcc.getConnectController().requestLogout(LogoutReason.RECONNECT);
-                }
-            });
+        getGUI().confirm("reconnect.text",
+                         "reconnect.no", "reconnect.yes").thenAccept((ret) -> {
+            if (ret) {
+                logger.finest("Reconnect quit.");
+                fcc.getConnectController().requestLogout(LogoutReason.QUIT);
+            } else {
+                logger.finest("Reconnect accepted.");
+                fcc.getConnectController().requestLogout(LogoutReason.RECONNECT);
+            }
+        });
     }
 
     /**
@@ -4732,9 +4716,9 @@ public final class InGameController extends FreeColClientHolder {
         String name = null;
         if (object instanceof Colony) {
             Colony colony = (Colony) object;
-            name = getGUI().getInput(colony.getTile(),
+            name = await(getGUI().getInput(colony.getTile(),
                 StringTemplate.key("renameColony.text"),
-                colony.getName(), "rename", "cancel");
+                colony.getName(), "rename", "cancel"));
             if (name == null) { // User cancelled
                 return CompletableFuture.completedFuture(false);
             } else if (name.isEmpty()) { // Zero length invalid
@@ -4751,9 +4735,9 @@ public final class InGameController extends FreeColClientHolder {
             }
         } else if (object instanceof Unit) {
             Unit unit = (Unit) object;
-            name = getGUI().getInput(unit.getTile(),
+            name = await(getGUI().getInput(unit.getTile(),
                 StringTemplate.key("renameUnit.text"),
-                unit.getName(), "rename", "cancel");
+                unit.getName(), "rename", "cancel"));
             if (name == null) return CompletableFuture.completedFuture(false); // User cancelled
         } else {
             logger.warning("Tried to rename an unsupported Nameable: "
@@ -4775,10 +4759,10 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return False if the game was not saved, otherwise the game quits.
      */
-    public boolean saveAndQuit() {
-        if (!saveGame()) return false;
+    public CompletableFuture<Boolean> saveAndQuit() {
+        if (!await(saveGame())) return CompletableFuture.completedFuture(false);
         getFreeColClient().quit();
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
     /**
@@ -4789,23 +4773,23 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True if the game was saved.
      */
-    public boolean saveGame() {
-        if (!getFreeColClient().canSaveCurrentGame()) return false;
+    public CompletableFuture<Boolean> saveGame() {
+        if (!getFreeColClient().canSaveCurrentGame()) return CompletableFuture.completedFuture(false);
 
         final Game game = getGame();
-        if (game == null) return false; // Keyboard handling can race init
+        if (game == null) return CompletableFuture.completedFuture(false); // Keyboard handling can race init
         String fileName = getSaveGameString(game);
-        File file = getGUI().showSaveDialog(FreeColDirectories.getSaveDirectory(),
-                                            fileName);
-        if (file == null) return false;
+        File file = await(getGUI().showSaveDialog(FreeColDirectories.getSaveDirectory(),
+                                            fileName));
+        if (file == null) return CompletableFuture.completedFuture(false);
         if (!getClientOptions().getBoolean(ClientOptions.CONFIRM_SAVE_OVERWRITE)
             || !file.exists()
-            || getGUI().confirm("saveConfirmationDialog.areYouSure.text",
-                                "ok", "cancel")) {
+            || await(getGUI().confirm("saveConfirmationDialog.areYouSure.text",
+                                "ok", "cancel"))) {
             FreeColDirectories.setSavegameFile(file.getPath());
-            return saveGame(file);
+            return CompletableFuture.completedFuture(saveGame(file));
         }
-        return false;
+        return CompletableFuture.completedFuture(false);
     }
 
     /**
@@ -4856,8 +4840,8 @@ public final class InGameController extends FreeColClientHolder {
     public CompletableFuture<Boolean> selectDestination(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
-        if (!getGUI().confirmClearTradeRoute(unit)) return CompletableFuture.completedFuture(false);
-        Location destination = getGUI().showSelectDestinationDialog(unit);
+        if (!await(getGUI().confirmClearTradeRoute(unit))) return CompletableFuture.completedFuture(false);
+        Location destination = await(getGUI().showSelectDestinationDialog(unit));
         if (destination == null) return CompletableFuture.completedFuture(false);
 
         UnitWas unitWas = new UnitWas(unit);
@@ -5026,15 +5010,15 @@ public final class InGameController extends FreeColClientHolder {
                 ; // Do nothing, retire routine will quit
             } else {
                 if (player.getPlayerType() != Player.PlayerType.UNDEAD
-                    && getGUI().confirm("defeatedSinglePlayer.text",
-                                        "defeatedSinglePlayer.yes", "quit")) {
+                    && await(getGUI().confirm("defeatedSinglePlayer.text",
+                                        "defeatedSinglePlayer.yes", "quit"))) {
                     await(askServer().enterRevengeMode());
                     return CompletableFuture.completedFuture(true);
                 }
                 reason = LogoutReason.DEFEATED;
             }
         } else {
-            if (!getGUI().confirm("defeated.text", "defeated.yes", "quit")) {
+            if (!await(getGUI().confirm("defeated.text", "defeated.yes", "quit"))) {
                 reason = LogoutReason.DEFEATED;
             }
         }
@@ -5199,7 +5183,7 @@ public final class InGameController extends FreeColClientHolder {
                 }
             }
             if (unit.hasGoodsCargo()) { // Goods left here must be dumped.
-                getGUI().showDumpCargoDialog(unit,
+                getGUI().showDumpCargoDialog(unit).thenAccept(
                     (List<Goods> goodsList) -> {
                         for (Goods g : goodsList) unloadCargo(g, true);
                     });
@@ -5335,7 +5319,7 @@ public final class InGameController extends FreeColClientHolder {
 
         StringTemplate template;
         if (unit.getStudent() != null
-            && !getGUI().confirmAbandonEducation(unit, false)) return CompletableFuture.completedFuture(false);
+            && !await(getGUI().confirmAbandonEducation(unit, false))) return CompletableFuture.completedFuture(false);
 
         Colony colony = workLocation.getColony();
         Tile tile = workLocation.getWorkTile();

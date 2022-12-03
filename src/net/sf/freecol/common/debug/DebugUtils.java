@@ -134,42 +134,43 @@ public class DebugUtils {
             new ChoiceItem<BuildingType>(Messages.getName(bt), bt);
 
         StringTemplate tmpl = StringTemplate.name(title);
-        BuildingType buildingType = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(spec.getBuildingTypeList(), alwaysTrue(), mapper,
-                      Comparator.naturalOrder()));
-        if (buildingType == null) return;
+                      Comparator.naturalOrder())).thenAccept((BuildingType buildingType) -> {
+            if (buildingType == null) return;
 
-        final Game sGame = server.getGame();
-        final BuildingType sBuildingType = server.getSpecification()
-            .getBuildingType(buildingType.getId());
-        final Player sPlayer = sGame.getFreeColGameObject(player.getId(),
-                                                          Player.class);
-        int fails = 0;
-        List<Colony> sColonies = sPlayer.getColonyList();
-        List<String> results = new ArrayList<>(sColonies.size());
-        for (Colony sColony : sColonies) {
-            Colony.NoBuildReason reason
-                = sColony.getNoBuildReason(sBuildingType, null);
-            results.add(sColony.getName() + ": " + reason);
-            if (reason == Colony.NoBuildReason.NONE) {
-                Building sBuilding = sColony.getBuilding(sBuildingType);
-                List<Unit> present = (sBuilding == null)
-                    ? Collections.<Unit>emptyList()
-                    : sBuilding.getUnitList();
-                if (sBuildingType.isDefenceType()) {
-                    sColony.getTile().cacheUnseen();//+til
+            final Game sGame = server.getGame();
+            final BuildingType sBuildingType = server.getSpecification()
+                .getBuildingType(buildingType.getId());
+            final Player sPlayer = sGame.getFreeColGameObject(player.getId(),
+                                                            Player.class);
+            int fails = 0;
+            List<Colony> sColonies = sPlayer.getColonyList();
+            List<String> results = new ArrayList<>(sColonies.size());
+            for (Colony sColony : sColonies) {
+                Colony.NoBuildReason reason
+                    = sColony.getNoBuildReason(sBuildingType, null);
+                results.add(sColony.getName() + ": " + reason);
+                if (reason == Colony.NoBuildReason.NONE) {
+                    Building sBuilding = sColony.getBuilding(sBuildingType);
+                    List<Unit> present = (sBuilding == null)
+                        ? Collections.<Unit>emptyList()
+                        : sBuilding.getUnitList();
+                    if (sBuildingType.isDefenceType()) {
+                        sColony.getTile().cacheUnseen();//+til
+                    }
+                    sBuilding = new ServerBuilding(sGame, sColony, sBuildingType);
+                    sColony.addBuilding(sBuilding);//-til
+                    for (Unit u : present) u.setLocation(sBuilding);
+                } else {
+                    fails++;
                 }
-                sBuilding = new ServerBuilding(sGame, sColony, sBuildingType);
-                sColony.addBuilding(sBuilding);//-til
-                for (Unit u : present) u.setLocation(sBuilding);
-            } else {
-                fails++;
             }
-        }
-        gui.showInformationPanel(join(", ", results));
-        if (fails < sPlayer.getSettlementCount()) { // Brutally resynchronize
-            reconnect(freeColClient);
-        }
+            gui.showInformationPanel(join(", ", results));
+            if (fails < sPlayer.getSettlementCount()) { // Brutally resynchronize
+                reconnect(freeColClient);
+            }
+        });
     }
 
     /**
@@ -195,12 +196,13 @@ public class DebugUtils {
             = f -> new ChoiceItem<FoundingFather>(Messages.getName(f), f);
 
         StringTemplate tmpl = StringTemplate.name(fatherTitle);
-        FoundingFather father = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(sSpec.getFoundingFathers(), noFatherPred, mapper,
-                      Comparator.naturalOrder()));
-        if (father != null) {
-            server.getInGameController().addFoundingFather(sPlayer, father);
-        }
+                      Comparator.naturalOrder())).thenAccept((FoundingFather father) -> {
+            if (father != null) {
+                server.getInGameController().addFoundingFather(sPlayer, father);
+            }
+        });
     }
 
     /**
@@ -218,18 +220,19 @@ public class DebugUtils {
         final Player sPlayer = sGame.getFreeColGameObject(player.getId(),
                                                           Player.class);
 
-        String response = gui.getInput(null,
+        gui.getInput(null,
             StringTemplate.template("prompt.selectGold"),
-            Integer.toString(1000), "ok", "cancel");
-        if (response == null || response.isEmpty()) return;
-        int gold;
-        try {
-            gold = Integer.parseInt(response);
-        } catch (NumberFormatException x) {
-            return;
-        }
-        player.modifyGold(gold);
-        sPlayer.modifyGold(gold);
+            Integer.toString(1000), "ok", "cancel").thenAccept((String response) -> {
+            if (response == null || response.isEmpty()) return;
+            int gold;
+            try {
+                gold = Integer.parseInt(response);
+            } catch (NumberFormatException x) {
+                return;
+            }
+            player.modifyGold(gold);
+            sPlayer.modifyGold(gold);
+        });
     }
 
     /**
@@ -266,19 +269,20 @@ public class DebugUtils {
         final Player sPlayer = sGame.getFreeColGameObject(player.getId(),
                                                           Player.class);
 
-        String response = gui.getInput(null,
+        gui.getInput(null,
             StringTemplate.template("prompt.selectImmigration"),
-            Integer.toString(100), "ok", "cancel");
-        if (response == null || response.isEmpty()) return;
+            Integer.toString(100), "ok", "cancel").thenAccept((String response) -> {
+            if (response == null || response.isEmpty()) return;
 
-        int crosses;
-        try {
-            crosses = Integer.parseInt(response);
-        } catch (NumberFormatException x) {
-            return;
-        }
-        player.modifyImmigration(crosses);
-        sPlayer.modifyImmigration(crosses);
+            int crosses;
+            try {
+                crosses = Integer.parseInt(response);
+            } catch (NumberFormatException x) {
+                return;
+            }
+            player.modifyImmigration(crosses);
+            sPlayer.modifyImmigration(crosses);
+        });
     }
 
     /**
@@ -294,22 +298,23 @@ public class DebugUtils {
         final Player player = freeColClient.getMyPlayer();
         final Game sGame = server.getGame();
 
-        String response = gui.getInput(null,
+        gui.getInput(null,
             StringTemplate.template("prompt.selectLiberty"),
-            Integer.toString(100), "ok", "cancel");
-        if (response == null || response.isEmpty()) return;
+            Integer.toString(100), "ok", "cancel").thenAccept((String response) -> {
+            if (response == null || response.isEmpty()) return;
 
-        int liberty;
-        try {
-            liberty = Integer.parseInt(response);
-        } catch (NumberFormatException x) {
-            return;
-        }
-        for (Colony c : player.getColonyList()) {
-            c.addLiberty(liberty);
-            sGame.getFreeColGameObject(c.getId(), Colony.class)
-                .addLiberty(liberty);
-        }
+            int liberty;
+            try {
+                liberty = Integer.parseInt(response);
+            } catch (NumberFormatException x) {
+                return;
+            }
+            for (Colony c : player.getColonyList()) {
+                c.addLiberty(liberty);
+                sGame.getFreeColGameObject(c.getId(), Colony.class)
+                    .addLiberty(liberty);
+            }
+        });
     }
 
     /**
@@ -357,30 +362,31 @@ public class DebugUtils {
             new ChoiceItem<UnitType>(Messages.getName(ut), ut);
 
         StringTemplate tmpl = StringTemplate.template("prompt.selectUnitType");
-        UnitType unitChoice = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(sSpec.getUnitTypeList(), alwaysTrue(), mapper,
-                      Comparator.naturalOrder()));
-        if (unitChoice == null) return;
+                      Comparator.naturalOrder())).thenAccept((UnitType unitChoice) -> {
+            if (unitChoice == null) return;
 
-        // Is there a server-unit with space left?
-        Unit sCarrier = (sTile.isLand() || unitChoice.isNaval()) ? null
-            : find(sTile.getUnitList(), u ->
-                u.isNaval() && u.getSpaceLeft() >= unitChoice.getSpaceTaken());
+            // Is there a server-unit with space left?
+            Unit sCarrier = (sTile.isLand() || unitChoice.isNaval()) ? null
+                : find(sTile.getUnitList(), u ->
+                    u.isNaval() && u.getSpaceLeft() >= unitChoice.getSpaceTaken());
 
-        ServerUnit sUnit
-            = new ServerUnit(sGame, ((sCarrier != null) ? sCarrier : sTile),
-                             sPlayer, unitChoice);//-vis(sPlayer)
-        ((ServerPlayer)sPlayer).exploreForUnit(sUnit);
-        sUnit.setMovesLeft(sUnit.getInitialMovesLeft());
-        sPlayer.invalidateCanSeeTiles();//+vis(sPlayer)
+            ServerUnit sUnit
+                = new ServerUnit(sGame, ((sCarrier != null) ? sCarrier : sTile),
+                                sPlayer, unitChoice);//-vis(sPlayer)
+            ((ServerPlayer)sPlayer).exploreForUnit(sUnit);
+            sUnit.setMovesLeft(sUnit.getInitialMovesLeft());
+            sPlayer.invalidateCanSeeTiles();//+vis(sPlayer)
 
-        reconnect(freeColClient);
-        // Note "game" is no longer valid after reconnect.
-        Game game = freeColClient.getGame();
-        if (game != null) {
-            Unit unit = game.getFreeColGameObject(sUnit.getId(), Unit.class);
-            if (unit != null) gui.changeView(unit, false);
-        }
+            reconnect(freeColClient);
+            // Note "game" is no longer valid after reconnect.
+            Game game = freeColClient.getGame();
+            if (game != null) {
+                Unit unit = game.getFreeColGameObject(sUnit.getId(), Unit.class);
+                if (unit != null) gui.changeView(unit, false);
+            }
+        });
     }
 
     /**
@@ -403,28 +409,30 @@ public class DebugUtils {
             new ChoiceItem<GoodsType>(Messages.getName(gt), gt);
             
         StringTemplate tmpl = StringTemplate.template("prompt.selectGoodsType");
-        GoodsType goodsType = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(sSpec.getGoodsTypeList(), goodsPred, mapper,
-                      Comparator.naturalOrder()));
-        if (goodsType == null) return;
+                      Comparator.naturalOrder())).thenAccept((GoodsType goodsType) -> {
+            if (goodsType == null) return;
 
-        String amount = gui.getInput(null,
-            StringTemplate.template("prompt.selectGoodsAmount"),
-            "20", "ok", "cancel");
-        if (amount == null) return;
+            gui.getInput(null,
+                StringTemplate.template("prompt.selectGoodsAmount"),
+                "20", "ok", "cancel").thenAccept((String amount) -> {
+                if (amount == null) return;
 
-        int a;
-        try {
-            a = Integer.parseInt(amount);
-        } catch (NumberFormatException nfe) {
-            return;
-        }
-        GoodsType sGoodsType = sSpec.getGoodsType(goodsType.getId());
-        GoodsContainer ugc = unit.getGoodsContainer();
-        GoodsContainer sgc = sGame.getFreeColGameObject(ugc.getId(),
-                                                        GoodsContainer.class);
-        ugc.setAmount(goodsType, a);
-        sgc.setAmount(sGoodsType, a);
+                int a;
+                try {
+                    a = Integer.parseInt(amount);
+                } catch (NumberFormatException nfe) {
+                    return;
+                }
+                GoodsType sGoodsType = sSpec.getGoodsType(goodsType.getId());
+                GoodsContainer ugc = unit.getGoodsContainer();
+                GoodsContainer sgc = sGame.getFreeColGameObject(ugc.getId(),
+                                                                GoodsContainer.class);
+                ugc.setAmount(goodsType, a);
+                sgc.setAmount(sGoodsType, a);
+            });
+        });
     }
 
     /**
@@ -453,23 +461,24 @@ public class DebugUtils {
             return;
         }
         StringTemplate tmpl = StringTemplate.template("prompt.selectDisaster");
-        Disaster disaster = gui.getChoice(tmpl, "cancel", disasters);
-        if (disaster == null) return;
+        gui.getChoice(tmpl, "cancel", disasters).thenAccept((Disaster disaster) -> {
+            if (disaster == null) return;
 
-        final FreeColServer server = freeColClient.getFreeColServer();
-        final Game sGame = server.getGame();
-        final ServerColony sColony = sGame.getFreeColGameObject(colony.getId(),
-            ServerColony.class);
-        final Disaster sDisaster = sGame.getSpecification()
-            .getDisaster(disaster.getId());
-        if (server.getInGameController().debugApplyDisaster(sColony, sDisaster)
-            <= 0) {
-            gui.showErrorPanel(StringTemplate
-                .template("error.disasterAvoided")
-                .addName("%colony%", colony.getName())
-                .addNamed("%disaster%", disaster));
-        }
-        freeColClient.getInGameController().nextModelMessage();
+            final FreeColServer server = freeColClient.getFreeColServer();
+            final Game sGame = server.getGame();
+            final ServerColony sColony = sGame.getFreeColGameObject(colony.getId(),
+                ServerColony.class);
+            final Disaster sDisaster = sGame.getSpecification()
+                .getDisaster(disaster.getId());
+            if (server.getInGameController().debugApplyDisaster(sColony, sDisaster)
+                <= 0) {
+                gui.showErrorPanel(StringTemplate
+                    .template("error.disasterAvoided")
+                    .addName("%colony%", colony.getName())
+                    .addNamed("%disaster%", disaster));
+            }
+            freeColClient.getInGameController().nextModelMessage();
+        });
     }
 
     /**
@@ -492,20 +501,21 @@ public class DebugUtils {
             new ChoiceItem<Player>(Messages.message(p.getCountryLabel()), p);
 
         StringTemplate tmpl = StringTemplate.template("prompt.selectOwner");
-        Player player = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(game.getLiveEuropeanPlayers(colony.getOwner()),
-                      alwaysTrue(), mapper, Comparator.naturalOrder()));
-        if (player == null) return;
+                      alwaysTrue(), mapper, Comparator.naturalOrder())).thenAccept((Player player) -> {
+            if (player == null) return;
 
-        ServerPlayer sPlayer = sGame.getFreeColGameObject(player.getId(),
-                                                          ServerPlayer.class);
-        server.getInGameController().debugChangeOwner(sColony, sPlayer);
+            ServerPlayer sPlayer = sGame.getFreeColGameObject(player.getId(),
+                                                            ServerPlayer.class);
+            server.getInGameController().debugChangeOwner(sColony, sPlayer);
 
-        Player myPlayer = freeColClient.getMyPlayer();
-        if (gui.getActiveUnit() != null
-            && gui.getActiveUnit().getOwner() != myPlayer) {
-            freeColClient.getInGameController().nextActiveUnit();
-        }
+            Player myPlayer = freeColClient.getMyPlayer();
+            if (gui.getActiveUnit() != null
+                && gui.getActiveUnit().getOwner() != myPlayer) {
+                freeColClient.getInGameController().nextActiveUnit();
+            }
+        });
     }
 
     /**
@@ -525,21 +535,22 @@ public class DebugUtils {
             new ChoiceItem<Player>(Messages.message(p.getCountryLabel()), p);
 
         StringTemplate tmpl = StringTemplate.template("prompt.selectOwner");
-        Player player = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(game.getLivePlayers(),
                       p -> unit.getType().isAvailableTo(p), mapper,
-                      Comparator.naturalOrder()));
-        if (player == null || unit.getOwner() == player) return;
+                      Comparator.naturalOrder())).thenAccept((Player player) -> {
+            if (player == null || unit.getOwner() == player) return;
 
-        final Game sGame = server.getGame();
-        ServerUnit sUnit = sGame.getFreeColGameObject(unit.getId(), 
-                                                      ServerUnit.class);
-        ServerPlayer sPlayer = sGame.getFreeColGameObject(player.getId(),
-                                                          ServerPlayer.class);
-        server.getInGameController().debugChangeOwner(sUnit, sPlayer);
+            final Game sGame = server.getGame();
+            ServerUnit sUnit = sGame.getFreeColGameObject(unit.getId(), 
+                                                        ServerUnit.class);
+            ServerPlayer sPlayer = sGame.getFreeColGameObject(player.getId(),
+                                                            ServerPlayer.class);
+            server.getInGameController().debugChangeOwner(sUnit, sPlayer);
 
-        Player myPlayer = freeColClient.getMyPlayer();
-        if (myPlayer.owns(unit)) gui.changeView(unit, true);
+            Player myPlayer = freeColClient.getMyPlayer();
+            if (myPlayer.owns(unit)) gui.changeView(unit, true);
+        });
     }
 
     /**
@@ -560,13 +571,14 @@ public class DebugUtils {
             new ChoiceItem<Role>(r.getId(), r);
 
         StringTemplate tmpl = StringTemplate.template("prompt.selectRole");
-        Role roleChoice = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(sGame.getSpecification().getRoles(), alwaysTrue(),
-                      roleMapper, Comparator.naturalOrder()));
-        if (roleChoice == null) return;
+                      roleMapper, Comparator.naturalOrder())).thenAccept((Role roleChoice) -> {
+            if (roleChoice == null) return;
 
-        sUnit.changeRole(roleChoice, roleChoice.getMaximumCount());
-        reconnect(freeColClient);
+            sUnit.changeRole(roleChoice, roleChoice.getMaximumCount());
+            reconnect(freeColClient);
+        });
     }
 
     /**
@@ -966,32 +978,34 @@ public class DebugUtils {
             new ChoiceItem<GoodsType>(Messages.getName(gt), gt);
 
         StringTemplate tmpl = StringTemplate.template("prompt.selectGoodsType");
-        GoodsType goodsType = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(spec.getGoodsTypeList(), goodsPred, mapper,
-                      Comparator.naturalOrder()));
-        if (goodsType == null) return;
+                      Comparator.naturalOrder())).thenAccept((GoodsType goodsType) -> {
+            if (goodsType == null) return;
 
-        String response = gui.getInput(null,
-                StringTemplate.template("prompt.selectGoodsAmount"),
-                Integer.toString(colony.getGoodsCount(goodsType)),
-                "ok", "cancel");
-        if (response == null || response.isEmpty()) return;
-        int a;
-        try {
-            a = Integer.parseInt(response);
-        } catch (NumberFormatException nfe) {
-            return;
-        }
+            gui.getInput(null,
+                    StringTemplate.template("prompt.selectGoodsAmount"),
+                    Integer.toString(colony.getGoodsCount(goodsType)),
+                    "ok", "cancel").thenAccept((String response) -> {
+                if (response == null || response.isEmpty()) return;
+                int a;
+                try {
+                    a = Integer.parseInt(response);
+                } catch (NumberFormatException nfe) {
+                    return;
+                }
 
-        final FreeColServer server = freeColClient.getFreeColServer();
-        final Game sGame = server.getGame();
-        final Specification sSpec = server.getSpecification();
-        final GoodsType sGoodsType = sSpec.getGoodsType(goodsType.getId());
-        GoodsContainer cgc = colony.getGoodsContainer();
-        GoodsContainer sgc = sGame.getFreeColGameObject(cgc.getId(),
-                                                        GoodsContainer.class);
-        cgc.setAmount(goodsType, a);
-        sgc.setAmount(sGoodsType, a);
+                final FreeColServer server = freeColClient.getFreeColServer();
+                final Game sGame = server.getGame();
+                final Specification sSpec = server.getSpecification();
+                final GoodsType sGoodsType = sSpec.getGoodsType(goodsType.getId());
+                GoodsContainer cgc = colony.getGoodsContainer();
+                GoodsContainer sgc = sGame.getFreeColGameObject(cgc.getId(),
+                                                                GoodsContainer.class);
+                cgc.setAmount(goodsType, a);
+                sgc.setAmount(sGoodsType, a);
+            });
+        });
     }
 
     /**
@@ -1026,12 +1040,13 @@ public class DebugUtils {
             new ChoiceItem<MonarchAction>(a);
 
         StringTemplate tmpl = StringTemplate.name(monarchTitle);
-        MonarchAction action = gui.getChoice(tmpl, "cancel",
+        gui.getChoice(tmpl, "cancel",
             transform(MonarchAction.values(), alwaysTrue(), mapper,
-                      Comparator.naturalOrder()));
-        if (action == null) return;
-        
-        server.getInGameController().setMonarchAction(sPlayer, action);
+                      Comparator.naturalOrder())).thenAccept((MonarchAction action) -> {
+            if (action == null) return;
+            
+            server.getInGameController().setMonarchAction(sPlayer, action);
+        });
     }
 
     /**
@@ -1054,15 +1069,16 @@ public class DebugUtils {
             new ChoiceItem<RumourType>(r.toString(), r);
             
         StringTemplate tmpl = StringTemplate.template("prompt.selectLostCityRumour");
-        RumourType rumourChoice = freeColClient.getGUI()
+        freeColClient.getGUI()
             .getChoice(tmpl, "cancel",
                        transform(RumourType.values(), realRumourPred, mapper,
-                                 Comparator.naturalOrder()));
-        if (rumourChoice == null) return;
+                                 Comparator.naturalOrder())).thenAccept((RumourType rumourChoice) -> {
+            if (rumourChoice == null) return;
 
-        tile.getTileItemContainer().getLostCityRumour().setType(rumourChoice);
-        sTile.getTileItemContainer().getLostCityRumour()
-            .setType(rumourChoice);
+            tile.getTileItemContainer().getLostCityRumour().setType(rumourChoice);
+            sTile.getTileItemContainer().getLostCityRumour()
+                .setType(rumourChoice);
+        });
     }
 
     /**
@@ -1094,18 +1110,19 @@ public class DebugUtils {
     public static void skipTurns(FreeColClient freeColClient) {
         freeColClient.skipTurns(0); // Clear existing skipping
 
-        String response = freeColClient.getGUI().getInput(null,
+        freeColClient.getGUI().getInput(null,
             StringTemplate.key("prompt.selectTurnsToSkip"),
-            Integer.toString(10), "ok", "cancel");
-        if (response == null || response.isEmpty()) return;
+            Integer.toString(10), "ok", "cancel").thenAccept((String response) -> {
+            if (response == null || response.isEmpty()) return;
 
-        int skip;
-        try {
-            skip = Integer.parseInt(response);
-        } catch (NumberFormatException nfe) {
-            skip = -1;
-        }
-        if (skip > 0) freeColClient.skipTurns(skip);
+            int skip;
+            try {
+                skip = Integer.parseInt(response);
+            } catch (NumberFormatException nfe) {
+                skip = -1;
+            }
+            if (skip > 0) freeColClient.skipTurns(skip);
+        });
     }
 
     /**
@@ -1138,13 +1155,13 @@ public class DebugUtils {
         final FreeColServer server = freeColClient.getFreeColServer();
         final GUI gui = freeColClient.getGUI();
 
-        boolean more = true;
-        while (more) {
-            int val = server.getInGameController().stepRandom();
-            more = gui.confirm(StringTemplate.template("prompt.stepRNG")
-                .addAmount("%value%", val),
-                "more", "cancel");
-        }
+        int val = server.getInGameController().stepRandom();
+        gui.confirm(StringTemplate.template("prompt.stepRNG")
+            .addAmount("%value%", val),
+            "more", "cancel").thenAccept((ret) -> {
+                if (ret)
+                    stepRNG(freeColClient);
+            });
     }
 
     /**
