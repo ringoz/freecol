@@ -139,9 +139,9 @@ public final class DefaultHandler extends Handler {
         }
 
         String str = getFormatter().format(record);
-        if (consoleLogging
-            && record.getLevel().intValue() >= Level.WARNING.intValue()) {
-            System.err.println(str);
+        if (consoleLogging) {
+            System.err.print(str);
+            return;
         }
 
         synchronized (this.writerLock) {
