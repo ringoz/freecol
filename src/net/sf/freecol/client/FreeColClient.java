@@ -27,6 +27,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,8 +42,6 @@ import net.sf.freecol.client.control.MapEditorController;
 import net.sf.freecol.client.control.PreGameController;
 import net.sf.freecol.client.control.SoundController;
 import net.sf.freecol.client.gui.GUI;
-import net.sf.freecol.client.gui.SplashScreen;
-import net.sf.freecol.client.gui.SwingGUI;
 import net.sf.freecol.client.gui.action.ActionManager;
 import net.sf.freecol.client.networking.UserServerAPI;
 import net.sf.freecol.common.debug.FreeColDebugger;
@@ -146,7 +145,7 @@ public final class FreeColClient {
      * @param spec If non-null, a {@code Specification} to use to start
      *     a new game immediately.
      */
-    public FreeColClient(final SplashScreen splashScreen,
+    public FreeColClient(final Function<FreeColClient, GUI> guiFactory,
                          final String fontName,
                          final Dimension windowSize,
                          final String userMsg,
@@ -222,7 +221,7 @@ public final class FreeColClient {
          */
 
         gui = (FreeCol.getHeadless()) ? new GUI(this)
-                : new SwingGUI(this);
+                : guiFactory.apply(this);
         
         // Swing system and look-and-feel initialization.
         if (!FreeCol.getHeadless()) {
@@ -237,10 +236,6 @@ public final class FreeColClient {
         // Initialize Sound (depends on client options)
         this.soundController = new SoundController(this, sound);
         
-        if (splashScreen != null) {
-            splashScreen.setVisible(false);
-            splashScreen.dispose();
-        }
         // Start the GUI (headless-safe)
         gui.startGUI(windowSize);
 

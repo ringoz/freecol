@@ -66,6 +66,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.SplashScreen;
+import net.sf.freecol.client.gui.SwingGUI;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.FreeColSeed;
 import net.sf.freecol.common.debug.FreeColDebugger;
@@ -1576,7 +1577,6 @@ public final class FreeCol {
              * as a fullscreen frame.
              */
             
-            final SplashScreen splashScreen = createSplashScreen();
             SwingUtilities.invokeLater(() -> {
                 Specification spec = null;
                 File savegame = FreeColDirectories.getSavegameFile();
@@ -1594,7 +1594,7 @@ public final class FreeCol {
                     // savegame was specified on command line
                 }
                 
-                new FreeColClient(splashScreen, fontName, windowSize,
+                new FreeColClient((client) -> new SwingGUI(client), fontName, windowSize,
                                       (String)null, sound, introVideo, savegame, spec);
             });
         });
