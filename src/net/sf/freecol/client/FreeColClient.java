@@ -72,9 +72,6 @@ public final class FreeColClient {
 
     private static final Logger logger = Logger.getLogger(FreeColClient.class.getName());
 
-    @SuppressWarnings("unused")
-    private byte[] memoryToBeFreedOnOutOfMemory = new byte[10 * 1024 * 1024];
-    
     private final ConnectController connectController;
 
     private final PreGameController preGameController;
@@ -157,17 +154,6 @@ public final class FreeColClient {
                          final boolean showOpeningVideo,
                          final File savedGame,
                          final Specification spec) {
-        String quitName = FreeCol.CLIENT_THREAD + "Quit Game";
-        Runtime.getRuntime().addShutdownHook(new Thread(quitName) {
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public void run() {
-                    stopServer();
-                }
-            });
-        
         if (FreeCol.getHeadless() && savedGame == null && spec == null) {
             FreeCol.fatal(logger, Messages.message("client.headlessRequires"));
         }
@@ -251,40 +237,17 @@ public final class FreeColClient {
         // Initialize Sound (depends on client options)
         this.soundController = new SoundController(this, sound);
         
-        overrideDefaultUncaughtExceptionHandler();
+        if (splashScreen != null) {
+            splashScreen.setVisible(false);
+            splashScreen.dispose();
+        }
+        // Start the GUI (headless-safe)
+        gui.startGUI(windowSize);
+
+        // Update the actions with the running GUI, resources may have changed.
+        if (this.actionManager != null) updateActions();
         
-        /*
-         * Please do NOT move preloading before mods are loaded -- as that
-         * might cause some images to be loaded from base and other images
-         * to be loaded from mods.
-         */
-        ResourceManager.startPreloading(() -> {
-            /*
-             * We can allow the GUI to be displayed while the preloading is running.
-             * 
-             * In that case we need to add that preloading gets aborted before
-             * ResourceManager.addMapping is called (which is now performed when
-             * loading a game). 
-             */
-    
-            /*
-             * Run later on the EDT so that we ensure pending GUI actions have
-             * completed.
-             */
-            SwingUtilities.invokeLater(() -> {
-                if (splashScreen != null) {
-                    splashScreen.setVisible(false);
-                    splashScreen.dispose();
-                }
-                // Start the GUI (headless-safe)
-                gui.startGUI(windowSize);
-        
-                // Update the actions with the running GUI, resources may have changed.
-                if (this.actionManager != null) updateActions();
-                
-                startFirstTaskInGui(userMsg, showOpeningVideo, savedGame, spec);
-            });
-        });
+        startFirstTaskInGui(userMsg, showOpeningVideo, savedGame, spec);
     }
 
     private void startFirstTaskInGui(String userMsg, boolean showOpeningVideo, File savedGame,
@@ -1022,32 +985,5 @@ public final class FreeColClient {
             FreeCol.fatal(logger, "Failed to shutdown gui: " + e);
         }
         FreeCol.quit(0);
-    }
-    
-    private void overrideDefaultUncaughtExceptionHandler() {
-        // This overrides the handler in FreeCol:
-        Thread.setDefaultUncaughtExceptionHandler((Thread thread, Throwable e) -> {
-            // Free enough space to ensure we can perform the next operations.
-            if (e instanceof Error) {
-                memoryToBeFreedOnOutOfMemory = null;
-                gui.emergencyPurge();
-            }
-            
-            final boolean seriousError = (e instanceof Error);
-            try {
-                logger.log(Level.WARNING, "Uncaught exception from thread: " + thread, e);
-                
-                if (seriousError) {
-                    gui.showErrorPanel(Messages.message("error.seriousError"), () -> {
-                        System.exit(1);
-                    });
-                }
-            } catch (Throwable t) {
-                if (seriousError) {
-                    t.printStackTrace();
-                    System.exit(1);
-                }
-            }
-        });
     }
 }
