@@ -137,7 +137,7 @@ public class Connection implements Closeable {
         this(name);
 
         setSocket(socket);
-        this.br = ByteBuffer.allocate(BUFFER_SIZE);
+        this.br = (ByteBuffer)ByteBuffer.allocate(BUFFER_SIZE).flip();
         this.receivingThread = new ReceivingThread(this, name);
         
         this.xw = new FreeColXMLWriter(new Writer() {
@@ -455,8 +455,7 @@ public class Connection implements Closeable {
                     final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
                     return CompletableFuture.completedFuture(line);
                 }
-                if (b != '\0')
-                    all.put(b);
+                all.put(b);
             }
         }
         return CompletableFuture.completedFuture(null);
