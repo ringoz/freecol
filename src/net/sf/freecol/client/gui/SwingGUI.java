@@ -1642,7 +1642,7 @@ public class SwingGUI extends GUI {
                 // TODO: remember how to write generic code, avoid
                 // introspection
                 try {
-                    Introspector.invokeVoidMethod(p, "update");
+                    p.getClass().getMethod("update").invoke(p);
                 } catch (Exception e) {
                     ; // "can not happen"
                 }
