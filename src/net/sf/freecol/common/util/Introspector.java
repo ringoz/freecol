@@ -299,13 +299,8 @@ public class Introspector {
      * @param name The class name to look for.
      * @return The class found, or null if none available.
      */
-    public static Class<?> getClassByName(String name) {
-        Class<?> messageClass;
-        try {
-            return Class.forName(name);
-        } catch (ClassNotFoundException ex) {
-            return null;
-        }
+    public static Class<?> getClassByName(String name) throws ClassNotFoundException {
+        return Class.forName(name);
     }       
 
     /**
@@ -363,7 +358,7 @@ public class Introspector {
         throws IntrospectorException {
         Class<?> messageClass;
         try {
-            messageClass = Class.forName(tag);
+            messageClass = getClassByName(tag);
         } catch (ClassNotFoundException ex) {
             throw new IntrospectorException("Unable to find class " + tag, ex);
         }

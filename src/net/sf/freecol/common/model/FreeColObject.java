@@ -98,9 +98,11 @@ public abstract class FreeColObject
     public static <T extends FreeColObject> Class<T> getFreeColObjectClassByName(String name) {
         final String type = "net.sf.freecol.common.model."
             + capitalize(name);
-        final Class<T> c = (Class<T>)Introspector.getClassByName(type);
-        if (c != null) return c;
-        logger.warning("getFreeColObjectClass could not find: " + type);
+        try {
+            return (Class<T>)Introspector.getClassByName(type);
+        } catch (ClassNotFoundException e) {
+            logger.warning("getFreeColObjectClass could not find: " + type);
+        }
         return null;
     }
 
