@@ -19,10 +19,14 @@
 
 package net.sf.freecol.common.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -300,7 +304,14 @@ public class Introspector {
      * @return The class found, or null if none available.
      */
     public static Class<?> getClassByName(String name) throws ClassNotFoundException {
-        return Class.forName(name);
+        if (!name.startsWith(PACKAGE))
+            throw new ClassNotFoundException(name);
+
+        final Impl<?> impl = IntrospectorImpl.names.get(name.substring(PACKAGE.length()));
+        if (impl == null)
+            throw new ClassNotFoundException(name);
+
+        return impl.clazz;
     }       
 
     /**
@@ -313,7 +324,7 @@ public class Introspector {
      * @return The new object instance.
      * @exception IntrospectorException wraps all exceptional conditions.
      */
-    public static Object instantiate(String tag, Class[] types,
+    public static Object instantiate(String tag, Class<?>[] types,
                                      Object[] params)
         throws IntrospectorException {
         Class<?> messageClass;
@@ -336,29 +347,26 @@ public class Introspector {
      * @return The new instance.
      * @exception IntrospectorException wraps all exceptional conditions.
      */
-    public static <T> T instantiate(Class<T> messageClass, Class[] types,
+    @SuppressWarnings("unchecked")
+    public static <T> T instantiate(Class<T> messageClass, Class<?>[] types,
                                     Object[] params)
         throws IntrospectorException {
         final String tag = messageClass.getName();
-        Constructor<T> constructor;
-        try {
-            constructor = messageClass.getDeclaredConstructor(types);
-        } catch (NoSuchMethodException | SecurityException ex) {
+
+        final Impl<?> impl = impls.get(messageClass);
+        if (impl == null)
             throw new IntrospectorException("Unable to find constructor "
                 + lastPart(tag, ".") + "("
                 + transform(types, alwaysTrue(), Class::getName,
                             Collectors.joining(","))
-                + ")", ex);
-        }
-        T instance;
+                + ")", new ClassNotFoundException(tag));
+
         try {
-            instance = constructor.newInstance(params);
-        } catch (IllegalAccessException | InstantiationException
-                 | InvocationTargetException ex) {
+            return (T)impl.newInstance(types, params);
+        } catch (Exception ex) {
             throw new IntrospectorException("Failed to construct "
                 + lastPart(tag, "."), ex);
         }
-        return instance;
     }
 
     /**
@@ -379,5 +387,90 @@ public class Introspector {
                NoSuchMethodException {
         return net.ringoz.GwtCompat.class_cast(returnClass, object.getClass().getMethod(methodName)
             .invoke(object));
+    }
+
+    /**
+     * Codegen.
+     */
+
+    static final String PACKAGE = "net.sf.freecol.";
+    static final java.util.Map<Class<?>,Introspector.Impl<?>> impls = new java.util.HashMap<>();
+    static {
+        for (final var impl : IntrospectorImpl.names.values())
+            impls.put(impl.clazz, impl);
+    }
+
+    static abstract class Impl<T> {
+        final Class<T> clazz;
+
+        protected Impl(Class<T> clazz) {
+            this.clazz = clazz;
+        }
+
+        static boolean areSame(Object[] types, Object... other) {
+            return Arrays.equals(types, other);
+        }
+
+        T newInstance(Class<?>[] types, Object[] params) throws Exception {
+            throw new InstantiationException();
+        }
+    }
+
+    @net.ringoz.GwtIncompatible
+    private static void emitClass(PrintStream out, Class<?> clazz) {
+        if (!Modifier.isPublic(clazz.getModifiers()))
+            return;
+
+        out.println("names.put(\"" + clazz.getName().substring(PACKAGE.length()) + "\", new Introspector.Impl<>(" + clazz.getCanonicalName() + ".class) {");
+        if (!Modifier.isAbstract(clazz.getModifiers())) {
+            out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
+            for (Constructor<?> ctor : clazz.getConstructors()) {
+                final var types = Arrays.asList(ctor.getParameterTypes());
+                if (types.isEmpty())
+                    out.println("  if (types.length == 0)");
+                else
+                    out.println("  if (areSame(types, " + String.join(", ", types.stream().map((Class<?> type) -> type.getCanonicalName() + ".class").toArray(String[]::new)) + "))");
+                out.println("    return new " + clazz.getCanonicalName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + ");");
+            }
+            out.println("  throw new IllegalArgumentException();");
+            out.println("}");
+        }
+        out.println("});");
+    }
+
+    @net.ringoz.GwtIncompatible
+    private static void emitSubClasses(PrintStream out, Class<?> clazz, String packageName) throws IOException {
+        final var srcList = clazz.getClassLoader().getResources(packageName.replace(".", "/"));
+        while (srcList.hasMoreElements()) {
+            File dirFile = new File(srcList.nextElement().getFile());
+            for (File file : dirFile.listFiles()) {
+                String subClassName = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
+                try {
+                    final Class<?> subClass = Class.forName(subClassName);
+                    if (clazz.isAssignableFrom(subClass))
+                        emitClass(out, subClass);
+                }
+                catch (ClassNotFoundException e) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    @net.ringoz.GwtIncompatible
+    public static void main(String[] args) throws Exception {
+        try (PrintStream out = new PrintStream(args[0])) {
+            out.println("// generated by Introspector::main");
+            out.println("package net.sf.freecol.common.util;");
+            out.println("class IntrospectorImpl {");
+            out.println("static final java.util.Map<String,Introspector.Impl<?>> names = new java.util.HashMap<>();");
+            out.println("static {");
+            emitSubClasses(out, net.sf.freecol.common.networking.Message.class, "net.sf.freecol.common.networking");
+            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.common.model");
+            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.model");
+            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.ai");
+            out.println("}");
+            out.println("}");
+        }
     }
 }
