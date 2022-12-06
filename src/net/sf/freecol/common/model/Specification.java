@@ -32,9 +32,10 @@ import static net.sf.freecol.common.util.CollectionUtils.transform;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.FileInputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -537,12 +538,12 @@ public final class Specification implements OptionContainer {
 
     /**
      * Creates a new Specification object by loading it from the
-     * given {@code InputStream}.
+     * given {@code Reader}.
      *
-     * @param in The {@code InputStream} to read from.
+     * @param in The {@code Reader} to read from.
      * @exception XMLStreamException if there is a problem with the stream.
      */
-    public Specification(InputStream in) throws XMLStreamException {
+    public Specification(Reader in) throws XMLStreamException {
         this();
         initialized = false;
         load(in);
@@ -554,10 +555,10 @@ public final class Specification implements OptionContainer {
     /**
      * Load a specification or fragment from a stream.
      *
-     * @param in The {@code InputStream} to read from.
+     * @param in The {@code Reader} to read from.
      * @exception XMLStreamException if there is a problem with the stream.
      */
-    private void load(InputStream in) throws XMLStreamException {
+    private void load(Reader in) throws XMLStreamException {
         try (
             FreeColXMLReader xr = new FreeColXMLReader(in);
         ) {
@@ -576,9 +577,9 @@ public final class Specification implements OptionContainer {
         initialized = false;
         boolean loadedMod = false;
         for (FreeColModFile mod : mods) {
-            InputStream sis = null;
+            Reader sis = null;
             try {
-                if ((sis = mod.getSpecificationInputStream()) != null) {
+                if ((sis = mod.getSpecificationReader()) != null) {
                     // Some mods are resource only
                     load(sis);
                 }
@@ -2176,7 +2177,7 @@ public final class Specification implements OptionContainer {
         if (compareVersion("0.85") > 0) return false;
 
         File rolf = FreeColDirectories.getCompatibilityFile(ROLES_COMPAT_FILE_NAME);
-        try (InputStream fis = new FileInputStream(rolf)) {
+        try (Reader fis = new FileReader(rolf, StandardCharsets.UTF_8)) {
             load(fis);
         } catch (IOException|XMLStreamException e) {
             logger.log(Level.WARNING, "Failed to load remedial roles.", e);
@@ -2201,7 +2202,7 @@ public final class Specification implements OptionContainer {
         UnitChangeType enter = find(unitChangeTypeList,
             matchKeyEquals(UnitChangeType.ENTER_COLONY, UnitChangeType::getId));
         File uctf = FreeColDirectories.getCompatibilityFile(UNIT_CHANGE_TYPES_COMPAT_FILE_NAME);
-        try (InputStream fis = new FileInputStream(uctf)) {
+        try (Reader fis = new FileReader(uctf, StandardCharsets.UTF_8)) {
             load(fis);
         } catch (IOException|XMLStreamException e) {
             logger.log(Level.WARNING, "Failed to load unit changes.", e);
@@ -3215,7 +3216,7 @@ public final class Specification implements OptionContainer {
         if (parentId != null) {
             try {
                 FreeColModFile parent = FreeColRules.getFreeColRulesFile(parentId);
-                load(parent.getSpecificationInputStream());
+                load(parent.getSpecificationReader());
                 initialized = false;
             } catch (IOException e) {
                 throw new XMLStreamException("Failed to open parent specification: ", e);

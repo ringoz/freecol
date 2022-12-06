@@ -26,11 +26,10 @@ import static net.sf.freecol.common.util.StringUtils.downCase;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.io.FileInputStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.List;
@@ -157,7 +156,7 @@ public class Messages {
             // attempt to read grammatical rules
             File cldr = FreeColDirectories.getI18nPluralsFile();
             if (cldr.exists()) {
-                try (InputStream in = new FileInputStream(cldr)) {
+                try (Reader in = new FileReader(cldr, StandardCharsets.UTF_8)) {
                     NumberRules.load(in);
                 } catch (IOException|XMLStreamException e) {
                     System.err.println("Failed to read CLDR rules: "
@@ -175,7 +174,7 @@ public class Messages {
 
         for (File f : FreeColDirectories.getI18nMessageFileList(locale)) {
             if (!f.canRead()) continue;
-            try (InputStream in = new FileInputStream(f)) {
+            try (Reader in = new FileReader(f, StandardCharsets.UTF_8)) {
                 loadMessages(in);
             } catch (IOException ioe) {
                 System.err.println("Failed to load messages from "
@@ -187,9 +186,9 @@ public class Messages {
             = FreeColDirectories.getMessageFileNameList(locale);
         for (FreeColModFile fctf : FreeColRules.getRulesList()) {
             for (String fn : filenames) {
-                InputStream is = null;
+                Reader is = null;
                 try {
-                    is = fctf.getInputStream(fn);
+                    is = fctf.getReader(fn);
                 } catch (IOException ioe) {
                     continue; // Expecting failure
                 }
@@ -210,12 +209,10 @@ public class Messages {
      *
      * Public for the test suite.
      *
-     * @param is The {@code InputStream} to read from.
+     * @param inputReader The {@code Reader} to read from.
      * @throws IOException on failure to read from the stream.
      */
-    public static void loadMessages(InputStream is) throws IOException {
-        InputStreamReader inputReader
-            = new InputStreamReader(is, StandardCharsets.UTF_8);
+    public static void loadMessages(Reader inputReader) throws IOException {
         BufferedReader in = new BufferedReader(inputReader);
 
         String line = null;
@@ -257,7 +254,7 @@ public class Messages {
         for (FreeColModFile fcmf : FreeColModFile.getModsList()) {
             for (String name : filenames) {
                 try {
-                    loadMessages(fcmf.getInputStream(name));
+                    loadMessages(fcmf.getReader(name));
                 } catch (IOException e) { // Failures expected
                     lb.add(' ', fcmf.getId(), '/', name);
                 }
@@ -284,7 +281,7 @@ public class Messages {
         for (FreeColModFile fcmf : mods) {
             for (String name : filenames) {
                 try {
-                    loadMessages(fcmf.getInputStream(name));
+                    loadMessages(fcmf.getReader(name));
                 } catch (IOException e) { // Failures expected
                     lb.add(' ', fcmf.getId(), '/', name);
                 }

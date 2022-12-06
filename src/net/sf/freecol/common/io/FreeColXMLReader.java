@@ -19,14 +19,14 @@
 
 package net.sf.freecol.common.io;
 
-import java.io.BufferedInputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+
 import net.sf.freecol.common.util.Introspector;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -98,9 +98,6 @@ public class FreeColXMLReader extends StreamReaderDelegate
     /** Trace all reads? */
     private boolean tracing = false;
 
-    /** The stream to read from. */
-    private InputStream inputStream = null;
-
     /** The read scope to apply. */
     private ReadScope readScope;
 
@@ -113,43 +110,6 @@ public class FreeColXMLReader extends StreamReaderDelegate
     private Map<String, FreeColObject> uninterned
         = new HashMap<String, FreeColObject>();
 
-
-    /**
-     * Creates a new {@code FreeColXMLReader}.
-     *
-     * @param bis The {@code BufferedInputStream} to create
-     *     an {@code FreeColXMLReader} for.
-     * @exception XMLStreamException can be thrown while creating the reader.
-     */
-    public FreeColXMLReader(BufferedInputStream bis)
-        throws XMLStreamException {
-        super();
-
-        XMLInputFactory xif = newXMLInputFactory();
-        XMLStreamReader xsr;
-        try {
-            xsr = xif.createXMLStreamReader(bis, "UTF-8");
-            setParent(xsr);
-        } catch (Exception ex) {
-            throw new XMLStreamException("Stream reader fail", ex);
-        }
-        this.inputStream = bis;
-        this.readScope = ReadScope.NORMAL;
-        this.uninterned.clear();
-    }
-
-    /**
-     * Creates a new {@code FreeColXMLReader}.
-     *
-     * @param inputStream The {@code InputStream} to create
-     *     an {@code FreeColXMLReader} for.
-     * @exception XMLStreamException can be thrown while creating the reader.
-     */
-    public FreeColXMLReader(InputStream inputStream)
-        throws XMLStreamException {
-        this(new BufferedInputStream(inputStream));
-    }
-
     /**
      * Creates a new {@code FreeColXMLReader}.
      *
@@ -158,7 +118,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
      * @exception XMLStreamException can be thrown while creating the reader.
      */
     public FreeColXMLReader(File file) throws IOException, XMLStreamException {
-        this(new FileInputStream(file));
+        this(new FileReader(file, StandardCharsets.UTF_8));
     }
     
     /**
@@ -174,7 +134,6 @@ public class FreeColXMLReader extends StreamReaderDelegate
         XMLInputFactory xif = newXMLInputFactory();
         XMLStreamReader xsr = xif.createXMLStreamReader(reader);
         setParent(xsr);
-        this.inputStream = null;
         this.readScope = ReadScope.NORMAL;
         this.uninterned.clear();
     }
@@ -304,15 +263,6 @@ public class FreeColXMLReader extends StreamReaderDelegate
             super.close();
         } catch (XMLStreamException xse) {
             logger.log(Level.WARNING, "Error closing stream.", xse);
-        }
-
-        if (inputStream != null) {
-            try {
-                inputStream.close();
-            } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Error closing stream.", ioe);
-            }
-            inputStream = null;
         }
     }
 

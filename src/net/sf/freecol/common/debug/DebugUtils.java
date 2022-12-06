@@ -20,6 +20,7 @@
 package net.sf.freecol.common.debug;
 
 import java.awt.event.ActionEvent;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -892,16 +893,17 @@ public class DebugUtils {
         final Game game = freeColClient.getGame();
         final Game sGame = server.getGame();
         final Player player = freeColClient.getMyPlayer();
+        final var err = new PrintWriter(System.err);
 
-        System.err.println("\nClient (" + game.getClientUserName()
+        err.println("\nClient (" + game.getClientUserName()
             + "/" + player.getId() + "):");
-        tile.save(System.err, WriteScope.toClient(player), true);
-        System.err.println("\n\nServer:");
+        tile.save(err, WriteScope.toClient(player), true);
+        err.println("\n\nServer:");
         Tile sTile = sGame.getFreeColGameObject(tile.getId(), Tile.class);
-        sTile.save(System.err, WriteScope.toServer(), true);
-        System.err.println("\n\nSave:");
-        sTile.save(System.err, WriteScope.toSave(), true);
-        System.err.println('\n');
+        sTile.save(err, WriteScope.toServer(), true);
+        err.println("\n\nSave:");
+        sTile.save(err, WriteScope.toSave(), true);
+        err.println('\n');
     }
 
     /**

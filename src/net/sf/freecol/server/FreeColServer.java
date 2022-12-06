@@ -30,10 +30,12 @@ import static net.sf.freecol.common.util.Utils.restoreRandomState;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -858,17 +860,15 @@ public final class FreeColServer {
         // Alas, gc is only advisory, but it is all we have got.
         garbageCollect();
         try {
-            FileOutputStream fos;
+            Writer fos;
             file.mkdir();
 
             if (image != null) {
-                fos = new FileOutputStream(new File(file, FreeColSavegameFile.THUMBNAIL_FILE));
-                ImageIO.write(image, "png", fos);
-                fos.close();
+                ImageIO.write(image, "png", new File(file, FreeColSavegameFile.THUMBNAIL_FILE));
             }
 
             if (options != null) {
-                fos = new FileOutputStream(new File(file, FreeColSavegameFile.CLIENT_OPTIONS));
+                fos = new FileWriter(new File(file, FreeColSavegameFile.CLIENT_OPTIONS), StandardCharsets.UTF_8);
                 options.save(fos, null, true);
                 fos.close();
             }
@@ -878,12 +878,12 @@ public final class FreeColServer {
                 Integer.toString(this.serverGame.getMap().getWidth()));
             properties.setProperty("map.height",
                 Integer.toString(this.serverGame.getMap().getHeight()));
-            fos = new FileOutputStream(new File(file, FreeColSavegameFile.SAVEGAME_PROPERTIES));
+            fos = new FileWriter(new File(file, FreeColSavegameFile.SAVEGAME_PROPERTIES), StandardCharsets.UTF_8);
             properties.store(fos, null);
             fos.close();
 
             // save the actual game data
-            fos = new FileOutputStream(new File(file, FreeColSavegameFile.SAVEGAME_FILE));
+            fos = new FileWriter(new File(file, FreeColSavegameFile.SAVEGAME_FILE), StandardCharsets.UTF_8);
             try (
                 // throws IOException                 
                 FreeColXMLWriter xw = new FreeColXMLWriter(fos,

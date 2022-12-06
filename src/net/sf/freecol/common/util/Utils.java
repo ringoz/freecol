@@ -19,9 +19,6 @@
 
 package net.sf.freecol.common.util;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -31,13 +28,11 @@ import java.awt.Toolkit;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.CharBuffer;
@@ -154,8 +149,7 @@ public class Utils {
      */
     public static Reader getFileUTF8Reader(File file) {
         try {
-            InputStream fis = new FileInputStream(file);
-            return new InputStreamReader(fis, StandardCharsets.UTF_8);
+            return new FileReader(file, StandardCharsets.UTF_8);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "No input stream for " + file.getPath(),
                        ioe);
@@ -195,24 +189,13 @@ public class Utils {
     /**
      * Create a new file writer that uses UTF-8.
      *
-     * @param os An {@code OutputStream} to write to.
-     * @return A {@code Writer} for this file.
-     */
-    public static Writer getUTF8Writer(OutputStream os) {
-        return new OutputStreamWriter(os, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Create a new file writer that uses UTF-8.
-     *
      * @param file A {@code File} to write to.
      * @param append If true, append to the file.
      * @return A {@code Writer} for this file.
      */
     private static Writer getF8W(File file, boolean append) {
         try {
-            OutputStream fos = new FileOutputStream(file, append);
-            return getUTF8Writer(fos);
+            return new FileWriter(file, StandardCharsets.UTF_8, append);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "No output stream for " + file.getName(),
                        ioe);

@@ -23,9 +23,10 @@ import static net.sf.freecol.common.util.CollectionUtils.alwaysTrue;
 import static net.sf.freecol.common.util.CollectionUtils.makeUnmodifiableList;
 import static net.sf.freecol.common.util.CollectionUtils.transform;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 
@@ -110,7 +111,7 @@ public class FreeColSavegameFile extends FreeColDataFile {
      */
     public Properties getProperties() throws IOException {
         Properties properties = new Properties();
-        properties.load(getInputStream(SAVEGAME_PROPERTIES));
+        properties.load(getReader(SAVEGAME_PROPERTIES));
         return properties;
     }
         
@@ -137,23 +138,23 @@ public class FreeColSavegameFile extends FreeColDataFile {
      *
      * Only still needed by the validator.
      *
-     * @return An {@code InputStream} to the save game file within
+     * @return An {@code Reader} to the save game file within
      *     this data file.
      * @exception IOException if there is a problem opening the input stream.
      */
-    public BufferedInputStream getSavegameInputStream() throws IOException {
-        return getInputStream(SAVEGAME_FILE);
+    public Reader getSavegameReader() throws IOException {
+        return getReader(SAVEGAME_FILE);
     }
 
     /**
      * Gets the input stream to the thumbnail file.
      *
-     * @return An {@code InputStream} to the thumbnail file within
+     * @return An {@code URI} to the thumbnail file within
      *      this data file.
      * @exception IOException if there is a problem opening the input stream.
      */
-    public BufferedInputStream getThumbnailInputStream() throws IOException {
-        return getInputStream(THUMBNAIL_FILE);
+    public URI getThumbnailURI() throws IOException {
+        return getURI(THUMBNAIL_FILE);
     }
 
     /**
@@ -165,7 +166,7 @@ public class FreeColSavegameFile extends FreeColDataFile {
      */
     public FreeColXMLReader getClientOptionsFreeColXMLReader()
         throws IOException, XMLStreamException {
-        return new FreeColXMLReader(getInputStream(CLIENT_OPTIONS));
+        return new FreeColXMLReader(getReader(CLIENT_OPTIONS));
     }
 
     /**
@@ -177,6 +178,6 @@ public class FreeColSavegameFile extends FreeColDataFile {
      */
     public FreeColXMLReader getSavedGameFreeColXMLReader()
         throws IOException, XMLStreamException {
-        return new FreeColXMLReader(getInputStream(SAVEGAME_FILE));
+        return new FreeColXMLReader(getReader(SAVEGAME_FILE));
     }
 }

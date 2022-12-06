@@ -22,7 +22,7 @@ package net.sf.freecol.common.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,13 +72,13 @@ public class FreeColModFile extends FreeColDataFile implements ObjectWithId {
     /**
      * Gets the input stream to the specification.
      *
-     * @return An {@code InputStream} to the file
+     * @return An {@code Reader} to the file
      *     "specification.xml" within this data file, or null if none present.
      * @exception IOException if thrown while opening the input stream.
      */
-    public InputStream getSpecificationInputStream() throws IOException {
+    public Reader getSpecificationReader() throws IOException {
         try {
-            return getInputStream(SPECIFICATION_FILE);
+            return getReader(SPECIFICATION_FILE);
         } catch (FileNotFoundException fnfe) {
             ; // Normal for graphic-only mods.
         }
@@ -92,7 +92,7 @@ public class FreeColModFile extends FreeColDataFile implements ObjectWithId {
      *      and can be opened.
      */
     public boolean hasSpecification() {
-        try (InputStream is = getSpecificationInputStream()) {
+        try (Reader is = getSpecificationReader()) {
             return is != null;
         } catch (IOException e) {
             return false;
@@ -108,7 +108,7 @@ public class FreeColModFile extends FreeColDataFile implements ObjectWithId {
      */
     public Specification getSpecification() throws IOException,
                                                    XMLStreamException {
-        try (InputStream si = getSpecificationInputStream()) {
+        try (Reader si = getSpecificationReader()) {
             return (si == null) ? null : new Specification(si);
         }
     }
@@ -116,12 +116,12 @@ public class FreeColModFile extends FreeColDataFile implements ObjectWithId {
     /**
      * Gets the input stream to the mod meta file.
      *
-     * @return An {@code InputStream} to the file "mod.xml"
+     * @return An {@code Reader} to the file "mod.xml"
      *     within this data file.
      * @exception IOException if thrown while opening the input stream.
      */
-    private InputStream getModDescriptorInputStream() throws IOException {
-        return getInputStream(FreeColDirectories.MOD_DESCRIPTOR_FILE_NAME);
+    private Reader getModDescriptorReader() throws IOException {
+        return getReader(FreeColDirectories.MOD_DESCRIPTOR_FILE_NAME);
     }
 
     /**
@@ -132,7 +132,7 @@ public class FreeColModFile extends FreeColDataFile implements ObjectWithId {
     protected final void readModDescriptor() throws IOException {
         try (
             FreeColXMLReader xr
-                = new FreeColXMLReader(getModDescriptorInputStream());
+                = new FreeColXMLReader(getModDescriptorReader());
         ) {
             xr.nextTag();
             id = xr.readId();

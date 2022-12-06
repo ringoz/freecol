@@ -20,11 +20,12 @@
 package net.sf.freecol.common.model;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -436,7 +437,7 @@ public class HighScore extends FreeColObject {
             return scores;
         }
         // Do not crash on high score fail
-        try (InputStream fis = new FileInputStream(hsf)) {
+        try (Reader fis = new FileReader(hsf, StandardCharsets.UTF_8)) {
             try (FreeColXMLReader xr = new FreeColXMLReader(fis)) {
                 xr.nextTag();
 
@@ -468,7 +469,7 @@ public class HighScore extends FreeColObject {
         tidyScores(scores);
 
         File hsf = FreeColDirectories.getHighScoreFile();
-        try (OutputStream fos = new FileOutputStream(hsf)) {
+        try (Writer fos = new FileWriter(hsf, StandardCharsets.UTF_8)) {
             try (FreeColXMLWriter xw = new FreeColXMLWriter(fos,
                     FreeColXMLWriter.WriteScope.toSave(), true)) {
                 xw.writeStartDocument("UTF-8", "1.0");

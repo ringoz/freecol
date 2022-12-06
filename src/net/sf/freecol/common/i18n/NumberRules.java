@@ -19,7 +19,7 @@
 
 package net.sf.freecol.common.i18n;
 
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -71,10 +71,10 @@ public class NumberRules {
      * input stream, which must contain an XML representation of the
      * CLDR plural rules.
      *
-     * @param in an {@code InputStream} value
+     * @param in an {@code Reader} value
      * @exception XMLStreamException if there is a problem reading the stream.
      */
-    public NumberRules(InputStream in) throws XMLStreamException {
+    public NumberRules(Reader in) throws XMLStreamException {
         load(in);
     }
 
@@ -96,7 +96,7 @@ public class NumberRules {
     }
 
 
-    public static void load(InputStream in) throws XMLStreamException {
+    public static void load(Reader in) throws XMLStreamException {
         try (FreeColXMLReader xr = new FreeColXMLReader(in)) {
             readFromXML(xr);
         }

@@ -23,9 +23,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +49,8 @@ public class FAFile {
      * @param is The {@code InputStream}
      * @throws IOException gets thrown if the data is invalid. 
      */
-    public FAFile(InputStream is) throws IOException {
-        load(new CREatingInputStream(is));
+    public FAFile(Reader is) throws IOException {
+        load(is);
     }
 
     
@@ -127,11 +125,10 @@ public class FAFile {
         return points.toArray(new Point[0]);
     }
 
-    private void load(InputStream is) throws IOException {
+    private void load(Reader is) throws IOException {
         letters.clear();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(is,
-                StandardCharsets.UTF_8));
+        BufferedReader in = new BufferedReader(is);
         String line = in.readLine();
         if (line == null || !line.startsWith("FontAnimationFile")) {
             throw new RuntimeException("Not a FAF: " + this);
@@ -228,39 +225,6 @@ public class FAFile {
         public Point[] points;
         public int width;
         public int height;
-    }
-
-    /**
-     * This utility class removes all CR:s from an {@link InputStream}.
-     * It is not particularly efficient and is intended as a temporary
-     * workaround.
-     */
-    private static class CREatingInputStream extends InputStream {
-        /**
-         * Constructor.
-         * 
-         * @param in The input stream to wrap.
-         */
-        CREatingInputStream(InputStream in) {
-            this.in = in;
-        }
-        
-        /**
-         * Read a character, override to eat all CR:s.
-         * 
-         * @return next character or -1 on end of file.
-         * @throws IOException if wrapped stream throws it.
-         */
-        @Override
-        public int read() throws IOException {
-            int c;
-            do {
-                c = this.in.read();
-            } while(c == '\r');
-            return c;
-        }
-        
-        private final InputStream in;
     }
 }
 

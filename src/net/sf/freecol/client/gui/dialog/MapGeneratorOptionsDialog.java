@@ -197,7 +197,7 @@ public final class MapGeneratorOptionsDialog extends OptionsDialog {
 
         Image thumbnail;
         try {
-            thumbnail = ImageIO.read(savegame.getThumbnailInputStream());
+            thumbnail = ImageIO.read(savegame.getThumbnailURI().toURL());
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Failed to read thumbnail for: "
                 + mapName, ioe);

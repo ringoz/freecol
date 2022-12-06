@@ -23,11 +23,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.FileOutputStream;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -865,7 +867,7 @@ public abstract class FreeColObject
      * Debugging tool, dump object XML to System.err.
      */
     public void dumpObject() {
-        save(System.err, WriteScope.toSave(), false);
+        save(new PrintWriter(System.err), WriteScope.toSave(), false);
     }
 
     /**
@@ -898,7 +900,7 @@ public abstract class FreeColObject
      * @return True if the save proceeded without error.
      */
     public boolean save(File file, WriteScope scope, boolean pretty) {
-        try (OutputStream fos = new FileOutputStream(file)) {
+        try (Writer fos = new FileWriter(file, StandardCharsets.UTF_8)) {
             return save(fos, scope, pretty);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Error creating output stream", ioe);
@@ -914,7 +916,7 @@ public abstract class FreeColObject
      * @param pretty Attempt to indent the output nicely.
      * @return True if the save proceeded without error.
      */
-    public boolean save(OutputStream out, WriteScope scope, boolean pretty) {
+    public boolean save(Writer out, WriteScope scope, boolean pretty) {
         boolean ret = false;
         if (scope == null) scope = FreeColXMLWriter.WriteScope.toSave();
         try (

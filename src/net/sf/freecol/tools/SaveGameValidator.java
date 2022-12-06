@@ -64,7 +64,7 @@ public class SaveGameValidator {
             //System.out.println("Processing file " + file.getPath());
             try {
                 FreeColSavegameFile mapFile = new FreeColSavegameFile(file);
-                saveGameValidator.validate(new StreamSource(mapFile.getSavegameInputStream()));
+                saveGameValidator.validate(new StreamSource(mapFile.getSavegameReader()));
                 System.out.println("Successfully validated " + file.getName());
             } catch (SAXParseException e) {
                 System.out.println(e.getMessage() 

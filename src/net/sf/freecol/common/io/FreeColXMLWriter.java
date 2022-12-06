@@ -21,12 +21,9 @@ package net.sf.freecol.common.io;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -140,23 +137,6 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
     /** A write scope to use for FreeCol object writes. */
     private WriteScope writeScope;
 
-
-    /**
-     * Creates a new {@code FreeColXMLWriter}.
-     *
-     * @param outputStream The {@code OutputStream} to create
-     *     an {@code FreeColXMLWriter} for.
-     * @param scope The {@code WriteScope} to use for FreeCol
-     *     object writes.
-     * @param indent If true, produce indented output if supported.
-     * @exception IOException if there is a problem while creating the
-     *     {@code FreeColXMLWriter}.
-     */
-    public FreeColXMLWriter(OutputStream outputStream, WriteScope scope,
-                            boolean indent) throws IOException {
-        this(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
-             scope, indent);
-    }
 
     /**
      * Creates a new {@code FreeColXMLWriter}.

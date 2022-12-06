@@ -21,14 +21,14 @@ package net.sf.freecol.common.io;
 
 import static net.sf.freecol.common.util.StringUtils.join;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -114,11 +114,11 @@ public class FreeColDataFile {
      *     then the provided filename should be relative towards the
      *     path of the directory.  In case of a compressed archive it
      *     should be the path within the archive.
-     * @return An {@code InputStream} to read the resource with.
+     * @return An {@code Reader} to read the resource with.
      * @exception IOException if an error occurs
      */
-    public BufferedInputStream getInputStream(String filename) throws IOException {
-        return new BufferedInputStream(new FileInputStream(new File(file, filename)));
+    public Reader getReader(String filename) throws IOException {
+        return new FileReader(new File(file, filename), StandardCharsets.UTF_8);
     }
 
     /**
@@ -254,7 +254,7 @@ public class FreeColDataFile {
         final Properties properties = new Properties();
         for (String fileName : FreeColDirectories.getResourceFileNames()) {
             try (
-                final InputStream is = getInputStream(fileName);
+                final Reader is = getReader(fileName);
             ) {
                 properties.load(is);
                 lb.add(' ', file, '/', fileName, ":ok");

@@ -69,6 +69,7 @@ import net.sf.freecol.common.model.Specification;
  * 6: major river
  * 7: mountain + major river (never seen)
  */
+@net.ringoz.GwtIncompatible
 public class ColonizationMapLoader implements MapLoader {
 
     private static final Logger logger = Logger.getLogger(ColonizationMapLoader.class.getName());

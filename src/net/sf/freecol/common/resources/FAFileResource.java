@@ -19,9 +19,11 @@
 
 package net.sf.freecol.common.resources;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -51,8 +53,7 @@ public class FAFileResource extends Resource {
      */
     public FAFileResource(String cachingKey, URI resourceLocator) throws IOException {
         super(cachingKey, resourceLocator);
-        URL url = resourceLocator.toURL();
-        FAFile = new FAFile(url.openStream());
+        FAFile = new FAFile(new FileReader(new File(resourceLocator), StandardCharsets.UTF_8));
     }
 
 
