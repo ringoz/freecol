@@ -27,9 +27,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static net.sf.freecol.common.util.CollectionUtils.*;
 import static net.sf.freecol.common.util.StringUtils.*;
 
 
@@ -307,11 +308,11 @@ public class Introspector {
         if (!name.startsWith(PACKAGE))
             throw new ClassNotFoundException(name);
 
-        final Impl<?> impl = IntrospectorImpl.names.get(name.substring(PACKAGE.length()));
-        if (impl == null)
+        final Class<?> clazz = IntrospectorImpl.names.get(name.substring(PACKAGE.length()));
+        if (clazz == null)
             throw new ClassNotFoundException(name);
 
-        return impl.clazz;
+        return clazz;
     }       
 
     /**
@@ -351,21 +352,11 @@ public class Introspector {
     public static <T> T instantiate(Class<T> messageClass, Class<?>[] types,
                                     Object[] params)
         throws IntrospectorException {
-        final String tag = messageClass.getName();
-
-        final Impl<?> impl = impls.get(messageClass);
-        if (impl == null)
-            throw new IntrospectorException("Unable to find constructor "
-                + lastPart(tag, ".") + "("
-                + transform(types, alwaysTrue(), Class::getName,
-                            Collectors.joining(","))
-                + ")", new ClassNotFoundException(tag));
-
         try {
-            return (T)impl.newInstance(types, params);
+            final Meta meta = IntrospectorImpl.metas.get(messageClass);
+            return (T)meta.newInstance(types, params);
         } catch (Exception ex) {
-            throw new IntrospectorException("Failed to construct "
-                + lastPart(tag, "."), ex);
+            throw new IntrospectorException("Failed to construct " + messageClass.getName(), ex);
         }
     }
 
@@ -385,8 +376,14 @@ public class Introspector {
                                      Class<T> returnClass)
         throws IllegalAccessException, InvocationTargetException,
                NoSuchMethodException {
-        return net.ringoz.GwtCompat.class_cast(returnClass, object.getClass().getMethod(methodName)
-            .invoke(object));
+        try {
+            final Meta meta = IntrospectorImpl.metas.get(object.getClass());
+            return net.ringoz.GwtCompat.class_cast(returnClass, meta.invokeMethod(object, methodName));
+        } catch (NoSuchMethodException|IllegalAccessException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvocationTargetException(e);
+        }
     }
 
     /**
@@ -394,34 +391,51 @@ public class Introspector {
      */
 
     static final String PACKAGE = "net.sf.freecol.";
-    static final java.util.Map<Class<?>,Introspector.Impl<?>> impls = new java.util.HashMap<>();
-    static {
-        for (final var impl : IntrospectorImpl.names.values())
-            impls.put(impl.clazz, impl);
-    }
 
-    static abstract class Impl<T> {
-        final Class<T> clazz;
-
-        protected Impl(Class<T> clazz) {
-            this.clazz = clazz;
-        }
-
+    static abstract class Meta {
         static boolean areSame(Object[] types, Object... other) {
             return Arrays.equals(types, other);
         }
 
-        T newInstance(Class<?>[] types, Object[] params) throws Exception {
+        Object newInstance(Class<?>[] types, Object[] params) throws Exception {
             throw new InstantiationException();
         }
+
+        Object invokeMethod(Object object, String method, Object... params) throws Exception {
+            switch (method) {
+                case "toString": return object.toString();
+                case "hashCode": return object.hashCode();
+                case "equals": return object.equals(params[0]);
+                default: throw new NoSuchMethodException();
+            }
+        }
     }
+
+    @net.ringoz.GwtIncompatible
+    private static boolean inheritsMethod(Class<?> clazz, Method meth) {
+        try {
+            clazz.getSuperclass().getMethod(meth.getName(), meth.getParameterTypes());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @net.ringoz.GwtIncompatible
+    private static final java.util.Set<Class<?>> emitted = new java.util.HashSet<>();
 
     @net.ringoz.GwtIncompatible
     private static void emitClass(PrintStream out, Class<?> clazz) {
         if (!Modifier.isPublic(clazz.getModifiers()))
             return;
 
-        out.println("names.put(\"" + clazz.getName().substring(PACKAGE.length()) + "\", new Introspector.Impl<>(" + clazz.getCanonicalName() + ".class) {");
+        if (emitted.contains(clazz))
+            return;
+
+        out.println("// " + clazz.getCanonicalName());
+        emitted.add(clazz);
+
+        out.println("final Meta " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + " = new Meta() {");
         if (!Modifier.isAbstract(clazz.getModifiers())) {
             out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
             for (Constructor<?> ctor : clazz.getConstructors()) {
@@ -435,20 +449,62 @@ public class Introspector {
             out.println("  throw new IllegalArgumentException();");
             out.println("}");
         }
-        out.println("});");
+
+        final var meths = Arrays.stream(clazz.getDeclaredMethods()).filter((Method meth) -> {
+            if (!Modifier.isPublic(meth.getModifiers()))
+                return false;
+            if (inheritsMethod(clazz, meth))
+                return false;
+            if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
+                return false;
+            if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
+                return false;
+            return true;
+        }).toArray(Method[]::new);
+
+        out.println("Object invokeMethod(Object object, String method, Object... params) throws Exception {");
+        if (meths.length != 0) {
+            out.println("  switch (method) {");
+            for (Method meth : meths) {
+                if (!Modifier.isPublic(meth.getModifiers()))
+                    continue;
+                if (inheritsMethod(clazz, meth))
+                    continue;
+                if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
+                    continue;
+                if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
+                    continue;
+                final var types = Arrays.asList(meth.getParameterTypes());
+                if (meth.getReturnType().equals(Void.TYPE))
+                    out.println("  case \"" + meth.getName() + "\": ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + "); return null;");
+                else
+                    out.println("  case \"" + meth.getName() + "\": return ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + ");");
+            }
+            out.println("  }");
+        }
+        out.println("  return " + (emitted.contains(clazz.getSuperclass()) ? clazz.getSuperclass().getName().substring(PACKAGE.length()).replace(".", "_") : "super") + ".invokeMethod(object, method, params);");
+        out.println("}");
+
+        out.println("};");
+        out.println("names.put(\"" + clazz.getName().substring(PACKAGE.length()) + "\", " + clazz.getCanonicalName() + ".class);");
+        out.println("metas.put(" + clazz.getCanonicalName() + ".class, " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + ");");
     }
 
     @net.ringoz.GwtIncompatible
-    private static void emitSubClasses(PrintStream out, Class<?> clazz, String packageName) throws IOException {
-        final var srcList = clazz.getClassLoader().getResources(packageName.replace(".", "/"));
+    private static void emitSubClasses(PrintStream out, Class<?> root, String packageName) throws IOException {
+        final var srcList = root.getClassLoader().getResources(packageName.replace(".", "/"));
         while (srcList.hasMoreElements()) {
             File dirFile = new File(srcList.nextElement().getFile());
             for (File file : dirFile.listFiles()) {
-                String subClassName = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
+                String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
                 try {
-                    final Class<?> subClass = Class.forName(subClassName);
-                    if (clazz.isAssignableFrom(subClass))
-                        emitClass(out, subClass);
+                    final Class<?> clazz = Class.forName(className);
+                    if (!root.isAssignableFrom(clazz))
+                        continue;
+
+                    final var hierarchy = Stream.iterate(clazz, (cls) -> cls != root.getSuperclass(), (Class<?> cls) -> cls.getSuperclass()).collect(Collectors.toList());
+                    Collections.reverse(hierarchy);
+                    hierarchy.forEach((cls) -> emitClass(out, cls));
                 }
                 catch (ClassNotFoundException e) {
                     continue;
@@ -459,11 +515,14 @@ public class Introspector {
 
     @net.ringoz.GwtIncompatible
     public static void main(String[] args) throws Exception {
+        emitted.clear();
         try (PrintStream out = new PrintStream(args[0])) {
             out.println("// generated by Introspector::main");
             out.println("package net.sf.freecol.common.util;");
+            out.println("import net.sf.freecol.common.util.Introspector.Meta;");
             out.println("class IntrospectorImpl {");
-            out.println("static final java.util.Map<String,Introspector.Impl<?>> names = new java.util.HashMap<>();");
+            out.println("static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();");
+            out.println("static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();");
             out.println("static {");
             emitSubClasses(out, net.sf.freecol.common.networking.Message.class, "net.sf.freecol.common.networking");
             emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.common.model");
