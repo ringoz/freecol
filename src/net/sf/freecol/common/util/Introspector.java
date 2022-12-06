@@ -73,63 +73,6 @@ public class Introspector {
         this.field = field;
     }
 
-
-    /**
-     * Get a get-method for this Introspector.
-     *
-     * @return A {@code Method} representing getField().
-     * @exception IntrospectorException if the get-method is not available.
-     */
-    private Method getGetMethod() throws IntrospectorException {
-        String methodName = "get" + capitalize(field);
-
-        try {
-            return theClass.getMethod(methodName);
-        } catch (NoSuchMethodException | SecurityException ex) {
-            throw new IntrospectorException(theClass.getName()
-                + "." + methodName, ex);
-        }
-    }
-
-    /**
-     * Get a set-method for this Introspector.
-     *
-     * @param argType A {@code Class} that is the argument to
-     *        the set-method
-     * @return A {@code Method} representing setField().
-     * @exception IntrospectorException if the set-method is not available.
-     */
-    private Method getSetMethod(Class<?> argType) throws IntrospectorException {
-        String methodName = "set" + capitalize(field);
-
-        try {
-            return theClass.getMethod(methodName, argType);
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new IntrospectorException(theClass.getName()
-                + "." + methodName, e);
-        }
-    }
-
-    /**
-     * Get the return type from a {@code Method}.
-     *
-     * @param method The {@code Method} to examine.
-     * @return The method return type, or null on error.
-     * @exception IntrospectorException if the return type is not available.
-     */
-    private Class<?> getMethodReturnType(Method method)
-        throws IntrospectorException {
-        Class<?> ret;
-
-        try {
-            ret = method.getReturnType();
-        } catch (Exception e) {
-            throw new IntrospectorException(theClass.getName()
-                + "." + method.getName() + " return type.", e);
-        }
-        return ret;
-    }
-
     /**
      * Get a function that converts to String from a given class.
      * We use Enum.name() for enums, and String.valueOf(argType) for the rest.
@@ -138,10 +81,11 @@ public class Introspector {
      * @return A conversion function, or null on error.
      * @exception NoSuchMethodException if no converter is found.
      */
-    private Method getToStringConverter(Class<?> argType)
-        throws NoSuchMethodException {
-        return (argType.isEnum()) ? argType.getMethod("name")
-            : String.class.getMethod("valueOf", argType);
+    private static String convertToString(Object arg) {
+        final Class<?> argType = arg.getClass();
+        if (argType.isEnum())
+            return ((Enum<?>)arg).name();
+        return String.valueOf(arg);
     }
 
     /**
@@ -153,39 +97,26 @@ public class Introspector {
      * @param argType A {@code Class} to find a converter for.
      * @return A conversion function, or null on error.
      */
-    private Method getFromStringConverter(Class<?> argType) {
-        Method method;
-
-        if (argType.isEnum()) {
-            try {
-                method = Enum.class.getMethod("valueOf", Class.class, String.class);
-            } catch (NoSuchMethodException|SecurityException e) {
-                throw new RuntimeException("Enum.getMethod(valueOf(Class, String)): " + argType, e);
-            }
-        } else {
-            if (argType.isPrimitive()) {
-                if (argType == Integer.TYPE) {
-                    argType = Integer.class;
-                } else if (argType == Boolean.TYPE) {
-                    argType = Boolean.class;
-                } else if (argType == Float.TYPE) {
-                    argType = Float.class;
-                } else if (argType == Double.TYPE) {
-                    argType = Double.class;
-                } else if (argType == Character.TYPE) {
-                    argType = Character.class;
-                } else {
-                    throw new IllegalArgumentException("Need compatible class for primitive " + argType.getName());
-                }
-            }
-            try {
-                method = argType.getMethod("valueOf", String.class);
-            } catch (NoSuchMethodException | SecurityException e) {
-                throw new IllegalArgumentException(argType.getName()
-                                                   + ".getMethod(valueOf(String))", e);
-            }
+    private static Object convertFromString(Class<?> argType, String arg) throws Exception {
+        if (argType == String.class)
+            return arg;
+        if (argType.isEnum())
+            return Enum.valueOf((Class)argType, arg);
+        if (argType == Integer.class) return Integer.valueOf(arg);
+        if (argType == Boolean.class) return Boolean.valueOf(arg);
+        if (argType == Float.class) return Float.valueOf(arg);
+        if (argType == Double.class) return Double.valueOf(arg);
+        if (argType == Character.class) return Character.valueOf(arg.charAt(0));
+        if (argType.isPrimitive()) {
+            if (argType == Integer.TYPE) return Integer.valueOf(arg);
+            if (argType == Boolean.TYPE) return Boolean.valueOf(arg);
+            if (argType == Float.TYPE) return Float.valueOf(arg);
+            if (argType == Double.TYPE) return Double.valueOf(arg);
+            if (argType == Character.TYPE) return Character.valueOf(arg.charAt(0));
+            throw new IllegalArgumentException("Need compatible class for primitive " + argType.getName());
         }
-        return method;
+        final Meta meta = IntrospectorImpl.metas.get(argType);
+        return meta.invokeMethod(null, "valueOf", arg);
     }
 
     /**
@@ -198,50 +129,12 @@ public class Introspector {
      * @exception IntrospectorException encompasses many failures.
      */
     public String getter(Object obj) throws IntrospectorException {
-        Method getMethod = getGetMethod();
-        Class<?> fieldType = getMethodReturnType(getMethod);
-
-        if (fieldType == String.class) {
-            try {
-                return (String) getMethod.invoke(obj);
-            } catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
-                throw new IntrospectorException(getMethod.getName() + "(obj)",
-                    e);
-            }
-        } else {
-            Object result = null;
-            try {
-                result = getMethod.invoke(obj);
-            } catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
-                throw new IntrospectorException(getMethod.getName() + "(obj)",
-                    e);
-            }
-            Method convertMethod;
-            try {
-                convertMethod = getToStringConverter(fieldType);
-            } catch (NoSuchMethodException nsme) {
-                throw new IntrospectorException("No String converter found for "
-                    + fieldType, nsme);
-            }
-            if (Modifier.isStatic(convertMethod.getModifiers())) {
-                try {
-                    return (String) convertMethod.invoke(null, result);
-                } catch (IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    throw new IntrospectorException(convertMethod.getName()
-                        + "(null, result)", e);
-                }
-            } else {
-                try {
-                    return (String) convertMethod.invoke(result);
-                } catch (IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    throw new IntrospectorException(convertMethod.getName()
-                        + "(result)", e);
-                }
-            }
+        final String methodName = "get" + capitalize(field);
+        try {
+            final Meta meta = IntrospectorImpl.metas.get(theClass);
+            return convertToString(meta.invokeMethod(obj, methodName));
+        } catch (Exception e) {
+            throw new IntrospectorException(methodName, e);
         }
     }
 
@@ -254,47 +147,13 @@ public class Introspector {
      * @exception IntrospectorException encompasses many failures.
      */
     public void setter(Object obj, String value) throws IntrospectorException {
-        Method getMethod = getGetMethod();
-        Class<?> fieldType = getMethodReturnType(getMethod);
-        Method setMethod = getSetMethod(fieldType);
-
-        if (fieldType == String.class) {
-            try {
-                setMethod.invoke(obj, value);
-            } catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
-                throw new IntrospectorException(setMethod.getName()
-                    + "(obj, " + value + ")", e);
-            }
-        } else {
-            Method convertMethod = getFromStringConverter(fieldType);
-            Object result = null;
-
-            if (fieldType.isEnum()) {
-                try {
-                    result = convertMethod.invoke(null, fieldType, value);
-                } catch (IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    throw new IntrospectorException(convertMethod.getName()
-                        + "(null, " + fieldType.getName()
-                        + ", " + value + ")", e);
-                }
-            } else {
-                try {
-                    result = convertMethod.invoke(null, value);
-                } catch (IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    throw new IntrospectorException(convertMethod.getName()
-                        + "(null, " + value + ")", e);
-                }
-            }
-            try {
-                setMethod.invoke(obj, result);
-            } catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
-                throw new IntrospectorException(setMethod.getName()
-                    + "(result)", e);
-            }
+        final String methodName = "set" + capitalize(field);
+        try {
+            final Meta meta = IntrospectorImpl.metas.get(theClass);
+            final Class<?> fieldType = meta.invokeMethod(obj, "get" + capitalize(field)).getClass();
+            meta.invokeMethod(obj, methodName, convertFromString(fieldType, value));
+        } catch (Exception e) {
+            throw new IntrospectorException(methodName, e);
         }
     }
 
@@ -450,8 +309,10 @@ public class Introspector {
             out.println("}");
         }
 
-        final var meths = Arrays.stream(clazz.getDeclaredMethods()).filter((Method meth) -> {
+        final var methods = Arrays.stream(clazz.getDeclaredMethods()).filter((Method meth) -> {
             if (!Modifier.isPublic(meth.getModifiers()))
+                return false;
+            if (meth.getAnnotation(net.ringoz.GwtIncompatible.class) != null)
                 return false;
             if (inheritsMethod(clazz, meth))
                 return false;
@@ -463,17 +324,9 @@ public class Introspector {
         }).toArray(Method[]::new);
 
         out.println("Object invokeMethod(Object object, String method, Object... params) throws Exception {");
-        if (meths.length != 0) {
+        if (methods.length != 0) {
             out.println("  switch (method) {");
-            for (Method meth : meths) {
-                if (!Modifier.isPublic(meth.getModifiers()))
-                    continue;
-                if (inheritsMethod(clazz, meth))
-                    continue;
-                if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
-                    continue;
-                if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
-                    continue;
+            for (Method meth : methods) {
                 final var types = Arrays.asList(meth.getParameterTypes());
                 if (meth.getReturnType().equals(Void.TYPE))
                     out.println("  case \"" + meth.getName() + "\": ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + "); return null;");

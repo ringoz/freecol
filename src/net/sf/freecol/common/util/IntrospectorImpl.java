@@ -2326,6 +2326,10 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "setLearnableSkill": ((net.sf.freecol.common.model.IndianSettlement)object).setLearnableSkill((net.sf.freecol.common.model.UnitType)params[0]); return null;
   case "setVisited": return ((net.sf.freecol.common.model.IndianSettlement)object).setVisited((net.sf.freecol.common.model.Player)params[0]);
   case "hasAnyScouted": return ((net.sf.freecol.common.model.IndianSettlement)object).hasAnyScouted();
+  case "setMissionary": ((net.sf.freecol.common.model.IndianSettlement)object).setMissionary((net.sf.freecol.common.model.Unit)params[0]); return null;
+  case "getMissionaryVisibleTiles": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryVisibleTiles();
+  case "getConvertProgress": return ((net.sf.freecol.common.model.IndianSettlement)object).getConvertProgress();
+  case "setConvertProgress": ((net.sf.freecol.common.model.IndianSettlement)object).setConvertProgress((int)params[0]); return null;
   case "setWantedGoods": ((net.sf.freecol.common.model.IndianSettlement)object).setWantedGoods((java.util.List)params[0]); return null;
   case "getWantedGoodsCount": return ((net.sf.freecol.common.model.IndianSettlement)object).getWantedGoodsCount();
   case "getMostHated": return ((net.sf.freecol.common.model.IndianSettlement)object).getMostHated();
@@ -2334,10 +2338,6 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getGoodsForSale": return ((net.sf.freecol.common.model.IndianSettlement)object).getGoodsForSale();
   case "setGoodsForSale": ((net.sf.freecol.common.model.IndianSettlement)object).setGoodsForSale((java.util.List)params[0]); return null;
   case "getRequiredDefenders": return ((net.sf.freecol.common.model.IndianSettlement)object).getRequiredDefenders();
-  case "setMissionary": ((net.sf.freecol.common.model.IndianSettlement)object).setMissionary((net.sf.freecol.common.model.Unit)params[0]); return null;
-  case "getMissionaryVisibleTiles": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryVisibleTiles();
-  case "getConvertProgress": return ((net.sf.freecol.common.model.IndianSettlement)object).getConvertProgress();
-  case "setConvertProgress": ((net.sf.freecol.common.model.IndianSettlement)object).setConvertProgress((int)params[0]); return null;
   }
   return common_model_Settlement.invokeMethod(object, method, params);
 }
@@ -2622,10 +2622,10 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getValue": return ((net.sf.freecol.common.model.Operand)object).getValue();
   case "setValue": ((net.sf.freecol.common.model.Operand)object).setValue((java.lang.Integer)params[0]); return null;
-  case "setOperandType": ((net.sf.freecol.common.model.Operand)object).setOperandType((net.sf.freecol.common.model.Operand.OperandType)params[0]); return null;
-  case "setScopeLevel": ((net.sf.freecol.common.model.Operand)object).setScopeLevel((net.sf.freecol.common.model.Operand.ScopeLevel)params[0]); return null;
   case "getScopeLevel": return ((net.sf.freecol.common.model.Operand)object).getScopeLevel();
   case "getOperandType": return ((net.sf.freecol.common.model.Operand)object).getOperandType();
+  case "setOperandType": ((net.sf.freecol.common.model.Operand)object).setOperandType((net.sf.freecol.common.model.Operand.OperandType)params[0]); return null;
+  case "setScopeLevel": ((net.sf.freecol.common.model.Operand)object).setScopeLevel((net.sf.freecol.common.model.Operand.ScopeLevel)params[0]); return null;
   }
   return common_model_Scope.invokeMethod(object, method, params);
 }
@@ -2678,6 +2678,7 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "setName": ((net.sf.freecol.common.model.Region)object).setName((java.lang.String)params[0]); return null;
   case "getType": return ((net.sf.freecol.common.model.Region)object).getType();
   case "setParent": ((net.sf.freecol.common.model.Region)object).setParent((net.sf.freecol.common.model.Region)params[0]); return null;
+  case "hasName": return ((net.sf.freecol.common.model.Region)object).hasName();
   case "setChildren": ((net.sf.freecol.common.model.Region)object).setChildren((java.util.List)params[0]); return null;
   case "getLabel": return ((net.sf.freecol.common.model.Region)object).getLabel();
   case "getScoreValue": return ((net.sf.freecol.common.model.Region)object).getScoreValue();
@@ -2693,7 +2694,6 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getDiscoveredBy": return ((net.sf.freecol.common.model.Region)object).getDiscoveredBy();
   case "setDiscoveredBy": ((net.sf.freecol.common.model.Region)object).setDiscoveredBy((net.sf.freecol.common.model.Player)params[0]); return null;
   case "setScoreValue": ((net.sf.freecol.common.model.Region)object).setScoreValue((int)params[0]); return null;
-  case "hasName": return ((net.sf.freecol.common.model.Region)object).hasName();
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -2779,7 +2779,6 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "isOnCarrier": return ((net.sf.freecol.common.model.Unit)object).isOnCarrier();
   case "couldMove": return ((net.sf.freecol.common.model.Unit)object).couldMove();
   case "goingToDestination": return ((net.sf.freecol.common.model.Unit)object).goingToDestination();
-  case "getAttrition": return ((net.sf.freecol.common.model.Unit)object).getAttrition();
   case "setAttrition": ((net.sf.freecol.common.model.Unit)object).setAttrition((int)params[0]); return null;
   case "getVisibleGoodsCount": return ((net.sf.freecol.common.model.Unit)object).getVisibleGoodsCount();
   case "getGoodsSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getGoodsSpaceTaken();
@@ -2845,6 +2844,7 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "setHomeIndianSettlement": ((net.sf.freecol.common.model.Unit)object).setHomeIndianSettlement((net.sf.freecol.common.model.IndianSettlement)params[0]); return null;
   case "setHitPoints": ((net.sf.freecol.common.model.Unit)object).setHitPoints((int)params[0]); return null;
   case "getCurrentStop": return ((net.sf.freecol.common.model.Unit)object).getCurrentStop();
+  case "getAttrition": return ((net.sf.freecol.common.model.Unit)object).getAttrition();
   }
   return common_model_GoodsLocation.invokeMethod(object, method, params);
 }
@@ -3164,7 +3164,6 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getLocationLabel": return ((net.sf.freecol.common.model.Map)object).getLocationLabel();
   case "getIndianSettlement": return ((net.sf.freecol.common.model.Map)object).getIndianSettlement();
   case "getRank": return ((net.sf.freecol.common.model.Map)object).getRank();
-  case "getLocationImageKey": return ((net.sf.freecol.common.model.Map)object).getLocationImageKey();
   case "setLayer": ((net.sf.freecol.common.model.Map)object).setLayer((net.sf.freecol.common.model.Map.Layer)params[0]); return null;
   case "getMinimumLatitude": return ((net.sf.freecol.common.model.Map)object).getMinimumLatitude();
   case "setMinimumLatitude": ((net.sf.freecol.common.model.Map)object).setMinimumLatitude((int)params[0]); return null;
@@ -3491,7 +3490,6 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getCurrentRecruitPrice": return ((net.sf.freecol.common.model.Europe)object).getCurrentRecruitPrice();
   case "getNameKey": return ((net.sf.freecol.common.model.Europe)object).getNameKey();
   case "canBeInput": return ((net.sf.freecol.common.model.Europe)object).canBeInput();
-  case "getNameAsJlabel": return ((net.sf.freecol.common.model.Europe)object).getNameAsJlabel();
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
 }
@@ -3614,9 +3612,9 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getDisplayUnitCount": return ((net.sf.freecol.common.model.Colony)object).getDisplayUnitCount();
   case "getOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).getOccupationTrace();
   case "setOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).setOccupationTrace((boolean)params[0]);
-  case "getCurrentWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getCurrentWorkLocationsList();
   case "getCurrentlyBuilding": return ((net.sf.freecol.common.model.Colony)object).getCurrentlyBuilding();
   case "setExportData": ((net.sf.freecol.common.model.Colony)object).setExportData((net.sf.freecol.common.model.ExportData)params[0]); return null;
+  case "getCurrentWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getCurrentWorkLocationsList();
   case "getAllWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getAllWorkLocationsList();
   case "getAvailableWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getAvailableWorkLocationsList();
   case "getAvailableWorkLocations": return ((net.sf.freecol.common.model.Colony)object).getAvailableWorkLocations();
@@ -4286,9 +4284,9 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "setSize": ((net.sf.freecol.server.model.ServerRegion)object).setSize((int)params[0]); return null;
   case "getSize": return ((net.sf.freecol.server.model.ServerRegion)object).getSize();
+  case "getBounds": return ((net.sf.freecol.server.model.ServerRegion)object).getBounds();
   case "isGeographic": return ((net.sf.freecol.server.model.ServerRegion)object).isGeographic();
   case "getCenter": return ((net.sf.freecol.server.model.ServerRegion)object).getCenter();
-  case "getBounds": return ((net.sf.freecol.server.model.ServerRegion)object).getBounds();
   }
   return common_model_Region.invokeMethod(object, method, params);
 }
@@ -4612,10 +4610,10 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getExportGoods": return ((net.sf.freecol.server.ai.AIColony)object).getExportGoods();
   case "getWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWishes();
   case "requestRearrange": ((net.sf.freecol.server.ai.AIColony)object).requestRearrange(); return null;
-  case "getPlannedBuildableTypes": return ((net.sf.freecol.server.ai.AIColony)object).getPlannedBuildableTypes();
-  case "planToString": return ((net.sf.freecol.server.ai.AIColony)object).planToString();
   case "getGoodsWishes": return ((net.sf.freecol.server.ai.AIColony)object).getGoodsWishes();
   case "getWorkerWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWorkerWishes();
+  case "getPlannedBuildableTypes": return ((net.sf.freecol.server.ai.AIColony)object).getPlannedBuildableTypes();
+  case "planToString": return ((net.sf.freecol.server.ai.AIColony)object).planToString();
   case "getTileImprovementPlans": return ((net.sf.freecol.server.ai.AIColony)object).getTileImprovementPlans();
   }
   return server_ai_AIObject.invokeMethod(object, method, params);
@@ -4684,8 +4682,8 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getGoodsType": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).getGoodsType();
   case "getWorkLocation": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).getWorkLocation();
-  case "isFoodPlan": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).isFoodPlan();
   case "setGoodsType": ((net.sf.freecol.server.ai.WorkLocationPlan)object).setGoodsType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
+  case "isFoodPlan": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).isFoodPlan();
   }
   return server_ai_AIObject.invokeMethod(object, method, params);
 }
