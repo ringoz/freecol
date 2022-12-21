@@ -87,8 +87,6 @@ public class Introspector {
     public static <T> T valueOf(Class<T> argType, String arg) {
         if (argType == String.class)
             return (T)arg;
-        if (argType.isEnum())
-            return (T)Enum.valueOf((Class)argType, arg);
         if (argType == Integer.class) return (T)Integer.valueOf(arg);
         if (argType == Boolean.class) return (T)Boolean.valueOf(arg);
         if (argType == Float.class) return (T)Float.valueOf(arg);
@@ -282,6 +280,13 @@ public class Introspector {
         if (emitted.contains(clazz))
             return;
 
+        if (!clazz.getName().startsWith(PACKAGE))
+            return;
+
+        for (Class<?> cls : clazz.getDeclaredClasses())
+            if (cls.isEnum())
+                emitClass(out, cls);
+
         out.println("// " + clazz.getCanonicalName());
         emitted.add(clazz);
 
@@ -336,8 +341,8 @@ public class Introspector {
     }
 
     @net.ringoz.GwtIncompatible
-    private static void emitSubClasses(PrintStream out, Class<?> root, String packageName) throws IOException {
-        final var srcList = root.getClassLoader().getResources(packageName.replace(".", "/"));
+    private static void emitClasses(PrintStream out, String packageName, Class<?> root) throws IOException {
+        final var srcList = Introspector.class.getClassLoader().getResources(packageName.replace(".", "/"));
         while (srcList.hasMoreElements()) {
             File dirFile = new File(srcList.nextElement().getFile());
             for (File file : dirFile.listFiles()) {
@@ -369,10 +374,16 @@ public class Introspector {
             out.println("static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();");
             out.println("static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();");
             out.println("static {");
-            emitSubClasses(out, net.sf.freecol.common.networking.Message.class, "net.sf.freecol.common.networking");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.common.model");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.model");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.ai");
+            emitClasses(out, "net.sf.freecol.common.networking", net.sf.freecol.common.networking.Message.class);
+            emitClasses(out, "net.sf.freecol.common.networking", Enum.class);
+            emitClasses(out, "net.sf.freecol.common.model", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.common.model", Enum.class);
+            emitClasses(out, "net.sf.freecol.server.model", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.server.model", Enum.class);
+            emitClasses(out, "net.sf.freecol.server.ai", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.server.ai", Enum.class);
+            emitClass(out, net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class);
+            emitClass(out, net.sf.freecol.server.FreeColServer.ServerState.class);
             out.println("}");
             out.println("}");
         }

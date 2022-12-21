@@ -5,6 +5,22 @@ class IntrospectorImpl {
 static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();
 static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();
 static {
+// net.sf.freecol.common.networking.Message.MessagePriority
+final Meta common_networking_Message$MessagePriority = new Meta() {
+net.sf.freecol.common.networking.Message.MessagePriority newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getValue": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).getValue();
+  case "valueOf": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.networking.Message$MessagePriority", net.sf.freecol.common.networking.Message.MessagePriority.class);
+metas.put(net.sf.freecol.common.networking.Message.MessagePriority.class, common_networking_Message$MessagePriority);
 // net.sf.freecol.common.networking.Message
 final Meta common_networking_Message = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1751,6 +1767,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.FreeColObject", net.sf.freecol.common.model.FreeColObject.class);
 metas.put(net.sf.freecol.common.model.FreeColObject.class, common_model_FreeColObject);
+// net.sf.freecol.common.model.StringTemplate.TemplateType
+final Meta common_model_StringTemplate$TemplateType = new Meta() {
+net.sf.freecol.common.model.StringTemplate.TemplateType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.StringTemplate.TemplateType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.StringTemplate.TemplateType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.StringTemplate$TemplateType", net.sf.freecol.common.model.StringTemplate.TemplateType.class);
+metas.put(net.sf.freecol.common.model.StringTemplate.TemplateType.class, common_model_StringTemplate$TemplateType);
 // net.sf.freecol.common.model.StringTemplate
 final Meta common_model_StringTemplate = new Meta() {
 net.sf.freecol.common.model.StringTemplate newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -1773,6 +1804,23 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.StringTemplate", net.sf.freecol.common.model.StringTemplate.class);
 metas.put(net.sf.freecol.common.model.StringTemplate.class, common_model_StringTemplate);
+// net.sf.freecol.common.model.ModelMessage.MessageType
+final Meta common_model_ModelMessage$MessageType = new Meta() {
+net.sf.freecol.common.model.ModelMessage.MessageType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getNameKey": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).getNameKey();
+  case "getOptionName": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).getOptionName();
+  case "valueOf": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.ModelMessage$MessageType", net.sf.freecol.common.model.ModelMessage.MessageType.class);
+metas.put(net.sf.freecol.common.model.ModelMessage.MessageType.class, common_model_ModelMessage$MessageType);
 // net.sf.freecol.common.model.ModelMessage
 final Meta common_model_ModelMessage = new Meta() {
 net.sf.freecol.common.model.ModelMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -1825,6 +1873,22 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.FreeColGameObject", net.sf.freecol.common.model.FreeColGameObject.class);
 metas.put(net.sf.freecol.common.model.FreeColGameObject.class, common_model_FreeColGameObject);
+// net.sf.freecol.common.model.UnitLocation.NoAddReason
+final Meta common_model_UnitLocation$NoAddReason = new Meta() {
+net.sf.freecol.common.model.UnitLocation.NoAddReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).getDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.UnitLocation$NoAddReason", net.sf.freecol.common.model.UnitLocation.NoAddReason.class);
+metas.put(net.sf.freecol.common.model.UnitLocation.NoAddReason.class, common_model_UnitLocation$NoAddReason);
 // net.sf.freecol.common.model.UnitLocation
 final Meta common_model_UnitLocation = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2304,6 +2368,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Settlement", net.sf.freecol.common.model.Settlement.class);
 metas.put(net.sf.freecol.common.model.Settlement.class, common_model_Settlement);
+// net.sf.freecol.common.model.IndianSettlement.ContactLevel
+final Meta common_model_IndianSettlement$ContactLevel = new Meta() {
+net.sf.freecol.common.model.IndianSettlement.ContactLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.IndianSettlement.ContactLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.IndianSettlement.ContactLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.IndianSettlement$ContactLevel", net.sf.freecol.common.model.IndianSettlement.ContactLevel.class);
+metas.put(net.sf.freecol.common.model.IndianSettlement.ContactLevel.class, common_model_IndianSettlement$ContactLevel);
 // net.sf.freecol.common.model.IndianSettlement
 final Meta common_model_IndianSettlement = new Meta() {
 net.sf.freecol.common.model.IndianSettlement newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2376,6 +2455,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Scope", net.sf.freecol.common.model.Scope.class);
 metas.put(net.sf.freecol.common.model.Scope.class, common_model_Scope);
+// net.sf.freecol.common.model.Market.Access
+final Meta common_model_Market$Access = new Meta() {
+net.sf.freecol.common.model.Market.Access newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Market.Access)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Market.Access)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Market$Access", net.sf.freecol.common.model.Market.Access.class);
+metas.put(net.sf.freecol.common.model.Market.Access.class, common_model_Market$Access);
 // net.sf.freecol.common.model.Market
 final Meta common_model_Market = new Meta() {
 net.sf.freecol.common.model.Market newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2398,6 +2492,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Market", net.sf.freecol.common.model.Market.class);
 metas.put(net.sf.freecol.common.model.Market.class, common_model_Market);
+// net.sf.freecol.common.model.Limit.Operator
+final Meta common_model_Limit$Operator = new Meta() {
+net.sf.freecol.common.model.Limit.Operator newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Limit.Operator)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Limit.Operator)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Limit$Operator", net.sf.freecol.common.model.Limit.Operator.class);
+metas.put(net.sf.freecol.common.model.Limit.Operator.class, common_model_Limit$Operator);
 // net.sf.freecol.common.model.Limit
 final Meta common_model_Limit = new Meta() {
 net.sf.freecol.common.model.Limit newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2423,6 +2532,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Limit", net.sf.freecol.common.model.Limit.class);
 metas.put(net.sf.freecol.common.model.Limit.class, common_model_Limit);
+// net.sf.freecol.common.model.Disaster.Effects
+final Meta common_model_Disaster$Effects = new Meta() {
+net.sf.freecol.common.model.Disaster.Effects newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Disaster.Effects)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Disaster.Effects)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Disaster$Effects", net.sf.freecol.common.model.Disaster.Effects.class);
+metas.put(net.sf.freecol.common.model.Disaster.Effects.class, common_model_Disaster$Effects);
 // net.sf.freecol.common.model.Disaster
 final Meta common_model_Disaster = new Meta() {
 net.sf.freecol.common.model.Disaster newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2490,6 +2614,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Feature", net.sf.freecol.common.model.Feature.class);
 metas.put(net.sf.freecol.common.model.Feature.class, common_model_Feature);
+// net.sf.freecol.common.model.Modifier.ModifierType
+final Meta common_model_Modifier$ModifierType = new Meta() {
+net.sf.freecol.common.model.Modifier.ModifierType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Modifier.ModifierType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Modifier.ModifierType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Modifier$ModifierType", net.sf.freecol.common.model.Modifier.ModifierType.class);
+metas.put(net.sf.freecol.common.model.Modifier.ModifierType.class, common_model_Modifier$ModifierType);
 // net.sf.freecol.common.model.Modifier
 final Meta common_model_Modifier = new Meta() {
 net.sf.freecol.common.model.Modifier newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2607,6 +2746,36 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.MarketData", net.sf.freecol.common.model.MarketData.class);
 metas.put(net.sf.freecol.common.model.MarketData.class, common_model_MarketData);
+// net.sf.freecol.common.model.Operand.OperandType
+final Meta common_model_Operand$OperandType = new Meta() {
+net.sf.freecol.common.model.Operand.OperandType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Operand.OperandType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Operand.OperandType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Operand$OperandType", net.sf.freecol.common.model.Operand.OperandType.class);
+metas.put(net.sf.freecol.common.model.Operand.OperandType.class, common_model_Operand$OperandType);
+// net.sf.freecol.common.model.Operand.ScopeLevel
+final Meta common_model_Operand$ScopeLevel = new Meta() {
+net.sf.freecol.common.model.Operand.ScopeLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Operand.ScopeLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Operand.ScopeLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Operand$ScopeLevel", net.sf.freecol.common.model.Operand.ScopeLevel.class);
+metas.put(net.sf.freecol.common.model.Operand.ScopeLevel.class, common_model_Operand$ScopeLevel);
 // net.sf.freecol.common.model.Operand
 final Meta common_model_Operand = new Meta() {
 net.sf.freecol.common.model.Operand newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2659,6 +2828,25 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.TileImprovementType", net.sf.freecol.common.model.TileImprovementType.class);
 metas.put(net.sf.freecol.common.model.TileImprovementType.class, common_model_TileImprovementType);
+// net.sf.freecol.common.model.Region.RegionType
+final Meta common_model_Region$RegionType = new Meta() {
+net.sf.freecol.common.model.Region.RegionType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getClaimable": return ((net.sf.freecol.common.model.Region.RegionType)object).getClaimable();
+  case "getKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getNameKey();
+  case "getUnknownKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getUnknownKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Region.RegionType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Region.RegionType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Region$RegionType", net.sf.freecol.common.model.Region.RegionType.class);
+metas.put(net.sf.freecol.common.model.Region.RegionType.class, common_model_Region$RegionType);
 // net.sf.freecol.common.model.Region
 final Meta common_model_Region = new Meta() {
 net.sf.freecol.common.model.Region newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2700,6 +2888,56 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Region", net.sf.freecol.common.model.Region.class);
 metas.put(net.sf.freecol.common.model.Region.class, common_model_Region);
+// net.sf.freecol.common.model.Unit.MoveType
+final Meta common_model_Unit$MoveType = new Meta() {
+net.sf.freecol.common.model.Unit.MoveType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isAttack": return ((net.sf.freecol.common.model.Unit.MoveType)object).isAttack();
+  case "isLegal": return ((net.sf.freecol.common.model.Unit.MoveType)object).isLegal();
+  case "isProgress": return ((net.sf.freecol.common.model.Unit.MoveType)object).isProgress();
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.MoveType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.MoveType)object).values();
+  case "whyIllegal": return ((net.sf.freecol.common.model.Unit.MoveType)object).whyIllegal();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$MoveType", net.sf.freecol.common.model.Unit.MoveType.class);
+metas.put(net.sf.freecol.common.model.Unit.MoveType.class, common_model_Unit$MoveType);
+// net.sf.freecol.common.model.Unit.UnitLabelType
+final Meta common_model_Unit$UnitLabelType = new Meta() {
+net.sf.freecol.common.model.Unit.UnitLabelType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.UnitLabelType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.UnitLabelType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$UnitLabelType", net.sf.freecol.common.model.Unit.UnitLabelType.class);
+metas.put(net.sf.freecol.common.model.Unit.UnitLabelType.class, common_model_Unit$UnitLabelType);
+// net.sf.freecol.common.model.Unit.UnitState
+final Meta common_model_Unit$UnitState = new Meta() {
+net.sf.freecol.common.model.Unit.UnitState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Unit.UnitState)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.UnitState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.UnitState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$UnitState", net.sf.freecol.common.model.Unit.UnitState.class);
+metas.put(net.sf.freecol.common.model.Unit.UnitState.class, common_model_Unit$UnitState);
 // net.sf.freecol.common.model.Unit
 final Meta common_model_Unit = new Meta() {
 net.sf.freecol.common.model.Unit newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2851,6 +3089,37 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Unit", net.sf.freecol.common.model.Unit.class);
 metas.put(net.sf.freecol.common.model.Unit.class, common_model_Unit);
+// net.sf.freecol.common.model.DiplomaticTrade.TradeContext
+final Meta common_model_DiplomaticTrade$TradeContext = new Meta() {
+net.sf.freecol.common.model.DiplomaticTrade.TradeContext newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.DiplomaticTrade$TradeContext", net.sf.freecol.common.model.DiplomaticTrade.TradeContext.class);
+metas.put(net.sf.freecol.common.model.DiplomaticTrade.TradeContext.class, common_model_DiplomaticTrade$TradeContext);
+// net.sf.freecol.common.model.DiplomaticTrade.TradeStatus
+final Meta common_model_DiplomaticTrade$TradeStatus = new Meta() {
+net.sf.freecol.common.model.DiplomaticTrade.TradeStatus newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.DiplomaticTrade$TradeStatus", net.sf.freecol.common.model.DiplomaticTrade.TradeStatus.class);
+metas.put(net.sf.freecol.common.model.DiplomaticTrade.TradeStatus.class, common_model_DiplomaticTrade$TradeStatus);
 // net.sf.freecol.common.model.DiplomaticTrade
 final Meta common_model_DiplomaticTrade = new Meta() {
 net.sf.freecol.common.model.DiplomaticTrade newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2910,6 +3179,38 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.AbstractUnit", net.sf.freecol.common.model.AbstractUnit.class);
 metas.put(net.sf.freecol.common.model.AbstractUnit.class, common_model_AbstractUnit);
+// net.sf.freecol.common.model.NationType.AggressionLevel
+final Meta common_model_NationType$AggressionLevel = new Meta() {
+net.sf.freecol.common.model.NationType.AggressionLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationType$AggressionLevel", net.sf.freecol.common.model.NationType.AggressionLevel.class);
+metas.put(net.sf.freecol.common.model.NationType.AggressionLevel.class, common_model_NationType$AggressionLevel);
+// net.sf.freecol.common.model.NationType.SettlementNumber
+final Meta common_model_NationType$SettlementNumber = new Meta() {
+net.sf.freecol.common.model.NationType.SettlementNumber newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationType$SettlementNumber", net.sf.freecol.common.model.NationType.SettlementNumber.class);
+metas.put(net.sf.freecol.common.model.NationType.SettlementNumber.class, common_model_NationType$SettlementNumber);
 // net.sf.freecol.common.model.NationType
 final Meta common_model_NationType = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3062,6 +3363,23 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.ResourceType", net.sf.freecol.common.model.ResourceType.class);
 metas.put(net.sf.freecol.common.model.ResourceType.class, common_model_ResourceType);
+// net.sf.freecol.common.model.FoundingFather.FoundingFatherType
+final Meta common_model_FoundingFather$FoundingFatherType = new Meta() {
+net.sf.freecol.common.model.FoundingFather.FoundingFatherType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).getKey();
+  case "getTypeKey": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).getTypeKey();
+  case "valueOf": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.FoundingFather$FoundingFatherType", net.sf.freecol.common.model.FoundingFather.FoundingFatherType.class);
+metas.put(net.sf.freecol.common.model.FoundingFather.FoundingFatherType.class, common_model_FoundingFather$FoundingFatherType);
 // net.sf.freecol.common.model.FoundingFather
 final Meta common_model_FoundingFather = new Meta() {
 net.sf.freecol.common.model.FoundingFather newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3084,6 +3402,22 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.FoundingFather", net.sf.freecol.common.model.FoundingFather.class);
 metas.put(net.sf.freecol.common.model.FoundingFather.class, common_model_FoundingFather);
+// net.sf.freecol.common.model.HighScore.ScoreLevel
+final Meta common_model_HighScore$ScoreLevel = new Meta() {
+net.sf.freecol.common.model.HighScore.ScoreLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getMinimumScore": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).getMinimumScore();
+  case "valueOf": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.HighScore$ScoreLevel", net.sf.freecol.common.model.HighScore.ScoreLevel.class);
+metas.put(net.sf.freecol.common.model.HighScore.ScoreLevel.class, common_model_HighScore$ScoreLevel);
 // net.sf.freecol.common.model.HighScore
 final Meta common_model_HighScore = new Meta() {
 net.sf.freecol.common.model.HighScore newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3135,6 +3469,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.UnitTypeChange", net.sf.freecol.common.model.UnitTypeChange.class);
 metas.put(net.sf.freecol.common.model.UnitTypeChange.class, common_model_UnitTypeChange);
+// net.sf.freecol.common.model.Map.Layer
+final Meta common_model_Map$Layer = new Meta() {
+net.sf.freecol.common.model.Map.Layer newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Map.Layer)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Map.Layer)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Map$Layer", net.sf.freecol.common.model.Map.Layer.class);
+metas.put(net.sf.freecol.common.model.Map.Layer.class, common_model_Map$Layer);
 // net.sf.freecol.common.model.Map
 final Meta common_model_Map = new Meta() {
 net.sf.freecol.common.model.Map newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3232,6 +3581,25 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.ColonyTile", net.sf.freecol.common.model.ColonyTile.class);
 metas.put(net.sf.freecol.common.model.ColonyTile.class, common_model_ColonyTile);
+// net.sf.freecol.common.model.Monarch.MonarchAction
+final Meta common_model_Monarch$MonarchAction = new Meta() {
+net.sf.freecol.common.model.Monarch.MonarchAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getHeaderKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getHeaderKey();
+  case "getNoKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getNoKey();
+  case "getTextKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getTextKey();
+  case "getYesKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getYesKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Monarch$MonarchAction", net.sf.freecol.common.model.Monarch.MonarchAction.class);
+metas.put(net.sf.freecol.common.model.Monarch.MonarchAction.class, common_model_Monarch$MonarchAction);
 // net.sf.freecol.common.model.Monarch
 final Meta common_model_Monarch = new Meta() {
 net.sf.freecol.common.model.Monarch newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3264,6 +3632,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Monarch", net.sf.freecol.common.model.Monarch.class);
 metas.put(net.sf.freecol.common.model.Monarch.class, common_model_Monarch);
+// net.sf.freecol.common.model.TileType.RangeType
+final Meta common_model_TileType$RangeType = new Meta() {
+net.sf.freecol.common.model.TileType.RangeType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.TileType.RangeType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.TileType.RangeType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.TileType$RangeType", net.sf.freecol.common.model.TileType.RangeType.class);
+metas.put(net.sf.freecol.common.model.TileType.RangeType.class, common_model_TileType$RangeType);
 // net.sf.freecol.common.model.TileType
 final Meta common_model_TileType = new Meta() {
 net.sf.freecol.common.model.TileType newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3310,6 +3693,23 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.TileTypeChange", net.sf.freecol.common.model.TileTypeChange.class);
 metas.put(net.sf.freecol.common.model.TileTypeChange.class, common_model_TileTypeChange);
+// net.sf.freecol.common.model.NativeTrade.NativeTradeAction
+final Meta common_model_NativeTrade$NativeTradeAction = new Meta() {
+net.sf.freecol.common.model.NativeTrade.NativeTradeAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isClosing": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).isClosing();
+  case "isEuropean": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).isEuropean();
+  case "valueOf": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NativeTrade$NativeTradeAction", net.sf.freecol.common.model.NativeTrade.NativeTradeAction.class);
+metas.put(net.sf.freecol.common.model.NativeTrade.NativeTradeAction.class, common_model_NativeTrade$NativeTradeAction);
 // net.sf.freecol.common.model.NativeTrade
 final Meta common_model_NativeTrade = new Meta() {
 net.sf.freecol.common.model.NativeTrade newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3429,6 +3829,23 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Resource", net.sf.freecol.common.model.Resource.class);
 metas.put(net.sf.freecol.common.model.Resource.class, common_model_Resource);
+// net.sf.freecol.common.model.HistoryEvent.HistoryEventType
+final Meta common_model_HistoryEvent$HistoryEventType = new Meta() {
+net.sf.freecol.common.model.HistoryEvent.HistoryEventType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).getDescriptionKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).getNameKey();
+  case "valueOf": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.HistoryEvent$HistoryEventType", net.sf.freecol.common.model.HistoryEvent.HistoryEventType.class);
+metas.put(net.sf.freecol.common.model.HistoryEvent.HistoryEventType.class, common_model_HistoryEvent$HistoryEventType);
 // net.sf.freecol.common.model.HistoryEvent
 final Meta common_model_HistoryEvent = new Meta() {
 net.sf.freecol.common.model.HistoryEvent newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3454,6 +3871,22 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.HistoryEvent", net.sf.freecol.common.model.HistoryEvent.class);
 metas.put(net.sf.freecol.common.model.HistoryEvent.class, common_model_HistoryEvent);
+// net.sf.freecol.common.model.LostCityRumour.RumourType
+final Meta common_model_LostCityRumour$RumourType = new Meta() {
+net.sf.freecol.common.model.LostCityRumour.RumourType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).getDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.LostCityRumour$RumourType", net.sf.freecol.common.model.LostCityRumour.RumourType.class);
+metas.put(net.sf.freecol.common.model.LostCityRumour.RumourType.class, common_model_LostCityRumour$RumourType);
 // net.sf.freecol.common.model.LostCityRumour
 final Meta common_model_LostCityRumour = new Meta() {
 net.sf.freecol.common.model.LostCityRumour newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3476,6 +3909,24 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.LostCityRumour", net.sf.freecol.common.model.LostCityRumour.class);
 metas.put(net.sf.freecol.common.model.LostCityRumour.class, common_model_LostCityRumour);
+// net.sf.freecol.common.model.Europe.MigrationType
+final Meta common_model_Europe$MigrationType = new Meta() {
+net.sf.freecol.common.model.Europe.MigrationType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDefaultSlot": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getDefaultSlot();
+  case "getMigrantCount": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getMigrantCount();
+  case "getUnspecificSlot": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getUnspecificSlot();
+  case "valueOf": return ((net.sf.freecol.common.model.Europe.MigrationType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Europe.MigrationType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Europe$MigrationType", net.sf.freecol.common.model.Europe.MigrationType.class);
+metas.put(net.sf.freecol.common.model.Europe.MigrationType.class, common_model_Europe$MigrationType);
 // net.sf.freecol.common.model.Europe
 final Meta common_model_Europe = new Meta() {
 net.sf.freecol.common.model.Europe newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3523,6 +3974,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Ability", net.sf.freecol.common.model.Ability.class);
 metas.put(net.sf.freecol.common.model.Ability.class, common_model_Ability);
+// net.sf.freecol.common.model.Game.LogoutReason
+final Meta common_model_Game$LogoutReason = new Meta() {
+net.sf.freecol.common.model.Game.LogoutReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Game.LogoutReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Game.LogoutReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Game$LogoutReason", net.sf.freecol.common.model.Game.LogoutReason.class);
+metas.put(net.sf.freecol.common.model.Game.LogoutReason.class, common_model_Game$LogoutReason);
 // net.sf.freecol.common.model.Game
 final Meta common_model_Game = new Meta() {
 net.sf.freecol.common.model.Game newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3579,6 +4045,36 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Game", net.sf.freecol.common.model.Game.class);
 metas.put(net.sf.freecol.common.model.Game.class, common_model_Game);
+// net.sf.freecol.common.model.Colony.ColonyChangeEvent
+final Meta common_model_Colony$ColonyChangeEvent = new Meta() {
+net.sf.freecol.common.model.Colony.ColonyChangeEvent newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Colony.ColonyChangeEvent)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Colony.ColonyChangeEvent)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Colony$ColonyChangeEvent", net.sf.freecol.common.model.Colony.ColonyChangeEvent.class);
+metas.put(net.sf.freecol.common.model.Colony.ColonyChangeEvent.class, common_model_Colony$ColonyChangeEvent);
+// net.sf.freecol.common.model.Colony.NoBuildReason
+final Meta common_model_Colony$NoBuildReason = new Meta() {
+net.sf.freecol.common.model.Colony.NoBuildReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Colony.NoBuildReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Colony.NoBuildReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Colony$NoBuildReason", net.sf.freecol.common.model.Colony.NoBuildReason.class);
+metas.put(net.sf.freecol.common.model.Colony.NoBuildReason.class, common_model_Colony$NoBuildReason);
 // net.sf.freecol.common.model.Colony
 final Meta common_model_Colony = new Meta() {
 net.sf.freecol.common.model.Colony newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3911,6 +4407,40 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.ExportData", net.sf.freecol.common.model.ExportData.class);
 metas.put(net.sf.freecol.common.model.ExportData.class, common_model_ExportData);
+// net.sf.freecol.common.model.NationOptions.Advantages
+final Meta common_model_NationOptions$Advantages = new Meta() {
+net.sf.freecol.common.model.NationOptions.Advantages newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getNameKey": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).getNameKey();
+  case "getShortDescriptionKey": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).getShortDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationOptions$Advantages", net.sf.freecol.common.model.NationOptions.Advantages.class);
+metas.put(net.sf.freecol.common.model.NationOptions.Advantages.class, common_model_NationOptions$Advantages);
+// net.sf.freecol.common.model.NationOptions.NationState
+final Meta common_model_NationOptions$NationState = new Meta() {
+net.sf.freecol.common.model.NationOptions.NationState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getNameKey": return ((net.sf.freecol.common.model.NationOptions.NationState)object).getNameKey();
+  case "getShortDescriptionKey": return ((net.sf.freecol.common.model.NationOptions.NationState)object).getShortDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationOptions.NationState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationOptions.NationState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationOptions$NationState", net.sf.freecol.common.model.NationOptions.NationState.class);
+metas.put(net.sf.freecol.common.model.NationOptions.NationState.class, common_model_NationOptions$NationState);
 // net.sf.freecol.common.model.NationOptions
 final Meta common_model_NationOptions = new Meta() {
 net.sf.freecol.common.model.NationOptions newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3948,6 +4478,70 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Effect", net.sf.freecol.common.model.Effect.class);
 metas.put(net.sf.freecol.common.model.Effect.class, common_model_Effect);
+// net.sf.freecol.common.model.Player.ColonyValueCategory
+final Meta common_model_Player$ColonyValueCategory = new Meta() {
+net.sf.freecol.common.model.Player.ColonyValueCategory newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Player.ColonyValueCategory)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.ColonyValueCategory)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$ColonyValueCategory", net.sf.freecol.common.model.Player.ColonyValueCategory.class);
+metas.put(net.sf.freecol.common.model.Player.ColonyValueCategory.class, common_model_Player$ColonyValueCategory);
+// net.sf.freecol.common.model.Player.NoClaimReason
+final Meta common_model_Player$NoClaimReason = new Meta() {
+net.sf.freecol.common.model.Player.NoClaimReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).getDescriptionKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).getNameKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$NoClaimReason", net.sf.freecol.common.model.Player.NoClaimReason.class);
+metas.put(net.sf.freecol.common.model.Player.NoClaimReason.class, common_model_Player$NoClaimReason);
+// net.sf.freecol.common.model.Player.NoValueType
+final Meta common_model_Player$NoValueType = new Meta() {
+net.sf.freecol.common.model.Player.NoValueType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDouble": return ((net.sf.freecol.common.model.Player.NoValueType)object).getDouble();
+  case "getValue": return ((net.sf.freecol.common.model.Player.NoValueType)object).getValue();
+  case "valueOf": return ((net.sf.freecol.common.model.Player.NoValueType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.NoValueType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$NoValueType", net.sf.freecol.common.model.Player.NoValueType.class);
+metas.put(net.sf.freecol.common.model.Player.NoValueType.class, common_model_Player$NoValueType);
+// net.sf.freecol.common.model.Player.PlayerType
+final Meta common_model_Player$PlayerType = new Meta() {
+net.sf.freecol.common.model.Player.PlayerType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Player.PlayerType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.PlayerType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$PlayerType", net.sf.freecol.common.model.Player.PlayerType.class);
+metas.put(net.sf.freecol.common.model.Player.PlayerType.class, common_model_Player$PlayerType);
 // net.sf.freecol.common.model.Player
 final Meta common_model_Player = new Meta() {
 net.sf.freecol.common.model.Player newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -4214,6 +4808,262 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.NationSummary", net.sf.freecol.common.model.NationSummary.class);
 metas.put(net.sf.freecol.common.model.NationSummary.class, common_model_NationSummary);
+// net.sf.freecol.common.model.Constants.MissionaryAction
+final Meta common_model_Constants$MissionaryAction = new Meta() {
+net.sf.freecol.common.model.Constants.MissionaryAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.MissionaryAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.MissionaryAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$MissionaryAction", net.sf.freecol.common.model.Constants.MissionaryAction.class);
+metas.put(net.sf.freecol.common.model.Constants.MissionaryAction.class, common_model_Constants$MissionaryAction);
+// net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction
+final Meta common_model_Constants$ArmedUnitSettlementAction = new Meta() {
+net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ArmedUnitSettlementAction", net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction.class, common_model_Constants$ArmedUnitSettlementAction);
+// net.sf.freecol.common.model.Constants.IndianDemandAction
+final Meta common_model_Constants$IndianDemandAction = new Meta() {
+net.sf.freecol.common.model.Constants.IndianDemandAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.IndianDemandAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.IndianDemandAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$IndianDemandAction", net.sf.freecol.common.model.Constants.IndianDemandAction.class);
+metas.put(net.sf.freecol.common.model.Constants.IndianDemandAction.class, common_model_Constants$IndianDemandAction);
+// net.sf.freecol.common.model.Constants.TradeBuyAction
+final Meta common_model_Constants$TradeBuyAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeBuyAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeBuyAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeBuyAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeBuyAction", net.sf.freecol.common.model.Constants.TradeBuyAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeBuyAction.class, common_model_Constants$TradeBuyAction);
+// net.sf.freecol.common.model.Direction
+final Meta common_model_Direction = new Meta() {
+net.sf.freecol.common.model.Direction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getEWMirroredDirection": return ((net.sf.freecol.common.model.Direction)object).getEWMirroredDirection();
+  case "getKey": return ((net.sf.freecol.common.model.Direction)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Direction)object).getNameKey();
+  case "getNextDirection": return ((net.sf.freecol.common.model.Direction)object).getNextDirection();
+  case "getPreviousDirection": return ((net.sf.freecol.common.model.Direction)object).getPreviousDirection();
+  case "getReverseDirection": return ((net.sf.freecol.common.model.Direction)object).getReverseDirection();
+  case "valueOf": return ((net.sf.freecol.common.model.Direction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Direction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Direction", net.sf.freecol.common.model.Direction.class);
+metas.put(net.sf.freecol.common.model.Direction.class, common_model_Direction);
+// net.sf.freecol.common.model.CombatModel.CombatResult
+final Meta common_model_CombatModel$CombatResult = new Meta() {
+net.sf.freecol.common.model.CombatModel.CombatResult newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.CombatModel.CombatResult)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.CombatModel.CombatResult)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.CombatModel$CombatResult", net.sf.freecol.common.model.CombatModel.CombatResult.class);
+metas.put(net.sf.freecol.common.model.CombatModel.CombatResult.class, common_model_CombatModel$CombatResult);
+// net.sf.freecol.common.model.Constants.TradeAction
+final Meta common_model_Constants$TradeAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeAction", net.sf.freecol.common.model.Constants.TradeAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeAction.class, common_model_Constants$TradeAction);
+// net.sf.freecol.common.model.Stance
+final Meta common_model_Stance = new Meta() {
+net.sf.freecol.common.model.Stance newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Stance)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Stance)object).getNameKey();
+  case "getOtherStanceChangeKey": return ((net.sf.freecol.common.model.Stance)object).getOtherStanceChangeKey();
+  case "getStanceChangeKey": return ((net.sf.freecol.common.model.Stance)object).getStanceChangeKey();
+  case "isIncitable": return ((net.sf.freecol.common.model.Stance)object).isIncitable();
+  case "valueOf": return ((net.sf.freecol.common.model.Stance)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Stance)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Stance", net.sf.freecol.common.model.Stance.class);
+metas.put(net.sf.freecol.common.model.Stance.class, common_model_Stance);
+// net.sf.freecol.common.model.Constants.TradeSellAction
+final Meta common_model_Constants$TradeSellAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeSellAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeSellAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeSellAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeSellAction", net.sf.freecol.common.model.Constants.TradeSellAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeSellAction.class, common_model_Constants$TradeSellAction);
+// net.sf.freecol.common.model.Constants.ScoutColonyAction
+final Meta common_model_Constants$ScoutColonyAction = new Meta() {
+net.sf.freecol.common.model.Constants.ScoutColonyAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ScoutColonyAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ScoutColonyAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ScoutColonyAction", net.sf.freecol.common.model.Constants.ScoutColonyAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ScoutColonyAction.class, common_model_Constants$ScoutColonyAction);
+// net.sf.freecol.common.model.Constants.ClaimAction
+final Meta common_model_Constants$ClaimAction = new Meta() {
+net.sf.freecol.common.model.Constants.ClaimAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ClaimAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ClaimAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ClaimAction", net.sf.freecol.common.model.Constants.ClaimAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ClaimAction.class, common_model_Constants$ClaimAction);
+// net.sf.freecol.common.model.BuildQueue.CompletionAction
+final Meta common_model_BuildQueue$CompletionAction = new Meta() {
+net.sf.freecol.common.model.BuildQueue.CompletionAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.BuildQueue.CompletionAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.BuildQueue.CompletionAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.BuildQueue$CompletionAction", net.sf.freecol.common.model.BuildQueue.CompletionAction.class);
+metas.put(net.sf.freecol.common.model.BuildQueue.CompletionAction.class, common_model_BuildQueue$CompletionAction);
+// net.sf.freecol.common.model.Constants.IntegrityType
+final Meta common_model_Constants$IntegrityType = new Meta() {
+net.sf.freecol.common.model.Constants.IntegrityType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "fail": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).fail();
+  case "fix": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).fix();
+  case "safe": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).safe();
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$IntegrityType", net.sf.freecol.common.model.Constants.IntegrityType.class);
+metas.put(net.sf.freecol.common.model.Constants.IntegrityType.class, common_model_Constants$IntegrityType);
+// net.sf.freecol.common.model.Constants.BoycottAction
+final Meta common_model_Constants$BoycottAction = new Meta() {
+net.sf.freecol.common.model.Constants.BoycottAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.BoycottAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.BoycottAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$BoycottAction", net.sf.freecol.common.model.Constants.BoycottAction.class);
+metas.put(net.sf.freecol.common.model.Constants.BoycottAction.class, common_model_Constants$BoycottAction);
+// net.sf.freecol.common.model.Tension.Level
+final Meta common_model_Tension$Level = new Meta() {
+net.sf.freecol.common.model.Tension.Level newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Tension.Level)object).getKey();
+  case "getLimit": return ((net.sf.freecol.common.model.Tension.Level)object).getLimit();
+  case "valueOf": return ((net.sf.freecol.common.model.Tension.Level)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Tension.Level)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Tension$Level", net.sf.freecol.common.model.Tension.Level.class);
+metas.put(net.sf.freecol.common.model.Tension.Level.class, common_model_Tension$Level);
+// net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction
+final Meta common_model_Constants$ScoutIndianSettlementAction = new Meta() {
+net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ScoutIndianSettlementAction", net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction.class, common_model_Constants$ScoutIndianSettlementAction);
 // net.sf.freecol.server.model.ServerGame
 final Meta server_model_ServerGame = new Meta() {
 net.sf.freecol.server.model.ServerGame newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -4342,6 +5192,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("server.model.ServerUnit", net.sf.freecol.server.model.ServerUnit.class);
 metas.put(net.sf.freecol.server.model.ServerUnit.class, server_model_ServerUnit);
+// net.sf.freecol.server.model.ServerPlayer.DeadCheck
+final Meta server_model_ServerPlayer$DeadCheck = new Meta() {
+net.sf.freecol.server.model.ServerPlayer.DeadCheck newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.server.model.ServerPlayer.DeadCheck)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.model.ServerPlayer.DeadCheck)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.model.ServerPlayer$DeadCheck", net.sf.freecol.server.model.ServerPlayer.DeadCheck.class);
+metas.put(net.sf.freecol.server.model.ServerPlayer.DeadCheck.class, server_model_ServerPlayer$DeadCheck);
 // net.sf.freecol.server.model.ServerPlayer
 final Meta server_model_ServerPlayer = new Meta() {
 net.sf.freecol.server.model.ServerPlayer newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -4728,5 +5593,52 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("server.ai.WorkerWish", net.sf.freecol.server.ai.WorkerWish.class);
 metas.put(net.sf.freecol.server.ai.WorkerWish.class, server_ai_WorkerWish);
+// net.sf.freecol.server.ai.Cargo.CargoMode
+final Meta server_ai_Cargo$CargoMode = new Meta() {
+net.sf.freecol.server.ai.Cargo.CargoMode newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isCollection": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).isCollection();
+  case "valueOf": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.ai.Cargo$CargoMode", net.sf.freecol.server.ai.Cargo.CargoMode.class);
+metas.put(net.sf.freecol.server.ai.Cargo.CargoMode.class, server_ai_Cargo$CargoMode);
+// net.sf.freecol.common.option.UnitTypeOption.TypeSelector
+final Meta common_option_UnitTypeOption$TypeSelector = new Meta() {
+net.sf.freecol.common.option.UnitTypeOption.TypeSelector newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.option.UnitTypeOption.TypeSelector)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.option.UnitTypeOption.TypeSelector)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.option.UnitTypeOption$TypeSelector", net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class);
+metas.put(net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class, common_option_UnitTypeOption$TypeSelector);
+// net.sf.freecol.server.FreeColServer.ServerState
+final Meta server_FreeColServer$ServerState = new Meta() {
+net.sf.freecol.server.FreeColServer.ServerState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getMetaServerState": return ((net.sf.freecol.server.FreeColServer.ServerState)object).getMetaServerState();
+  case "valueOf": return ((net.sf.freecol.server.FreeColServer.ServerState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.FreeColServer.ServerState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.FreeColServer$ServerState", net.sf.freecol.server.FreeColServer.ServerState.class);
+metas.put(net.sf.freecol.server.FreeColServer.ServerState.class, server_FreeColServer$ServerState);
 }
 }
