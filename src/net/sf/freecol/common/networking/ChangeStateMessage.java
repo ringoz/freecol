@@ -25,6 +25,7 @@ import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.model.Game;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.Unit.UnitState;
+import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.server.FreeColServer;
 import net.sf.freecol.server.model.ServerPlayer;
 
@@ -98,7 +99,7 @@ public class ChangeStateMessage extends AttributeMessage {
 
         UnitState state;
         try {
-            state = Enum.valueOf(UnitState.class, stateString);
+            state = Introspector.convertFromString(UnitState.class, stateString);
         } catch (Exception e) {
             return serverPlayer.clientError(e.getMessage());
         }

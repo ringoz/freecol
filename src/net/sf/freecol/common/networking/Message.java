@@ -299,7 +299,7 @@ public abstract class Message {
         if (hasAttribute(key)) {
             String kv = upCase(getStringAttribute(key));
             try {
-                result = Enum.valueOf(returnClass, kv);
+                result = Introspector.convertFromString(returnClass, kv);
             } catch (Exception e) {
                 logger.warning("Not a " + defaultValue.getClass().getName()
                     + ": " + kv);
@@ -325,7 +325,7 @@ public abstract class Message {
      * @param value The value of the attribute.
      */
     protected void setEnumAttribute(String key, Enum<?> value) {
-        if (value != null) setStringAttribute(key, downCase(value.toString()));
+        if (value != null) setStringAttribute(key, downCase(Introspector.convertToString(value)));
     }
 
     /**

@@ -42,6 +42,8 @@ import net.sf.freecol.common.model.FreeColObject;
 import net.sf.freecol.common.model.Location;
 import net.sf.freecol.common.model.Player;
 import static net.sf.freecol.common.util.StringUtils.*;
+
+import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.Utils;
 
 
@@ -354,7 +356,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
     public void writeAttribute(String attributeName, Enum<?> value)
         throws XMLStreamException {
         xmlStreamWriter.writeAttribute(attributeName,
-                                       downCase(value.toString()));
+                                       downCase(Introspector.convertToString(value)));
     }
 
     /**

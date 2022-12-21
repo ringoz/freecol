@@ -27,6 +27,7 @@ import net.sf.freecol.common.model.Game;
 import net.sf.freecol.common.model.Game.LogoutReason;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.networking.ChangeSet.See;
+import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.server.FreeColServer;
 import net.sf.freecol.server.ai.AIPlayer;
 import net.sf.freecol.server.model.ServerPlayer;
@@ -174,6 +175,6 @@ public class LogoutMessage extends AttributeMessage {
      * @return The {@code LogoutReason}.
      */
     public LogoutReason getReason() {
-        return Enum.valueOf(LogoutReason.class, getStringAttribute(REASON_TAG));
+        return Introspector.convertFromString(LogoutReason.class, getStringAttribute(REASON_TAG));
     }
 }

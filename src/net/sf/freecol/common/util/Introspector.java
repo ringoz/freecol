@@ -81,7 +81,7 @@ public class Introspector {
      * @return A conversion function, or null on error.
      * @exception NoSuchMethodException if no converter is found.
      */
-    private static String convertToString(Object arg) {
+    public static String convertToString(Object arg) {
         final Class<?> argType = arg.getClass();
         if (argType.isEnum())
             return ((Enum<?>)arg).name();
@@ -97,26 +97,31 @@ public class Introspector {
      * @param argType A {@code Class} to find a converter for.
      * @return A conversion function, or null on error.
      */
-    private static Object convertFromString(Class<?> argType, String arg) throws Exception {
+    @SuppressWarnings("unchecked")
+    public static <T> T convertFromString(Class<T> argType, String arg) {
         if (argType == String.class)
-            return arg;
+            return (T)arg;
         if (argType.isEnum())
-            return Enum.valueOf((Class)argType, arg);
-        if (argType == Integer.class) return Integer.valueOf(arg);
-        if (argType == Boolean.class) return Boolean.valueOf(arg);
-        if (argType == Float.class) return Float.valueOf(arg);
-        if (argType == Double.class) return Double.valueOf(arg);
-        if (argType == Character.class) return Character.valueOf(arg.charAt(0));
+            return (T)Enum.valueOf((Class)argType, arg);
+        if (argType == Integer.class) return (T)Integer.valueOf(arg);
+        if (argType == Boolean.class) return (T)Boolean.valueOf(arg);
+        if (argType == Float.class) return (T)Float.valueOf(arg);
+        if (argType == Double.class) return (T)Double.valueOf(arg);
+        if (argType == Character.class) return (T)Character.valueOf(arg.charAt(0));
         if (argType.isPrimitive()) {
-            if (argType == Integer.TYPE) return Integer.valueOf(arg);
-            if (argType == Boolean.TYPE) return Boolean.valueOf(arg);
-            if (argType == Float.TYPE) return Float.valueOf(arg);
-            if (argType == Double.TYPE) return Double.valueOf(arg);
-            if (argType == Character.TYPE) return Character.valueOf(arg.charAt(0));
+            if (argType == Integer.TYPE) return (T)Integer.valueOf(arg);
+            if (argType == Boolean.TYPE) return (T)Boolean.valueOf(arg);
+            if (argType == Float.TYPE) return (T)Float.valueOf(arg);
+            if (argType == Double.TYPE) return (T)Double.valueOf(arg);
+            if (argType == Character.TYPE) return (T)Character.valueOf(arg.charAt(0));
             throw new IllegalArgumentException("Need compatible class for primitive " + argType.getName());
         }
         final Meta meta = IntrospectorImpl.metas.get(argType);
-        return meta.invokeMethod(null, "valueOf", arg);
+        try {
+            return (T)meta.invokeMethod(null, "valueOf", arg);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     /**

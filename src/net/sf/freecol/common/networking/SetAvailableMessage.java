@@ -27,6 +27,7 @@ import net.sf.freecol.common.model.Game;
 import net.sf.freecol.common.model.Nation;
 import net.sf.freecol.common.model.NationOptions.NationState;
 import net.sf.freecol.common.model.Specification;
+import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.server.FreeColServer;
 import net.sf.freecol.server.model.ServerPlayer;
 
@@ -123,6 +124,6 @@ public class SetAvailableMessage extends AttributeMessage {
      * @return The new {@code NationState}.
      */
     public NationState getNationState() {
-        return Enum.valueOf(NationState.class, getStringAttribute(STATE_TAG));
+        return Introspector.convertFromString(NationState.class, getStringAttribute(STATE_TAG));
     }
 }

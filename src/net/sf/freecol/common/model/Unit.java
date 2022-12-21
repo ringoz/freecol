@@ -58,6 +58,7 @@ import net.sf.freecol.common.model.pathfinding.CostDeciders;
 import net.sf.freecol.common.model.pathfinding.GoalDecider;
 import net.sf.freecol.common.model.pathfinding.GoalDeciders;
 import net.sf.freecol.common.option.GameOptions;
+import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.LogBuilder;
 
 
@@ -3973,7 +3974,7 @@ public class Unit extends GoodsLocation
                 + getId());
         }
 
-        Direction direction = Enum.valueOf(Direction.class, directionString);
+        Direction direction = Introspector.convertFromString(Direction.class, directionString);
         Tile tile = getTile().getNeighbourOrNull(direction);
         if (tile == null) {
             throw new IllegalStateException("Could not find tile"
