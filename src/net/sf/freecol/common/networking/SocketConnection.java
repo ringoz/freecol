@@ -31,6 +31,10 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +53,8 @@ public class SocketConnection extends Connection {
   
     private static final Logger logger = Logger.getLogger(Connection.class.getName());
 
+    /** Maximum number of retries before closing the connection. */
+    private static final int MAXIMUM_RETRIES = 5;
     private static final int BUFFER_SIZE = 1 << 14;
 
     static final String NETWORK_REPLY_ID_TAG = "networkReplyId";
@@ -68,8 +74,12 @@ public class SocketConnection extends Connection {
     /** Main message writer. */
     private FreeColXMLWriter xw;
 
-    /** The subthread to read the input. */
-    private ReceivingThread receivingThread;
+    /** A map of network ids to the corresponding waiting thread. */
+    private final Map<Integer, NetworkReplyObject> waitingThreads
+        = Collections.synchronizedMap(new HashMap<Integer, NetworkReplyObject>());
+
+    /** A counter for reply ids. */
+    private int nextNetworkReplyId = 1;
 
     /**
      * Creates a new {@code Connection} with the specified
@@ -84,7 +94,6 @@ public class SocketConnection extends Connection {
 
         this.socket = socket;
         this.br = (ByteBuffer)ByteBuffer.allocate(BUFFER_SIZE).flip();
-        this.receivingThread = new ReceivingThread(this, name);
         
         this.xw = new FreeColXMLWriter(new Writer() {
             private CompletableFuture<Void> writeBytesAsync(final ByteBuffer buf) {
@@ -190,7 +199,7 @@ public class SocketConnection extends Connection {
         return CompletableFuture.completedFuture(null);
     }
 
-    CompletableFuture<String> startListen() {
+    private CompletableFuture<String> startListen() {
         return readLineAsync().thenApply((line) -> {
             if (line == null) return DisconnectMessage.TAG;
             try {
@@ -207,12 +216,12 @@ public class SocketConnection extends Connection {
         });
     }
 
-    int getReplyId() {
+    private int getReplyId() {
         return (this.xr == null) ? -1
             : this.xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);
     }
 
-    void endListen() {
+    private void endListen() {
         this.xr = null;
     }
 
@@ -282,11 +291,115 @@ public class SocketConnection extends Connection {
     }
 
     /**
+     * Stop this thread.
+     *
+     * @return True if the thread was previously running and is now stopped.
+     */
+    private boolean stopThread() {
+        //if (isInterrupted()) return false; interrupt();
+        // Explicit extraction from waitingThreads before iterating
+        Collection<NetworkReplyObject> nros;
+        synchronized (this.waitingThreads) {
+            nros = this.waitingThreads.values();
+        }
+        for (NetworkReplyObject o : nros) o.interrupt();
+        return true;
+    }
+        
+    /**
+     * Ask this thread to stop work.
+     *
+     * @param reason A brief description of why the thread should stop.
+     */
+    public void askToStop(String reason) {
+        if (stopThread()) {
+            logger.info(this.getName() + ": stopped receiving thread: " + reason);
+        }
+    }
+
+    /**
+     * Listens to the InputStream and calls the message handler for
+     * each message received.
+     * 
+     * @exception IOException on low level IO problems.
+     * @exception SAXException if a problem occured during parsing.
+     * @exception XMLStreamException if a problem occured during parsing.
+     */
+    private CompletableFuture<Void> listen() {
+        CompletableFuture<String> start = this.startListen().exceptionally((xse) -> {
+            logger.log(Level.WARNING, this.getName() + ": listen fail", xse);
+            return DisconnectMessage.TAG;
+        });
+
+        return start.thenAccept((String tag) -> {
+            if (tag == null) return;
+            final int replyId = this.getReplyId();
+
+            Message message;
+            try {
+                message = tag.equals(DisconnectMessage.TAG) ? TrivialMessage.disconnectMessage : this.reader();
+            } catch (Exception ex) {
+                logger.log(Level.WARNING, this.getName() + ": read message fail", ex);
+                return;
+            }
+
+            if (tag.equals(SocketConnection.REPLY_TAG)) {
+                NetworkReplyObject nro = this.waitingThreads.remove(replyId);
+                if (nro == null) {
+                    logger.warning(this.getName() + ": did not find reply " + replyId);
+                } else {
+                    nro.setResponse(message);
+                }
+                return;
+            }
+
+            if (tag.equals(SocketConnection.QUESTION_TAG))
+                message = ((QuestionMessage)message).getMessage();
+            final String subTag = this.getName() + "-" + message.getType();
+
+            Message reply;
+            try {
+                reply = this.handle(message);
+            } catch (FreeColException fce) {
+                logger.log(Level.WARNING, subTag + ": handler fail", fce);
+                return;
+            }
+    
+            final String replyTag = (reply == null) ? "null" : reply.getType();
+            if (tag.equals(SocketConnection.QUESTION_TAG))
+                reply = new ReplyMessage(replyId, reply);
+
+            this.sendMessage(reply).thenAccept((v) -> {
+                logger.log(Level.FINEST, subTag + " -> " + replyTag);
+            }).exceptionally((ex) -> {
+                logger.log(Level.WARNING, subTag + " -> " + replyTag + " failed", ex);
+                return null;
+            });
+        }).whenComplete((v, e) -> {
+            this.endListen(); // Clean up
+        });
+    }
+
+    private int timesFailed = 0;
+
+    /**
      * Start the recieving thread.
      */
     @Override
     public void startReceiving() {
-        if (this.receivingThread != null) this.receivingThread.start();
+        listen().whenComplete((v, ex) -> {
+            if (ex == null) {
+                timesFailed = 0;
+            }
+            else {
+                logger.log(Level.WARNING, this.getName() + ": fail", ex);
+                if (++timesFailed > MAXIMUM_RETRIES) {
+                    askToStop("disconnect");
+                    sendDisconnect();
+                }
+            }
+            this.startReceiving();
+        });
     }
 
     /**
@@ -319,7 +432,7 @@ public class SocketConnection extends Connection {
      *
      * @return The port number, or negative on error.
      */
-    int getPort() {
+    private int getPort() {
         try {
             return ((InetSocketAddress)this.socket.getRemoteAddress()).getPort();
         }
@@ -333,7 +446,7 @@ public class SocketConnection extends Connection {
      *
      * @return *host-address*:*port-number* or an empty string on error.
      */
-    String getSocketName() {
+    private String getSocketName() {
         return (isAlive()) ? getHostAddress() + ":" + getPort() : "";
     }
 
@@ -372,9 +485,10 @@ public class SocketConnection extends Connection {
 
         // Build the question message and establish an NRO for it.
         // *Then* send the message.
-        final int replyId = this.receivingThread.getNextNetworkReplyId();
+        final int replyId = this.nextNetworkReplyId++;
         QuestionMessage qm = new QuestionMessage(replyId, message);
-        NetworkReplyObject nro = this.receivingThread.waitForNetworkReply(replyId);
+        NetworkReplyObject nro = new NetworkReplyObject(replyId);
+        this.waitingThreads.put(replyId, nro);
 
         return sendMessage(qm).thenCompose((v) -> nro.getResponse(timeout)).thenApply((response) -> {
             if (response == null && !this.socket.isOpen()) {
@@ -417,10 +531,7 @@ public class SocketConnection extends Connection {
 
     @Override
     public void close() {
-        if (this.receivingThread != null) {
-            this.receivingThread.askToStop("connection closing");
-            this.receivingThread = null;
-        }
+        askToStop("connection closing");
 
         // Close the socket before the input stream.  Socket closure will
         // terminate any existing I/O and release the locks.
