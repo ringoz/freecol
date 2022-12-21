@@ -75,8 +75,8 @@ public class SocketConnection extends Connection {
     private FreeColXMLWriter xw;
 
     /** A map of network ids to the corresponding waiting thread. */
-    private final Map<Integer, NetworkReplyObject> waitingThreads
-        = Collections.synchronizedMap(new HashMap<Integer, NetworkReplyObject>());
+    private final Map<Integer, CompletableFuture<Object>> waitingThreads
+        = Collections.synchronizedMap(new HashMap<Integer, CompletableFuture<Object>>());
 
     /** A counter for reply ids. */
     private int nextNetworkReplyId = 1;
@@ -296,13 +296,11 @@ public class SocketConnection extends Connection {
      * @return True if the thread was previously running and is now stopped.
      */
     private boolean stopThread() {
-        //if (isInterrupted()) return false; interrupt();
-        // Explicit extraction from waitingThreads before iterating
-        Collection<NetworkReplyObject> nros;
+        Collection<CompletableFuture<Object>> nros;
         synchronized (this.waitingThreads) {
             nros = this.waitingThreads.values();
         }
-        for (NetworkReplyObject o : nros) o.interrupt();
+        for (CompletableFuture<Object> o : nros) o.cancel(true);
         return true;
     }
         
@@ -344,11 +342,11 @@ public class SocketConnection extends Connection {
             }
 
             if (tag.equals(SocketConnection.REPLY_TAG)) {
-                NetworkReplyObject nro = this.waitingThreads.remove(replyId);
+                final var nro = this.waitingThreads.remove(replyId);
                 if (nro == null) {
                     logger.warning(this.getName() + ": did not find reply " + replyId);
                 } else {
-                    nro.setResponse(message);
+                    nro.complete(message);
                 }
                 return;
             }
@@ -487,10 +485,10 @@ public class SocketConnection extends Connection {
         // *Then* send the message.
         final int replyId = this.nextNetworkReplyId++;
         QuestionMessage qm = new QuestionMessage(replyId, message);
-        NetworkReplyObject nro = new NetworkReplyObject(replyId);
+        final var nro = new CompletableFuture<Object>();
         this.waitingThreads.put(replyId, nro);
 
-        return sendMessage(qm).thenCompose((v) -> nro.getResponse(timeout)).thenApply((response) -> {
+        return sendMessage(qm).thenCompose((v) -> nro.orTimeout(timeout, TimeUnit.MILLISECONDS)).thenApply((response) -> {
             if (response == null && !this.socket.isOpen()) {
                 return null;
             } else if (!(response instanceof ReplyMessage)) {
