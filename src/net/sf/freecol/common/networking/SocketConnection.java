@@ -31,7 +31,6 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -166,84 +165,6 @@ public class SocketConnection extends Connection {
         return result.orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
-    // ReceivingThread input support, work in progress
-
-    private CompletableFuture<ByteBuffer> readBytesAsync(final ByteBuffer buf) {
-        final var result = new CompletableFuture<ByteBuffer>();
-        socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
-            @Override
-            public void completed(Integer len, ByteBuffer buf) {
-                result.complete((len != -1) ? (ByteBuffer)buf.flip() : null);
-            }
-
-            @Override
-            public void failed(Throwable exc, ByteBuffer buf) {
-                result.completeExceptionally(exc);
-            }
-        });
-        return result;
-    }
-
-    private CompletableFuture<String> readLineAsync() {
-        final var all = ByteBuffer.allocate(1 << 20);
-        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
-            while (buf.hasRemaining()) {
-                final byte b = buf.get();
-                if (b == END_OF_STREAM) {
-                    final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
-                    return CompletableFuture.completedFuture(line);
-                }
-                all.put(b);
-            }
-        }
-        return CompletableFuture.completedFuture(null);
-    }
-
-    private CompletableFuture<String> startListen() {
-        return readLineAsync().thenApply((line) -> {
-            if (line == null) return DisconnectMessage.TAG;
-            try {
-                this.xr = new FreeColXMLReader(new StringReader(line));
-            } catch (Exception ex) {
-                return DisconnectMessage.TAG;
-            }
-            try {
-                this.xr.nextTag();
-            } catch (XMLStreamException e) {
-                throw new CompletionException(e);
-            }
-            return this.xr.getLocalName();
-        });
-    }
-
-    private int getReplyId() {
-        return (this.xr == null) ? -1
-            : this.xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);
-    }
-
-    private void endListen() {
-        this.xr = null;
-    }
-
-    /**
-     * Read a message using the MessageHandler.
-     *
-     * @return The {@code Message} found, if any.
-     * @exception FreeColException there is a problem creating the message.
-     * @exception XMLStreamException if there is a problem reading the stream.
-     */
-    Message reader()
-        throws FreeColException, XMLStreamException {
-        if (this.xr == null) return null;
-
-        MessageHandler mh = getMessageHandler();
-        if (mh == null) { // FIXME: Temporary fast fail
-            throw new FreeColException("No handler at " + xr.getLocalName())
-                .preserveDebug();
-        }
-        return mh.read(this);
-    }
-
     /**
      * Close and clear the socket.
      */
@@ -289,30 +210,48 @@ public class SocketConnection extends Connection {
             }
         }
     }
-
-    /**
-     * Stop this thread.
-     *
-     * @return True if the thread was previously running and is now stopped.
-     */
-    private boolean stopThread() {
-        Collection<CompletableFuture<Object>> nros;
-        synchronized (this.waitingThreads) {
-            nros = this.waitingThreads.values();
-        }
-        for (CompletableFuture<Object> o : nros) o.cancel(true);
-        return true;
-    }
         
     /**
      * Ask this thread to stop work.
      *
      * @param reason A brief description of why the thread should stop.
      */
-    public void askToStop(String reason) {
-        if (stopThread()) {
-            logger.info(this.getName() + ": stopped receiving thread: " + reason);
+    private void askToStop(String reason) {
+        final var nros = this.waitingThreads.values();
+        for (var nro : nros) nro.cancel(true);
+
+        logger.info(this.getName() + ": stopped receiving thread: " + reason);
+    }
+
+    private CompletableFuture<ByteBuffer> readBytesAsync(final ByteBuffer buf) {
+        final var result = new CompletableFuture<ByteBuffer>();
+        socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
+            @Override
+            public void completed(Integer len, ByteBuffer buf) {
+                result.complete((len != -1) ? (ByteBuffer)buf.flip() : null);
+            }
+
+            @Override
+            public void failed(Throwable exc, ByteBuffer buf) {
+                result.completeExceptionally(exc);
+            }
+        });
+        return result;
+    }
+
+    private CompletableFuture<String> readLineAsync() {
+        final var all = ByteBuffer.allocate(1 << 20);
+        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
+            while (buf.hasRemaining()) {
+                final byte b = buf.get();
+                if (b == END_OF_STREAM) {
+                    final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
+                    return CompletableFuture.completedFuture(line);
+                }
+                all.put(b);
+            }
         }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**
@@ -324,18 +263,33 @@ public class SocketConnection extends Connection {
      * @exception XMLStreamException if a problem occured during parsing.
      */
     private CompletableFuture<Void> listen() {
-        CompletableFuture<String> start = this.startListen().exceptionally((xse) -> {
+        CompletableFuture<String> start = readLineAsync().thenApply((line) -> {
+            if (line == null) return DisconnectMessage.TAG;
+            try {
+                this.xr = new FreeColXMLReader(new StringReader(line));
+            } catch (Exception ex) {
+                return DisconnectMessage.TAG;
+            }
+            try {
+                this.xr.nextTag();
+            } catch (XMLStreamException e) {
+                throw new CompletionException(e);
+            }
+            return this.xr.getLocalName();
+        }).exceptionally((xse) -> {
             logger.log(Level.WARNING, this.getName() + ": listen fail", xse);
             return DisconnectMessage.TAG;
         });
 
         return start.thenAccept((String tag) -> {
             if (tag == null) return;
-            final int replyId = this.getReplyId();
+            final int replyId = this.xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);
 
             Message message;
             try {
-                message = tag.equals(DisconnectMessage.TAG) ? TrivialMessage.disconnectMessage : this.reader();
+                message = tag.equals(DisconnectMessage.TAG) 
+                    ? TrivialMessage.disconnectMessage 
+                    : this.getMessageHandler().read(this);
             } catch (Exception ex) {
                 logger.log(Level.WARNING, this.getName() + ": read message fail", ex);
                 return;
@@ -374,7 +328,7 @@ public class SocketConnection extends Connection {
                 return null;
             });
         }).whenComplete((v, e) -> {
-            this.endListen(); // Clean up
+            this.xr = null; // Clean up
         });
     }
 
