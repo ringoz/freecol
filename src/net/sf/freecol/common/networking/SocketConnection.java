@@ -19,18 +19,12 @@
 
 package net.sf.freecol.common.networking;
 
-import static com.ea.async.Async.await;
-
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.Writer;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.net.SocketAddress;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +40,6 @@ import javax.xml.stream.XMLStreamException;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
-import net.sf.freecol.common.util.CharsetCompat;
 
 public class SocketConnection extends Connection {
   
@@ -54,7 +47,6 @@ public class SocketConnection extends Connection {
 
     /** Maximum number of retries before closing the connection. */
     private static final int MAXIMUM_RETRIES = 5;
-    private static final int BUFFER_SIZE = 1 << 14;
 
     static final String NETWORK_REPLY_ID_TAG = "networkReplyId";
     static final String QUESTION_TAG = "question";
@@ -63,10 +55,7 @@ public class SocketConnection extends Connection {
     private static final int TIMEOUT = 5000; // 5s
 
     /** The socket connected to the other end of the connection. */
-    private AsynchronousSocketChannel socket = null;
-
-    /** The wrapped version of the input side of the socket. */
-    private ByteBuffer br;
+    private SocketIO io = null;
 
     /** Main message writer. */
     private FreeColXMLWriter xw;
@@ -89,47 +78,8 @@ public class SocketConnection extends Connection {
     public SocketConnection(AsynchronousSocketChannel socket, String name) throws IOException {
         super(name);
 
-        this.socket = socket;
-        this.br = (ByteBuffer)ByteBuffer.allocate(BUFFER_SIZE).flip();
-        
-        this.xw = new FreeColXMLWriter(new Writer() {
-            private CompletableFuture<Void> writeBytesAsync(final ByteBuffer buf) {
-                final var result = new CompletableFuture<Void>();
-                socket.write(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
-                    @Override
-                    public void completed(Integer len, ByteBuffer buf) {
-                        if (buf.hasRemaining())
-                            socket.write(buf, buf, this);
-                        else
-                            result.complete(null);
-                    }
-        
-                    @Override
-                    public void failed(Throwable exc, ByteBuffer buf) {
-                        result.completeExceptionally(exc);
-                    }
-                });
-                return result;
-            }
-
-            private CompletableFuture<Void> pending = CompletableFuture.completedFuture(null);
-            
-            @Override
-            public void write(char[] cbuf, int off, int len) throws IOException {
-                final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(cbuf, off, len));
-                synchronized (this) {
-                    pending = pending.thenCompose((v) -> writeBytesAsync(buf));
-                }
-            }
-    
-            @Override
-            public void flush() throws IOException {
-            }
-    
-            @Override
-            public void close() throws IOException {
-            }
-        }, FreeColXMLWriter.WriteScope.toSave());
+        this.io = new SocketIO(socket);
+        this.xw = new FreeColXMLWriter(this.io, FreeColXMLWriter.WriteScope.toSave());
     }
 
     /**
@@ -164,52 +114,6 @@ public class SocketConnection extends Connection {
     }
 
     /**
-     * Close and clear the socket.
-     */
-    private void closeSocket() {
-        if (this.socket != null) {
-            try {
-                this.socket.close();
-            } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Error closing socket", ioe);
-            } finally {
-                this.socket = null;
-            }
-        }
-    }
-
-    /**
-     * Close and clear the output stream.
-     */
-    private void closeOutputStream() {
-        if (this.xw != null) {
-            try {
-                this.socket.shutdownOutput();
-            } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Error closing output", ioe);
-            } finally {
-                this.xw.close();
-                this.xw = null;
-            }
-        }
-    }
-
-    /**
-     * Close and clear the input stream.
-     */
-    private void closeInputStream() {
-        if (this.br != null) {
-            try {
-                this.socket.shutdownInput();
-            } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Error closing input", ioe);
-            } finally {
-                this.br = null;
-            }
-        }
-    }
-        
-    /**
      * Ask this thread to stop work.
      *
      * @param reason A brief description of why the thread should stop.
@@ -221,37 +125,6 @@ public class SocketConnection extends Connection {
         logger.info(this.getName() + ": stopped receiving thread: " + reason);
     }
 
-    private CompletableFuture<ByteBuffer> readBytesAsync(final ByteBuffer buf) {
-        final var result = new CompletableFuture<ByteBuffer>();
-        socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
-            @Override
-            public void completed(Integer len, ByteBuffer buf) {
-                result.complete((len != -1) ? (ByteBuffer)buf.flip() : null);
-            }
-
-            @Override
-            public void failed(Throwable exc, ByteBuffer buf) {
-                result.completeExceptionally(exc);
-            }
-        });
-        return result;
-    }
-
-    private CompletableFuture<String> readLineAsync() {
-        final var all = ByteBuffer.allocate(1 << 20);
-        for (ByteBuffer buf = this.br; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
-            while (buf.hasRemaining()) {
-                final byte b = buf.get();
-                if (b == END_OF_STREAM) {
-                    final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
-                    return CompletableFuture.completedFuture(line);
-                }
-                all.put(b);
-            }
-        }
-        return CompletableFuture.completedFuture(null);
-    }
-
     /**
      * Listens to the InputStream and calls the message handler for
      * each message received.
@@ -261,7 +134,7 @@ public class SocketConnection extends Connection {
      * @exception XMLStreamException if a problem occured during parsing.
      */
     private CompletableFuture<Void> listen() {
-        return readLineAsync().thenAccept((line) -> {
+        return this.io.readLineAsync().thenAccept((line) -> {
             if (line == null) return;
 
             String tag; Message message; int replyId = -1;
@@ -340,7 +213,7 @@ public class SocketConnection extends Connection {
      */
     @Override
     public boolean isAlive() {
-        return this.socket != null;
+        return this.io != null;
     }
 
     /**
@@ -351,7 +224,7 @@ public class SocketConnection extends Connection {
     @Override
     public String getHostAddress() {
         try {
-            return ((InetSocketAddress)this.socket.getRemoteAddress()).getHostString();
+            return ((InetSocketAddress)this.io.getRemoteAddress()).getHostString();
         }
         catch (Throwable t) {
             return "";
@@ -365,7 +238,7 @@ public class SocketConnection extends Connection {
      */
     private int getPort() {
         try {
-            return ((InetSocketAddress)this.socket.getRemoteAddress()).getPort();
+            return ((InetSocketAddress)this.io.getRemoteAddress()).getPort();
         }
         catch (Throwable t) {
             return -1;
@@ -417,7 +290,7 @@ public class SocketConnection extends Connection {
         this.waitingThreads.put(replyId, nro);
 
         return sendMessage(qm).thenCompose((v) -> nro.orTimeout(timeout, TimeUnit.MILLISECONDS)).thenApply((response) -> {
-            if (response == null && !this.socket.isOpen()) {
+            if (response == null && this.io == null) {
                 return null;
             } else if (!(response instanceof ReplyMessage)) {
                 throw new CompletionException(new FreeColException("Bad response to " + replyId + "/" + tag
@@ -461,9 +334,15 @@ public class SocketConnection extends Connection {
 
         // Close the socket before the input stream.  Socket closure will
         // terminate any existing I/O and release the locks.
-        closeSocket();
-        closeInputStream();
-        closeOutputStream();
+        if (this.io != null) {
+            try {
+                this.io.close();
+            } catch (IOException ioe) {
+                logger.log(Level.WARNING, "Error closing socket", ioe);
+            } finally {
+                this.io = null;
+            }
+        }
         
         logger.fine("Connection closed for " + getName());
     }
