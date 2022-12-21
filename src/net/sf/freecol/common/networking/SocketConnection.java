@@ -261,7 +261,7 @@ public class SocketConnection extends Connection {
      */
     @Override
     public void setWriteScope(FreeColXMLWriter.WriteScope ws) {
-        if (this.xw != null) this.xw.setWriteScope(ws);
+        this.xw.setWriteScope(ws);
     }
 
     /**
@@ -315,7 +315,6 @@ public class SocketConnection extends Connection {
     @Override
     public CompletableFuture<Void> sendMessage(Message message) {
         if (message == null) return CompletableFuture.completedFuture(null);
-        if (this.xw == null) return CompletableFuture.completedFuture(null);
         try {
             message.toXML(this.xw);
             this.xw.writeCharacters(END_OF_STREAM_ARRAY, 0,
@@ -330,18 +329,19 @@ public class SocketConnection extends Connection {
 
     @Override
     public void close() {
+        if (this.io == null)
+            return;
+
         askToStop("connection closing");
 
         // Close the socket before the input stream.  Socket closure will
         // terminate any existing I/O and release the locks.
-        if (this.io != null) {
-            try {
-                this.io.close();
-            } catch (IOException ioe) {
-                logger.log(Level.WARNING, "Error closing socket", ioe);
-            } finally {
-                this.io = null;
-            }
+        try {
+            this.io.close();
+        } catch (IOException ioe) {
+            logger.log(Level.WARNING, "Error closing socket", ioe);
+        } finally {
+            this.io = null;
         }
         
         logger.fine("Connection closed for " + getName());
