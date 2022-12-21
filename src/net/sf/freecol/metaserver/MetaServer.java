@@ -23,13 +23,16 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.networking.Connection;
+import net.sf.freecol.common.networking.SocketConnection;
+
+import static net.sf.freecol.common.util.CollectionUtils.*;
 
 
 /**
@@ -48,7 +51,7 @@ public final class MetaServer {
     private final AsynchronousServerSocketChannel serverSocket;
 
     /** A map of Connection objects, keyed by the Socket they relate to. */
-    private final Map<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
+    private final Set<Connection> connections = new HashSet<>();
 
     /** The TCP port that is beeing used for the public socket. */
     private final int port;
@@ -98,20 +101,10 @@ public final class MetaServer {
             logger.log(Level.WARNING, "Could not close the server socket!", e);
         }
 
-        Connection c;
-        while ((c = this.connections.remove(0)) != null) c.disconnect();
+        for (Connection c : transform(this.connections,
+                                      Connection::isAlive)) c.disconnect();
+        this.connections.clear();
         logger.info("Metaserver shutdown.");
-    }
-
-    /**
-     * Gets a {@code Connection} identified by a {@code Socket}.
-     * 
-     * @param socket The {@code Socket} that identifies the
-     *            {@code Connection}
-     * @return The {@code Connection}.
-     */
-    public Connection getConnection(AsynchronousSocketChannel socket) {
-        return this.connections.get(socket);
     }
 
     /**
@@ -120,7 +113,7 @@ public final class MetaServer {
      * @param connection The connection that should be removed.
      */
     public void removeConnection(Connection connection) {
-        this.connections.remove(connection.getSocket());
+        this.connections.remove(connection);
     }
 
 
@@ -140,10 +133,10 @@ public final class MetaServer {
                 clientSocket = serverSocket.accept().get();
                 logger.info("Client connection from: "
                     + clientSocket.getRemoteAddress().toString());
-                Connection connection = new Connection(clientSocket,
+                Connection connection = new SocketConnection(clientSocket,
                     FreeCol.METASERVER_THREAD)
                     .setMessageHandler(getMetaServerHandler());
-                this.connections.put(clientSocket, connection);
+                this.connections.add(connection);
                 connection.startReceiving();
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Meta-run", e);

@@ -77,6 +77,7 @@ import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.GameStateMessage;
 import net.sf.freecol.common.networking.LogoutMessage;
 import net.sf.freecol.common.networking.Message;
+import net.sf.freecol.common.networking.SocketConnection;
 import net.sf.freecol.common.networking.TrivialMessage;
 import net.sf.freecol.common.networking.VacantPlayersMessage;
 import net.sf.freecol.common.option.GameOptions;
@@ -657,7 +658,7 @@ public final class FreeColServer {
     public void addNewUserConnection(AsynchronousSocketChannel socket)
         throws FreeColException, IOException, XMLStreamException {
         final String name = socket.getRemoteAddress().toString();
-        Connection c = new Connection(socket, FreeCol.SERVER_THREAD + name)
+        Connection c = new SocketConnection(socket, FreeCol.SERVER_THREAD + name)
             .setMessageHandler(this.userConnectionHandler);
         getServer().addConnection(c);
         // Short delay here improves reliability

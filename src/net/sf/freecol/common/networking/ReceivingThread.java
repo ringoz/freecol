@@ -49,7 +49,7 @@ final class ReceivingThread {
         = Collections.synchronizedMap(new HashMap<Integer, NetworkReplyObject>());
 
     /** The connection to receive on. */
-    private Connection connection;
+    private SocketConnection connection;
 
     /** A counter for reply ids. */
     private int nextNetworkReplyId;
@@ -63,7 +63,7 @@ final class ReceivingThread {
      *     {@code ReceivingThread} belongs to.
      * @param threadName The base name for the thread.
      */
-    public ReceivingThread(Connection connection, String threadName) {
+    public ReceivingThread(SocketConnection connection, String threadName) {
         this.threadName = "ReceivingThread-" + threadName;
         this.connection = connection;
         this.nextNetworkReplyId = 1;
@@ -141,7 +141,7 @@ final class ReceivingThread {
      * @exception XMLStreamException if a problem occured during parsing.
      */
     private CompletableFuture<Void> listen() {
-        final Connection conn = this.connection;
+        final var conn = this.connection;
         CompletableFuture<String> start = conn.startListen().exceptionally((xse) -> {
             logger.log(Level.WARNING, threadName + ": listen fail", xse);
             return DisconnectMessage.TAG;
@@ -159,7 +159,7 @@ final class ReceivingThread {
                 return;
             }
 
-            if (tag.equals(Connection.REPLY_TAG)) {
+            if (tag.equals(SocketConnection.REPLY_TAG)) {
                 NetworkReplyObject nro = this.waitingThreads.remove(replyId);
                 if (nro == null) {
                     logger.warning(threadName + ": did not find reply " + replyId);
@@ -169,7 +169,7 @@ final class ReceivingThread {
                 return;
             }
 
-            if (tag.equals(Connection.QUESTION_TAG))
+            if (tag.equals(SocketConnection.QUESTION_TAG))
                 message = ((QuestionMessage)message).getMessage();
             final String subTag = threadName + "-" + message.getType();
 
@@ -182,7 +182,7 @@ final class ReceivingThread {
             }
     
             final String replyTag = (reply == null) ? "null" : reply.getType();
-            if (tag.equals(Connection.QUESTION_TAG))
+            if (tag.equals(SocketConnection.QUESTION_TAG))
                 reply = new ReplyMessage(replyId, reply);
 
             conn.sendMessage(reply).thenAccept((v) -> {

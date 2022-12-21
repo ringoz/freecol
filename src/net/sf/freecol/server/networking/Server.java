@@ -25,7 +25,8 @@ import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,7 +61,7 @@ public final class Server {
     private final AsynchronousServerSocketChannel serverSocket;
 
     /** A map of Connection objects, keyed by their Socket. */
-    private final HashMap<AsynchronousSocketChannel, Connection> connections = new HashMap<>();
+    private final Set<Connection> connections = new HashSet<>();
 
     /** The owner of this {@code Server}. */
     private final FreeColServer freeColServer;
@@ -114,28 +115,13 @@ public final class Server {
     }
 
     /**
-     * Gets a {@code Connection} identified by a {@code Socket}.
-     *
-     * @param socket The {@code Socket} that identifies the
-     *               {@code Connection}
-     * @return The {@code Connection}.
-     */
-    public Connection getConnection(AsynchronousSocketChannel socket) {
-        return this.connections.get(socket);
-    }
-
-    /**
      * Adds a (usually Dummy)Connection into the hashmap.
      *
      * @param connection The connection to add.
      */
     public void addDummyConnection(Connection connection) {
         if (!this.serverSocket.isOpen()) return;
-        try {
-            this.connections.put(AsynchronousSocketChannel.open(), connection);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.connections.add(connection);
     }
 
     /**
@@ -145,7 +131,7 @@ public final class Server {
      */
     public void addConnection(Connection connection) {
         if (!this.serverSocket.isOpen()) return;
-        this.connections.put(connection.getSocket(), connection);
+        this.connections.add(connection);
     }
 
     /**
@@ -154,7 +140,7 @@ public final class Server {
      * @param connection The connection that should be removed.
      */
     public void removeConnection(Connection connection) {
-        this.connections.remove(connection.getSocket());
+        this.connections.remove(connection);
     }
 
     /**
@@ -163,7 +149,7 @@ public final class Server {
      * @param mh The {@code MessageHandler} to use.
      */
     public void setMessageHandlerToAllConnections(MessageHandler mh) {
-        for (Connection c : this.connections.values()) {
+        for (Connection c : this.connections) {
             c.setMessageHandler(mh);
         }
     }
@@ -176,7 +162,7 @@ public final class Server {
      *     to send to.
      */
     public void sendToAll(Message message, Connection exceptConnection) {
-        for (Connection conn : transform(connections.values(),
+        for (Connection conn : transform(connections,
                                          c -> c != exceptConnection)) {
 
             if (conn.isAlive()) {
@@ -198,7 +184,7 @@ public final class Server {
      * @param log If true, enable logging.
      */
     public void setCommsLogging(boolean log) {
-        for (Connection conn : connections.values()) {
+        for (Connection conn : connections) {
             conn.setCommsLogging(log);
         }
     }
@@ -256,7 +242,7 @@ public final class Server {
             logger.fine("Wait for Server.run to complete.");
         }
 
-        for (Connection c : transform(this.connections.values(),
+        for (Connection c : transform(this.connections,
                                       Connection::isAlive)) c.disconnect();
         this.connections.clear();
 
