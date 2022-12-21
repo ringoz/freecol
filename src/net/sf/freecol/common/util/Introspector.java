@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -326,7 +327,7 @@ public class Introspector {
             if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
                 return false;
             return true;
-        }).toArray(Method[]::new);
+        }).sorted(Comparator.comparing(Method::getName)).toArray(Method[]::new);
 
         out.println("Object invokeMethod(Object object, String method, Object... params) throws Exception {");
         if (methods.length != 0) {
