@@ -41,6 +41,7 @@ import javax.xml.stream.XMLStreamException;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.FreeColException;
+import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.ConnectionVerificationMessage;
 import net.sf.freecol.common.networking.DisconnectMessage;
@@ -86,6 +87,7 @@ public class MetaServerUtils {
         /**
          * {@inheritDoc}
          */
+        @Override
         public Message handle(Connection connection, Message message)
             throws FreeColException {
             if (message == null) return null;
@@ -107,9 +109,10 @@ public class MetaServerUtils {
         /**
          * {@inheritDoc}
          */
-        public Message read(Connection connection)
+        @Override
+        public Message read(Connection connection, FreeColXMLReader xr)
             throws FreeColException, XMLStreamException {
-            return Message.read(null, connection.getFreeColXMLReader());
+            return Message.read(null, xr);
         }
     }
 

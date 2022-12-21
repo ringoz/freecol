@@ -33,7 +33,6 @@ import javax.xml.stream.XMLStreamException;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.io.FreeColDirectories;
-import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 
 
@@ -145,10 +144,6 @@ public abstract class Connection implements Closeable {
      * @param ws The new write scope.
      */
     public void setWriteScope(FreeColXMLWriter.WriteScope ws) {
-    }
-
-    public FreeColXMLReader getFreeColXMLReader() {
-        return null;
     }
 
     /**

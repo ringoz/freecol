@@ -67,8 +67,6 @@ public class SocketConnection extends Connection {
 
     /** The wrapped version of the input side of the socket. */
     private ByteBuffer br;
-    /** An XML stream wrapping of an input line. */
-    private FreeColXMLReader xr;
 
     /** Main message writer. */
     private FreeColXMLWriter xw;
@@ -263,36 +261,19 @@ public class SocketConnection extends Connection {
      * @exception XMLStreamException if a problem occured during parsing.
      */
     private CompletableFuture<Void> listen() {
-        CompletableFuture<String> start = readLineAsync().thenApply((line) -> {
-            if (line == null) return DisconnectMessage.TAG;
-            try {
-                this.xr = new FreeColXMLReader(new StringReader(line));
-            } catch (Exception ex) {
-                return DisconnectMessage.TAG;
-            }
-            try {
-                this.xr.nextTag();
-            } catch (XMLStreamException e) {
-                throw new CompletionException(e);
-            }
-            return this.xr.getLocalName();
-        }).exceptionally((xse) -> {
-            logger.log(Level.WARNING, this.getName() + ": listen fail", xse);
-            return DisconnectMessage.TAG;
-        });
+        return readLineAsync().thenAccept((line) -> {
+            if (line == null) return;
 
-        return start.thenAccept((String tag) -> {
-            if (tag == null) return;
-            final int replyId = this.xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);
-
-            Message message;
-            try {
-                message = tag.equals(DisconnectMessage.TAG) 
-                    ? TrivialMessage.disconnectMessage 
-                    : this.getMessageHandler().read(this);
-            } catch (Exception ex) {
-                logger.log(Level.WARNING, this.getName() + ": read message fail", ex);
-                return;
+            String tag; Message message; int replyId = -1;
+            try (final FreeColXMLReader xr = new FreeColXMLReader(new StringReader(line))) {
+                xr.nextTag();
+                tag = xr.getLocalName();
+                replyId = xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);
+                message = this.getMessageHandler().read(this, xr);
+            } catch (Exception e) {
+                logger.log(Level.WARNING, this.getName() + ": read message fail", e);
+                tag = DisconnectMessage.TAG;
+                message = TrivialMessage.disconnectMessage;
             }
 
             if (tag.equals(SocketConnection.REPLY_TAG)) {
@@ -327,8 +308,6 @@ public class SocketConnection extends Connection {
                 logger.log(Level.WARNING, subTag + " -> " + replyTag + " failed", ex);
                 return null;
             });
-        }).whenComplete((v, e) -> {
-            this.xr = null; // Clean up
         });
     }
 
@@ -410,11 +389,6 @@ public class SocketConnection extends Connection {
     @Override
     public void setWriteScope(FreeColXMLWriter.WriteScope ws) {
         if (this.xw != null) this.xw.setWriteScope(ws);
-    }
-
-    @Override
-    public FreeColXMLReader getFreeColXMLReader() {
-        return this.xr;
     }
 
     /**

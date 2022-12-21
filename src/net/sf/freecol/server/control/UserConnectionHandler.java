@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
 import net.sf.freecol.common.FreeColException;
+import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.networking.ChangeSet;
@@ -59,6 +60,7 @@ public final class UserConnectionHandler extends FreeColServerHolder
     /**
      * {@inheritDoc}
      */
+    @Override
     public Message handle(Connection connection, Message message)
         throws FreeColException {
         final FreeColServer freeColServer = getFreeColServer();
@@ -81,8 +83,9 @@ public final class UserConnectionHandler extends FreeColServerHolder
     /**
      * {@inheritDoc}
      */
-    public Message read(Connection connection)
+    @Override
+    public Message read(Connection connection, FreeColXMLReader xr)
         throws FreeColException, XMLStreamException {
-        return Message.read(getGame(), connection.getFreeColXMLReader());
+        return Message.read(getGame(), xr);
     }
 }
