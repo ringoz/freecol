@@ -288,7 +288,8 @@ public class Introspector {
         out.println("final Meta " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + " = new Meta() {");
         if (!Modifier.isAbstract(clazz.getModifiers())) {
             out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
-            for (Constructor<?> ctor : clazz.getConstructors()) {
+            final var ctors = Arrays.stream(clazz.getConstructors()).sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor[]::new);
+            for (Constructor<?> ctor : ctors) {
                 final var types = Arrays.asList(ctor.getParameterTypes());
                 if (types.isEmpty())
                     out.println("  if (types.length == 0)");

@@ -31,10 +31,10 @@ metas.put(net.sf.freecol.common.networking.TrivialMessage.class, common_networki
 // net.sf.freecol.common.networking.AttributeMessage
 final Meta common_networking_AttributeMessage = new Meta() {
 net.sf.freecol.common.networking.AttributeMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.lang.String.class, java.lang.String[].class))
-    return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0], (java.lang.String[])params[1]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0]);
+  if (areSame(types, java.lang.String.class, java.lang.String[].class))
+    return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0], (java.lang.String[])params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -117,10 +117,10 @@ metas.put(net.sf.freecol.common.networking.EmigrateUnitMessage.class, common_net
 // net.sf.freecol.common.networking.MissionaryMessage
 final Meta common_networking_MissionaryMessage = new Meta() {
 net.sf.freecol.common.networking.MissionaryMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class, boolean.class))
-    return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class, boolean.class))
+    return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -132,10 +132,10 @@ metas.put(net.sf.freecol.common.networking.MissionaryMessage.class, common_netwo
 // net.sf.freecol.common.networking.FirstContactMessage
 final Meta common_networking_FirstContactMessage = new Meta() {
 net.sf.freecol.common.networking.FirstContactMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Tile)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Tile)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -182,10 +182,10 @@ metas.put(net.sf.freecol.common.networking.RenameMessage.class, common_networkin
 // net.sf.freecol.common.networking.FeatureChangeMessage
 final Meta common_networking_FeatureChangeMessage = new Meta() {
 net.sf.freecol.common.networking.FeatureChangeMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class, boolean.class))
-    return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.FreeColGameObject)params[0], (net.sf.freecol.common.model.FreeColObject)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class, boolean.class))
+    return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.FreeColGameObject)params[0], (net.sf.freecol.common.model.FreeColObject)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -245,10 +245,10 @@ metas.put(net.sf.freecol.common.networking.EnterRevengeModeMessage.class, common
 // net.sf.freecol.common.networking.RearrangeColonyMessage
 final Meta common_networking_RearrangeColonyMessage = new Meta() {
 net.sf.freecol.common.networking.RearrangeColonyMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Colony.class, java.util.List.class, net.sf.freecol.common.model.Colony.class))
-    return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Colony)params[0], (java.util.List)params[1], (net.sf.freecol.common.model.Colony)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Colony.class, java.util.List.class, net.sf.freecol.common.model.Colony.class))
+    return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Colony)params[0], (java.util.List)params[1], (net.sf.freecol.common.model.Colony)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -435,10 +435,10 @@ metas.put(net.sf.freecol.common.networking.SetDeadMessage.class, common_networki
 // net.sf.freecol.common.networking.MonarchActionMessage
 final Meta common_networking_MonarchActionMessage = new Meta() {
 net.sf.freecol.common.networking.MonarchActionMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Monarch.MonarchAction.class, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Monarch.MonarchAction)params[0], (net.sf.freecol.common.model.StringTemplate)params[1], (java.lang.String)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Monarch.MonarchAction.class, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Monarch.MonarchAction)params[0], (net.sf.freecol.common.model.StringTemplate)params[1], (java.lang.String)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -502,10 +502,10 @@ metas.put(net.sf.freecol.common.networking.AskSkillMessage.class, common_network
 // net.sf.freecol.common.networking.InciteMessage
 final Meta common_networking_InciteMessage = new Meta() {
 net.sf.freecol.common.networking.InciteMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Player.class, int.class))
-    return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Player)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Player.class, int.class))
+    return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Player)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -550,10 +550,10 @@ metas.put(net.sf.freecol.common.networking.DemandTributeMessage.class, common_ne
 // net.sf.freecol.common.networking.IndianDemandMessage
 final Meta common_networking_IndianDemandMessage = new Meta() {
 net.sf.freecol.common.networking.IndianDemandMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.GoodsType.class, int.class))
-    return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.GoodsType.class, int.class))
+    return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -721,10 +721,10 @@ metas.put(net.sf.freecol.common.networking.ReplyMessage.class, common_networking
 // net.sf.freecol.common.networking.AnimateAttackMessage
 final Meta common_networking_AnimateAttackMessage = new Meta() {
 net.sf.freecol.common.networking.AnimateAttackMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, boolean.class, boolean.class, boolean.class))
-    return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (boolean)params[2], (boolean)params[2], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, boolean.class, boolean.class, boolean.class))
+    return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (boolean)params[2], (boolean)params[2], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -768,18 +768,18 @@ metas.put(net.sf.freecol.common.networking.NativeTradeMessage.class, common_netw
 // net.sf.freecol.common.networking.ErrorMessage
 final Meta common_networking_ErrorMessage = new Meta() {
 net.sf.freecol.common.networking.ErrorMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, java.lang.String.class, java.lang.Exception.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0], (java.lang.Exception)params[1]);
   if (areSame(types, java.lang.Exception.class))
     return new net.sf.freecol.common.networking.ErrorMessage((java.lang.Exception)params[0]);
-  if (areSame(types, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.StringTemplate.class))
     return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, java.lang.String.class, java.lang.Exception.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0], (java.lang.Exception)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0], (java.lang.String)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -809,10 +809,10 @@ metas.put(net.sf.freecol.common.networking.NewTurnMessage.class, common_networki
 // net.sf.freecol.common.networking.ClaimLandMessage
 final Meta common_networking_ClaimLandMessage = new Meta() {
 net.sf.freecol.common.networking.ClaimLandMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.FreeColGameObject.class, int.class))
-    return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Tile)params[0], (net.sf.freecol.common.model.FreeColGameObject)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.FreeColGameObject.class, int.class))
+    return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Tile)params[0], (net.sf.freecol.common.model.FreeColGameObject)params[1], (int)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -839,10 +839,10 @@ metas.put(net.sf.freecol.common.networking.PayArrearsMessage.class, common_netwo
 // net.sf.freecol.common.networking.DeliverGiftMessage
 final Meta common_networking_DeliverGiftMessage = new Meta() {
 net.sf.freecol.common.networking.DeliverGiftMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Goods.class))
-    return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Goods)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Goods.class))
+    return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Goods)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -933,10 +933,10 @@ metas.put(net.sf.freecol.common.networking.ClearSpecialityMessage.class, common_
 // net.sf.freecol.common.networking.LootCargoMessage
 final Meta common_networking_LootCargoMessage = new Meta() {
 net.sf.freecol.common.networking.LootCargoMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, java.lang.String.class, java.util.List.class))
-    return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Unit)params[0], (java.lang.String)params[1], (java.util.List)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, java.lang.String.class, java.util.List.class))
+    return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Unit)params[0], (java.lang.String)params[1], (java.util.List)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1092,10 +1092,10 @@ metas.put(net.sf.freecol.common.networking.StartGameMessage.class, common_networ
 // net.sf.freecol.common.networking.AnimateMoveMessage
 final Meta common_networking_AnimateMoveMessage = new Meta() {
 net.sf.freecol.common.networking.AnimateMoveMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Tile.class, boolean.class))
-    return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Tile)params[1], (boolean)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Tile.class, boolean.class))
+    return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Tile)params[1], (boolean)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1137,10 +1137,10 @@ metas.put(net.sf.freecol.common.networking.DisembarkMessage.class, common_networ
 // net.sf.freecol.common.networking.LoadGoodsMessage
 final Meta common_networking_LoadGoodsMessage = new Meta() {
 net.sf.freecol.common.networking.LoadGoodsMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (int)params[2], (net.sf.freecol.common.model.Unit)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (int)params[2], (net.sf.freecol.common.model.Unit)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1167,10 +1167,10 @@ metas.put(net.sf.freecol.common.networking.RemoveServerMessage.class, common_net
 // net.sf.freecol.common.networking.NewRegionNameMessage
 final Meta common_networking_NewRegionNameMessage = new Meta() {
 net.sf.freecol.common.networking.NewRegionNameMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Region.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Unit.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Region)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Unit)params[2], (java.lang.String)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Region.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Unit.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Region)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Unit)params[2], (java.lang.String)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1200,10 +1200,10 @@ metas.put(net.sf.freecol.common.networking.WorkMessage.class, common_networking_
 // net.sf.freecol.common.networking.UnloadGoodsMessage
 final Meta common_networking_UnloadGoodsMessage = new Meta() {
 net.sf.freecol.common.networking.UnloadGoodsMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.GoodsType)params[0], (int)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.GoodsType)params[0], (int)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1215,10 +1215,10 @@ metas.put(net.sf.freecol.common.networking.UnloadGoodsMessage.class, common_netw
 // net.sf.freecol.common.networking.ScoutSpeakToChiefMessage
 final Meta common_networking_ScoutSpeakToChiefMessage = new Meta() {
 net.sf.freecol.common.networking.ScoutSpeakToChiefMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (java.lang.String)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (java.lang.String)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1263,10 +1263,10 @@ metas.put(net.sf.freecol.common.networking.SetBuildQueueMessage.class, common_ne
 // net.sf.freecol.common.networking.EmbarkMessage
 final Meta common_networking_EmbarkMessage = new Meta() {
 net.sf.freecol.common.networking.EmbarkMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class))
-    return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class))
+    return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1358,10 +1358,10 @@ metas.put(net.sf.freecol.common.networking.DisconnectMessage.class, common_netwo
 // net.sf.freecol.common.networking.MultipleMessage
 final Meta common_networking_MultipleMessage = new Meta() {
 net.sf.freecol.common.networking.MultipleMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.util.List.class))
-    return new net.sf.freecol.common.networking.MultipleMessage((java.util.List)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.networking.MultipleMessage();
+  if (areSame(types, java.util.List.class))
+    return new net.sf.freecol.common.networking.MultipleMessage((java.util.List)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MultipleMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
@@ -1379,10 +1379,10 @@ metas.put(net.sf.freecol.common.networking.MultipleMessage.class, common_network
 // net.sf.freecol.common.networking.ChatMessage
 final Meta common_networking_ChatMessage = new Meta() {
 net.sf.freecol.common.networking.ChatMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, boolean.class))
-    return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, boolean.class))
+    return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1418,12 +1418,12 @@ metas.put(net.sf.freecol.common.networking.GameEndedMessage.class, common_networ
 // net.sf.freecol.common.networking.GameStateMessage
 final Meta common_networking_GameStateMessage = new Meta() {
 net.sf.freecol.common.networking.GameStateMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.FreeColServer.ServerState.class))
-    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.server.FreeColServer.ServerState)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.networking.GameStateMessage();
+  if (areSame(types, net.sf.freecol.server.FreeColServer.ServerState.class))
+    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.server.FreeColServer.ServerState)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1450,10 +1450,10 @@ metas.put(net.sf.freecol.common.networking.MoveMessage.class, common_networking_
 // net.sf.freecol.common.networking.LoginMessage
 final Meta common_networking_LoginMessage = new Meta() {
 net.sf.freecol.common.networking.LoginMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.server.FreeColServer.ServerState.class, boolean.class, boolean.class, net.sf.freecol.common.model.Game.class))
-    return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.server.FreeColServer.ServerState)params[4], (boolean)params[5], (boolean)params[5], (net.sf.freecol.common.model.Game)params[7]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.server.FreeColServer.ServerState.class, boolean.class, boolean.class, net.sf.freecol.common.model.Game.class))
+    return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.server.FreeColServer.ServerState)params[4], (boolean)params[5], (boolean)params[5], (net.sf.freecol.common.model.Game)params[7]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1561,10 +1561,10 @@ metas.put(net.sf.freecol.common.networking.QuestionMessage.class, common_network
 // net.sf.freecol.common.networking.SetStanceMessage
 final Meta common_networking_SetStanceMessage = new Meta() {
 net.sf.freecol.common.networking.SetStanceMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Stance.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Stance)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Stance.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Stance)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1657,10 +1657,10 @@ metas.put(net.sf.freecol.common.networking.ReadyMessage.class, common_networking
 // net.sf.freecol.common.networking.EquipForRoleMessage
 final Meta common_networking_EquipForRoleMessage = new Meta() {
 net.sf.freecol.common.networking.EquipForRoleMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Role.class, int.class))
-    return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Role)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Role.class, int.class))
+    return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Role)params[1], (int)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1754,10 +1754,10 @@ metas.put(net.sf.freecol.common.model.FreeColObject.class, common_model_FreeColO
 // net.sf.freecol.common.model.StringTemplate
 final Meta common_model_StringTemplate = new Meta() {
 net.sf.freecol.common.model.StringTemplate newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.StringTemplate((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.StringTemplate();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.StringTemplate((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1776,16 +1776,16 @@ metas.put(net.sf.freecol.common.model.StringTemplate.class, common_model_StringT
 // net.sf.freecol.common.model.ModelMessage
 final Meta common_model_ModelMessage = new Meta() {
 net.sf.freecol.common.model.ModelMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[3], (net.sf.freecol.common.model.FreeColObject)params[4]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.ModelMessage();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[3], (net.sf.freecol.common.model.FreeColObject)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2113,10 +2113,10 @@ metas.put(net.sf.freecol.common.model.TradeItem.class, common_model_TradeItem);
 // net.sf.freecol.common.model.GoodsTradeItem
 final Meta common_model_GoodsTradeItem = new Meta() {
 net.sf.freecol.common.model.GoodsTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
-    return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
+    return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2156,12 +2156,12 @@ metas.put(net.sf.freecol.common.model.AbstractGoods.class, common_model_Abstract
 // net.sf.freecol.common.model.Goods
 final Meta common_model_Goods = new Meta() {
 net.sf.freecol.common.model.Goods newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class))
-    return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class))
+    return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2222,14 +2222,14 @@ metas.put(net.sf.freecol.common.model.WorkLocation.class, common_model_WorkLocat
 // net.sf.freecol.common.model.ProductionType
 final Meta common_model_ProductionType = new Meta() {
 net.sf.freecol.common.model.ProductionType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, java.util.List.class, java.util.List.class))
     return new net.sf.freecol.common.model.ProductionType((java.util.List)params[0], (java.util.List)params[0]);
   if (areSame(types, net.sf.freecol.common.model.AbstractGoods.class, boolean.class, java.lang.String.class))
     return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.AbstractGoods)params[0], (boolean)params[1], (java.lang.String)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.Specification)params[0]);
   if (areSame(types, net.sf.freecol.common.model.GoodsType.class, net.sf.freecol.common.model.GoodsType.class, int.class))
     return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.GoodsType)params[0], (net.sf.freecol.common.model.GoodsType)params[0], (int)params[2]);
   throw new IllegalArgumentException();
@@ -2347,10 +2347,10 @@ metas.put(net.sf.freecol.common.model.IndianSettlement.class, common_model_India
 // net.sf.freecol.common.model.Scope
 final Meta common_model_Scope = new Meta() {
 net.sf.freecol.common.model.Scope newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.Scope((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.Scope();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.Scope((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2493,16 +2493,16 @@ metas.put(net.sf.freecol.common.model.Feature.class, common_model_Feature);
 // net.sf.freecol.common.model.Modifier
 final Meta common_model_Modifier = new Meta() {
 net.sf.freecol.common.model.Modifier newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class))
-    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.model.Specification)params[0]);
-  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class, int.class))
-    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3], (int)params[4]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
+  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class))
+    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2]);
   if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class))
     return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
+  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class, int.class))
+    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3], (int)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2544,10 +2544,10 @@ metas.put(net.sf.freecol.common.model.UnitChangeType.class, common_model_UnitCha
 // net.sf.freecol.common.model.NativeTradeItem
 final Meta common_model_NativeTradeItem = new Meta() {
 net.sf.freecol.common.model.NativeTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.NativeTradeItem.class))
     return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.NativeTradeItem)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
     return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   throw new IllegalArgumentException();
@@ -2610,12 +2610,12 @@ metas.put(net.sf.freecol.common.model.MarketData.class, common_model_MarketData)
 // net.sf.freecol.common.model.Operand
 final Meta common_model_Operand = new Meta() {
 net.sf.freecol.common.model.Operand newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Operand.OperandType.class, net.sf.freecol.common.model.Operand.ScopeLevel.class))
-    return new net.sf.freecol.common.model.Operand((net.sf.freecol.common.model.Operand.OperandType)params[0], (net.sf.freecol.common.model.Operand.ScopeLevel)params[1]);
-  if (areSame(types, int.class))
-    return new net.sf.freecol.common.model.Operand((int)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.Operand();
+  if (areSame(types, int.class))
+    return new net.sf.freecol.common.model.Operand((int)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Operand.OperandType.class, net.sf.freecol.common.model.Operand.ScopeLevel.class))
+    return new net.sf.freecol.common.model.Operand((net.sf.freecol.common.model.Operand.OperandType)params[0], (net.sf.freecol.common.model.Operand.ScopeLevel)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2996,12 +2996,12 @@ final Meta common_model_TradeRouteStop = new Meta() {
 net.sf.freecol.common.model.TradeRouteStop newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.TradeRouteStop.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.TradeRouteStop)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class))
+    return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class))
-    return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3020,10 +3020,10 @@ metas.put(net.sf.freecol.common.model.TradeRouteStop.class, common_model_TradeRo
 // net.sf.freecol.common.model.TileItemContainer
 final Meta common_model_TileItemContainer = new Meta() {
 net.sf.freecol.common.model.TileItemContainer newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3087,10 +3087,10 @@ metas.put(net.sf.freecol.common.model.FoundingFather.class, common_model_Foundin
 // net.sf.freecol.common.model.HighScore
 final Meta common_model_HighScore = new Meta() {
 net.sf.freecol.common.model.HighScore newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.model.Player)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.HighScore();
+  if (areSame(types, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.model.Player)params[0]);
   if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   throw new IllegalArgumentException();
@@ -3138,10 +3138,10 @@ metas.put(net.sf.freecol.common.model.UnitTypeChange.class, common_model_UnitTyp
 // net.sf.freecol.common.model.Map
 final Meta common_model_Map = new Meta() {
 net.sf.freecol.common.model.Map newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, int.class, int.class))
     return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (int)params[1], (int)params[1]);
   throw new IllegalArgumentException();
@@ -3293,10 +3293,10 @@ metas.put(net.sf.freecol.common.model.TileType.class, common_model_TileType);
 // net.sf.freecol.common.model.TileTypeChange
 final Meta common_model_TileTypeChange = new Meta() {
 net.sf.freecol.common.model.TileTypeChange newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3393,10 +3393,10 @@ metas.put(net.sf.freecol.common.model.Nation.class, common_model_Nation);
 // net.sf.freecol.common.model.ColonyTradeItem
 final Meta common_model_ColonyTradeItem = new Meta() {
 net.sf.freecol.common.model.ColonyTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Colony.class))
-    return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Colony)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Colony.class))
+    return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Colony)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3459,10 +3459,10 @@ final Meta common_model_LostCityRumour = new Meta() {
 net.sf.freecol.common.model.LostCityRumour newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.LostCityRumour.RumourType.class, java.lang.String.class))
-    return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.LostCityRumour.RumourType)params[2], (java.lang.String)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
     return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.LostCityRumour.RumourType.class, java.lang.String.class))
+    return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.LostCityRumour.RumourType)params[2], (java.lang.String)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3501,16 +3501,16 @@ final Meta common_model_Ability = new Meta() {
 net.sf.freecol.common.model.Ability newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.Ability.class))
     return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.model.Ability)params[0]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.model.Specification)params[0]);
-  if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.FreeColSpecObjectType.class, boolean.class))
-    return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (net.sf.freecol.common.model.FreeColSpecObjectType)params[1], (boolean)params[2]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.model.Ability((java.lang.String)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, java.lang.String.class, boolean.class))
     return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (boolean)params[1]);
+  if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.FreeColSpecObjectType.class, boolean.class))
+    return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (net.sf.freecol.common.model.FreeColSpecObjectType)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3526,10 +3526,10 @@ metas.put(net.sf.freecol.common.model.Ability.class, common_model_Ability);
 // net.sf.freecol.common.model.Game
 final Meta common_model_Game = new Meta() {
 net.sf.freecol.common.model.Game newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.Game((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.Game();
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.Game((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3711,10 +3711,10 @@ metas.put(net.sf.freecol.common.model.UnitType.class, common_model_UnitType);
 // net.sf.freecol.common.model.TradeRoute
 final Meta common_model_TradeRoute = new Meta() {
 net.sf.freecol.common.model.TradeRoute newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.Player)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.Player)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3834,14 +3834,14 @@ metas.put(net.sf.freecol.common.model.GoodsType.class, common_model_GoodsType);
 // net.sf.freecol.common.model.LastSale
 final Meta common_model_LastSale = new Meta() {
 net.sf.freecol.common.model.LastSale newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.LastSale();
   if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.LastSale((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.Turn.class, int.class))
     return new net.sf.freecol.common.model.LastSale((java.lang.String)params[0], (net.sf.freecol.common.model.Turn)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, net.sf.freecol.common.model.Turn.class, int.class))
     return new net.sf.freecol.common.model.LastSale((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (net.sf.freecol.common.model.Turn)params[2], (int)params[3]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.LastSale();
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3914,10 +3914,10 @@ metas.put(net.sf.freecol.common.model.ExportData.class, common_model_ExportData)
 // net.sf.freecol.common.model.NationOptions
 final Meta common_model_NationOptions = new Meta() {
 net.sf.freecol.common.model.NationOptions newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4139,10 +4139,10 @@ metas.put(net.sf.freecol.common.model.BuildingType.class, common_model_BuildingT
 // net.sf.freecol.common.model.TileImprovement
 final Meta common_model_TileImprovement = new Meta() {
 net.sf.freecol.common.model.TileImprovement newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, net.sf.freecol.common.model.TileImprovementStyle.class))
-    return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (net.sf.freecol.common.model.TileImprovementStyle)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, net.sf.freecol.common.model.TileImprovementStyle.class))
+    return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (net.sf.freecol.common.model.TileImprovementStyle)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4172,10 +4172,10 @@ metas.put(net.sf.freecol.common.model.TileImprovement.class, common_model_TileIm
 // net.sf.freecol.common.model.HighSeas
 final Meta common_model_HighSeas = new Meta() {
 net.sf.freecol.common.model.HighSeas newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
-    return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class))
     return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
+    return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4217,10 +4217,10 @@ metas.put(net.sf.freecol.common.model.NationSummary.class, common_model_NationSu
 // net.sf.freecol.server.model.ServerGame
 final Meta server_model_ServerGame = new Meta() {
 net.sf.freecol.server.model.ServerGame newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Specification.class, java.util.Random.class))
-    return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (java.util.Random)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Specification.class, java.util.Random.class))
+    return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (java.util.Random)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
@@ -4257,10 +4257,10 @@ metas.put(net.sf.freecol.server.model.ServerEurope.class, server_model_ServerEur
 // net.sf.freecol.server.model.ServerColonyTile
 final Meta server_model_ServerColonyTile = new Meta() {
 net.sf.freecol.server.model.ServerColonyTile newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.Tile)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.Tile)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4296,10 +4296,10 @@ metas.put(net.sf.freecol.server.model.ServerRegion.class, server_model_ServerReg
 // net.sf.freecol.server.model.ServerColony
 final Meta server_model_ServerColony = new Meta() {
 net.sf.freecol.server.model.ServerColony newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4311,10 +4311,10 @@ metas.put(net.sf.freecol.server.model.ServerColony.class, server_model_ServerCol
 // net.sf.freecol.server.model.ServerBuilding
 final Meta server_model_ServerBuilding = new Meta() {
 net.sf.freecol.server.model.ServerBuilding newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.BuildingType.class))
-    return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.BuildingType)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.BuildingType.class))
+    return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.BuildingType)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4326,12 +4326,12 @@ metas.put(net.sf.freecol.server.model.ServerBuilding.class, server_model_ServerB
 // net.sf.freecol.server.model.ServerUnit
 final Meta server_model_ServerUnit = new Meta() {
 net.sf.freecol.server.model.ServerUnit newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
+    return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Unit.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.UnitType.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Player)params[2], (net.sf.freecol.common.model.UnitType)params[3]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
-    return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Role.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Player)params[2], (net.sf.freecol.common.model.UnitType)params[3], (net.sf.freecol.common.model.Role)params[4]);
   throw new IllegalArgumentException();
@@ -4371,12 +4371,12 @@ metas.put(net.sf.freecol.server.model.ServerPlayer.class, server_model_ServerPla
 // net.sf.freecol.server.model.ServerIndianSettlement
 final Meta server_model_ServerIndianSettlement = new Meta() {
 net.sf.freecol.server.model.ServerIndianSettlement newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class, boolean.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3], (boolean)params[4], (net.sf.freecol.common.model.UnitType)params[5], (net.sf.freecol.common.model.Unit)params[6]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.IndianSettlement.class))
     return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Tile)params[2], (net.sf.freecol.common.model.IndianSettlement)params[3]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class, boolean.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3], (boolean)params[4], (net.sf.freecol.common.model.UnitType)params[5], (net.sf.freecol.common.model.Unit)params[6]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4489,10 +4489,10 @@ final Meta server_ai_AIGoods = new Meta() {
 net.sf.freecol.server.ai.AIGoods newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Location.class))
-    return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3], (net.sf.freecol.common.model.Location)params[1]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Location.class))
+    return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3], (net.sf.freecol.common.model.Location)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4528,10 +4528,10 @@ final Meta server_ai_GoodsWish = new Meta() {
 net.sf.freecol.server.ai.GoodsWish newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, int.class, net.sf.freecol.common.model.GoodsType.class))
-    return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (int)params[2], (net.sf.freecol.common.model.GoodsType)params[4]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, int.class, net.sf.freecol.common.model.GoodsType.class))
+    return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (int)params[2], (net.sf.freecol.common.model.GoodsType)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4548,10 +4548,10 @@ metas.put(net.sf.freecol.server.ai.GoodsWish.class, server_ai_GoodsWish);
 // net.sf.freecol.server.ai.AIMain
 final Meta server_ai_AIMain = new Meta() {
 net.sf.freecol.server.ai.AIMain newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.server.FreeColServer.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.server.FreeColServer.class))
     return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0]);
+  if (areSame(types, net.sf.freecol.server.FreeColServer.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4571,10 +4571,10 @@ final Meta server_ai_TileImprovementPlan = new Meta() {
 net.sf.freecol.server.ai.TileImprovementPlan newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, int.class))
-    return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, int.class))
+    return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4713,10 +4713,10 @@ final Meta server_ai_WorkerWish = new Meta() {
 net.sf.freecol.server.ai.WorkerWish newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, net.sf.freecol.common.model.UnitType.class, boolean.class))
-    return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (net.sf.freecol.common.model.UnitType)params[3], (boolean)params[4]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, net.sf.freecol.common.model.UnitType.class, boolean.class))
+    return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (net.sf.freecol.common.model.UnitType)params[3], (boolean)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
