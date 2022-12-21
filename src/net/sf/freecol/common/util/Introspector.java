@@ -84,7 +84,7 @@ public class Introspector {
      * @return A conversion function, or null on error.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T convertFromString(Class<T> argType, String arg) {
+    public static <T> T valueOf(Class<T> argType, String arg) {
         if (argType == String.class)
             return (T)arg;
         if (argType.isEnum())
@@ -142,7 +142,7 @@ public class Introspector {
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
             final Class<?> fieldType = meta.invokeMethod(obj, "get" + capitalize(field)).getClass();
-            meta.invokeMethod(obj, methodName, convertFromString(fieldType, value));
+            meta.invokeMethod(obj, methodName, valueOf(fieldType, value));
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }
@@ -310,7 +310,7 @@ public class Introspector {
                 return false;
             if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
                 return false;
-            if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
+            if (!(meth.getName().startsWith("set") || meth.getName().equals("valueOf")) && meth.getParameterCount() != 0)
                 return false;
             return true;
         }).sorted(Comparator.comparing(Method::getName)).toArray(Method[]::new);

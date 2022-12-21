@@ -26,7 +26,6 @@ import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.model.Game;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Stance;
-import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.server.FreeColServer;
 import net.sf.freecol.server.ai.AIPlayer;
 
@@ -116,7 +115,7 @@ public class SetStanceMessage extends AttributeMessage {
      * @return The {@code Stance} value.
      */
     public Stance getStance() {
-        return Introspector.convertFromString(Stance.class, getStringAttribute(STANCE_TAG));
+        return Stance.valueOf(getStringAttribute(STANCE_TAG));
     }
 
     /**

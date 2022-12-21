@@ -299,7 +299,7 @@ public abstract class Message {
         if (hasAttribute(key)) {
             String kv = upCase(getStringAttribute(key));
             try {
-                result = Introspector.convertFromString(returnClass, kv);
+                result = Introspector.valueOf(returnClass, kv);
             } catch (Exception e) {
                 logger.warning("Not a " + defaultValue.getClass().getName()
                     + ": " + kv);
