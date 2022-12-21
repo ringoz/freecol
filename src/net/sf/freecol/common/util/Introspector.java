@@ -75,21 +75,6 @@ public class Introspector {
     }
 
     /**
-     * Get a function that converts to String from a given class.
-     * We use Enum.name() for enums, and String.valueOf(argType) for the rest.
-     *
-     * @param argType A {@code Class} to find a converter for.
-     * @return A conversion function, or null on error.
-     * @exception NoSuchMethodException if no converter is found.
-     */
-    public static String convertToString(Object arg) {
-        final Class<?> argType = arg.getClass();
-        if (argType.isEnum())
-            return ((Enum<?>)arg).name();
-        return String.valueOf(arg);
-    }
-
-    /**
      * Get a function that converts from String to a given class.
      * We use Enum.valueOf(Class, String) for enums, and
      * argType.valueOf(String) for the rest, having first dodged
@@ -138,7 +123,7 @@ public class Introspector {
         final String methodName = "get" + capitalize(field);
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
-            return convertToString(meta.invokeMethod(obj, methodName));
+            return meta.invokeMethod(obj, methodName).toString();
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }

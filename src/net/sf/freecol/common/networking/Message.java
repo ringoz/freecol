@@ -325,7 +325,7 @@ public abstract class Message {
      * @param value The value of the attribute.
      */
     protected void setEnumAttribute(String key, Enum<?> value) {
-        if (value != null) setStringAttribute(key, downCase(Introspector.convertToString(value)));
+        if (value != null) setStringAttribute(key, downCase(value.toString()));
     }
 
     /**

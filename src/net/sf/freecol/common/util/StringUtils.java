@@ -115,7 +115,7 @@ public class StringUtils {
      * @return A suitable key.
      */
     public static String getEnumKey(Enum<?> value) {
-        final String base = downCase(Introspector.convertToString(value));
+        final String base = downCase(value.toString());
         final int len = base.length();
         StringBuilder sb = new StringBuilder(len);
         int idx, from = 0;

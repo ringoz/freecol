@@ -356,7 +356,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
     public void writeAttribute(String attributeName, Enum<?> value)
         throws XMLStreamException {
         xmlStreamWriter.writeAttribute(attributeName,
-                                       downCase(Introspector.convertToString(value)));
+                                       downCase(value.toString()));
     }
 
     /**
