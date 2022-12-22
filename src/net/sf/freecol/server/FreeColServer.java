@@ -34,7 +34,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.InetAddress;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -78,6 +77,7 @@ import net.sf.freecol.common.networking.GameStateMessage;
 import net.sf.freecol.common.networking.LogoutMessage;
 import net.sf.freecol.common.networking.Message;
 import net.sf.freecol.common.networking.SocketConnection;
+import net.sf.freecol.common.networking.SocketIO;
 import net.sf.freecol.common.networking.TrivialMessage;
 import net.sf.freecol.common.networking.VacantPlayersMessage;
 import net.sf.freecol.common.option.GameOptions;
@@ -655,7 +655,7 @@ public final class FreeColServer {
      * @exception IOException if the socket was already broken.
      * @exception XMLStreamException on stream problem.
      */
-    public void addNewUserConnection(AsynchronousSocketChannel socket)
+    public void addNewUserConnection(SocketIO socket)
         throws FreeColException, IOException, XMLStreamException {
         final String name = socket.getRemoteAddress().toString();
         Connection c = new SocketConnection(socket, FreeCol.SERVER_THREAD + name)

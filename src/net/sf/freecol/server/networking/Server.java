@@ -20,20 +20,16 @@
 package net.sf.freecol.server.networking;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.StandardSocketOptions;
-import java.nio.channels.AsynchronousServerSocketChannel;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.CompletionHandler;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.Message;
 import net.sf.freecol.common.networking.MessageHandler;
+import net.sf.freecol.common.networking.SocketIO;
+
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import net.sf.freecol.server.FreeColServer;
 
@@ -54,11 +50,8 @@ public final class Server {
 
     private static final Logger logger = Logger.getLogger(Server.class.getName());
 
-    /** Backlog for socket. */
-    private static final int BACKLOG_DEFAULT = 10;
-
     /** The public "well-known" socket to which clients may connect. */
-    private final AsynchronousServerSocketChannel serverSocket;
+    private final SocketIO.Server serverSocket;
 
     /** A map of Connection objects, keyed by their Socket. */
     private final Set<Connection> connections = new HashSet<>();
@@ -91,8 +84,7 @@ public final class Server {
         this.freeColServer = freeColServer;
         this.host = host;
         this.port = port;
-        this.serverSocket = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(host, port), BACKLOG_DEFAULT);
-        this.serverSocket.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+        this.serverSocket = new SocketIO.Server(host, port);
     }
 
 
@@ -206,23 +198,19 @@ public final class Server {
      * the control object.
      */
     public void start() {
-        serverSocket.accept(null, new CompletionHandler<AsynchronousSocketChannel, Void>() {
-            public void completed(AsynchronousSocketChannel sock, Void att) {
-                serverSocket.accept(null, this); // accept the next connection
-                synchronized (shutdownLock) {
-                    if (!serverSocket.isOpen()) return;
-                    try {
-                        freeColServer.addNewUserConnection(sock);
-                    } catch (Exception ex) {
-                        logger.log(Level.WARNING, "Connection failed: ", ex);
-                    }
-                }
-            }
-
-            public void failed(Throwable ex, Void att) {
-                if (!serverSocket.isOpen()) return;
+        serverSocket.accept().whenComplete((sock, ex) -> {
+            if (ex != null) {
                 logger.log(Level.WARNING, "Connection failed: ", ex);
             }
+            else synchronized (shutdownLock) {
+                if (!serverSocket.isOpen()) return;
+                try {
+                    freeColServer.addNewUserConnection(sock);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Connection failed: ", e);
+                }
+            }
+            start(); // accept the next connection
         });
     }
 

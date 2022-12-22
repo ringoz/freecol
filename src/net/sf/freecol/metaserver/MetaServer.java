@@ -20,9 +20,6 @@
 package net.sf.freecol.metaserver;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.channels.AsynchronousServerSocketChannel;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -31,6 +28,7 @@ import java.util.logging.Logger;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.SocketConnection;
+import net.sf.freecol.common.networking.SocketIO;
 
 import static net.sf.freecol.common.util.CollectionUtils.*;
 
@@ -48,7 +46,7 @@ public final class MetaServer {
     private static final Logger logger = Logger.getLogger(MetaServer.class.getName());
 
     /** The public "well-known" socket to which clients may connect. */
-    private final AsynchronousServerSocketChannel serverSocket;
+    private final SocketIO.Server serverSocket;
 
     /** A map of Connection objects, keyed by the Socket they relate to. */
     private final Set<Connection> connections = new HashSet<>();
@@ -70,7 +68,7 @@ public final class MetaServer {
         this.port = port;
         final MetaRegister mr = new MetaRegister();
         this.metaServerHandler = new MetaServerHandler(this, mr);
-        this.serverSocket = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(port));
+        this.serverSocket = new SocketIO.Server(null, port);
     }
 
     /**
@@ -128,7 +126,7 @@ public final class MetaServer {
         // new client connects to the server a new {@link Connection}
         // is made, with {@link MetaServerHandler} as the input handler.
         while (this.serverSocket.isOpen()) {
-            AsynchronousSocketChannel clientSocket = null;
+            SocketIO clientSocket = null;
             try {
                 clientSocket = serverSocket.accept().get();
                 logger.info("Client connection from: "

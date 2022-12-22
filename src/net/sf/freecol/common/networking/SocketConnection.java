@@ -22,11 +22,7 @@ package net.sf.freecol.common.networking;
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.InetSocketAddress;
 import java.nio.CharBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.CompletionHandler;
-import java.net.SocketAddress;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,10 +53,10 @@ public class SocketConnection extends Connection {
     private static final int TIMEOUT = 5000; // 5s
 
     /** The socket connected to the other end of the connection. */
-    private SocketIO io = null;
+    private final SocketIO io;
 
     /** Main message writer. */
-    private FreeColXMLWriter xw;
+    private final FreeColXMLWriter xw;
 
     /** A map of network ids to the corresponding waiting thread. */
     private final Map<Integer, CompletableFuture<Object>> waitingThreads
@@ -77,10 +73,10 @@ public class SocketConnection extends Connection {
      * @param name The connection name.
      * @exception IOException if streams can not be derived from the socket.
      */
-    public SocketConnection(AsynchronousSocketChannel socket, String name) throws IOException {
+    public SocketConnection(SocketIO io, String name) throws IOException {
         super(name);
 
-        this.io = new SocketIO(socket);
+        this.io = io;
         this.xw = new FreeColXMLWriter(new Writer() {
             @Override
             public void write(char[] cbuf, int off, int len) throws IOException {
@@ -109,25 +105,13 @@ public class SocketConnection extends Connection {
      * @exception IOException if the socket creation is problematic.
      */
     public static CompletableFuture<Connection> open(String host, int port, String name) throws IOException {
-        final AsynchronousSocketChannel socket = AsynchronousSocketChannel.open();
-        final SocketAddress addr = new InetSocketAddress(host, port);
-        final var result = new CompletableFuture<Connection>();
-        socket.connect(addr, result, new CompletionHandler<Void,CompletableFuture<Connection>>() {
-            @Override
-            public void completed(Void v, CompletableFuture<Connection> result) {
-                try {
-                    result.complete(new SocketConnection(socket, name));
-                } catch (IOException e) {
-                    result.completeExceptionally(e);
-                }
+        return SocketIO.connect(host, port).thenApply((io) -> {
+            try {
+                return (Connection)new SocketConnection(io, name);
+            } catch (IOException e) {
+                throw new CompletionException(e);
             }
-
-            @Override
-            public void failed(Throwable exc, CompletableFuture<Connection> result) {
-                result.completeExceptionally(exc);
-            }
-        });
-        return result.orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
+        }).orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -230,7 +214,7 @@ public class SocketConnection extends Connection {
      */
     @Override
     public boolean isAlive() {
-        return this.io != null;
+        return this.io.isOpen();
     }
 
     /**
@@ -241,34 +225,11 @@ public class SocketConnection extends Connection {
     @Override
     public String getHostAddress() {
         try {
-            return ((InetSocketAddress)this.io.getRemoteAddress()).getHostString();
+            return this.io.getRemoteAddress().toString();
         }
         catch (Throwable t) {
             return "";
         }
-    }
-
-    /**
-     * Get the port for this connection.
-     *
-     * @return The port number, or negative on error.
-     */
-    private int getPort() {
-        try {
-            return ((InetSocketAddress)this.io.getRemoteAddress()).getPort();
-        }
-        catch (Throwable t) {
-            return -1;
-        }
-    }
-
-    /**
-     * Get the printable description of the socket.
-     *
-     * @return *host-address*:*port-number* or an empty string on error.
-     */
-    private String getSocketName() {
-        return (isAlive()) ? getHostAddress() + ":" + getPort() : "";
     }
 
     /**
@@ -346,9 +307,6 @@ public class SocketConnection extends Connection {
 
     @Override
     public void close() {
-        if (this.io == null)
-            return;
-
         askToStop("connection closing");
 
         // Close the socket before the input stream.  Socket closure will
@@ -357,8 +315,6 @@ public class SocketConnection extends Connection {
             this.io.close();
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Error closing socket", ioe);
-        } finally {
-            this.io = null;
         }
         
         logger.fine("Connection closed for " + getName());
@@ -371,7 +327,7 @@ public class SocketConnection extends Connection {
     public String toString() {
         StringBuilder sb = new StringBuilder(32);
         sb.append("[Connection ").append(getName()).append(" (")
-            .append(getSocketName()).append(")]");
+            .append(getHostAddress()).append(")]");
         return sb.toString();
     }
 }

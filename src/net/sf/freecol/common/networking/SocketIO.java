@@ -21,28 +21,77 @@ package net.sf.freecol.common.networking;
 
 import static com.ea.async.Async.await;
 
-import java.io.Closeable;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.Channel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 import net.sf.freecol.common.util.CharsetCompat;
 
-public class SocketIO implements Closeable {
-    private static final int BUFFER_SIZE = 1 << 14;
+public class SocketIO implements Channel {
+    public static class Server implements Channel {
+        private final AsynchronousServerSocketChannel serverSocket;
+
+        public Server(String host, int port) throws IOException {
+            if (host == null) host = "0.0.0.0";
+            this.serverSocket = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(host, port));
+            this.serverSocket.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+        }
+
+        public CompletableFuture<SocketIO> accept() {
+            return CompletableFuture.supplyAsync(() -> {
+                try {
+                    return new SocketIO(this.serverSocket.accept().get());
+                } catch (Exception e) {
+                    throw new CompletionException(e);
+                }
+            });
+        }
+
+        @Override
+        public boolean isOpen() {
+            return this.serverSocket.isOpen();
+        }
+
+        @Override
+        public void close() throws IOException {
+            this.serverSocket.close();
+        }
+    }
 
     private final AsynchronousSocketChannel socket;
-    private final ByteBuffer readBuf;
+    private final ByteBuffer readBuf = (ByteBuffer)ByteBuffer.allocate(1 << 14).flip();
     private CompletableFuture<Void> pendingWrite = CompletableFuture.completedFuture(null);
 
-    public SocketIO(AsynchronousSocketChannel socket) {
+    private SocketIO(AsynchronousSocketChannel socket) {
         this.socket = socket;
-        this.readBuf = (ByteBuffer)ByteBuffer.allocate(BUFFER_SIZE).flip();
+    }
+
+    static CompletableFuture<SocketIO> connect(String host, int port) throws IOException {
+        final var socket = AsynchronousSocketChannel.open();
+        final var addr = new InetSocketAddress(host, port);
+        final var result = new CompletableFuture<SocketIO>();
+        socket.connect(addr, result, new CompletionHandler<Void,CompletableFuture<SocketIO>>() {
+            @Override
+            public void completed(Void v, CompletableFuture<SocketIO> result) {
+                result.complete(new SocketIO(socket));
+            }
+
+            @Override
+            public void failed(Throwable exc, CompletableFuture<SocketIO> result) {
+                result.completeExceptionally(exc);
+            }
+        });
+        return result;
     }
 
     public SocketAddress getRemoteAddress() throws IOException {
@@ -104,6 +153,11 @@ public class SocketIO implements Closeable {
         synchronized (this) {
             return pendingWrite = pendingWrite.thenCompose((v) -> writeBytesAsync(buf));
         }
+    }
+
+    @Override
+    public boolean isOpen() {
+        return this.socket.isOpen();
     }
 
     @Override
