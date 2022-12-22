@@ -19,9 +19,11 @@
 
 package net.sf.freecol.common.networking;
 
+import java.io.CharArrayReader;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.Writer;
 import java.net.InetSocketAddress;
+import java.nio.CharBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.net.SocketAddress;
@@ -79,7 +81,22 @@ public class SocketConnection extends Connection {
         super(name);
 
         this.io = new SocketIO(socket);
-        this.xw = new FreeColXMLWriter(this.io, FreeColXMLWriter.WriteScope.toSave());
+        this.xw = new FreeColXMLWriter(new Writer() {
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException {
+                if (cbuf[off + len - 1] != '\n')
+                    throw new IOException();
+                io.writeLineAsync(CharBuffer.wrap(cbuf, off, len));
+            }
+
+            @Override
+            public void flush() throws IOException {
+            }
+
+            @Override
+            public void close() throws IOException {
+            }
+        }, FreeColXMLWriter.WriteScope.toSave());
     }
 
     /**
@@ -138,7 +155,7 @@ public class SocketConnection extends Connection {
             if (line == null) return;
 
             String tag; Message message; int replyId = -1;
-            try (final FreeColXMLReader xr = new FreeColXMLReader(new StringReader(line))) {
+            try (final FreeColXMLReader xr = new FreeColXMLReader(new CharArrayReader(line.array()))) {
                 xr.nextTag();
                 tag = xr.getLocalName();
                 replyId = xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);

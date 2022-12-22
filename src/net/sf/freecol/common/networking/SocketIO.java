@@ -21,8 +21,8 @@ package net.sf.freecol.common.networking;
 
 import static com.ea.async.Async.await;
 
+import java.io.Closeable;
 import java.io.IOException;
-import java.io.Writer;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 import net.sf.freecol.common.util.CharsetCompat;
 
-public class SocketIO extends Writer {
+public class SocketIO implements Closeable {
     private static final int BUFFER_SIZE = 1 << 14;
 
     private final AsynchronousSocketChannel socket;
@@ -65,14 +65,14 @@ public class SocketIO extends Writer {
         return result;
     }
 
-    public CompletableFuture<String> readLineAsync() {
+    public CompletableFuture<CharBuffer> readLineAsync() {
         final var all = ByteBuffer.allocate(1 << 20);
         for (ByteBuffer buf = this.readBuf; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
             while (buf.hasRemaining()) {
                 final byte b = buf.get();
                 if (b == '\n') {
-                    final String line = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip()).toString();
-                    return CompletableFuture.completedFuture(line);
+                    final CharBuffer cbuf = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip());
+                    return CompletableFuture.completedFuture(cbuf);
                 }
                 all.put(b);
             }
@@ -99,16 +99,11 @@ public class SocketIO extends Writer {
         return result;
     }
 
-    @Override
-    public void write(char[] cbuf, int off, int len) throws IOException {
-        final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(cbuf, off, len));
+    public CompletableFuture<Void> writeLineAsync(final CharBuffer cbuf) throws IOException {
+        final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, cbuf);
         synchronized (this) {
-            pendingWrite = pendingWrite.thenCompose((v) -> writeBytesAsync(buf));
+            return pendingWrite = pendingWrite.thenCompose((v) -> writeBytesAsync(buf));
         }
-    }
-
-    @Override
-    public void flush() throws IOException {
     }
 
     @Override
