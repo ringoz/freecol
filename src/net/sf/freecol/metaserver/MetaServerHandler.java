@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
 import net.sf.freecol.common.FreeColException;
+import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.metaserver.ServerInfo;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.ConnectionVerificationMessage;
@@ -109,9 +110,10 @@ public final class MetaServerHandler implements MessageHandler {
     /**
      * {@inheritDoc}
      */
-    public Message read(Connection connection)
+    @Override
+    public Message read(Connection connection, FreeColXMLReader xr)
         throws FreeColException, XMLStreamException {
-        return Message.read(null, connection.getFreeColXMLReader());
+        return Message.read(null, xr);
     }
 
     // Individual message handlers

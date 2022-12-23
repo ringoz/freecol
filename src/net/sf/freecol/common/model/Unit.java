@@ -3973,7 +3973,7 @@ public class Unit extends GoodsLocation
                 + getId());
         }
 
-        Direction direction = Enum.valueOf(Direction.class, directionString);
+        Direction direction = Direction.valueOf(directionString);
         Tile tile = getTile().getNeighbourOrNull(direction);
         if (tile == null) {
             throw new IllegalStateException("Could not find tile"

@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -74,21 +75,6 @@ public class Introspector {
     }
 
     /**
-     * Get a function that converts to String from a given class.
-     * We use Enum.name() for enums, and String.valueOf(argType) for the rest.
-     *
-     * @param argType A {@code Class} to find a converter for.
-     * @return A conversion function, or null on error.
-     * @exception NoSuchMethodException if no converter is found.
-     */
-    private static String convertToString(Object arg) {
-        final Class<?> argType = arg.getClass();
-        if (argType.isEnum())
-            return ((Enum<?>)arg).name();
-        return String.valueOf(arg);
-    }
-
-    /**
      * Get a function that converts from String to a given class.
      * We use Enum.valueOf(Class, String) for enums, and
      * argType.valueOf(String) for the rest, having first dodged
@@ -97,26 +83,29 @@ public class Introspector {
      * @param argType A {@code Class} to find a converter for.
      * @return A conversion function, or null on error.
      */
-    private static Object convertFromString(Class<?> argType, String arg) throws Exception {
+    @SuppressWarnings("unchecked")
+    public static <T> T valueOf(Class<T> argType, String arg) {
         if (argType == String.class)
-            return arg;
-        if (argType.isEnum())
-            return Enum.valueOf((Class)argType, arg);
-        if (argType == Integer.class) return Integer.valueOf(arg);
-        if (argType == Boolean.class) return Boolean.valueOf(arg);
-        if (argType == Float.class) return Float.valueOf(arg);
-        if (argType == Double.class) return Double.valueOf(arg);
-        if (argType == Character.class) return Character.valueOf(arg.charAt(0));
+            return (T)arg;
+        if (argType == Integer.class) return (T)Integer.valueOf(arg);
+        if (argType == Boolean.class) return (T)Boolean.valueOf(arg);
+        if (argType == Float.class) return (T)Float.valueOf(arg);
+        if (argType == Double.class) return (T)Double.valueOf(arg);
+        if (argType == Character.class) return (T)Character.valueOf(arg.charAt(0));
         if (argType.isPrimitive()) {
-            if (argType == Integer.TYPE) return Integer.valueOf(arg);
-            if (argType == Boolean.TYPE) return Boolean.valueOf(arg);
-            if (argType == Float.TYPE) return Float.valueOf(arg);
-            if (argType == Double.TYPE) return Double.valueOf(arg);
-            if (argType == Character.TYPE) return Character.valueOf(arg.charAt(0));
+            if (argType == Integer.TYPE) return (T)Integer.valueOf(arg);
+            if (argType == Boolean.TYPE) return (T)Boolean.valueOf(arg);
+            if (argType == Float.TYPE) return (T)Float.valueOf(arg);
+            if (argType == Double.TYPE) return (T)Double.valueOf(arg);
+            if (argType == Character.TYPE) return (T)Character.valueOf(arg.charAt(0));
             throw new IllegalArgumentException("Need compatible class for primitive " + argType.getName());
         }
         final Meta meta = IntrospectorImpl.metas.get(argType);
-        return meta.invokeMethod(null, "valueOf", arg);
+        try {
+            return (T)meta.invokeMethod(null, "valueOf", arg);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     /**
@@ -132,7 +121,7 @@ public class Introspector {
         final String methodName = "get" + capitalize(field);
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
-            return convertToString(meta.invokeMethod(obj, methodName));
+            return meta.invokeMethod(obj, methodName).toString();
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }
@@ -151,7 +140,7 @@ public class Introspector {
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
             final Class<?> fieldType = meta.invokeMethod(obj, "get" + capitalize(field)).getClass();
-            meta.invokeMethod(obj, methodName, convertFromString(fieldType, value));
+            meta.invokeMethod(obj, methodName, valueOf(fieldType, value));
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }
@@ -291,13 +280,21 @@ public class Introspector {
         if (emitted.contains(clazz))
             return;
 
+        if (!clazz.getName().startsWith(PACKAGE))
+            return;
+
+        for (Class<?> cls : clazz.getDeclaredClasses())
+            if (cls.isEnum())
+                emitClass(out, cls);
+
         out.println("// " + clazz.getCanonicalName());
         emitted.add(clazz);
 
         out.println("final Meta " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + " = new Meta() {");
         if (!Modifier.isAbstract(clazz.getModifiers())) {
             out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
-            for (Constructor<?> ctor : clazz.getConstructors()) {
+            final var ctors = Arrays.stream(clazz.getConstructors()).sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor[]::new);
+            for (Constructor<?> ctor : ctors) {
                 final var types = Arrays.asList(ctor.getParameterTypes());
                 if (types.isEmpty())
                     out.println("  if (types.length == 0)");
@@ -318,10 +315,10 @@ public class Introspector {
                 return false;
             if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
                 return false;
-            if (!meth.getName().startsWith("set") && meth.getParameterCount() != 0)
+            if (!(meth.getName().startsWith("set") || meth.getName().equals("valueOf")) && meth.getParameterCount() != 0)
                 return false;
             return true;
-        }).toArray(Method[]::new);
+        }).sorted(Comparator.comparing(Method::getName)).toArray(Method[]::new);
 
         out.println("Object invokeMethod(Object object, String method, Object... params) throws Exception {");
         if (methods.length != 0) {
@@ -344,8 +341,8 @@ public class Introspector {
     }
 
     @net.ringoz.GwtIncompatible
-    private static void emitSubClasses(PrintStream out, Class<?> root, String packageName) throws IOException {
-        final var srcList = root.getClassLoader().getResources(packageName.replace(".", "/"));
+    private static void emitClasses(PrintStream out, String packageName, Class<?> root) throws IOException {
+        final var srcList = Introspector.class.getClassLoader().getResources(packageName.replace(".", "/"));
         while (srcList.hasMoreElements()) {
             File dirFile = new File(srcList.nextElement().getFile());
             for (File file : dirFile.listFiles()) {
@@ -377,10 +374,16 @@ public class Introspector {
             out.println("static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();");
             out.println("static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();");
             out.println("static {");
-            emitSubClasses(out, net.sf.freecol.common.networking.Message.class, "net.sf.freecol.common.networking");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.common.model");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.model");
-            emitSubClasses(out, net.sf.freecol.common.model.FreeColObject.class, "net.sf.freecol.server.ai");
+            emitClasses(out, "net.sf.freecol.common.networking", net.sf.freecol.common.networking.Message.class);
+            emitClasses(out, "net.sf.freecol.common.networking", Enum.class);
+            emitClasses(out, "net.sf.freecol.common.model", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.common.model", Enum.class);
+            emitClasses(out, "net.sf.freecol.server.model", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.server.model", Enum.class);
+            emitClasses(out, "net.sf.freecol.server.ai", net.sf.freecol.common.model.FreeColObject.class);
+            emitClasses(out, "net.sf.freecol.server.ai", Enum.class);
+            emitClass(out, net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class);
+            emitClass(out, net.sf.freecol.server.FreeColServer.ServerState.class);
             out.println("}");
             out.println("}");
         }

@@ -115,7 +115,7 @@ public class SetStanceMessage extends AttributeMessage {
      * @return The {@code Stance} value.
      */
     public Stance getStance() {
-        return Enum.valueOf(Stance.class, getStringAttribute(STANCE_TAG));
+        return Stance.valueOf(getStringAttribute(STANCE_TAG));
     }
 
     /**

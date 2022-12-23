@@ -5,15 +5,31 @@ class IntrospectorImpl {
 static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();
 static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();
 static {
+// net.sf.freecol.common.networking.Message.MessagePriority
+final Meta common_networking_Message$MessagePriority = new Meta() {
+net.sf.freecol.common.networking.Message.MessagePriority newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getValue": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).getValue();
+  case "valueOf": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.networking.Message.MessagePriority)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.networking.Message$MessagePriority", net.sf.freecol.common.networking.Message.MessagePriority.class);
+metas.put(net.sf.freecol.common.networking.Message.MessagePriority.class, common_networking_Message$MessagePriority);
 // net.sf.freecol.common.networking.Message
 final Meta common_networking_Message = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getPriority": return ((net.sf.freecol.common.networking.Message)object).getPriority();
-  case "getType": return ((net.sf.freecol.common.networking.Message)object).getType();
-  case "currentPlayerMessage": return ((net.sf.freecol.common.networking.Message)object).currentPlayerMessage();
   case "canMerge": return ((net.sf.freecol.common.networking.Message)object).canMerge();
+  case "currentPlayerMessage": return ((net.sf.freecol.common.networking.Message)object).currentPlayerMessage();
+  case "getPriority": return ((net.sf.freecol.common.networking.Message)object).getPriority();
   case "getPriorityLevel": return ((net.sf.freecol.common.networking.Message)object).getPriorityLevel();
+  case "getType": return ((net.sf.freecol.common.networking.Message)object).getType();
   }
   return super.invokeMethod(object, method, params);
 }
@@ -31,10 +47,10 @@ metas.put(net.sf.freecol.common.networking.TrivialMessage.class, common_networki
 // net.sf.freecol.common.networking.AttributeMessage
 final Meta common_networking_AttributeMessage = new Meta() {
 net.sf.freecol.common.networking.AttributeMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.lang.String.class, java.lang.String[].class))
-    return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0], (java.lang.String[])params[1]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0]);
+  if (areSame(types, java.lang.String.class, java.lang.String[].class))
+    return new net.sf.freecol.common.networking.AttributeMessage((java.lang.String)params[0], (java.lang.String[])params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -117,10 +133,10 @@ metas.put(net.sf.freecol.common.networking.EmigrateUnitMessage.class, common_net
 // net.sf.freecol.common.networking.MissionaryMessage
 final Meta common_networking_MissionaryMessage = new Meta() {
 net.sf.freecol.common.networking.MissionaryMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class, boolean.class))
-    return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class, boolean.class))
+    return new net.sf.freecol.common.networking.MissionaryMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -132,17 +148,17 @@ metas.put(net.sf.freecol.common.networking.MissionaryMessage.class, common_netwo
 // net.sf.freecol.common.networking.FirstContactMessage
 final Meta common_networking_FirstContactMessage = new Meta() {
 net.sf.freecol.common.networking.FirstContactMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Tile)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.common.networking.FirstContactMessage((net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Player)params[0], (net.sf.freecol.common.model.Tile)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setResult": return ((net.sf.freecol.common.networking.FirstContactMessage)object).setResult((boolean)params[0]);
   case "getResult": return ((net.sf.freecol.common.networking.FirstContactMessage)object).getResult();
   case "getSettlementCount": return ((net.sf.freecol.common.networking.FirstContactMessage)object).getSettlementCount();
+  case "setResult": return ((net.sf.freecol.common.networking.FirstContactMessage)object).setResult((boolean)params[0]);
   }
   return common_networking_AttributeMessage.invokeMethod(object, method, params);
 }
@@ -182,10 +198,10 @@ metas.put(net.sf.freecol.common.networking.RenameMessage.class, common_networkin
 // net.sf.freecol.common.networking.FeatureChangeMessage
 final Meta common_networking_FeatureChangeMessage = new Meta() {
 net.sf.freecol.common.networking.FeatureChangeMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class, boolean.class))
-    return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.FreeColGameObject)params[0], (net.sf.freecol.common.model.FreeColObject)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class, boolean.class))
+    return new net.sf.freecol.common.networking.FeatureChangeMessage((net.sf.freecol.common.model.FreeColGameObject)params[0], (net.sf.freecol.common.model.FreeColObject)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -245,10 +261,10 @@ metas.put(net.sf.freecol.common.networking.EnterRevengeModeMessage.class, common
 // net.sf.freecol.common.networking.RearrangeColonyMessage
 final Meta common_networking_RearrangeColonyMessage = new Meta() {
 net.sf.freecol.common.networking.RearrangeColonyMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Colony.class, java.util.List.class, net.sf.freecol.common.model.Colony.class))
-    return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Colony)params[0], (java.util.List)params[1], (net.sf.freecol.common.model.Colony)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Colony.class, java.util.List.class, net.sf.freecol.common.model.Colony.class))
+    return new net.sf.freecol.common.networking.RearrangeColonyMessage((net.sf.freecol.common.model.Colony)params[0], (java.util.List)params[1], (net.sf.freecol.common.model.Colony)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -435,10 +451,10 @@ metas.put(net.sf.freecol.common.networking.SetDeadMessage.class, common_networki
 // net.sf.freecol.common.networking.MonarchActionMessage
 final Meta common_networking_MonarchActionMessage = new Meta() {
 net.sf.freecol.common.networking.MonarchActionMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Monarch.MonarchAction.class, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Monarch.MonarchAction)params[0], (net.sf.freecol.common.model.StringTemplate)params[1], (java.lang.String)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Monarch.MonarchAction.class, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.MonarchActionMessage((net.sf.freecol.common.model.Monarch.MonarchAction)params[0], (net.sf.freecol.common.model.StringTemplate)params[1], (java.lang.String)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -502,10 +518,10 @@ metas.put(net.sf.freecol.common.networking.AskSkillMessage.class, common_network
 // net.sf.freecol.common.networking.InciteMessage
 final Meta common_networking_InciteMessage = new Meta() {
 net.sf.freecol.common.networking.InciteMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Player.class, int.class))
-    return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Player)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Player.class, int.class))
+    return new net.sf.freecol.common.networking.InciteMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Player)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -550,17 +566,17 @@ metas.put(net.sf.freecol.common.networking.DemandTributeMessage.class, common_ne
 // net.sf.freecol.common.networking.IndianDemandMessage
 final Meta common_networking_IndianDemandMessage = new Meta() {
 net.sf.freecol.common.networking.IndianDemandMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.GoodsType.class, int.class))
-    return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.GoodsType.class, int.class))
+    return new net.sf.freecol.common.networking.IndianDemandMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setResult": return ((net.sf.freecol.common.networking.IndianDemandMessage)object).setResult((net.sf.freecol.common.model.Constants.IndianDemandAction)params[0]);
-  case "getResult": return ((net.sf.freecol.common.networking.IndianDemandMessage)object).getResult();
   case "getAmount": return ((net.sf.freecol.common.networking.IndianDemandMessage)object).getAmount();
+  case "getResult": return ((net.sf.freecol.common.networking.IndianDemandMessage)object).getResult();
+  case "setResult": return ((net.sf.freecol.common.networking.IndianDemandMessage)object).setResult((net.sf.freecol.common.model.Constants.IndianDemandAction)params[0]);
   }
   return common_networking_AttributeMessage.invokeMethod(object, method, params);
 }
@@ -694,9 +710,9 @@ metas.put(net.sf.freecol.common.networking.SetNationMessage.class, common_networ
 final Meta common_networking_WrapperMessage = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isEmpty": return ((net.sf.freecol.common.networking.WrapperMessage)object).isEmpty();
   case "getMessage": return ((net.sf.freecol.common.networking.WrapperMessage)object).getMessage();
   case "getSubType": return ((net.sf.freecol.common.networking.WrapperMessage)object).getSubType();
+  case "isEmpty": return ((net.sf.freecol.common.networking.WrapperMessage)object).isEmpty();
   }
   return common_networking_AttributeMessage.invokeMethod(object, method, params);
 }
@@ -721,10 +737,10 @@ metas.put(net.sf.freecol.common.networking.ReplyMessage.class, common_networking
 // net.sf.freecol.common.networking.AnimateAttackMessage
 final Meta common_networking_AnimateAttackMessage = new Meta() {
 net.sf.freecol.common.networking.AnimateAttackMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, boolean.class, boolean.class, boolean.class))
-    return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (boolean)params[2], (boolean)params[2], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, boolean.class, boolean.class, boolean.class))
+    return new net.sf.freecol.common.networking.AnimateAttackMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (boolean)params[2], (boolean)params[2], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -768,18 +784,18 @@ metas.put(net.sf.freecol.common.networking.NativeTradeMessage.class, common_netw
 // net.sf.freecol.common.networking.ErrorMessage
 final Meta common_networking_ErrorMessage = new Meta() {
 net.sf.freecol.common.networking.ErrorMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, java.lang.String.class, java.lang.Exception.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0], (java.lang.Exception)params[1]);
   if (areSame(types, java.lang.Exception.class))
     return new net.sf.freecol.common.networking.ErrorMessage((java.lang.Exception)params[0]);
-  if (areSame(types, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.StringTemplate.class))
     return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, java.lang.String.class, java.lang.Exception.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((java.lang.String)params[0], (java.lang.Exception)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.StringTemplate.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.ErrorMessage((net.sf.freecol.common.model.StringTemplate)params[0], (java.lang.String)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -809,10 +825,10 @@ metas.put(net.sf.freecol.common.networking.NewTurnMessage.class, common_networki
 // net.sf.freecol.common.networking.ClaimLandMessage
 final Meta common_networking_ClaimLandMessage = new Meta() {
 net.sf.freecol.common.networking.ClaimLandMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.FreeColGameObject.class, int.class))
-    return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Tile)params[0], (net.sf.freecol.common.model.FreeColGameObject)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.FreeColGameObject.class, int.class))
+    return new net.sf.freecol.common.networking.ClaimLandMessage((net.sf.freecol.common.model.Tile)params[0], (net.sf.freecol.common.model.FreeColGameObject)params[1], (int)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -839,10 +855,10 @@ metas.put(net.sf.freecol.common.networking.PayArrearsMessage.class, common_netwo
 // net.sf.freecol.common.networking.DeliverGiftMessage
 final Meta common_networking_DeliverGiftMessage = new Meta() {
 net.sf.freecol.common.networking.DeliverGiftMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Goods.class))
-    return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Goods)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, net.sf.freecol.common.model.Goods.class))
+    return new net.sf.freecol.common.networking.DeliverGiftMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (net.sf.freecol.common.model.Goods)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -862,8 +878,8 @@ net.sf.freecol.common.networking.VacantPlayersMessage newInstance(Class<?>[] typ
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setVacantPlayers": return ((net.sf.freecol.common.networking.VacantPlayersMessage)object).setVacantPlayers((net.sf.freecol.common.model.Game)params[0]);
   case "getVacantPlayers": return ((net.sf.freecol.common.networking.VacantPlayersMessage)object).getVacantPlayers();
+  case "setVacantPlayers": return ((net.sf.freecol.common.networking.VacantPlayersMessage)object).setVacantPlayers((net.sf.freecol.common.model.Game)params[0]);
   }
   return common_networking_AttributeMessage.invokeMethod(object, method, params);
 }
@@ -933,10 +949,10 @@ metas.put(net.sf.freecol.common.networking.ClearSpecialityMessage.class, common_
 // net.sf.freecol.common.networking.LootCargoMessage
 final Meta common_networking_LootCargoMessage = new Meta() {
 net.sf.freecol.common.networking.LootCargoMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, java.lang.String.class, java.util.List.class))
-    return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Unit)params[0], (java.lang.String)params[1], (java.util.List)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, java.lang.String.class, java.util.List.class))
+    return new net.sf.freecol.common.networking.LootCargoMessage((net.sf.freecol.common.model.Unit)params[0], (java.lang.String)params[1], (java.util.List)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1092,10 +1108,10 @@ metas.put(net.sf.freecol.common.networking.StartGameMessage.class, common_networ
 // net.sf.freecol.common.networking.AnimateMoveMessage
 final Meta common_networking_AnimateMoveMessage = new Meta() {
 net.sf.freecol.common.networking.AnimateMoveMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Tile.class, boolean.class))
-    return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Tile)params[1], (boolean)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Tile.class, boolean.class))
+    return new net.sf.freecol.common.networking.AnimateMoveMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Tile)params[1], (boolean)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1137,10 +1153,10 @@ metas.put(net.sf.freecol.common.networking.DisembarkMessage.class, common_networ
 // net.sf.freecol.common.networking.LoadGoodsMessage
 final Meta common_networking_LoadGoodsMessage = new Meta() {
 net.sf.freecol.common.networking.LoadGoodsMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (int)params[2], (net.sf.freecol.common.model.Unit)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.common.networking.LoadGoodsMessage((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (int)params[2], (net.sf.freecol.common.model.Unit)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1167,10 +1183,10 @@ metas.put(net.sf.freecol.common.networking.RemoveServerMessage.class, common_net
 // net.sf.freecol.common.networking.NewRegionNameMessage
 final Meta common_networking_NewRegionNameMessage = new Meta() {
 net.sf.freecol.common.networking.NewRegionNameMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Region.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Unit.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Region)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Unit)params[2], (java.lang.String)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Region.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.Unit.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.NewRegionNameMessage((net.sf.freecol.common.model.Region)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.Unit)params[2], (java.lang.String)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1200,10 +1216,10 @@ metas.put(net.sf.freecol.common.networking.WorkMessage.class, common_networking_
 // net.sf.freecol.common.networking.UnloadGoodsMessage
 final Meta common_networking_UnloadGoodsMessage = new Meta() {
 net.sf.freecol.common.networking.UnloadGoodsMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.GoodsType)params[0], (int)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.common.networking.UnloadGoodsMessage((net.sf.freecol.common.model.GoodsType)params[0], (int)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1215,10 +1231,10 @@ metas.put(net.sf.freecol.common.networking.UnloadGoodsMessage.class, common_netw
 // net.sf.freecol.common.networking.ScoutSpeakToChiefMessage
 final Meta common_networking_ScoutSpeakToChiefMessage = new Meta() {
 net.sf.freecol.common.networking.ScoutSpeakToChiefMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, java.lang.String.class))
-    return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (java.lang.String)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.IndianSettlement.class, java.lang.String.class))
+    return new net.sf.freecol.common.networking.ScoutSpeakToChiefMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.IndianSettlement)params[1], (java.lang.String)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1263,10 +1279,10 @@ metas.put(net.sf.freecol.common.networking.SetBuildQueueMessage.class, common_ne
 // net.sf.freecol.common.networking.EmbarkMessage
 final Meta common_networking_EmbarkMessage = new Meta() {
 net.sf.freecol.common.networking.EmbarkMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class))
-    return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Direction.class))
+    return new net.sf.freecol.common.networking.EmbarkMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Direction)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1358,10 +1374,10 @@ metas.put(net.sf.freecol.common.networking.DisconnectMessage.class, common_netwo
 // net.sf.freecol.common.networking.MultipleMessage
 final Meta common_networking_MultipleMessage = new Meta() {
 net.sf.freecol.common.networking.MultipleMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.util.List.class))
-    return new net.sf.freecol.common.networking.MultipleMessage((java.util.List)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.networking.MultipleMessage();
+  if (areSame(types, java.util.List.class))
+    return new net.sf.freecol.common.networking.MultipleMessage((java.util.List)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.MultipleMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
@@ -1379,18 +1395,18 @@ metas.put(net.sf.freecol.common.networking.MultipleMessage.class, common_network
 // net.sf.freecol.common.networking.ChatMessage
 final Meta common_networking_ChatMessage = new Meta() {
 net.sf.freecol.common.networking.ChatMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, boolean.class))
-    return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (boolean)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, boolean.class))
+    return new net.sf.freecol.common.networking.ChatMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getMessage": return ((net.sf.freecol.common.networking.ChatMessage)object).getMessage();
-  case "isPrivate": return ((net.sf.freecol.common.networking.ChatMessage)object).isPrivate();
   case "getColor": return ((net.sf.freecol.common.networking.ChatMessage)object).getColor();
+  case "getMessage": return ((net.sf.freecol.common.networking.ChatMessage)object).getMessage();
   case "getSender": return ((net.sf.freecol.common.networking.ChatMessage)object).getSender();
+  case "isPrivate": return ((net.sf.freecol.common.networking.ChatMessage)object).isPrivate();
   }
   return common_networking_AttributeMessage.invokeMethod(object, method, params);
 }
@@ -1418,12 +1434,12 @@ metas.put(net.sf.freecol.common.networking.GameEndedMessage.class, common_networ
 // net.sf.freecol.common.networking.GameStateMessage
 final Meta common_networking_GameStateMessage = new Meta() {
 net.sf.freecol.common.networking.GameStateMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.FreeColServer.ServerState.class))
-    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.server.FreeColServer.ServerState)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.networking.GameStateMessage();
+  if (areSame(types, net.sf.freecol.server.FreeColServer.ServerState.class))
+    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.server.FreeColServer.ServerState)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.networking.GameStateMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1450,10 +1466,10 @@ metas.put(net.sf.freecol.common.networking.MoveMessage.class, common_networking_
 // net.sf.freecol.common.networking.LoginMessage
 final Meta common_networking_LoginMessage = new Meta() {
 net.sf.freecol.common.networking.LoginMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.server.FreeColServer.ServerState.class, boolean.class, boolean.class, net.sf.freecol.common.model.Game.class))
-    return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.server.FreeColServer.ServerState)params[4], (boolean)params[5], (boolean)params[5], (net.sf.freecol.common.model.Game)params[7]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Player.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.server.FreeColServer.ServerState.class, boolean.class, boolean.class, net.sf.freecol.common.model.Game.class))
+    return new net.sf.freecol.common.networking.LoginMessage((net.sf.freecol.common.model.Player)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.server.FreeColServer.ServerState)params[4], (boolean)params[5], (boolean)params[5], (net.sf.freecol.common.model.Game)params[7]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1561,10 +1577,10 @@ metas.put(net.sf.freecol.common.networking.QuestionMessage.class, common_network
 // net.sf.freecol.common.networking.SetStanceMessage
 final Meta common_networking_SetStanceMessage = new Meta() {
 net.sf.freecol.common.networking.SetStanceMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Stance.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Stance)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Stance.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.networking.SetStanceMessage((net.sf.freecol.common.model.Stance)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1657,10 +1673,10 @@ metas.put(net.sf.freecol.common.networking.ReadyMessage.class, common_networking
 // net.sf.freecol.common.networking.EquipForRoleMessage
 final Meta common_networking_EquipForRoleMessage = new Meta() {
 net.sf.freecol.common.networking.EquipForRoleMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Role.class, int.class))
-    return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Role)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Unit.class, net.sf.freecol.common.model.Role.class, int.class))
+    return new net.sf.freecol.common.networking.EquipForRoleMessage((net.sf.freecol.common.model.Unit)params[0], (net.sf.freecol.common.model.Role)params[1], (int)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -1724,82 +1740,114 @@ metas.put(net.sf.freecol.common.networking.NewLandNameMessage.class, common_netw
 final Meta common_model_FreeColObject = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getModifiers": return ((net.sf.freecol.common.model.FreeColObject)object).getModifiers();
-  case "getId": return ((net.sf.freecol.common.model.FreeColObject)object).getId();
+  case "dumpObject": ((net.sf.freecol.common.model.FreeColObject)object).dumpObject(); return null;
   case "getAbilities": return ((net.sf.freecol.common.model.FreeColObject)object).getAbilities();
+  case "getClassIndex": return ((net.sf.freecol.common.model.FreeColObject)object).getClassIndex();
+  case "getDefenceModifiers": return ((net.sf.freecol.common.model.FreeColObject)object).getDefenceModifiers();
+  case "getDisplayObject": return ((net.sf.freecol.common.model.FreeColObject)object).getDisplayObject();
+  case "getFeatureContainer": return ((net.sf.freecol.common.model.FreeColObject)object).getFeatureContainer();
+  case "getFreeColObjectClass": return ((net.sf.freecol.common.model.FreeColObject)object).getFreeColObjectClass();
+  case "getGame": return ((net.sf.freecol.common.model.FreeColObject)object).getGame();
+  case "getId": return ((net.sf.freecol.common.model.FreeColObject)object).getId();
+  case "getIdNumber": return ((net.sf.freecol.common.model.FreeColObject)object).getIdNumber();
+  case "getIdType": return ((net.sf.freecol.common.model.FreeColObject)object).getIdType();
+  case "getModifiers": return ((net.sf.freecol.common.model.FreeColObject)object).getModifiers();
+  case "getPropertyChangeListeners": return ((net.sf.freecol.common.model.FreeColObject)object).getPropertyChangeListeners();
   case "getSortedAbilities": return ((net.sf.freecol.common.model.FreeColObject)object).getSortedAbilities();
   case "getSortedModifiers": return ((net.sf.freecol.common.model.FreeColObject)object).getSortedModifiers();
-  case "getDefenceModifiers": return ((net.sf.freecol.common.model.FreeColObject)object).getDefenceModifiers();
-  case "getFreeColObjectClass": return ((net.sf.freecol.common.model.FreeColObject)object).getFreeColObjectClass();
-  case "setId": ((net.sf.freecol.common.model.FreeColObject)object).setId((java.lang.String)params[0]); return null;
-  case "getSuffix": return ((net.sf.freecol.common.model.FreeColObject)object).getSuffix();
-  case "getIdType": return ((net.sf.freecol.common.model.FreeColObject)object).getIdType();
-  case "getIdNumber": return ((net.sf.freecol.common.model.FreeColObject)object).getIdNumber();
-  case "getClassIndex": return ((net.sf.freecol.common.model.FreeColObject)object).getClassIndex();
   case "getSpecification": return ((net.sf.freecol.common.model.FreeColObject)object).getSpecification();
-  case "getGame": return ((net.sf.freecol.common.model.FreeColObject)object).getGame();
-  case "setGame": ((net.sf.freecol.common.model.FreeColObject)object).setGame((net.sf.freecol.common.model.Game)params[0]); return null;
-  case "getPropertyChangeListeners": return ((net.sf.freecol.common.model.FreeColObject)object).getPropertyChangeListeners();
-  case "getFeatureContainer": return ((net.sf.freecol.common.model.FreeColObject)object).getFeatureContainer();
-  case "getDisplayObject": return ((net.sf.freecol.common.model.FreeColObject)object).getDisplayObject();
-  case "dumpObject": ((net.sf.freecol.common.model.FreeColObject)object).dumpObject(); return null;
-  case "serialize": return ((net.sf.freecol.common.model.FreeColObject)object).serialize();
+  case "getSuffix": return ((net.sf.freecol.common.model.FreeColObject)object).getSuffix();
   case "getXMLTagName": return ((net.sf.freecol.common.model.FreeColObject)object).getXMLTagName();
+  case "serialize": return ((net.sf.freecol.common.model.FreeColObject)object).serialize();
+  case "setGame": ((net.sf.freecol.common.model.FreeColObject)object).setGame((net.sf.freecol.common.model.Game)params[0]); return null;
+  case "setId": ((net.sf.freecol.common.model.FreeColObject)object).setId((java.lang.String)params[0]); return null;
   }
   return super.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.FreeColObject", net.sf.freecol.common.model.FreeColObject.class);
 metas.put(net.sf.freecol.common.model.FreeColObject.class, common_model_FreeColObject);
-// net.sf.freecol.common.model.StringTemplate
-final Meta common_model_StringTemplate = new Meta() {
-net.sf.freecol.common.model.StringTemplate newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.StringTemplate((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.StringTemplate();
+// net.sf.freecol.common.model.StringTemplate.TemplateType
+final Meta common_model_StringTemplate$TemplateType = new Meta() {
+net.sf.freecol.common.model.StringTemplate.TemplateType newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isEmpty": return ((net.sf.freecol.common.model.StringTemplate)object).isEmpty();
-  case "getTemplateType": return ((net.sf.freecol.common.model.StringTemplate)object).getTemplateType();
-  case "getDefaultId": return ((net.sf.freecol.common.model.StringTemplate)object).getDefaultId();
-  case "setDefaultId": ((net.sf.freecol.common.model.StringTemplate)object).setDefaultId((java.lang.String)params[0]); return null;
+  case "valueOf": return ((net.sf.freecol.common.model.StringTemplate.TemplateType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.StringTemplate.TemplateType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.StringTemplate$TemplateType", net.sf.freecol.common.model.StringTemplate.TemplateType.class);
+metas.put(net.sf.freecol.common.model.StringTemplate.TemplateType.class, common_model_StringTemplate$TemplateType);
+// net.sf.freecol.common.model.StringTemplate
+final Meta common_model_StringTemplate = new Meta() {
+net.sf.freecol.common.model.StringTemplate newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.StringTemplate();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.StringTemplate((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
   case "entryList": return ((net.sf.freecol.common.model.StringTemplate)object).entryList();
+  case "getDefaultId": return ((net.sf.freecol.common.model.StringTemplate)object).getDefaultId();
+  case "getTemplateType": return ((net.sf.freecol.common.model.StringTemplate)object).getTemplateType();
+  case "isEmpty": return ((net.sf.freecol.common.model.StringTemplate)object).isEmpty();
+  case "setDefaultId": ((net.sf.freecol.common.model.StringTemplate)object).setDefaultId((java.lang.String)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.StringTemplate", net.sf.freecol.common.model.StringTemplate.class);
 metas.put(net.sf.freecol.common.model.StringTemplate.class, common_model_StringTemplate);
-// net.sf.freecol.common.model.ModelMessage
-final Meta common_model_ModelMessage = new Meta() {
-net.sf.freecol.common.model.ModelMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
-  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
-    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[3], (net.sf.freecol.common.model.FreeColObject)params[4]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.ModelMessage();
+// net.sf.freecol.common.model.ModelMessage.MessageType
+final Meta common_model_ModelMessage$MessageType = new Meta() {
+net.sf.freecol.common.model.ModelMessage.MessageType newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getSourceId": return ((net.sf.freecol.common.model.ModelMessage)object).getSourceId();
+  case "getNameKey": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).getNameKey();
+  case "getOptionName": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).getOptionName();
+  case "valueOf": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.ModelMessage.MessageType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.ModelMessage$MessageType", net.sf.freecol.common.model.ModelMessage.MessageType.class);
+metas.put(net.sf.freecol.common.model.ModelMessage.MessageType.class, common_model_ModelMessage$MessageType);
+// net.sf.freecol.common.model.ModelMessage
+final Meta common_model_ModelMessage = new Meta() {
+net.sf.freecol.common.model.ModelMessage newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.ModelMessage();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
+  if (areSame(types, net.sf.freecol.common.model.ModelMessage.MessageType.class, java.lang.String.class, java.lang.String.class, net.sf.freecol.common.model.FreeColGameObject.class, net.sf.freecol.common.model.FreeColObject.class))
+    return new net.sf.freecol.common.model.ModelMessage((net.sf.freecol.common.model.ModelMessage.MessageType)params[0], (java.lang.String)params[1], (java.lang.String)params[1], (net.sf.freecol.common.model.FreeColGameObject)params[3], (net.sf.freecol.common.model.FreeColObject)params[4]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
   case "getDisplayId": return ((net.sf.freecol.common.model.ModelMessage)object).getDisplayId();
-  case "getIgnoredMessageKey": return ((net.sf.freecol.common.model.ModelMessage)object).getIgnoredMessageKey();
-  case "setDisplayed": ((net.sf.freecol.common.model.ModelMessage)object).setDisplayed((boolean)params[0]); return null;
   case "getDisplayed": return ((net.sf.freecol.common.model.ModelMessage)object).getDisplayed();
+  case "getIgnoredMessageKey": return ((net.sf.freecol.common.model.ModelMessage)object).getIgnoredMessageKey();
   case "getMessageType": return ((net.sf.freecol.common.model.ModelMessage)object).getMessageType();
   case "getOptionName": return ((net.sf.freecol.common.model.ModelMessage)object).getOptionName();
-  case "setSourceId": ((net.sf.freecol.common.model.ModelMessage)object).setSourceId((java.lang.String)params[0]); return null;
+  case "getSourceId": return ((net.sf.freecol.common.model.ModelMessage)object).getSourceId();
   case "setDisplayId": ((net.sf.freecol.common.model.ModelMessage)object).setDisplayId((java.lang.String)params[0]); return null;
+  case "setDisplayed": ((net.sf.freecol.common.model.ModelMessage)object).setDisplayed((boolean)params[0]); return null;
   case "setMessageType": ((net.sf.freecol.common.model.ModelMessage)object).setMessageType((net.sf.freecol.common.model.ModelMessage.MessageType)params[0]); return null;
+  case "setSourceId": ((net.sf.freecol.common.model.ModelMessage)object).setSourceId((java.lang.String)params[0]); return null;
   }
   return common_model_StringTemplate.invokeMethod(object, method, params);
 }
@@ -1811,41 +1859,57 @@ final Meta common_model_FreeColGameObject = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "dispose": ((net.sf.freecol.common.model.FreeColGameObject)object).dispose(); return null;
+  case "disposeResources": ((net.sf.freecol.common.model.FreeColGameObject)object).disposeResources(); return null;
+  case "fundamentalDispose": ((net.sf.freecol.common.model.FreeColGameObject)object).fundamentalDispose(); return null;
+  case "getDisposables": return ((net.sf.freecol.common.model.FreeColGameObject)object).getDisposables();
   case "intern": ((net.sf.freecol.common.model.FreeColGameObject)object).intern(); return null;
-  case "setSpecification": ((net.sf.freecol.common.model.FreeColGameObject)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   case "isDisposed": return ((net.sf.freecol.common.model.FreeColGameObject)object).isDisposed();
   case "isInitialized": return ((net.sf.freecol.common.model.FreeColGameObject)object).isInitialized();
   case "isInternable": return ((net.sf.freecol.common.model.FreeColGameObject)object).isInternable();
-  case "getDisposables": return ((net.sf.freecol.common.model.FreeColGameObject)object).getDisposables();
-  case "disposeResources": ((net.sf.freecol.common.model.FreeColGameObject)object).disposeResources(); return null;
-  case "fundamentalDispose": ((net.sf.freecol.common.model.FreeColGameObject)object).fundamentalDispose(); return null;
+  case "setSpecification": ((net.sf.freecol.common.model.FreeColGameObject)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.FreeColGameObject", net.sf.freecol.common.model.FreeColGameObject.class);
 metas.put(net.sf.freecol.common.model.FreeColGameObject.class, common_model_FreeColGameObject);
+// net.sf.freecol.common.model.UnitLocation.NoAddReason
+final Meta common_model_UnitLocation$NoAddReason = new Meta() {
+net.sf.freecol.common.model.UnitLocation.NoAddReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).getDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.UnitLocation.NoAddReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.UnitLocation$NoAddReason", net.sf.freecol.common.model.UnitLocation.NoAddReason.class);
+metas.put(net.sf.freecol.common.model.UnitLocation.NoAddReason.class, common_model_UnitLocation$NoAddReason);
 // net.sf.freecol.common.model.UnitLocation
 final Meta common_model_UnitLocation = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getUnits": return ((net.sf.freecol.common.model.UnitLocation)object).getUnits();
-  case "isEmpty": return ((net.sf.freecol.common.model.UnitLocation)object).isEmpty();
-  case "getUnitCount": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitCount();
-  case "getSpaceTaken": return ((net.sf.freecol.common.model.UnitLocation)object).getSpaceTaken();
-  case "getTile": return ((net.sf.freecol.common.model.UnitLocation)object).getTile();
-  case "getFirstUnit": return ((net.sf.freecol.common.model.UnitLocation)object).getFirstUnit();
   case "getColony": return ((net.sf.freecol.common.model.UnitLocation)object).getColony();
-  case "getUnitList": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitList();
-  case "getSettlement": return ((net.sf.freecol.common.model.UnitLocation)object).getSettlement();
+  case "getFirstUnit": return ((net.sf.freecol.common.model.UnitLocation)object).getFirstUnit();
   case "getGoodsContainer": return ((net.sf.freecol.common.model.UnitLocation)object).getGoodsContainer();
+  case "getIndianSettlement": return ((net.sf.freecol.common.model.UnitLocation)object).getIndianSettlement();
+  case "getLastUnit": return ((net.sf.freecol.common.model.UnitLocation)object).getLastUnit();
   case "getLocationLabel": return ((net.sf.freecol.common.model.UnitLocation)object).getLocationLabel();
   case "getNavalUnits": return ((net.sf.freecol.common.model.UnitLocation)object).getNavalUnits();
-  case "getIndianSettlement": return ((net.sf.freecol.common.model.UnitLocation)object).getIndianSettlement();
-  case "isFull": return ((net.sf.freecol.common.model.UnitLocation)object).isFull();
-  case "getUnitCapacity": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitCapacity();
-  case "getLastUnit": return ((net.sf.freecol.common.model.UnitLocation)object).getLastUnit();
+  case "getSettlement": return ((net.sf.freecol.common.model.UnitLocation)object).getSettlement();
+  case "getSpaceTaken": return ((net.sf.freecol.common.model.UnitLocation)object).getSpaceTaken();
+  case "getTile": return ((net.sf.freecol.common.model.UnitLocation)object).getTile();
   case "getTotalUnitCount": return ((net.sf.freecol.common.model.UnitLocation)object).getTotalUnitCount();
+  case "getUnitCapacity": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitCapacity();
+  case "getUnitCount": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitCount();
+  case "getUnitList": return ((net.sf.freecol.common.model.UnitLocation)object).getUnitList();
+  case "getUnits": return ((net.sf.freecol.common.model.UnitLocation)object).getUnits();
+  case "isEmpty": return ((net.sf.freecol.common.model.UnitLocation)object).isEmpty();
+  case "isFull": return ((net.sf.freecol.common.model.UnitLocation)object).isFull();
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -1863,78 +1927,78 @@ net.sf.freecol.common.model.Tile newInstance(Class<?>[] types, Object[] params) 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Tile)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getRegion": return ((net.sf.freecol.common.model.Tile)object).getRegion();
-  case "setRegion": ((net.sf.freecol.common.model.Tile)object).setRegion((net.sf.freecol.common.model.Region)params[0]); return null;
-  case "getResource": return ((net.sf.freecol.common.model.Tile)object).getResource();
-  case "getType": return ((net.sf.freecol.common.model.Tile)object).getType();
-  case "getOwner": return ((net.sf.freecol.common.model.Tile)object).getOwner();
-  case "getMap": return ((net.sf.freecol.common.model.Tile)object).getMap();
-  case "setType": ((net.sf.freecol.common.model.Tile)object).setType((net.sf.freecol.common.model.TileType)params[0]); return null;
+  case "addRoad": return ((net.sf.freecol.common.model.Tile)object).addRoad();
   case "cacheUnseen": ((net.sf.freecol.common.model.Tile)object).cacheUnseen(); return null;
-  case "getOwningSettlement": return ((net.sf.freecol.common.model.Tile)object).getOwningSettlement();
-  case "getDisasterChoices": return ((net.sf.freecol.common.model.Tile)object).getDisasterChoices();
-  case "getLabel": return ((net.sf.freecol.common.model.Tile)object).getLabel();
-  case "hasSettlement": return ((net.sf.freecol.common.model.Tile)object).hasSettlement();
-  case "seeTile": ((net.sf.freecol.common.model.Tile)object).seeTile(); return null;
-  case "getTileToCache": return ((net.sf.freecol.common.model.Tile)object).getTileToCache();
-  case "isLandLocked": return ((net.sf.freecol.common.model.Tile)object).isLandLocked();
-  case "isLand": return ((net.sf.freecol.common.model.Tile)object).isLand();
-  case "getHighSeasCount": return ((net.sf.freecol.common.model.Tile)object).getHighSeasCount();
-  case "isDirectlyHighSeasConnected": return ((net.sf.freecol.common.model.Tile)object).isDirectlyHighSeasConnected();
-  case "getLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).getLostCityRumour();
-  case "getDiscoverableRegion": return ((net.sf.freecol.common.model.Tile)object).getDiscoverableRegion();
-  case "getX": return ((net.sf.freecol.common.model.Tile)object).getX();
-  case "isExplored": return ((net.sf.freecol.common.model.Tile)object).isExplored();
-  case "getY": return ((net.sf.freecol.common.model.Tile)object).getY();
-  case "hasLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).hasLostCityRumour();
-  case "isInUse": return ((net.sf.freecol.common.model.Tile)object).isInUse();
   case "getAdjacentColonies": return ((net.sf.freecol.common.model.Tile)object).getAdjacentColonies();
-  case "isPolar": return ((net.sf.freecol.common.model.Tile)object).isPolar();
+  case "getAvailableAdjacentCount": return ((net.sf.freecol.common.model.Tile)object).getAvailableAdjacentCount();
   case "getBestFoodProduction": return ((net.sf.freecol.common.model.Tile)object).getBestFoodProduction();
-  case "hasResource": return ((net.sf.freecol.common.model.Tile)object).hasResource();
-  case "getSortedPotential": return ((net.sf.freecol.common.model.Tile)object).getSortedPotential();
-  case "isOnRiver": return ((net.sf.freecol.common.model.Tile)object).isOnRiver();
-  case "isRiverCorner": return ((net.sf.freecol.common.model.Tile)object).isRiverCorner();
-  case "getContiguity": return ((net.sf.freecol.common.model.Tile)object).getContiguity();
-  case "getNameKey": return ((net.sf.freecol.common.model.Tile)object).getNameKey();
-  case "getSortedAutoPotential": return ((net.sf.freecol.common.model.Tile)object).getSortedAutoPotential();
-  case "getMaximumPotentialFoodProductionWithExpert": return ((net.sf.freecol.common.model.Tile)object).getMaximumPotentialFoodProductionWithExpert();
-  case "getOccupyingUnit": return ((net.sf.freecol.common.model.Tile)object).getOccupyingUnit();
-  case "isOccupied": return ((net.sf.freecol.common.model.Tile)object).isOccupied();
-  case "isForested": return ((net.sf.freecol.common.model.Tile)object).isForested();
-  case "setTileItemContainer": ((net.sf.freecol.common.model.Tile)object).setTileItemContainer((net.sf.freecol.common.model.TileItemContainer)params[0]); return null;
   case "getCompleteItems": return ((net.sf.freecol.common.model.Tile)object).getCompleteItems();
-  case "setHighSeasCount": ((net.sf.freecol.common.model.Tile)object).setHighSeasCount((int)params[0]); return null;
-  case "getMoveToEurope": return ((net.sf.freecol.common.model.Tile)object).getMoveToEurope();
-  case "setMoveToEurope": ((net.sf.freecol.common.model.Tile)object).setMoveToEurope((java.lang.Boolean)params[0]); return null;
-  case "getStyle": return ((net.sf.freecol.common.model.Tile)object).getStyle();
-  case "setStyle": ((net.sf.freecol.common.model.Tile)object).setStyle((int)params[0]); return null;
-  case "setContiguity": ((net.sf.freecol.common.model.Tile)object).setContiguity((int)params[0]); return null;
-  case "getTileImprovements": return ((net.sf.freecol.common.model.Tile)object).getTileImprovements();
   case "getCompleteTileImprovements": return ((net.sf.freecol.common.model.Tile)object).getCompleteTileImprovements();
-  case "hasRiver": return ((net.sf.freecol.common.model.Tile)object).hasRiver();
+  case "getContiguity": return ((net.sf.freecol.common.model.Tile)object).getContiguity();
+  case "getDefenceBonusPercentage": return ((net.sf.freecol.common.model.Tile)object).getDefenceBonusPercentage();
+  case "getDefenceValue": return ((net.sf.freecol.common.model.Tile)object).getDefenceValue();
+  case "getDisasterChoices": return ((net.sf.freecol.common.model.Tile)object).getDisasterChoices();
+  case "getDiscoverableRegion": return ((net.sf.freecol.common.model.Tile)object).getDiscoverableRegion();
+  case "getHighSeasCount": return ((net.sf.freecol.common.model.Tile)object).getHighSeasCount();
+  case "getLabel": return ((net.sf.freecol.common.model.Tile)object).getLabel();
+  case "getLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).getLostCityRumour();
+  case "getMap": return ((net.sf.freecol.common.model.Tile)object).getMap();
+  case "getMaximumPotentialFoodProductionWithExpert": return ((net.sf.freecol.common.model.Tile)object).getMaximumPotentialFoodProductionWithExpert();
+  case "getMoveToEurope": return ((net.sf.freecol.common.model.Tile)object).getMoveToEurope();
+  case "getNameKey": return ((net.sf.freecol.common.model.Tile)object).getNameKey();
+  case "getOccupyingUnit": return ((net.sf.freecol.common.model.Tile)object).getOccupyingUnit();
+  case "getOwner": return ((net.sf.freecol.common.model.Tile)object).getOwner();
+  case "getOwningSettlement": return ((net.sf.freecol.common.model.Tile)object).getOwningSettlement();
+  case "getRegion": return ((net.sf.freecol.common.model.Tile)object).getRegion();
+  case "getResource": return ((net.sf.freecol.common.model.Tile)object).getResource();
   case "getRiver": return ((net.sf.freecol.common.model.Tile)object).getRiver();
   case "getRiverStyle": return ((net.sf.freecol.common.model.Tile)object).getRiverStyle();
-  case "removeRiver": ((net.sf.freecol.common.model.Tile)object).removeRiver(); return null;
-  case "removeResource": return ((net.sf.freecol.common.model.Tile)object).removeResource();
-  case "getSimpleLabel": return ((net.sf.freecol.common.model.Tile)object).getSimpleLabel();
-  case "isGoodHillTile": return ((net.sf.freecol.common.model.Tile)object).isGoodHillTile();
-  case "hasUnexploredAdjacent": return ((net.sf.freecol.common.model.Tile)object).hasUnexploredAdjacent();
-  case "getAvailableAdjacentCount": return ((net.sf.freecol.common.model.Tile)object).getAvailableAdjacentCount();
-  case "getDefenceValue": return ((net.sf.freecol.common.model.Tile)object).getDefenceValue();
-  case "getDefenceBonusPercentage": return ((net.sf.freecol.common.model.Tile)object).getDefenceBonusPercentage();
-  case "removeLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).removeLostCityRumour();
-  case "isCoastland": return ((net.sf.freecol.common.model.Tile)object).isCoastland();
-  case "isShore": return ((net.sf.freecol.common.model.Tile)object).isShore();
-  case "setOwningSettlement": ((net.sf.freecol.common.model.Tile)object).setOwningSettlement((net.sf.freecol.common.model.Settlement)params[0]); return null;
-  case "getTileItemContainer": return ((net.sf.freecol.common.model.Tile)object).getTileItemContainer();
-  case "setSettlement": ((net.sf.freecol.common.model.Tile)object).setSettlement((net.sf.freecol.common.model.Settlement)params[0]); return null;
-  case "hasRoad": return ((net.sf.freecol.common.model.Tile)object).hasRoad();
-  case "addRoad": return ((net.sf.freecol.common.model.Tile)object).addRoad();
   case "getRoad": return ((net.sf.freecol.common.model.Tile)object).getRoad();
-  case "removeRoad": return ((net.sf.freecol.common.model.Tile)object).removeRoad();
+  case "getSimpleLabel": return ((net.sf.freecol.common.model.Tile)object).getSimpleLabel();
+  case "getSortedAutoPotential": return ((net.sf.freecol.common.model.Tile)object).getSortedAutoPotential();
+  case "getSortedPotential": return ((net.sf.freecol.common.model.Tile)object).getSortedPotential();
+  case "getStyle": return ((net.sf.freecol.common.model.Tile)object).getStyle();
+  case "getTileImprovements": return ((net.sf.freecol.common.model.Tile)object).getTileImprovements();
+  case "getTileItemContainer": return ((net.sf.freecol.common.model.Tile)object).getTileItemContainer();
+  case "getTileToCache": return ((net.sf.freecol.common.model.Tile)object).getTileToCache();
+  case "getType": return ((net.sf.freecol.common.model.Tile)object).getType();
+  case "getX": return ((net.sf.freecol.common.model.Tile)object).getX();
+  case "getY": return ((net.sf.freecol.common.model.Tile)object).getY();
+  case "hasLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).hasLostCityRumour();
+  case "hasResource": return ((net.sf.freecol.common.model.Tile)object).hasResource();
+  case "hasRiver": return ((net.sf.freecol.common.model.Tile)object).hasRiver();
+  case "hasRoad": return ((net.sf.freecol.common.model.Tile)object).hasRoad();
+  case "hasSettlement": return ((net.sf.freecol.common.model.Tile)object).hasSettlement();
+  case "hasUnexploredAdjacent": return ((net.sf.freecol.common.model.Tile)object).hasUnexploredAdjacent();
+  case "isCoastland": return ((net.sf.freecol.common.model.Tile)object).isCoastland();
+  case "isDirectlyHighSeasConnected": return ((net.sf.freecol.common.model.Tile)object).isDirectlyHighSeasConnected();
+  case "isExplored": return ((net.sf.freecol.common.model.Tile)object).isExplored();
+  case "isForested": return ((net.sf.freecol.common.model.Tile)object).isForested();
+  case "isGoodHillTile": return ((net.sf.freecol.common.model.Tile)object).isGoodHillTile();
   case "isHighSeasConnected": return ((net.sf.freecol.common.model.Tile)object).isHighSeasConnected();
+  case "isInUse": return ((net.sf.freecol.common.model.Tile)object).isInUse();
+  case "isLand": return ((net.sf.freecol.common.model.Tile)object).isLand();
+  case "isLandLocked": return ((net.sf.freecol.common.model.Tile)object).isLandLocked();
+  case "isOccupied": return ((net.sf.freecol.common.model.Tile)object).isOccupied();
+  case "isOnRiver": return ((net.sf.freecol.common.model.Tile)object).isOnRiver();
+  case "isPolar": return ((net.sf.freecol.common.model.Tile)object).isPolar();
+  case "isRiverCorner": return ((net.sf.freecol.common.model.Tile)object).isRiverCorner();
+  case "isShore": return ((net.sf.freecol.common.model.Tile)object).isShore();
+  case "removeLostCityRumour": return ((net.sf.freecol.common.model.Tile)object).removeLostCityRumour();
+  case "removeResource": return ((net.sf.freecol.common.model.Tile)object).removeResource();
+  case "removeRiver": ((net.sf.freecol.common.model.Tile)object).removeRiver(); return null;
+  case "removeRoad": return ((net.sf.freecol.common.model.Tile)object).removeRoad();
+  case "seeTile": ((net.sf.freecol.common.model.Tile)object).seeTile(); return null;
+  case "setContiguity": ((net.sf.freecol.common.model.Tile)object).setContiguity((int)params[0]); return null;
+  case "setHighSeasCount": ((net.sf.freecol.common.model.Tile)object).setHighSeasCount((int)params[0]); return null;
+  case "setMoveToEurope": ((net.sf.freecol.common.model.Tile)object).setMoveToEurope((java.lang.Boolean)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.Tile)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setOwningSettlement": ((net.sf.freecol.common.model.Tile)object).setOwningSettlement((net.sf.freecol.common.model.Settlement)params[0]); return null;
+  case "setRegion": ((net.sf.freecol.common.model.Tile)object).setRegion((net.sf.freecol.common.model.Region)params[0]); return null;
+  case "setSettlement": ((net.sf.freecol.common.model.Tile)object).setSettlement((net.sf.freecol.common.model.Settlement)params[0]); return null;
+  case "setStyle": ((net.sf.freecol.common.model.Tile)object).setStyle((int)params[0]); return null;
+  case "setTileItemContainer": ((net.sf.freecol.common.model.Tile)object).setTileItemContainer((net.sf.freecol.common.model.TileItemContainer)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.Tile)object).setType((net.sf.freecol.common.model.TileType)params[0]); return null;
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
 }
@@ -1953,11 +2017,11 @@ metas.put(net.sf.freecol.common.model.FreeColSpecObject.class, common_model_Free
 final Meta common_model_FreeColSpecObjectType = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getIndex": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getIndex();
   case "getDescriptionKey": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getDescriptionKey();
-  case "getScopes": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getScopes();
+  case "getIndex": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getIndex();
   case "getNameKey": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getNameKey();
   case "getScopeList": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getScopeList();
+  case "getScopes": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).getScopes();
   case "isAbstractType": return ((net.sf.freecol.common.model.FreeColSpecObjectType)object).isAbstractType();
   }
   return common_model_FreeColSpecObject.invokeMethod(object, method, params);
@@ -1976,20 +2040,20 @@ net.sf.freecol.common.model.SettlementType newInstance(Class<?>[] types, Object[
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isCapital": return ((net.sf.freecol.common.model.SettlementType)object).isCapital();
-  case "getWarehouseCapacity": return ((net.sf.freecol.common.model.SettlementType)object).getWarehouseCapacity();
-  case "getGifts": return ((net.sf.freecol.common.model.SettlementType)object).getGifts();
   case "getClaimableRadius": return ((net.sf.freecol.common.model.SettlementType)object).getClaimableRadius();
-  case "getVisibleRadius": return ((net.sf.freecol.common.model.SettlementType)object).getVisibleRadius();
-  case "getTradeBonus": return ((net.sf.freecol.common.model.SettlementType)object).getTradeBonus();
-  case "getMinimumSize": return ((net.sf.freecol.common.model.SettlementType)object).getMinimumSize();
-  case "getMaximumSize": return ((net.sf.freecol.common.model.SettlementType)object).getMaximumSize();
-  case "getPlunderTypes": return ((net.sf.freecol.common.model.SettlementType)object).getPlunderTypes();
-  case "getExtraClaimableRadius": return ((net.sf.freecol.common.model.SettlementType)object).getExtraClaimableRadius();
-  case "getWanderingRadius": return ((net.sf.freecol.common.model.SettlementType)object).getWanderingRadius();
-  case "getMinimumGrowth": return ((net.sf.freecol.common.model.SettlementType)object).getMinimumGrowth();
-  case "getMaximumGrowth": return ((net.sf.freecol.common.model.SettlementType)object).getMaximumGrowth();
   case "getConvertThreshold": return ((net.sf.freecol.common.model.SettlementType)object).getConvertThreshold();
+  case "getExtraClaimableRadius": return ((net.sf.freecol.common.model.SettlementType)object).getExtraClaimableRadius();
+  case "getGifts": return ((net.sf.freecol.common.model.SettlementType)object).getGifts();
+  case "getMaximumGrowth": return ((net.sf.freecol.common.model.SettlementType)object).getMaximumGrowth();
+  case "getMaximumSize": return ((net.sf.freecol.common.model.SettlementType)object).getMaximumSize();
+  case "getMinimumGrowth": return ((net.sf.freecol.common.model.SettlementType)object).getMinimumGrowth();
+  case "getMinimumSize": return ((net.sf.freecol.common.model.SettlementType)object).getMinimumSize();
+  case "getPlunderTypes": return ((net.sf.freecol.common.model.SettlementType)object).getPlunderTypes();
+  case "getTradeBonus": return ((net.sf.freecol.common.model.SettlementType)object).getTradeBonus();
+  case "getVisibleRadius": return ((net.sf.freecol.common.model.SettlementType)object).getVisibleRadius();
+  case "getWanderingRadius": return ((net.sf.freecol.common.model.SettlementType)object).getWanderingRadius();
+  case "getWarehouseCapacity": return ((net.sf.freecol.common.model.SettlementType)object).getWarehouseCapacity();
+  case "isCapital": return ((net.sf.freecol.common.model.SettlementType)object).isCapital();
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -2000,17 +2064,17 @@ metas.put(net.sf.freecol.common.model.SettlementType.class, common_model_Settlem
 final Meta common_model_BuildableType = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getRequiredGoodsList": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredGoodsList();
-  case "getRequiredGoods": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredGoods();
-  case "needsGoodsToBuild": return ((net.sf.freecol.common.model.BuildableType)object).needsGoodsToBuild();
-  case "getRequiredPopulation": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredPopulation();
-  case "getRequiredAbilities": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredAbilities();
+  case "getCurrentlyBuildingLabel": return ((net.sf.freecol.common.model.BuildableType)object).getCurrentlyBuildingLabel();
   case "getLimits": return ((net.sf.freecol.common.model.BuildableType)object).getLimits();
-  case "setRequiredPopulation": ((net.sf.freecol.common.model.BuildableType)object).setRequiredPopulation((int)params[0]); return null;
+  case "getRequiredAbilities": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredAbilities();
+  case "getRequiredGoods": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredGoods();
+  case "getRequiredGoodsList": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredGoodsList();
+  case "getRequiredPopulation": return ((net.sf.freecol.common.model.BuildableType)object).getRequiredPopulation();
+  case "needsGoodsToBuild": return ((net.sf.freecol.common.model.BuildableType)object).needsGoodsToBuild();
+  case "setLimits": ((net.sf.freecol.common.model.BuildableType)object).setLimits((java.util.List)params[0]); return null;
   case "setRequiredAbilities": ((net.sf.freecol.common.model.BuildableType)object).setRequiredAbilities((java.util.Map)params[0]); return null;
   case "setRequiredGoods": ((net.sf.freecol.common.model.BuildableType)object).setRequiredGoods((java.util.List)params[0]); return null;
-  case "setLimits": ((net.sf.freecol.common.model.BuildableType)object).setLimits((java.util.List)params[0]); return null;
-  case "getCurrentlyBuildingLabel": return ((net.sf.freecol.common.model.BuildableType)object).getCurrentlyBuildingLabel();
+  case "setRequiredPopulation": ((net.sf.freecol.common.model.BuildableType)object).setRequiredPopulation((int)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -2027,18 +2091,18 @@ net.sf.freecol.common.model.Role newInstance(Class<?>[] types, Object[] params) 
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "getDowngrade": return ((net.sf.freecol.common.model.Role)object).getDowngrade();
-  case "getOffence": return ((net.sf.freecol.common.model.Role)object).getOffence();
+  case "getExpertUnit": return ((net.sf.freecol.common.model.Role)object).getExpertUnit();
   case "getMaximumCount": return ((net.sf.freecol.common.model.Role)object).getMaximumCount();
+  case "getOffence": return ((net.sf.freecol.common.model.Role)object).getOffence();
+  case "getRoleChanges": return ((net.sf.freecol.common.model.Role)object).getRoleChanges();
+  case "getRoleIndex": return ((net.sf.freecol.common.model.Role)object).getRoleIndex();
+  case "getRoleSuffix": return ((net.sf.freecol.common.model.Role)object).getRoleSuffix();
+  case "isDefaultRole": return ((net.sf.freecol.common.model.Role)object).isDefaultRole();
   case "isDefensive": return ((net.sf.freecol.common.model.Role)object).isDefensive();
   case "isOffensive": return ((net.sf.freecol.common.model.Role)object).isOffensive();
-  case "getRoleIndex": return ((net.sf.freecol.common.model.Role)object).getRoleIndex();
-  case "getRoleChanges": return ((net.sf.freecol.common.model.Role)object).getRoleChanges();
-  case "isDefaultRole": return ((net.sf.freecol.common.model.Role)object).isDefaultRole();
-  case "getRoleSuffix": return ((net.sf.freecol.common.model.Role)object).getRoleSuffix();
   case "setDowngrade": ((net.sf.freecol.common.model.Role)object).setDowngrade((net.sf.freecol.common.model.Role)params[0]); return null;
-  case "setMaximumCount": ((net.sf.freecol.common.model.Role)object).setMaximumCount((int)params[0]); return null;
-  case "getExpertUnit": return ((net.sf.freecol.common.model.Role)object).getExpertUnit();
   case "setExpertUnit": ((net.sf.freecol.common.model.Role)object).setExpertUnit((net.sf.freecol.common.model.UnitType)params[0]); return null;
+  case "setMaximumCount": ((net.sf.freecol.common.model.Role)object).setMaximumCount((int)params[0]); return null;
   case "toFullString": return ((net.sf.freecol.common.model.Role)object).toFullString();
   }
   return common_model_BuildableType.invokeMethod(object, method, params);
@@ -2068,16 +2132,16 @@ metas.put(net.sf.freecol.common.model.PlunderType.class, common_model_PlunderTyp
 final Meta common_model_TileItem = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getLocation": return ((net.sf.freecol.common.model.TileItem)object).getLocation();
   case "getLayer": return ((net.sf.freecol.common.model.TileItem)object).getLayer();
+  case "getLocation": return ((net.sf.freecol.common.model.TileItem)object).getLocation();
+  case "getNameKey": return ((net.sf.freecol.common.model.TileItem)object).getNameKey();
   case "getSpaceTaken": return ((net.sf.freecol.common.model.TileItem)object).getSpaceTaken();
   case "getTile": return ((net.sf.freecol.common.model.TileItem)object).getTile();
-  case "setLocation": return ((net.sf.freecol.common.model.TileItem)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
+  case "getZIndex": return ((net.sf.freecol.common.model.TileItem)object).getZIndex();
+  case "isComplete": return ((net.sf.freecol.common.model.TileItem)object).isComplete();
   case "isInEurope": return ((net.sf.freecol.common.model.TileItem)object).isInEurope();
   case "isNatural": return ((net.sf.freecol.common.model.TileItem)object).isNatural();
-  case "getNameKey": return ((net.sf.freecol.common.model.TileItem)object).getNameKey();
-  case "isComplete": return ((net.sf.freecol.common.model.TileItem)object).isComplete();
-  case "getZIndex": return ((net.sf.freecol.common.model.TileItem)object).getZIndex();
+  case "setLocation": return ((net.sf.freecol.common.model.TileItem)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -2088,21 +2152,21 @@ metas.put(net.sf.freecol.common.model.TileItem.class, common_model_TileItem);
 final Meta common_model_TradeItem = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isValid": return ((net.sf.freecol.common.model.TradeItem)object).isValid();
+  case "getDestination": return ((net.sf.freecol.common.model.TradeItem)object).getDestination();
   case "getGold": return ((net.sf.freecol.common.model.TradeItem)object).getGold();
-  case "getUnit": return ((net.sf.freecol.common.model.TradeItem)object).getUnit();
-  case "getStance": return ((net.sf.freecol.common.model.TradeItem)object).getStance();
-  case "setStance": ((net.sf.freecol.common.model.TradeItem)object).setStance((net.sf.freecol.common.model.Stance)params[0]); return null;
+  case "getGoods": return ((net.sf.freecol.common.model.TradeItem)object).getGoods();
   case "getLabel": return ((net.sf.freecol.common.model.TradeItem)object).getLabel();
   case "getSource": return ((net.sf.freecol.common.model.TradeItem)object).getSource();
-  case "getDestination": return ((net.sf.freecol.common.model.TradeItem)object).getDestination();
-  case "setDestination": ((net.sf.freecol.common.model.TradeItem)object).setDestination((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getGoods": return ((net.sf.freecol.common.model.TradeItem)object).getGoods();
-  case "setGold": ((net.sf.freecol.common.model.TradeItem)object).setGold((int)params[0]); return null;
+  case "getStance": return ((net.sf.freecol.common.model.TradeItem)object).getStance();
+  case "getUnit": return ((net.sf.freecol.common.model.TradeItem)object).getUnit();
   case "getVictim": return ((net.sf.freecol.common.model.TradeItem)object).getVictim();
-  case "setSource": ((net.sf.freecol.common.model.TradeItem)object).setSource((net.sf.freecol.common.model.Player)params[0]); return null;
   case "isUnique": return ((net.sf.freecol.common.model.TradeItem)object).isUnique();
+  case "isValid": return ((net.sf.freecol.common.model.TradeItem)object).isValid();
+  case "setDestination": ((net.sf.freecol.common.model.TradeItem)object).setDestination((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setGold": ((net.sf.freecol.common.model.TradeItem)object).setGold((int)params[0]); return null;
   case "setGoods": ((net.sf.freecol.common.model.TradeItem)object).setGoods((net.sf.freecol.common.model.Goods)params[0]); return null;
+  case "setSource": ((net.sf.freecol.common.model.TradeItem)object).setSource((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setStance": ((net.sf.freecol.common.model.TradeItem)object).setStance((net.sf.freecol.common.model.Stance)params[0]); return null;
   case "setUnit": ((net.sf.freecol.common.model.TradeItem)object).setUnit((net.sf.freecol.common.model.Unit)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
@@ -2113,10 +2177,10 @@ metas.put(net.sf.freecol.common.model.TradeItem.class, common_model_TradeItem);
 // net.sf.freecol.common.model.GoodsTradeItem
 final Meta common_model_GoodsTradeItem = new Meta() {
 net.sf.freecol.common.model.GoodsTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
-    return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
+    return new net.sf.freecol.common.model.GoodsTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -2138,15 +2202,15 @@ net.sf.freecol.common.model.AbstractGoods newInstance(Class<?>[] types, Object[]
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isPositive": return ((net.sf.freecol.common.model.AbstractGoods)object).isPositive();
-  case "getType": return ((net.sf.freecol.common.model.AbstractGoods)object).getType();
-  case "setType": ((net.sf.freecol.common.model.AbstractGoods)object).setType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
   case "getAmount": return ((net.sf.freecol.common.model.AbstractGoods)object).getAmount();
-  case "setAmount": ((net.sf.freecol.common.model.AbstractGoods)object).setAmount((int)params[0]); return null;
   case "getLabel": return ((net.sf.freecol.common.model.AbstractGoods)object).getLabel();
-  case "isStorable": return ((net.sf.freecol.common.model.AbstractGoods)object).isStorable();
-  case "isFoodType": return ((net.sf.freecol.common.model.AbstractGoods)object).isFoodType();
   case "getNameKey": return ((net.sf.freecol.common.model.AbstractGoods)object).getNameKey();
+  case "getType": return ((net.sf.freecol.common.model.AbstractGoods)object).getType();
+  case "isFoodType": return ((net.sf.freecol.common.model.AbstractGoods)object).isFoodType();
+  case "isPositive": return ((net.sf.freecol.common.model.AbstractGoods)object).isPositive();
+  case "isStorable": return ((net.sf.freecol.common.model.AbstractGoods)object).isStorable();
+  case "setAmount": ((net.sf.freecol.common.model.AbstractGoods)object).setAmount((int)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.AbstractGoods)object).setType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
@@ -2156,25 +2220,25 @@ metas.put(net.sf.freecol.common.model.AbstractGoods.class, common_model_Abstract
 // net.sf.freecol.common.model.Goods
 final Meta common_model_Goods = new Meta() {
 net.sf.freecol.common.model.Goods newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class))
-    return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class))
+    return new net.sf.freecol.common.model.Goods((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Goods)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "adjustAmount": ((net.sf.freecol.common.model.Goods)object).adjustAmount(); return null;
   case "getLocation": return ((net.sf.freecol.common.model.Goods)object).getLocation();
   case "getOwner": return ((net.sf.freecol.common.model.Goods)object).getOwner();
-  case "setSpecification": ((net.sf.freecol.common.model.Goods)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   case "getSpaceTaken": return ((net.sf.freecol.common.model.Goods)object).getSpaceTaken();
   case "getTile": return ((net.sf.freecol.common.model.Goods)object).getTile();
-  case "setLocation": return ((net.sf.freecol.common.model.Goods)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
   case "isInEurope": return ((net.sf.freecol.common.model.Goods)object).isInEurope();
-  case "adjustAmount": ((net.sf.freecol.common.model.Goods)object).adjustAmount(); return null;
+  case "setLocation": return ((net.sf.freecol.common.model.Goods)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
+  case "setOwner": ((net.sf.freecol.common.model.Goods)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setSpecification": ((net.sf.freecol.common.model.Goods)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   }
   return common_model_AbstractGoods.invokeMethod(object, method, params);
 }
@@ -2185,34 +2249,34 @@ metas.put(net.sf.freecol.common.model.Goods.class, common_model_Goods);
 final Meta common_model_WorkLocation = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.WorkLocation)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getLevel": return ((net.sf.freecol.common.model.WorkLocation)object).getLevel();
-  case "getOwner": return ((net.sf.freecol.common.model.WorkLocation)object).getOwner();
-  case "getLabel": return ((net.sf.freecol.common.model.WorkLocation)object).getLabel();
+  case "canAutoProduce": return ((net.sf.freecol.common.model.WorkLocation)object).canAutoProduce();
   case "canBeWorked": return ((net.sf.freecol.common.model.WorkLocation)object).canBeWorked();
-  case "getWorkTile": return ((net.sf.freecol.common.model.WorkLocation)object).getWorkTile();
-  case "getProductionInfo": return ((net.sf.freecol.common.model.WorkLocation)object).getProductionInfo();
   case "canTeach": return ((net.sf.freecol.common.model.WorkLocation)object).canTeach();
-  case "getRebelFactor": return ((net.sf.freecol.common.model.WorkLocation)object).getRebelFactor();
-  case "getProduction": return ((net.sf.freecol.common.model.WorkLocation)object).getProduction();
-  case "updateProductionType": ((net.sf.freecol.common.model.WorkLocation)object).updateProductionType(); return null;
-  case "setColony": ((net.sf.freecol.common.model.WorkLocation)object).setColony((net.sf.freecol.common.model.Colony)params[0]); return null;
-  case "getInputs": return ((net.sf.freecol.common.model.WorkLocation)object).getInputs();
-  case "getOutputs": return ((net.sf.freecol.common.model.WorkLocation)object).getOutputs();
-  case "isAvailable": return ((net.sf.freecol.common.model.WorkLocation)object).isAvailable();
-  case "isCurrent": return ((net.sf.freecol.common.model.WorkLocation)object).isCurrent();
-  case "getProductionType": return ((net.sf.freecol.common.model.WorkLocation)object).getProductionType();
-  case "setProductionType": ((net.sf.freecol.common.model.WorkLocation)object).setProductionType((net.sf.freecol.common.model.ProductionType)params[0]); return null;
+  case "getClaimTemplate": return ((net.sf.freecol.common.model.WorkLocation)object).getClaimTemplate();
+  case "getCompetenceFactor": return ((net.sf.freecol.common.model.WorkLocation)object).getCompetenceFactor();
   case "getCurrentWorkType": return ((net.sf.freecol.common.model.WorkLocation)object).getCurrentWorkType();
-  case "setWorkFor": return ((net.sf.freecol.common.model.WorkLocation)object).setWorkFor((net.sf.freecol.common.model.Unit)params[0]);
+  case "getExpertUnitType": return ((net.sf.freecol.common.model.WorkLocation)object).getExpertUnitType();
+  case "getInputs": return ((net.sf.freecol.common.model.WorkLocation)object).getInputs();
+  case "getLabel": return ((net.sf.freecol.common.model.WorkLocation)object).getLabel();
+  case "getLevel": return ((net.sf.freecol.common.model.WorkLocation)object).getLevel();
+  case "getNoWorkReason": return ((net.sf.freecol.common.model.WorkLocation)object).getNoWorkReason();
+  case "getOutputs": return ((net.sf.freecol.common.model.WorkLocation)object).getOutputs();
+  case "getOwner": return ((net.sf.freecol.common.model.WorkLocation)object).getOwner();
+  case "getProduction": return ((net.sf.freecol.common.model.WorkLocation)object).getProduction();
+  case "getProductionInfo": return ((net.sf.freecol.common.model.WorkLocation)object).getProductionInfo();
+  case "getProductionType": return ((net.sf.freecol.common.model.WorkLocation)object).getProductionType();
+  case "getRebelFactor": return ((net.sf.freecol.common.model.WorkLocation)object).getRebelFactor();
   case "getSuggestions": return ((net.sf.freecol.common.model.WorkLocation)object).getSuggestions();
+  case "getWorkTile": return ((net.sf.freecol.common.model.WorkLocation)object).getWorkTile();
   case "hasInputs": return ((net.sf.freecol.common.model.WorkLocation)object).hasInputs();
   case "hasOutputs": return ((net.sf.freecol.common.model.WorkLocation)object).hasOutputs();
-  case "getNoWorkReason": return ((net.sf.freecol.common.model.WorkLocation)object).getNoWorkReason();
-  case "getExpertUnitType": return ((net.sf.freecol.common.model.WorkLocation)object).getExpertUnitType();
-  case "canAutoProduce": return ((net.sf.freecol.common.model.WorkLocation)object).canAutoProduce();
-  case "getCompetenceFactor": return ((net.sf.freecol.common.model.WorkLocation)object).getCompetenceFactor();
-  case "getClaimTemplate": return ((net.sf.freecol.common.model.WorkLocation)object).getClaimTemplate();
+  case "isAvailable": return ((net.sf.freecol.common.model.WorkLocation)object).isAvailable();
+  case "isCurrent": return ((net.sf.freecol.common.model.WorkLocation)object).isCurrent();
+  case "setColony": ((net.sf.freecol.common.model.WorkLocation)object).setColony((net.sf.freecol.common.model.Colony)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.WorkLocation)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setProductionType": ((net.sf.freecol.common.model.WorkLocation)object).setProductionType((net.sf.freecol.common.model.ProductionType)params[0]); return null;
+  case "setWorkFor": return ((net.sf.freecol.common.model.WorkLocation)object).setWorkFor((net.sf.freecol.common.model.Unit)params[0]);
+  case "updateProductionType": ((net.sf.freecol.common.model.WorkLocation)object).updateProductionType(); return null;
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
 }
@@ -2222,30 +2286,30 @@ metas.put(net.sf.freecol.common.model.WorkLocation.class, common_model_WorkLocat
 // net.sf.freecol.common.model.ProductionType
 final Meta common_model_ProductionType = new Meta() {
 net.sf.freecol.common.model.ProductionType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, java.util.List.class, java.util.List.class))
     return new net.sf.freecol.common.model.ProductionType((java.util.List)params[0], (java.util.List)params[0]);
   if (areSame(types, net.sf.freecol.common.model.AbstractGoods.class, boolean.class, java.lang.String.class))
     return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.AbstractGoods)params[0], (boolean)params[1], (java.lang.String)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.Specification)params[0]);
   if (areSame(types, net.sf.freecol.common.model.GoodsType.class, net.sf.freecol.common.model.GoodsType.class, int.class))
     return new net.sf.freecol.common.model.ProductionType((net.sf.freecol.common.model.GoodsType)params[0], (net.sf.freecol.common.model.GoodsType)params[0], (int)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getOutputList": return ((net.sf.freecol.common.model.ProductionType)object).getOutputList();
-  case "getInputs": return ((net.sf.freecol.common.model.ProductionType)object).getInputs();
-  case "getOutputs": return ((net.sf.freecol.common.model.ProductionType)object).getOutputs();
-  case "setUnattended": ((net.sf.freecol.common.model.ProductionType)object).setUnattended((boolean)params[0]); return null;
-  case "getUnattended": return ((net.sf.freecol.common.model.ProductionType)object).getUnattended();
-  case "getProductionLevel": return ((net.sf.freecol.common.model.ProductionType)object).getProductionLevel();
+  case "getBestOutputType": return ((net.sf.freecol.common.model.ProductionType)object).getBestOutputType();
   case "getInputList": return ((net.sf.freecol.common.model.ProductionType)object).getInputList();
+  case "getInputs": return ((net.sf.freecol.common.model.ProductionType)object).getInputs();
+  case "getOutputList": return ((net.sf.freecol.common.model.ProductionType)object).getOutputList();
+  case "getOutputs": return ((net.sf.freecol.common.model.ProductionType)object).getOutputs();
+  case "getProductionLevel": return ((net.sf.freecol.common.model.ProductionType)object).getProductionLevel();
+  case "getUnattended": return ((net.sf.freecol.common.model.ProductionType)object).getUnattended();
   case "setInputs": ((net.sf.freecol.common.model.ProductionType)object).setInputs((java.util.List)params[0]); return null;
   case "setOutputs": ((net.sf.freecol.common.model.ProductionType)object).setOutputs((java.util.List)params[0]); return null;
-  case "getBestOutputType": return ((net.sf.freecol.common.model.ProductionType)object).getBestOutputType();
+  case "setUnattended": ((net.sf.freecol.common.model.ProductionType)object).setUnattended((boolean)params[0]); return null;
   }
   return common_model_FreeColSpecObject.invokeMethod(object, method, params);
 }
@@ -2256,11 +2320,11 @@ metas.put(net.sf.freecol.common.model.ProductionType.class, common_model_Product
 final Meta common_model_GoodsLocation = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "removeAll": ((net.sf.freecol.common.model.GoodsLocation)object).removeAll(); return null;
-  case "invalidateCache": ((net.sf.freecol.common.model.GoodsLocation)object).invalidateCache(); return null;
   case "getCompactGoodsList": return ((net.sf.freecol.common.model.GoodsLocation)object).getCompactGoodsList();
-  case "getGoodsList": return ((net.sf.freecol.common.model.GoodsLocation)object).getGoodsList();
   case "getGoodsCapacity": return ((net.sf.freecol.common.model.GoodsLocation)object).getGoodsCapacity();
+  case "getGoodsList": return ((net.sf.freecol.common.model.GoodsLocation)object).getGoodsList();
+  case "invalidateCache": ((net.sf.freecol.common.model.GoodsLocation)object).invalidateCache(); return null;
+  case "removeAll": ((net.sf.freecol.common.model.GoodsLocation)object).removeAll(); return null;
   case "setGoodsContainer": ((net.sf.freecol.common.model.GoodsLocation)object).setGoodsContainer((net.sf.freecol.common.model.GoodsContainer)params[0]); return null;
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
@@ -2272,38 +2336,53 @@ metas.put(net.sf.freecol.common.model.GoodsLocation.class, common_model_GoodsLoc
 final Meta common_model_Settlement = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Settlement)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getName": return ((net.sf.freecol.common.model.Settlement)object).getName();
-  case "setName": ((net.sf.freecol.common.model.Settlement)object).setName((java.lang.String)params[0]); return null;
-  case "getType": return ((net.sf.freecol.common.model.Settlement)object).getType();
-  case "getOwner": return ((net.sf.freecol.common.model.Settlement)object).getOwner();
-  case "setType": ((net.sf.freecol.common.model.Settlement)object).setType((net.sf.freecol.common.model.SettlementType)params[0]); return null;
-  case "getOwnedTiles": return ((net.sf.freecol.common.model.Settlement)object).getOwnedTiles();
-  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Settlement)object).getVisibleTileSet();
-  case "getRadius": return ((net.sf.freecol.common.model.Settlement)object).getRadius();
-  case "getAllUnitsList": return ((net.sf.freecol.common.model.Settlement)object).getAllUnitsList();
-  case "getLineOfSight": return ((net.sf.freecol.common.model.Settlement)object).getLineOfSight();
-  case "getImmigration": return ((net.sf.freecol.common.model.Settlement)object).getImmigration();
-  case "isCapital": return ((net.sf.freecol.common.model.Settlement)object).isCapital();
-  case "exciseSettlement": ((net.sf.freecol.common.model.Settlement)object).exciseSettlement(); return null;
-  case "isLandLocked": return ((net.sf.freecol.common.model.Settlement)object).isLandLocked();
-  case "getLiberty": return ((net.sf.freecol.common.model.Settlement)object).getLiberty();
-  case "getSonsOfLiberty": return ((net.sf.freecol.common.model.Settlement)object).getSonsOfLiberty();
-  case "getHighSeasCount": return ((net.sf.freecol.common.model.Settlement)object).getHighSeasCount();
-  case "getUpkeep": return ((net.sf.freecol.common.model.Settlement)object).getUpkeep();
   case "canBombardEnemyShip": return ((net.sf.freecol.common.model.Settlement)object).canBombardEnemyShip();
-  case "isConnectedPort": return ((net.sf.freecol.common.model.Settlement)object).isConnectedPort();
-  case "getWarehouseCapacity": return ((net.sf.freecol.common.model.Settlement)object).getWarehouseCapacity();
+  case "exciseSettlement": ((net.sf.freecol.common.model.Settlement)object).exciseSettlement(); return null;
+  case "getAllUnitsList": return ((net.sf.freecol.common.model.Settlement)object).getAllUnitsList();
   case "getDefenceRatio": return ((net.sf.freecol.common.model.Settlement)object).getDefenceRatio();
-  case "isBadlyDefended": return ((net.sf.freecol.common.model.Settlement)object).isBadlyDefended();
-  case "setCapital": ((net.sf.freecol.common.model.Settlement)object).setCapital((boolean)params[0]); return null;
   case "getFoodConsumption": return ((net.sf.freecol.common.model.Settlement)object).getFoodConsumption();
+  case "getHighSeasCount": return ((net.sf.freecol.common.model.Settlement)object).getHighSeasCount();
+  case "getImmigration": return ((net.sf.freecol.common.model.Settlement)object).getImmigration();
+  case "getLiberty": return ((net.sf.freecol.common.model.Settlement)object).getLiberty();
+  case "getLineOfSight": return ((net.sf.freecol.common.model.Settlement)object).getLineOfSight();
+  case "getName": return ((net.sf.freecol.common.model.Settlement)object).getName();
+  case "getOwnedTiles": return ((net.sf.freecol.common.model.Settlement)object).getOwnedTiles();
+  case "getOwner": return ((net.sf.freecol.common.model.Settlement)object).getOwner();
+  case "getRadius": return ((net.sf.freecol.common.model.Settlement)object).getRadius();
+  case "getSonsOfLiberty": return ((net.sf.freecol.common.model.Settlement)object).getSonsOfLiberty();
+  case "getType": return ((net.sf.freecol.common.model.Settlement)object).getType();
+  case "getUpkeep": return ((net.sf.freecol.common.model.Settlement)object).getUpkeep();
+  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Settlement)object).getVisibleTileSet();
+  case "getWarehouseCapacity": return ((net.sf.freecol.common.model.Settlement)object).getWarehouseCapacity();
+  case "isBadlyDefended": return ((net.sf.freecol.common.model.Settlement)object).isBadlyDefended();
+  case "isCapital": return ((net.sf.freecol.common.model.Settlement)object).isCapital();
+  case "isConnectedPort": return ((net.sf.freecol.common.model.Settlement)object).isConnectedPort();
+  case "isLandLocked": return ((net.sf.freecol.common.model.Settlement)object).isLandLocked();
+  case "setCapital": ((net.sf.freecol.common.model.Settlement)object).setCapital((boolean)params[0]); return null;
+  case "setName": ((net.sf.freecol.common.model.Settlement)object).setName((java.lang.String)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.Settlement)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.Settlement)object).setType((net.sf.freecol.common.model.SettlementType)params[0]); return null;
   }
   return common_model_GoodsLocation.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Settlement", net.sf.freecol.common.model.Settlement.class);
 metas.put(net.sf.freecol.common.model.Settlement.class, common_model_Settlement);
+// net.sf.freecol.common.model.IndianSettlement.ContactLevel
+final Meta common_model_IndianSettlement$ContactLevel = new Meta() {
+net.sf.freecol.common.model.IndianSettlement.ContactLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.IndianSettlement.ContactLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.IndianSettlement.ContactLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.IndianSettlement$ContactLevel", net.sf.freecol.common.model.IndianSettlement.ContactLevel.class);
+metas.put(net.sf.freecol.common.model.IndianSettlement.ContactLevel.class, common_model_IndianSettlement$ContactLevel);
 // net.sf.freecol.common.model.IndianSettlement
 final Meta common_model_IndianSettlement = new Meta() {
 net.sf.freecol.common.model.IndianSettlement newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2313,31 +2392,31 @@ net.sf.freecol.common.model.IndianSettlement newInstance(Class<?>[] types, Objec
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "hasMissionary": return ((net.sf.freecol.common.model.IndianSettlement)object).hasMissionary();
-  case "getMissionary": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionary();
-  case "getOwnedUnitList": return ((net.sf.freecol.common.model.IndianSettlement)object).getOwnedUnitList();
-  case "getMissionaryLineOfSight": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryLineOfSight();
-  case "getLearnableSkill": return ((net.sf.freecol.common.model.IndianSettlement)object).getLearnableSkill();
-  case "getWantedGoods": return ((net.sf.freecol.common.model.IndianSettlement)object).getWantedGoods();
-  case "setContacted": return ((net.sf.freecol.common.model.IndianSettlement)object).setContacted((net.sf.freecol.common.model.Player)params[0]);
-  case "updateWantedGoods": ((net.sf.freecol.common.model.IndianSettlement)object).updateWantedGoods(); return null;
+  case "getConvertProgress": return ((net.sf.freecol.common.model.IndianSettlement)object).getConvertProgress();
+  case "getGoodsForSale": return ((net.sf.freecol.common.model.IndianSettlement)object).getGoodsForSale();
   case "getLastTribute": return ((net.sf.freecol.common.model.IndianSettlement)object).getLastTribute();
+  case "getLearnableSkill": return ((net.sf.freecol.common.model.IndianSettlement)object).getLearnableSkill();
+  case "getMissionary": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionary();
+  case "getMissionaryLineOfSight": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryLineOfSight();
+  case "getMissionaryVisibleTiles": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryVisibleTiles();
+  case "getMostHated": return ((net.sf.freecol.common.model.IndianSettlement)object).getMostHated();
+  case "getOwnedUnitList": return ((net.sf.freecol.common.model.IndianSettlement)object).getOwnedUnitList();
+  case "getRequiredDefenders": return ((net.sf.freecol.common.model.IndianSettlement)object).getRequiredDefenders();
+  case "getWantedGoods": return ((net.sf.freecol.common.model.IndianSettlement)object).getWantedGoods();
+  case "getWantedGoodsCount": return ((net.sf.freecol.common.model.IndianSettlement)object).getWantedGoodsCount();
+  case "hasAnyScouted": return ((net.sf.freecol.common.model.IndianSettlement)object).hasAnyScouted();
+  case "hasMissionary": return ((net.sf.freecol.common.model.IndianSettlement)object).hasMissionary();
+  case "setContacted": return ((net.sf.freecol.common.model.IndianSettlement)object).setContacted((net.sf.freecol.common.model.Player)params[0]);
+  case "setConvertProgress": ((net.sf.freecol.common.model.IndianSettlement)object).setConvertProgress((int)params[0]); return null;
+  case "setGoodsForSale": ((net.sf.freecol.common.model.IndianSettlement)object).setGoodsForSale((java.util.List)params[0]); return null;
   case "setLastTribute": ((net.sf.freecol.common.model.IndianSettlement)object).setLastTribute((int)params[0]); return null;
   case "setLearnableSkill": ((net.sf.freecol.common.model.IndianSettlement)object).setLearnableSkill((net.sf.freecol.common.model.UnitType)params[0]); return null;
-  case "setVisited": return ((net.sf.freecol.common.model.IndianSettlement)object).setVisited((net.sf.freecol.common.model.Player)params[0]);
-  case "hasAnyScouted": return ((net.sf.freecol.common.model.IndianSettlement)object).hasAnyScouted();
   case "setMissionary": ((net.sf.freecol.common.model.IndianSettlement)object).setMissionary((net.sf.freecol.common.model.Unit)params[0]); return null;
-  case "getMissionaryVisibleTiles": return ((net.sf.freecol.common.model.IndianSettlement)object).getMissionaryVisibleTiles();
-  case "getConvertProgress": return ((net.sf.freecol.common.model.IndianSettlement)object).getConvertProgress();
-  case "setConvertProgress": ((net.sf.freecol.common.model.IndianSettlement)object).setConvertProgress((int)params[0]); return null;
-  case "setWantedGoods": ((net.sf.freecol.common.model.IndianSettlement)object).setWantedGoods((java.util.List)params[0]); return null;
-  case "getWantedGoodsCount": return ((net.sf.freecol.common.model.IndianSettlement)object).getWantedGoodsCount();
-  case "getMostHated": return ((net.sf.freecol.common.model.IndianSettlement)object).getMostHated();
   case "setMostHated": ((net.sf.freecol.common.model.IndianSettlement)object).setMostHated((net.sf.freecol.common.model.Player)params[0]); return null;
   case "setScouted": return ((net.sf.freecol.common.model.IndianSettlement)object).setScouted((net.sf.freecol.common.model.Player)params[0]);
-  case "getGoodsForSale": return ((net.sf.freecol.common.model.IndianSettlement)object).getGoodsForSale();
-  case "setGoodsForSale": ((net.sf.freecol.common.model.IndianSettlement)object).setGoodsForSale((java.util.List)params[0]); return null;
-  case "getRequiredDefenders": return ((net.sf.freecol.common.model.IndianSettlement)object).getRequiredDefenders();
+  case "setVisited": return ((net.sf.freecol.common.model.IndianSettlement)object).setVisited((net.sf.freecol.common.model.Player)params[0]);
+  case "setWantedGoods": ((net.sf.freecol.common.model.IndianSettlement)object).setWantedGoods((java.util.List)params[0]); return null;
+  case "updateWantedGoods": ((net.sf.freecol.common.model.IndianSettlement)object).updateWantedGoods(); return null;
   }
   return common_model_Settlement.invokeMethod(object, method, params);
 }
@@ -2347,35 +2426,50 @@ metas.put(net.sf.freecol.common.model.IndianSettlement.class, common_model_India
 // net.sf.freecol.common.model.Scope
 final Meta common_model_Scope = new Meta() {
 net.sf.freecol.common.model.Scope newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.Scope((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.Scope();
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.Scope((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getKey": return ((net.sf.freecol.common.model.Scope)object).getKey();
-  case "getType": return ((net.sf.freecol.common.model.Scope)object).getType();
-  case "getMethodName": return ((net.sf.freecol.common.model.Scope)object).getMethodName();
-  case "setType": ((net.sf.freecol.common.model.Scope)object).setType((java.lang.String)params[0]); return null;
   case "getAbilityId": return ((net.sf.freecol.common.model.Scope)object).getAbilityId();
-  case "getFeatureString": return ((net.sf.freecol.common.model.Scope)object).getFeatureString();
-  case "getMatchNegated": return ((net.sf.freecol.common.model.Scope)object).getMatchNegated();
-  case "setMatchesNull": ((net.sf.freecol.common.model.Scope)object).setMatchesNull((boolean)params[0]); return null;
-  case "setMatchNegated": ((net.sf.freecol.common.model.Scope)object).setMatchNegated((boolean)params[0]); return null;
-  case "setAbilityId": ((net.sf.freecol.common.model.Scope)object).setAbilityId((java.lang.String)params[0]); return null;
   case "getAbilityValue": return ((net.sf.freecol.common.model.Scope)object).getAbilityValue();
-  case "setAbilityValue": ((net.sf.freecol.common.model.Scope)object).setAbilityValue((boolean)params[0]); return null;
-  case "setMethodName": ((net.sf.freecol.common.model.Scope)object).setMethodName((java.lang.String)params[0]); return null;
+  case "getFeatureString": return ((net.sf.freecol.common.model.Scope)object).getFeatureString();
+  case "getKey": return ((net.sf.freecol.common.model.Scope)object).getKey();
+  case "getMatchNegated": return ((net.sf.freecol.common.model.Scope)object).getMatchNegated();
+  case "getMethodName": return ((net.sf.freecol.common.model.Scope)object).getMethodName();
   case "getMethodValue": return ((net.sf.freecol.common.model.Scope)object).getMethodValue();
+  case "getType": return ((net.sf.freecol.common.model.Scope)object).getType();
+  case "setAbilityId": ((net.sf.freecol.common.model.Scope)object).setAbilityId((java.lang.String)params[0]); return null;
+  case "setAbilityValue": ((net.sf.freecol.common.model.Scope)object).setAbilityValue((boolean)params[0]); return null;
+  case "setMatchNegated": ((net.sf.freecol.common.model.Scope)object).setMatchNegated((boolean)params[0]); return null;
+  case "setMatchesNull": ((net.sf.freecol.common.model.Scope)object).setMatchesNull((boolean)params[0]); return null;
+  case "setMethodName": ((net.sf.freecol.common.model.Scope)object).setMethodName((java.lang.String)params[0]); return null;
   case "setMethodValue": ((net.sf.freecol.common.model.Scope)object).setMethodValue((java.lang.String)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.Scope)object).setType((java.lang.String)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Scope", net.sf.freecol.common.model.Scope.class);
 metas.put(net.sf.freecol.common.model.Scope.class, common_model_Scope);
+// net.sf.freecol.common.model.Market.Access
+final Meta common_model_Market$Access = new Meta() {
+net.sf.freecol.common.model.Market.Access newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Market.Access)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Market.Access)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Market$Access", net.sf.freecol.common.model.Market.Access.class);
+metas.put(net.sf.freecol.common.model.Market.Access.class, common_model_Market$Access);
 // net.sf.freecol.common.model.Market
 final Meta common_model_Market = new Meta() {
 net.sf.freecol.common.model.Market newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2387,17 +2481,32 @@ net.sf.freecol.common.model.Market newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Market)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "getMarketDataValues": return ((net.sf.freecol.common.model.Market)object).getMarketDataValues();
   case "getOwner": return ((net.sf.freecol.common.model.Market)object).getOwner();
   case "getSalePriceComparator": return ((net.sf.freecol.common.model.Market)object).getSalePriceComparator();
-  case "getMarketDataValues": return ((net.sf.freecol.common.model.Market)object).getMarketDataValues();
   case "getTransactionListener": return ((net.sf.freecol.common.model.Market)object).getTransactionListener();
+  case "setOwner": ((net.sf.freecol.common.model.Market)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Market", net.sf.freecol.common.model.Market.class);
 metas.put(net.sf.freecol.common.model.Market.class, common_model_Market);
+// net.sf.freecol.common.model.Limit.Operator
+final Meta common_model_Limit$Operator = new Meta() {
+net.sf.freecol.common.model.Limit.Operator newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Limit.Operator)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Limit.Operator)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Limit$Operator", net.sf.freecol.common.model.Limit.Operator.class);
+metas.put(net.sf.freecol.common.model.Limit.Operator.class, common_model_Limit$Operator);
 // net.sf.freecol.common.model.Limit
 final Meta common_model_Limit = new Meta() {
 net.sf.freecol.common.model.Limit newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2411,11 +2520,11 @@ net.sf.freecol.common.model.Limit newInstance(Class<?>[] types, Object[] params)
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getRightHandSide": return ((net.sf.freecol.common.model.Limit)object).getRightHandSide();
   case "getLeftHandSide": return ((net.sf.freecol.common.model.Limit)object).getLeftHandSide();
-  case "setOperator": ((net.sf.freecol.common.model.Limit)object).setOperator((net.sf.freecol.common.model.Limit.Operator)params[0]); return null;
   case "getOperator": return ((net.sf.freecol.common.model.Limit)object).getOperator();
+  case "getRightHandSide": return ((net.sf.freecol.common.model.Limit)object).getRightHandSide();
   case "setLeftHandSide": ((net.sf.freecol.common.model.Limit)object).setLeftHandSide((net.sf.freecol.common.model.Operand)params[0]); return null;
+  case "setOperator": ((net.sf.freecol.common.model.Limit)object).setOperator((net.sf.freecol.common.model.Limit.Operator)params[0]); return null;
   case "setRightHandSide": ((net.sf.freecol.common.model.Limit)object).setRightHandSide((net.sf.freecol.common.model.Operand)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
@@ -2423,6 +2532,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Limit", net.sf.freecol.common.model.Limit.class);
 metas.put(net.sf.freecol.common.model.Limit.class, common_model_Limit);
+// net.sf.freecol.common.model.Disaster.Effects
+final Meta common_model_Disaster$Effects = new Meta() {
+net.sf.freecol.common.model.Disaster.Effects newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Disaster.Effects)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Disaster.Effects)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Disaster$Effects", net.sf.freecol.common.model.Disaster.Effects.class);
+metas.put(net.sf.freecol.common.model.Disaster.Effects.class, common_model_Disaster$Effects);
 // net.sf.freecol.common.model.Disaster
 final Meta common_model_Disaster = new Meta() {
 net.sf.freecol.common.model.Disaster newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2450,14 +2574,14 @@ net.sf.freecol.common.model.Building newInstance(Class<?>[] types, Object[] para
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
+  case "canBeDamaged": return ((net.sf.freecol.common.model.Building)object).canBeDamaged();
+  case "canBuildNext": return ((net.sf.freecol.common.model.Building)object).canBuildNext();
+  case "downgrade": return ((net.sf.freecol.common.model.Building)object).downgrade();
+  case "getConsumedGoods": return ((net.sf.freecol.common.model.Building)object).getConsumedGoods();
+  case "getNameKey": return ((net.sf.freecol.common.model.Building)object).getNameKey();
   case "getPriority": return ((net.sf.freecol.common.model.Building)object).getPriority();
   case "getType": return ((net.sf.freecol.common.model.Building)object).getType();
-  case "downgrade": return ((net.sf.freecol.common.model.Building)object).downgrade();
-  case "canBeDamaged": return ((net.sf.freecol.common.model.Building)object).canBeDamaged();
-  case "getNameKey": return ((net.sf.freecol.common.model.Building)object).getNameKey();
-  case "getConsumedGoods": return ((net.sf.freecol.common.model.Building)object).getConsumedGoods();
   case "upgrade": return ((net.sf.freecol.common.model.Building)object).upgrade();
-  case "canBuildNext": return ((net.sf.freecol.common.model.Building)object).canBuildNext();
   }
   return common_model_WorkLocation.invokeMethod(object, method, params);
 }
@@ -2469,56 +2593,71 @@ final Meta common_model_Feature = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "getDuration": return ((net.sf.freecol.common.model.Feature)object).getDuration();
+  case "getFirstTurn": return ((net.sf.freecol.common.model.Feature)object).getFirstTurn();
+  case "getLastTurn": return ((net.sf.freecol.common.model.Feature)object).getLastTurn();
+  case "getNameKey": return ((net.sf.freecol.common.model.Feature)object).getNameKey();
+  case "getScopeList": return ((net.sf.freecol.common.model.Feature)object).getScopeList();
+  case "getScopes": return ((net.sf.freecol.common.model.Feature)object).getScopes();
   case "getSource": return ((net.sf.freecol.common.model.Feature)object).getSource();
+  case "hasScope": return ((net.sf.freecol.common.model.Feature)object).hasScope();
+  case "hasTimeLimit": return ((net.sf.freecol.common.model.Feature)object).hasTimeLimit();
   case "isIndependent": return ((net.sf.freecol.common.model.Feature)object).isIndependent();
   case "isTemporary": return ((net.sf.freecol.common.model.Feature)object).isTemporary();
-  case "getScopes": return ((net.sf.freecol.common.model.Feature)object).getScopes();
-  case "getNameKey": return ((net.sf.freecol.common.model.Feature)object).getNameKey();
-  case "setSource": ((net.sf.freecol.common.model.Feature)object).setSource((net.sf.freecol.common.model.FreeColObject)params[0]); return null;
-  case "hasTimeLimit": return ((net.sf.freecol.common.model.Feature)object).hasTimeLimit();
-  case "getFirstTurn": return ((net.sf.freecol.common.model.Feature)object).getFirstTurn();
-  case "setFirstTurn": ((net.sf.freecol.common.model.Feature)object).setFirstTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
-  case "getLastTurn": return ((net.sf.freecol.common.model.Feature)object).getLastTurn();
-  case "setLastTurn": ((net.sf.freecol.common.model.Feature)object).setLastTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
   case "setDuration": ((net.sf.freecol.common.model.Feature)object).setDuration((int)params[0]); return null;
+  case "setFirstTurn": ((net.sf.freecol.common.model.Feature)object).setFirstTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "setLastTurn": ((net.sf.freecol.common.model.Feature)object).setLastTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "setSource": ((net.sf.freecol.common.model.Feature)object).setSource((net.sf.freecol.common.model.FreeColObject)params[0]); return null;
   case "setTemporary": ((net.sf.freecol.common.model.Feature)object).setTemporary((boolean)params[0]); return null;
-  case "hasScope": return ((net.sf.freecol.common.model.Feature)object).hasScope();
-  case "getScopeList": return ((net.sf.freecol.common.model.Feature)object).getScopeList();
   }
   return common_model_FreeColSpecObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Feature", net.sf.freecol.common.model.Feature.class);
 metas.put(net.sf.freecol.common.model.Feature.class, common_model_Feature);
-// net.sf.freecol.common.model.Modifier
-final Meta common_model_Modifier = new Meta() {
-net.sf.freecol.common.model.Modifier newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class))
-    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.model.Specification)params[0]);
-  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class, int.class))
-    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3], (int)params[4]);
-  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class))
-    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
+// net.sf.freecol.common.model.Modifier.ModifierType
+final Meta common_model_Modifier$ModifierType = new Meta() {
+net.sf.freecol.common.model.Modifier.ModifierType newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isKnown": return ((net.sf.freecol.common.model.Modifier)object).isKnown();
-  case "getValue": return ((net.sf.freecol.common.model.Modifier)object).getValue();
-  case "setValue": return ((net.sf.freecol.common.model.Modifier)object).setValue((float)params[0]);
-  case "getType": return ((net.sf.freecol.common.model.Modifier)object).getType();
-  case "setType": return ((net.sf.freecol.common.model.Modifier)object).setType((net.sf.freecol.common.model.Modifier.ModifierType)params[0]);
-  case "setModifierIndex": return ((net.sf.freecol.common.model.Modifier)object).setModifierIndex((int)params[0]);
-  case "hasIncrement": return ((net.sf.freecol.common.model.Modifier)object).hasIncrement();
+  case "valueOf": return ((net.sf.freecol.common.model.Modifier.ModifierType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Modifier.ModifierType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Modifier$ModifierType", net.sf.freecol.common.model.Modifier.ModifierType.class);
+metas.put(net.sf.freecol.common.model.Modifier.ModifierType.class, common_model_Modifier$ModifierType);
+// net.sf.freecol.common.model.Modifier
+final Meta common_model_Modifier = new Meta() {
+net.sf.freecol.common.model.Modifier newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.Modifier((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
+  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class))
+    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2]);
+  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class))
+    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3]);
+  if (areSame(types, java.lang.String.class, float.class, net.sf.freecol.common.model.Modifier.ModifierType.class, net.sf.freecol.common.model.FreeColObject.class, int.class))
+    return new net.sf.freecol.common.model.Modifier((java.lang.String)params[0], (float)params[1], (net.sf.freecol.common.model.Modifier.ModifierType)params[2], (net.sf.freecol.common.model.FreeColObject)params[3], (int)params[4]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
   case "getIncrement": return ((net.sf.freecol.common.model.Modifier)object).getIncrement();
   case "getIncrementType": return ((net.sf.freecol.common.model.Modifier)object).getIncrementType();
+  case "getModifierIndex": return ((net.sf.freecol.common.model.Modifier)object).getModifierIndex();
+  case "getType": return ((net.sf.freecol.common.model.Modifier)object).getType();
+  case "getValue": return ((net.sf.freecol.common.model.Modifier)object).getValue();
+  case "hasIncrement": return ((net.sf.freecol.common.model.Modifier)object).hasIncrement();
+  case "isKnown": return ((net.sf.freecol.common.model.Modifier)object).isKnown();
   case "setIncrement": return ((net.sf.freecol.common.model.Modifier)object).setIncrement((float)params[0]);
   case "setIncrementType": return ((net.sf.freecol.common.model.Modifier)object).setIncrementType((net.sf.freecol.common.model.Modifier.ModifierType)params[0]);
-  case "getModifierIndex": return ((net.sf.freecol.common.model.Modifier)object).getModifierIndex();
+  case "setModifierIndex": return ((net.sf.freecol.common.model.Modifier)object).setModifierIndex((int)params[0]);
+  case "setType": return ((net.sf.freecol.common.model.Modifier)object).setType((net.sf.freecol.common.model.Modifier.ModifierType)params[0]);
+  case "setValue": return ((net.sf.freecol.common.model.Modifier)object).setValue((float)params[0]);
   }
   return common_model_Feature.invokeMethod(object, method, params);
 }
@@ -2544,23 +2683,23 @@ metas.put(net.sf.freecol.common.model.UnitChangeType.class, common_model_UnitCha
 // net.sf.freecol.common.model.NativeTradeItem
 final Meta common_model_NativeTradeItem = new Meta() {
 net.sf.freecol.common.model.NativeTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.NativeTradeItem.class))
     return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.NativeTradeItem)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Goods.class))
     return new net.sf.freecol.common.model.NativeTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Goods)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setPrice": ((net.sf.freecol.common.model.NativeTradeItem)object).setPrice((int)params[0]); return null;
+  case "getHaggleCount": return ((net.sf.freecol.common.model.NativeTradeItem)object).getHaggleCount();
   case "getPrice": return ((net.sf.freecol.common.model.NativeTradeItem)object).getPrice();
-  case "priceIsValid": return ((net.sf.freecol.common.model.NativeTradeItem)object).priceIsValid();
   case "goodsMatcher": return ((net.sf.freecol.common.model.NativeTradeItem)object).goodsMatcher();
   case "priceIsSet": return ((net.sf.freecol.common.model.NativeTradeItem)object).priceIsSet();
-  case "getHaggleCount": return ((net.sf.freecol.common.model.NativeTradeItem)object).getHaggleCount();
+  case "priceIsValid": return ((net.sf.freecol.common.model.NativeTradeItem)object).priceIsValid();
   case "setHaggleCount": ((net.sf.freecol.common.model.NativeTradeItem)object).setHaggleCount((int)params[0]); return null;
+  case "setPrice": ((net.sf.freecol.common.model.NativeTradeItem)object).setPrice((int)params[0]); return null;
   }
   return common_model_GoodsTradeItem.invokeMethod(object, method, params);
 }
@@ -2578,54 +2717,84 @@ net.sf.freecol.common.model.MarketData newInstance(Class<?>[] types, Object[] pa
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "update": ((net.sf.freecol.common.model.MarketData)object).update(); return null;
-  case "setInitialPrice": ((net.sf.freecol.common.model.MarketData)object).setInitialPrice((int)params[0]); return null;
-  case "price": return ((net.sf.freecol.common.model.MarketData)object).price();
   case "getAmountInMarket": return ((net.sf.freecol.common.model.MarketData)object).getAmountInMarket();
   case "getArrears": return ((net.sf.freecol.common.model.MarketData)object).getArrears();
-  case "setArrears": ((net.sf.freecol.common.model.MarketData)object).setArrears((int)params[0]); return null;
+  case "getCostToBuy": return ((net.sf.freecol.common.model.MarketData)object).getCostToBuy();
+  case "getGoodsType": return ((net.sf.freecol.common.model.MarketData)object).getGoodsType();
+  case "getIncomeAfterTaxes": return ((net.sf.freecol.common.model.MarketData)object).getIncomeAfterTaxes();
+  case "getIncomeBeforeTaxes": return ((net.sf.freecol.common.model.MarketData)object).getIncomeBeforeTaxes();
+  case "getInitialPrice": return ((net.sf.freecol.common.model.MarketData)object).getInitialPrice();
+  case "getOldPrice": return ((net.sf.freecol.common.model.MarketData)object).getOldPrice();
   case "getPaidForSale": return ((net.sf.freecol.common.model.MarketData)object).getPaidForSale();
   case "getSales": return ((net.sf.freecol.common.model.MarketData)object).getSales();
-  case "getIncomeBeforeTaxes": return ((net.sf.freecol.common.model.MarketData)object).getIncomeBeforeTaxes();
-  case "getIncomeAfterTaxes": return ((net.sf.freecol.common.model.MarketData)object).getIncomeAfterTaxes();
-  case "getGoodsType": return ((net.sf.freecol.common.model.MarketData)object).getGoodsType();
-  case "getInitialPrice": return ((net.sf.freecol.common.model.MarketData)object).getInitialPrice();
   case "getTraded": return ((net.sf.freecol.common.model.MarketData)object).getTraded();
-  case "getCostToBuy": return ((net.sf.freecol.common.model.MarketData)object).getCostToBuy();
+  case "price": return ((net.sf.freecol.common.model.MarketData)object).price();
   case "setAmountInMarket": ((net.sf.freecol.common.model.MarketData)object).setAmountInMarket((int)params[0]); return null;
-  case "setTraded": ((net.sf.freecol.common.model.MarketData)object).setTraded((boolean)params[0]); return null;
-  case "setSales": ((net.sf.freecol.common.model.MarketData)object).setSales((int)params[0]); return null;
-  case "setIncomeBeforeTaxes": ((net.sf.freecol.common.model.MarketData)object).setIncomeBeforeTaxes((int)params[0]); return null;
-  case "setIncomeAfterTaxes": ((net.sf.freecol.common.model.MarketData)object).setIncomeAfterTaxes((int)params[0]); return null;
-  case "getOldPrice": return ((net.sf.freecol.common.model.MarketData)object).getOldPrice();
-  case "setOldPrice": ((net.sf.freecol.common.model.MarketData)object).setOldPrice((int)params[0]); return null;
+  case "setArrears": ((net.sf.freecol.common.model.MarketData)object).setArrears((int)params[0]); return null;
   case "setCostToBuy": ((net.sf.freecol.common.model.MarketData)object).setCostToBuy((int)params[0]); return null;
+  case "setIncomeAfterTaxes": ((net.sf.freecol.common.model.MarketData)object).setIncomeAfterTaxes((int)params[0]); return null;
+  case "setIncomeBeforeTaxes": ((net.sf.freecol.common.model.MarketData)object).setIncomeBeforeTaxes((int)params[0]); return null;
+  case "setInitialPrice": ((net.sf.freecol.common.model.MarketData)object).setInitialPrice((int)params[0]); return null;
+  case "setOldPrice": ((net.sf.freecol.common.model.MarketData)object).setOldPrice((int)params[0]); return null;
   case "setPaidForSale": ((net.sf.freecol.common.model.MarketData)object).setPaidForSale((int)params[0]); return null;
+  case "setSales": ((net.sf.freecol.common.model.MarketData)object).setSales((int)params[0]); return null;
+  case "setTraded": ((net.sf.freecol.common.model.MarketData)object).setTraded((boolean)params[0]); return null;
+  case "update": ((net.sf.freecol.common.model.MarketData)object).update(); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.MarketData", net.sf.freecol.common.model.MarketData.class);
 metas.put(net.sf.freecol.common.model.MarketData.class, common_model_MarketData);
-// net.sf.freecol.common.model.Operand
-final Meta common_model_Operand = new Meta() {
-net.sf.freecol.common.model.Operand newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Operand.OperandType.class, net.sf.freecol.common.model.Operand.ScopeLevel.class))
-    return new net.sf.freecol.common.model.Operand((net.sf.freecol.common.model.Operand.OperandType)params[0], (net.sf.freecol.common.model.Operand.ScopeLevel)params[1]);
-  if (areSame(types, int.class))
-    return new net.sf.freecol.common.model.Operand((int)params[0]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.Operand();
+// net.sf.freecol.common.model.Operand.OperandType
+final Meta common_model_Operand$OperandType = new Meta() {
+net.sf.freecol.common.model.Operand.OperandType newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getValue": return ((net.sf.freecol.common.model.Operand)object).getValue();
-  case "setValue": ((net.sf.freecol.common.model.Operand)object).setValue((java.lang.Integer)params[0]); return null;
-  case "getScopeLevel": return ((net.sf.freecol.common.model.Operand)object).getScopeLevel();
+  case "valueOf": return ((net.sf.freecol.common.model.Operand.OperandType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Operand.OperandType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Operand$OperandType", net.sf.freecol.common.model.Operand.OperandType.class);
+metas.put(net.sf.freecol.common.model.Operand.OperandType.class, common_model_Operand$OperandType);
+// net.sf.freecol.common.model.Operand.ScopeLevel
+final Meta common_model_Operand$ScopeLevel = new Meta() {
+net.sf.freecol.common.model.Operand.ScopeLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Operand.ScopeLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Operand.ScopeLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Operand$ScopeLevel", net.sf.freecol.common.model.Operand.ScopeLevel.class);
+metas.put(net.sf.freecol.common.model.Operand.ScopeLevel.class, common_model_Operand$ScopeLevel);
+// net.sf.freecol.common.model.Operand
+final Meta common_model_Operand = new Meta() {
+net.sf.freecol.common.model.Operand newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.Operand();
+  if (areSame(types, int.class))
+    return new net.sf.freecol.common.model.Operand((int)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Operand.OperandType.class, net.sf.freecol.common.model.Operand.ScopeLevel.class))
+    return new net.sf.freecol.common.model.Operand((net.sf.freecol.common.model.Operand.OperandType)params[0], (net.sf.freecol.common.model.Operand.ScopeLevel)params[1]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
   case "getOperandType": return ((net.sf.freecol.common.model.Operand)object).getOperandType();
+  case "getScopeLevel": return ((net.sf.freecol.common.model.Operand)object).getScopeLevel();
+  case "getValue": return ((net.sf.freecol.common.model.Operand)object).getValue();
   case "setOperandType": ((net.sf.freecol.common.model.Operand)object).setOperandType((net.sf.freecol.common.model.Operand.OperandType)params[0]); return null;
   case "setScopeLevel": ((net.sf.freecol.common.model.Operand)object).setScopeLevel((net.sf.freecol.common.model.Operand.ScopeLevel)params[0]); return null;
+  case "setValue": ((net.sf.freecol.common.model.Operand)object).setValue((java.lang.Integer)params[0]); return null;
   }
   return common_model_Scope.invokeMethod(object, method, params);
 }
@@ -2641,17 +2810,17 @@ net.sf.freecol.common.model.TileImprovementType newInstance(Class<?>[] types, Ob
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileImprovementType)object).getDisasterChoices();
-  case "getMoveCost": return ((net.sf.freecol.common.model.TileImprovementType)object).getMoveCost();
-  case "isNatural": return ((net.sf.freecol.common.model.TileImprovementType)object).isNatural();
-  case "isChangeType": return ((net.sf.freecol.common.model.TileImprovementType)object).isChangeType();
   case "getAddWorkTurns": return ((net.sf.freecol.common.model.TileImprovementType)object).getAddWorkTurns();
-  case "getRequiredImprovementType": return ((net.sf.freecol.common.model.TileImprovementType)object).getRequiredImprovementType();
-  case "getExposeResourcePercent": return ((net.sf.freecol.common.model.TileImprovementType)object).getExposeResourcePercent();
+  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileImprovementType)object).getDisasterChoices();
   case "getExpendedAmount": return ((net.sf.freecol.common.model.TileImprovementType)object).getExpendedAmount();
+  case "getExposeResourcePercent": return ((net.sf.freecol.common.model.TileImprovementType)object).getExposeResourcePercent();
   case "getMagnitude": return ((net.sf.freecol.common.model.TileImprovementType)object).getMagnitude();
+  case "getMoveCost": return ((net.sf.freecol.common.model.TileImprovementType)object).getMoveCost();
+  case "getRequiredImprovementType": return ((net.sf.freecol.common.model.TileImprovementType)object).getRequiredImprovementType();
   case "getRequiredRole": return ((net.sf.freecol.common.model.TileImprovementType)object).getRequiredRole();
   case "getZIndex": return ((net.sf.freecol.common.model.TileImprovementType)object).getZIndex();
+  case "isChangeType": return ((net.sf.freecol.common.model.TileImprovementType)object).isChangeType();
+  case "isNatural": return ((net.sf.freecol.common.model.TileImprovementType)object).isNatural();
   case "setZIndex": ((net.sf.freecol.common.model.TileImprovementType)object).setZIndex((int)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
@@ -2659,6 +2828,25 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.TileImprovementType", net.sf.freecol.common.model.TileImprovementType.class);
 metas.put(net.sf.freecol.common.model.TileImprovementType.class, common_model_TileImprovementType);
+// net.sf.freecol.common.model.Region.RegionType
+final Meta common_model_Region$RegionType = new Meta() {
+net.sf.freecol.common.model.Region.RegionType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getClaimable": return ((net.sf.freecol.common.model.Region.RegionType)object).getClaimable();
+  case "getKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getNameKey();
+  case "getUnknownKey": return ((net.sf.freecol.common.model.Region.RegionType)object).getUnknownKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Region.RegionType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Region.RegionType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Region$RegionType", net.sf.freecol.common.model.Region.RegionType.class);
+metas.put(net.sf.freecol.common.model.Region.RegionType.class, common_model_Region$RegionType);
 // net.sf.freecol.common.model.Region
 final Meta common_model_Region = new Meta() {
 net.sf.freecol.common.model.Region newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2670,29 +2858,29 @@ net.sf.freecol.common.model.Region newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isLeaf": return ((net.sf.freecol.common.model.Region)object).isLeaf();
   case "getChildren": return ((net.sf.freecol.common.model.Region)object).getChildren();
-  case "getName": return ((net.sf.freecol.common.model.Region)object).getName();
-  case "getKey": return ((net.sf.freecol.common.model.Region)object).getKey();
-  case "getParent": return ((net.sf.freecol.common.model.Region)object).getParent();
-  case "setName": ((net.sf.freecol.common.model.Region)object).setName((java.lang.String)params[0]); return null;
-  case "getType": return ((net.sf.freecol.common.model.Region)object).getType();
-  case "setParent": ((net.sf.freecol.common.model.Region)object).setParent((net.sf.freecol.common.model.Region)params[0]); return null;
-  case "hasName": return ((net.sf.freecol.common.model.Region)object).hasName();
-  case "setChildren": ((net.sf.freecol.common.model.Region)object).setChildren((java.util.List)params[0]); return null;
-  case "getLabel": return ((net.sf.freecol.common.model.Region)object).getLabel();
-  case "getScoreValue": return ((net.sf.freecol.common.model.Region)object).getScoreValue();
-  case "getDiscoverableRegion": return ((net.sf.freecol.common.model.Region)object).getDiscoverableRegion();
-  case "isPacific": return ((net.sf.freecol.common.model.Region)object).isPacific();
-  case "getDiscoverer": return ((net.sf.freecol.common.model.Region)object).getDiscoverer();
   case "getClaimable": return ((net.sf.freecol.common.model.Region)object).getClaimable();
-  case "setClaimable": ((net.sf.freecol.common.model.Region)object).setClaimable((boolean)params[0]); return null;
   case "getDiscoverable": return ((net.sf.freecol.common.model.Region)object).getDiscoverable();
-  case "setDiscoverable": ((net.sf.freecol.common.model.Region)object).setDiscoverable((boolean)params[0]); return null;
-  case "getDiscoveredIn": return ((net.sf.freecol.common.model.Region)object).getDiscoveredIn();
-  case "setDiscoveredIn": ((net.sf.freecol.common.model.Region)object).setDiscoveredIn((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "getDiscoverableRegion": return ((net.sf.freecol.common.model.Region)object).getDiscoverableRegion();
   case "getDiscoveredBy": return ((net.sf.freecol.common.model.Region)object).getDiscoveredBy();
+  case "getDiscoveredIn": return ((net.sf.freecol.common.model.Region)object).getDiscoveredIn();
+  case "getDiscoverer": return ((net.sf.freecol.common.model.Region)object).getDiscoverer();
+  case "getKey": return ((net.sf.freecol.common.model.Region)object).getKey();
+  case "getLabel": return ((net.sf.freecol.common.model.Region)object).getLabel();
+  case "getName": return ((net.sf.freecol.common.model.Region)object).getName();
+  case "getParent": return ((net.sf.freecol.common.model.Region)object).getParent();
+  case "getScoreValue": return ((net.sf.freecol.common.model.Region)object).getScoreValue();
+  case "getType": return ((net.sf.freecol.common.model.Region)object).getType();
+  case "hasName": return ((net.sf.freecol.common.model.Region)object).hasName();
+  case "isLeaf": return ((net.sf.freecol.common.model.Region)object).isLeaf();
+  case "isPacific": return ((net.sf.freecol.common.model.Region)object).isPacific();
+  case "setChildren": ((net.sf.freecol.common.model.Region)object).setChildren((java.util.List)params[0]); return null;
+  case "setClaimable": ((net.sf.freecol.common.model.Region)object).setClaimable((boolean)params[0]); return null;
+  case "setDiscoverable": ((net.sf.freecol.common.model.Region)object).setDiscoverable((boolean)params[0]); return null;
   case "setDiscoveredBy": ((net.sf.freecol.common.model.Region)object).setDiscoveredBy((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setDiscoveredIn": ((net.sf.freecol.common.model.Region)object).setDiscoveredIn((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "setName": ((net.sf.freecol.common.model.Region)object).setName((java.lang.String)params[0]); return null;
+  case "setParent": ((net.sf.freecol.common.model.Region)object).setParent((net.sf.freecol.common.model.Region)params[0]); return null;
   case "setScoreValue": ((net.sf.freecol.common.model.Region)object).setScoreValue((int)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
@@ -2700,6 +2888,56 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Region", net.sf.freecol.common.model.Region.class);
 metas.put(net.sf.freecol.common.model.Region.class, common_model_Region);
+// net.sf.freecol.common.model.Unit.MoveType
+final Meta common_model_Unit$MoveType = new Meta() {
+net.sf.freecol.common.model.Unit.MoveType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isAttack": return ((net.sf.freecol.common.model.Unit.MoveType)object).isAttack();
+  case "isLegal": return ((net.sf.freecol.common.model.Unit.MoveType)object).isLegal();
+  case "isProgress": return ((net.sf.freecol.common.model.Unit.MoveType)object).isProgress();
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.MoveType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.MoveType)object).values();
+  case "whyIllegal": return ((net.sf.freecol.common.model.Unit.MoveType)object).whyIllegal();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$MoveType", net.sf.freecol.common.model.Unit.MoveType.class);
+metas.put(net.sf.freecol.common.model.Unit.MoveType.class, common_model_Unit$MoveType);
+// net.sf.freecol.common.model.Unit.UnitLabelType
+final Meta common_model_Unit$UnitLabelType = new Meta() {
+net.sf.freecol.common.model.Unit.UnitLabelType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.UnitLabelType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.UnitLabelType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$UnitLabelType", net.sf.freecol.common.model.Unit.UnitLabelType.class);
+metas.put(net.sf.freecol.common.model.Unit.UnitLabelType.class, common_model_Unit$UnitLabelType);
+// net.sf.freecol.common.model.Unit.UnitState
+final Meta common_model_Unit$UnitState = new Meta() {
+net.sf.freecol.common.model.Unit.UnitState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Unit.UnitState)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Unit.UnitState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Unit.UnitState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Unit$UnitState", net.sf.freecol.common.model.Unit.UnitState.class);
+metas.put(net.sf.freecol.common.model.Unit.UnitState.class, common_model_Unit$UnitState);
 // net.sf.freecol.common.model.Unit
 final Meta common_model_Unit = new Meta() {
 net.sf.freecol.common.model.Unit newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2709,148 +2947,179 @@ net.sf.freecol.common.model.Unit newInstance(Class<?>[] types, Object[] params) 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Unit)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "setState": ((net.sf.freecol.common.model.Unit)object).setState((net.sf.freecol.common.model.Unit.UnitState)params[0]); return null;
-  case "getName": return ((net.sf.freecol.common.model.Unit)object).getName();
-  case "getLocation": return ((net.sf.freecol.common.model.Unit)object).getLocation();
-  case "getPriority": return ((net.sf.freecol.common.model.Unit)object).getPriority();
-  case "setName": ((net.sf.freecol.common.model.Unit)object).setName((java.lang.String)params[0]); return null;
-  case "getState": return ((net.sf.freecol.common.model.Unit)object).getState();
-  case "getType": return ((net.sf.freecol.common.model.Unit)object).getType();
-  case "getOwner": return ((net.sf.freecol.common.model.Unit)object).getOwner();
-  case "setType": ((net.sf.freecol.common.model.Unit)object).setType((net.sf.freecol.common.model.UnitType)params[0]); return null;
-  case "isUndead": return ((net.sf.freecol.common.model.Unit)object).isUndead();
-  case "isCarrier": return ((net.sf.freecol.common.model.Unit)object).isCarrier();
-  case "hasGoodsCargo": return ((net.sf.freecol.common.model.Unit)object).hasGoodsCargo();
-  case "isColonist": return ((net.sf.freecol.common.model.Unit)object).isColonist();
-  case "isOffensiveUnit": return ((net.sf.freecol.common.model.Unit)object).isOffensiveUnit();
-  case "getCarrier": return ((net.sf.freecol.common.model.Unit)object).getCarrier();
-  case "hasTile": return ((net.sf.freecol.common.model.Unit)object).hasTile();
-  case "isInMission": return ((net.sf.freecol.common.model.Unit)object).isInMission();
-  case "isNaval": return ((net.sf.freecol.common.model.Unit)object).isNaval();
-  case "isOnTile": return ((net.sf.freecol.common.model.Unit)object).isOnTile();
-  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Unit)object).getVisibleTileSet();
-  case "getSpaceLeft": return ((net.sf.freecol.common.model.Unit)object).getSpaceLeft();
-  case "getRole": return ((net.sf.freecol.common.model.Unit)object).getRole();
-  case "setLocation": return ((net.sf.freecol.common.model.Unit)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
-  case "getLabel": return ((net.sf.freecol.common.model.Unit)object).getLabel();
-  case "getRepairLocation": return ((net.sf.freecol.common.model.Unit)object).getRepairLocation();
-  case "getLineOfSight": return ((net.sf.freecol.common.model.Unit)object).getLineOfSight();
-  case "getInitialMovesLeft": return ((net.sf.freecol.common.model.Unit)object).getInitialMovesLeft();
-  case "setMovesLeft": ((net.sf.freecol.common.model.Unit)object).setMovesLeft((int)params[0]); return null;
-  case "getMovesLeft": return ((net.sf.freecol.common.model.Unit)object).getMovesLeft();
-  case "isMounted": return ((net.sf.freecol.common.model.Unit)object).isMounted();
-  case "getApparentOwnerName": return ((net.sf.freecol.common.model.Unit)object).getApparentOwnerName();
-  case "getHomeIndianSettlement": return ((net.sf.freecol.common.model.Unit)object).getHomeIndianSettlement();
-  case "getAutomaticRole": return ((net.sf.freecol.common.model.Unit)object).getAutomaticRole();
-  case "setTreasureAmount": ((net.sf.freecol.common.model.Unit)object).setTreasureAmount((int)params[0]); return null;
-  case "hasSpaceLeft": return ((net.sf.freecol.common.model.Unit)object).hasSpaceLeft();
-  case "isArmed": return ((net.sf.freecol.common.model.Unit)object).isArmed();
-  case "setTradeRoute": ((net.sf.freecol.common.model.Unit)object).setTradeRoute((net.sf.freecol.common.model.TradeRoute)params[0]); return null;
-  case "isInColony": return ((net.sf.freecol.common.model.Unit)object).isInColony();
-  case "setLocationNoUpdate": ((net.sf.freecol.common.model.Unit)object).setLocationNoUpdate((net.sf.freecol.common.model.Location)params[0]); return null;
-  case "isDamaged": return ((net.sf.freecol.common.model.Unit)object).isDamaged();
-  case "getScoreValue": return ((net.sf.freecol.common.model.Unit)object).getScoreValue();
-  case "isInEurope": return ((net.sf.freecol.common.model.Unit)object).isInEurope();
-  case "getTradeRoute": return ((net.sf.freecol.common.model.Unit)object).getTradeRoute();
-  case "getTradeLocation": return ((net.sf.freecol.common.model.Unit)object).getTradeLocation();
-  case "getDestination": return ((net.sf.freecol.common.model.Unit)object).getDestination();
-  case "setDestination": ((net.sf.freecol.common.model.Unit)object).setDestination((net.sf.freecol.common.model.Location)params[0]); return null;
-  case "isAtSea": return ((net.sf.freecol.common.model.Unit)object).isAtSea();
-  case "getStop": return ((net.sf.freecol.common.model.Unit)object).getStop();
-  case "getSailTurns": return ((net.sf.freecol.common.model.Unit)object).getSailTurns();
-  case "canCarryUnits": return ((net.sf.freecol.common.model.Unit)object).canCarryUnits();
-  case "getCurrentStops": return ((net.sf.freecol.common.model.Unit)object).getCurrentStops();
-  case "setCurrentStop": ((net.sf.freecol.common.model.Unit)object).setCurrentStop((int)params[0]); return null;
-  case "getTeacher": return ((net.sf.freecol.common.model.Unit)object).getTeacher();
   case "canBuildColony": return ((net.sf.freecol.common.model.Unit)object).canBuildColony();
-  case "isOwnerHidden": return ((net.sf.freecol.common.model.Unit)object).isOwnerHidden();
-  case "getWorkImprovement": return ((net.sf.freecol.common.model.Unit)object).getWorkImprovement();
-  case "getWorkType": return ((net.sf.freecol.common.model.Unit)object).getWorkType();
+  case "canCaptureGoods": return ((net.sf.freecol.common.model.Unit)object).canCaptureGoods();
+  case "canCarryGoods": return ((net.sf.freecol.common.model.Unit)object).canCarryGoods();
   case "canCarryTreasure": return ((net.sf.freecol.common.model.Unit)object).canCarryTreasure();
+  case "canCarryUnits": return ((net.sf.freecol.common.model.Unit)object).canCarryUnits();
   case "canCashInTreasureTrain": return ((net.sf.freecol.common.model.Unit)object).canCashInTreasureTrain();
-  case "getTransportFee": return ((net.sf.freecol.common.model.Unit)object).getTransportFee();
-  case "getWorkTurnsLeft": return ((net.sf.freecol.common.model.Unit)object).getWorkTurnsLeft();
-  case "getRoleCount": return ((net.sf.freecol.common.model.Unit)object).getRoleCount();
-  case "getStudent": return ((net.sf.freecol.common.model.Unit)object).getStudent();
-  case "getWorkTile": return ((net.sf.freecol.common.model.Unit)object).getWorkTile();
-  case "isReadyToTrade": return ((net.sf.freecol.common.model.Unit)object).isReadyToTrade();
-  case "getDescription": return ((net.sf.freecol.common.model.Unit)object).getDescription();
-  case "isOnCarrier": return ((net.sf.freecol.common.model.Unit)object).isOnCarrier();
+  case "canMoveToHighSeas": return ((net.sf.freecol.common.model.Unit)object).canMoveToHighSeas();
   case "couldMove": return ((net.sf.freecol.common.model.Unit)object).couldMove();
-  case "goingToDestination": return ((net.sf.freecol.common.model.Unit)object).goingToDestination();
-  case "setAttrition": ((net.sf.freecol.common.model.Unit)object).setAttrition((int)params[0]); return null;
-  case "getVisibleGoodsCount": return ((net.sf.freecol.common.model.Unit)object).getVisibleGoodsCount();
-  case "getGoodsSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getGoodsSpaceTaken();
-  case "losingEquipmentKillsUnit": return ((net.sf.freecol.common.model.Unit)object).losingEquipmentKillsUnit();
-  case "losingEquipmentDemotesUnit": return ((net.sf.freecol.common.model.Unit)object).losingEquipmentDemotesUnit();
-  case "isBeached": return ((net.sf.freecol.common.model.Unit)object).isBeached();
-  case "getMovesAsString": return ((net.sf.freecol.common.model.Unit)object).getMovesAsString();
-  case "resolveDestination": return ((net.sf.freecol.common.model.Unit)object).resolveDestination();
-  case "followingTradeRoute": return ((net.sf.freecol.common.model.Unit)object).followingTradeRoute();
-  case "getPathStartLocation": return ((net.sf.freecol.common.model.Unit)object).getPathStartLocation();
-  case "getTrivialPath": return ((net.sf.freecol.common.model.Unit)object).getTrivialPath();
-  case "findOurNearestSettlement": return ((net.sf.freecol.common.model.Unit)object).findOurNearestSettlement();
-  case "findOurNearestPort": return ((net.sf.freecol.common.model.Unit)object).findOurNearestPort();
   case "findOurNearestOtherSettlement": return ((net.sf.freecol.common.model.Unit)object).findOurNearestOtherSettlement();
+  case "findOurNearestPort": return ((net.sf.freecol.common.model.Unit)object).findOurNearestPort();
+  case "findOurNearestSettlement": return ((net.sf.freecol.common.model.Unit)object).findOurNearestSettlement();
+  case "followingTradeRoute": return ((net.sf.freecol.common.model.Unit)object).followingTradeRoute();
+  case "getApparentOwnerName": return ((net.sf.freecol.common.model.Unit)object).getApparentOwnerName();
+  case "getAttrition": return ((net.sf.freecol.common.model.Unit)object).getAttrition();
+  case "getAutomaticRole": return ((net.sf.freecol.common.model.Unit)object).getAutomaticRole();
+  case "getBurnProbability": return ((net.sf.freecol.common.model.Unit)object).getBurnProbability();
   case "getCargoCapacity": return ((net.sf.freecol.common.model.Unit)object).getCargoCapacity();
   case "getCargoSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getCargoSpaceTaken();
-  case "getUnitSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getUnitSpaceTaken();
-  case "hasCargo": return ((net.sf.freecol.common.model.Unit)object).hasCargo();
-  case "getConvertProbability": return ((net.sf.freecol.common.model.Unit)object).getConvertProbability();
-  case "getBurnProbability": return ((net.sf.freecol.common.model.Unit)object).getBurnProbability();
-  case "getPioneerScore": return ((net.sf.freecol.common.model.Unit)object).getPioneerScore();
-  case "getScoutScore": return ((net.sf.freecol.common.model.Unit)object).getScoutScore();
+  case "getCarrier": return ((net.sf.freecol.common.model.Unit)object).getCarrier();
   case "getConsumedGoods": return ((net.sf.freecol.common.model.Unit)object).getConsumedGoods();
+  case "getConvertProbability": return ((net.sf.freecol.common.model.Unit)object).getConvertProbability();
+  case "getCurrentStop": return ((net.sf.freecol.common.model.Unit)object).getCurrentStop();
+  case "getCurrentStops": return ((net.sf.freecol.common.model.Unit)object).getCurrentStops();
+  case "getDescription": return ((net.sf.freecol.common.model.Unit)object).getDescription();
+  case "getDestination": return ((net.sf.freecol.common.model.Unit)object).getDestination();
+  case "getDestinationLabel": return ((net.sf.freecol.common.model.Unit)object).getDestinationLabel();
+  case "getEntryLocation": return ((net.sf.freecol.common.model.Unit)object).getEntryLocation();
+  case "getEthnicity": return ((net.sf.freecol.common.model.Unit)object).getEthnicity();
+  case "getExperience": return ((net.sf.freecol.common.model.Unit)object).getExperience();
   case "getExperienceType": return ((net.sf.freecol.common.model.Unit)object).getExperienceType();
   case "getFullEntryLocation": return ((net.sf.freecol.common.model.Unit)object).getFullEntryLocation();
-  case "setWorkLeft": ((net.sf.freecol.common.model.Unit)object).setWorkLeft((int)params[0]); return null;
-  case "setStudent": ((net.sf.freecol.common.model.Unit)object).setStudent((net.sf.freecol.common.model.Unit)params[0]); return null;
-  case "setTeacher": ((net.sf.freecol.common.model.Unit)object).setTeacher((net.sf.freecol.common.model.Unit)params[0]); return null;
-  case "getTreasureAmount": return ((net.sf.freecol.common.model.Unit)object).getTreasureAmount();
-  case "setWorkImprovement": ((net.sf.freecol.common.model.Unit)object).setWorkImprovement((net.sf.freecol.common.model.TileImprovement)params[0]); return null;
-  case "setExperience": ((net.sf.freecol.common.model.Unit)object).setExperience((int)params[0]); return null;
-  case "canMoveToHighSeas": return ((net.sf.freecol.common.model.Unit)object).canMoveToHighSeas();
-  case "getWorkLeft": return ((net.sf.freecol.common.model.Unit)object).getWorkLeft();
-  case "setEntryLocation": ((net.sf.freecol.common.model.Unit)object).setEntryLocation((net.sf.freecol.common.model.Location)params[0]); return null;
-  case "hasDefaultRole": return ((net.sf.freecol.common.model.Unit)object).hasDefaultRole();
-  case "getWorkLocation": return ((net.sf.freecol.common.model.Unit)object).getWorkLocation();
-  case "setTurnsOfTraining": ((net.sf.freecol.common.model.Unit)object).setTurnsOfTraining((int)params[0]); return null;
-  case "canCarryGoods": return ((net.sf.freecol.common.model.Unit)object).canCarryGoods();
-  case "isDefensiveUnit": return ((net.sf.freecol.common.model.Unit)object).isDefensiveUnit();
-  case "getSkillLevel": return ((net.sf.freecol.common.model.Unit)object).getSkillLevel();
-  case "isPerson": return ((net.sf.freecol.common.model.Unit)object).isPerson();
-  case "setNationality": ((net.sf.freecol.common.model.Unit)object).setNationality((java.lang.String)params[0]); return null;
-  case "setEthnicity": ((net.sf.freecol.common.model.Unit)object).setEthnicity((java.lang.String)params[0]); return null;
-  case "getDestinationLabel": return ((net.sf.freecol.common.model.Unit)object).getDestinationLabel();
-  case "getRepairLabel": return ((net.sf.freecol.common.model.Unit)object).getRepairLabel();
-  case "getTurnsForRepair": return ((net.sf.freecol.common.model.Unit)object).getTurnsForRepair();
+  case "getGoodsSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getGoodsSpaceTaken();
   case "getHitPoints": return ((net.sf.freecol.common.model.Unit)object).getHitPoints();
-  case "canCaptureGoods": return ((net.sf.freecol.common.model.Unit)object).canCaptureGoods();
+  case "getHomeIndianSettlement": return ((net.sf.freecol.common.model.Unit)object).getHomeIndianSettlement();
+  case "getInitialMovesLeft": return ((net.sf.freecol.common.model.Unit)object).getInitialMovesLeft();
+  case "getLabel": return ((net.sf.freecol.common.model.Unit)object).getLabel();
+  case "getLineOfSight": return ((net.sf.freecol.common.model.Unit)object).getLineOfSight();
+  case "getLocation": return ((net.sf.freecol.common.model.Unit)object).getLocation();
+  case "getMilitaryRole": return ((net.sf.freecol.common.model.Unit)object).getMilitaryRole();
+  case "getMovesAsString": return ((net.sf.freecol.common.model.Unit)object).getMovesAsString();
+  case "getMovesLeft": return ((net.sf.freecol.common.model.Unit)object).getMovesLeft();
+  case "getName": return ((net.sf.freecol.common.model.Unit)object).getName();
+  case "getNationality": return ((net.sf.freecol.common.model.Unit)object).getNationality();
+  case "getNeededTurnsOfTraining": return ((net.sf.freecol.common.model.Unit)object).getNeededTurnsOfTraining();
+  case "getOwner": return ((net.sf.freecol.common.model.Unit)object).getOwner();
+  case "getPathStartLocation": return ((net.sf.freecol.common.model.Unit)object).getPathStartLocation();
+  case "getPioneerScore": return ((net.sf.freecol.common.model.Unit)object).getPioneerScore();
+  case "getPriority": return ((net.sf.freecol.common.model.Unit)object).getPriority();
+  case "getRepairLabel": return ((net.sf.freecol.common.model.Unit)object).getRepairLabel();
+  case "getRepairLocation": return ((net.sf.freecol.common.model.Unit)object).getRepairLocation();
+  case "getRole": return ((net.sf.freecol.common.model.Unit)object).getRole();
+  case "getRoleCount": return ((net.sf.freecol.common.model.Unit)object).getRoleCount();
+  case "getRoleSuffix": return ((net.sf.freecol.common.model.Unit)object).getRoleSuffix();
+  case "getSailTurns": return ((net.sf.freecol.common.model.Unit)object).getSailTurns();
+  case "getScoreValue": return ((net.sf.freecol.common.model.Unit)object).getScoreValue();
+  case "getScoutScore": return ((net.sf.freecol.common.model.Unit)object).getScoutScore();
+  case "getSkillLevel": return ((net.sf.freecol.common.model.Unit)object).getSkillLevel();
+  case "getSpaceLeft": return ((net.sf.freecol.common.model.Unit)object).getSpaceLeft();
+  case "getState": return ((net.sf.freecol.common.model.Unit)object).getState();
+  case "getStop": return ((net.sf.freecol.common.model.Unit)object).getStop();
+  case "getStudent": return ((net.sf.freecol.common.model.Unit)object).getStudent();
+  case "getTeacher": return ((net.sf.freecol.common.model.Unit)object).getTeacher();
+  case "getTradeLocation": return ((net.sf.freecol.common.model.Unit)object).getTradeLocation();
+  case "getTradeRoute": return ((net.sf.freecol.common.model.Unit)object).getTradeRoute();
+  case "getTransportFee": return ((net.sf.freecol.common.model.Unit)object).getTransportFee();
+  case "getTreasureAmount": return ((net.sf.freecol.common.model.Unit)object).getTreasureAmount();
+  case "getTrivialPath": return ((net.sf.freecol.common.model.Unit)object).getTrivialPath();
+  case "getTurnsForRepair": return ((net.sf.freecol.common.model.Unit)object).getTurnsForRepair();
+  case "getTurnsOfTraining": return ((net.sf.freecol.common.model.Unit)object).getTurnsOfTraining();
+  case "getType": return ((net.sf.freecol.common.model.Unit)object).getType();
+  case "getUnitSpaceTaken": return ((net.sf.freecol.common.model.Unit)object).getUnitSpaceTaken();
+  case "getVisibleGoodsCount": return ((net.sf.freecol.common.model.Unit)object).getVisibleGoodsCount();
+  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Unit)object).getVisibleTileSet();
+  case "getWorkImprovement": return ((net.sf.freecol.common.model.Unit)object).getWorkImprovement();
+  case "getWorkLeft": return ((net.sf.freecol.common.model.Unit)object).getWorkLeft();
+  case "getWorkLocation": return ((net.sf.freecol.common.model.Unit)object).getWorkLocation();
+  case "getWorkTile": return ((net.sf.freecol.common.model.Unit)object).getWorkTile();
+  case "getWorkTurnsLeft": return ((net.sf.freecol.common.model.Unit)object).getWorkTurnsLeft();
+  case "getWorkType": return ((net.sf.freecol.common.model.Unit)object).getWorkType();
+  case "goingToDestination": return ((net.sf.freecol.common.model.Unit)object).goingToDestination();
+  case "hasCargo": return ((net.sf.freecol.common.model.Unit)object).hasCargo();
+  case "hasDefaultRole": return ((net.sf.freecol.common.model.Unit)object).hasDefaultRole();
+  case "hasGoodsCargo": return ((net.sf.freecol.common.model.Unit)object).hasGoodsCargo();
+  case "hasNativeEthnicity": return ((net.sf.freecol.common.model.Unit)object).hasNativeEthnicity();
+  case "hasSpaceLeft": return ((net.sf.freecol.common.model.Unit)object).hasSpaceLeft();
+  case "hasTile": return ((net.sf.freecol.common.model.Unit)object).hasTile();
+  case "isArmed": return ((net.sf.freecol.common.model.Unit)object).isArmed();
+  case "isAtSea": return ((net.sf.freecol.common.model.Unit)object).isAtSea();
+  case "isBeached": return ((net.sf.freecol.common.model.Unit)object).isBeached();
+  case "isCarrier": return ((net.sf.freecol.common.model.Unit)object).isCarrier();
+  case "isColonist": return ((net.sf.freecol.common.model.Unit)object).isColonist();
+  case "isDamaged": return ((net.sf.freecol.common.model.Unit)object).isDamaged();
+  case "isDefensiveUnit": return ((net.sf.freecol.common.model.Unit)object).isDefensiveUnit();
+  case "isInColony": return ((net.sf.freecol.common.model.Unit)object).isInColony();
+  case "isInEurope": return ((net.sf.freecol.common.model.Unit)object).isInEurope();
+  case "isInMission": return ((net.sf.freecol.common.model.Unit)object).isInMission();
+  case "isMounted": return ((net.sf.freecol.common.model.Unit)object).isMounted();
+  case "isNaval": return ((net.sf.freecol.common.model.Unit)object).isNaval();
+  case "isOffensiveUnit": return ((net.sf.freecol.common.model.Unit)object).isOffensiveUnit();
+  case "isOnCarrier": return ((net.sf.freecol.common.model.Unit)object).isOnCarrier();
+  case "isOnTile": return ((net.sf.freecol.common.model.Unit)object).isOnTile();
+  case "isOwnerHidden": return ((net.sf.freecol.common.model.Unit)object).isOwnerHidden();
+  case "isPerson": return ((net.sf.freecol.common.model.Unit)object).isPerson();
+  case "isReadyToTrade": return ((net.sf.freecol.common.model.Unit)object).isReadyToTrade();
   case "isTradingUnit": return ((net.sf.freecol.common.model.Unit)object).isTradingUnit();
-  case "setStateToAllChildren": ((net.sf.freecol.common.model.Unit)object).setStateToAllChildren((net.sf.freecol.common.model.Unit.UnitState)params[0]); return null;
+  case "isUndead": return ((net.sf.freecol.common.model.Unit)object).isUndead();
+  case "losingEquipmentDemotesUnit": return ((net.sf.freecol.common.model.Unit)object).losingEquipmentDemotesUnit();
+  case "losingEquipmentKillsUnit": return ((net.sf.freecol.common.model.Unit)object).losingEquipmentKillsUnit();
+  case "resolveDestination": return ((net.sf.freecol.common.model.Unit)object).resolveDestination();
+  case "setAttrition": ((net.sf.freecol.common.model.Unit)object).setAttrition((int)params[0]); return null;
+  case "setCurrentStop": ((net.sf.freecol.common.model.Unit)object).setCurrentStop((int)params[0]); return null;
+  case "setDestination": ((net.sf.freecol.common.model.Unit)object).setDestination((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "setEntryLocation": ((net.sf.freecol.common.model.Unit)object).setEntryLocation((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "setEthnicity": ((net.sf.freecol.common.model.Unit)object).setEthnicity((java.lang.String)params[0]); return null;
+  case "setExperience": ((net.sf.freecol.common.model.Unit)object).setExperience((int)params[0]); return null;
+  case "setHitPoints": ((net.sf.freecol.common.model.Unit)object).setHitPoints((int)params[0]); return null;
+  case "setHomeIndianSettlement": ((net.sf.freecol.common.model.Unit)object).setHomeIndianSettlement((net.sf.freecol.common.model.IndianSettlement)params[0]); return null;
+  case "setLocation": return ((net.sf.freecol.common.model.Unit)object).setLocation((net.sf.freecol.common.model.Location)params[0]);
+  case "setLocationNoUpdate": ((net.sf.freecol.common.model.Unit)object).setLocationNoUpdate((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "setMovesLeft": ((net.sf.freecol.common.model.Unit)object).setMovesLeft((int)params[0]); return null;
+  case "setName": ((net.sf.freecol.common.model.Unit)object).setName((java.lang.String)params[0]); return null;
+  case "setNationality": ((net.sf.freecol.common.model.Unit)object).setNationality((java.lang.String)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.Unit)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
   case "setRole": ((net.sf.freecol.common.model.Unit)object).setRole((net.sf.freecol.common.model.Role)params[0]); return null;
   case "setRoleCount": ((net.sf.freecol.common.model.Unit)object).setRoleCount((int)params[0]); return null;
-  case "getRoleSuffix": return ((net.sf.freecol.common.model.Unit)object).getRoleSuffix();
-  case "getMilitaryRole": return ((net.sf.freecol.common.model.Unit)object).getMilitaryRole();
-  case "getEntryLocation": return ((net.sf.freecol.common.model.Unit)object).getEntryLocation();
+  case "setState": ((net.sf.freecol.common.model.Unit)object).setState((net.sf.freecol.common.model.Unit.UnitState)params[0]); return null;
+  case "setStateToAllChildren": ((net.sf.freecol.common.model.Unit)object).setStateToAllChildren((net.sf.freecol.common.model.Unit.UnitState)params[0]); return null;
+  case "setStudent": ((net.sf.freecol.common.model.Unit)object).setStudent((net.sf.freecol.common.model.Unit)params[0]); return null;
+  case "setTeacher": ((net.sf.freecol.common.model.Unit)object).setTeacher((net.sf.freecol.common.model.Unit)params[0]); return null;
+  case "setTradeRoute": ((net.sf.freecol.common.model.Unit)object).setTradeRoute((net.sf.freecol.common.model.TradeRoute)params[0]); return null;
+  case "setTreasureAmount": ((net.sf.freecol.common.model.Unit)object).setTreasureAmount((int)params[0]); return null;
+  case "setTurnsOfTraining": ((net.sf.freecol.common.model.Unit)object).setTurnsOfTraining((int)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.Unit)object).setType((net.sf.freecol.common.model.UnitType)params[0]); return null;
+  case "setWorkImprovement": ((net.sf.freecol.common.model.Unit)object).setWorkImprovement((net.sf.freecol.common.model.TileImprovement)params[0]); return null;
+  case "setWorkLeft": ((net.sf.freecol.common.model.Unit)object).setWorkLeft((int)params[0]); return null;
   case "setWorkType": ((net.sf.freecol.common.model.Unit)object).setWorkType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
-  case "getExperience": return ((net.sf.freecol.common.model.Unit)object).getExperience();
-  case "getTurnsOfTraining": return ((net.sf.freecol.common.model.Unit)object).getTurnsOfTraining();
-  case "getNeededTurnsOfTraining": return ((net.sf.freecol.common.model.Unit)object).getNeededTurnsOfTraining();
-  case "getNationality": return ((net.sf.freecol.common.model.Unit)object).getNationality();
-  case "getEthnicity": return ((net.sf.freecol.common.model.Unit)object).getEthnicity();
-  case "hasNativeEthnicity": return ((net.sf.freecol.common.model.Unit)object).hasNativeEthnicity();
-  case "setHomeIndianSettlement": ((net.sf.freecol.common.model.Unit)object).setHomeIndianSettlement((net.sf.freecol.common.model.IndianSettlement)params[0]); return null;
-  case "setHitPoints": ((net.sf.freecol.common.model.Unit)object).setHitPoints((int)params[0]); return null;
-  case "getCurrentStop": return ((net.sf.freecol.common.model.Unit)object).getCurrentStop();
-  case "getAttrition": return ((net.sf.freecol.common.model.Unit)object).getAttrition();
   }
   return common_model_GoodsLocation.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Unit", net.sf.freecol.common.model.Unit.class);
 metas.put(net.sf.freecol.common.model.Unit.class, common_model_Unit);
+// net.sf.freecol.common.model.DiplomaticTrade.TradeContext
+final Meta common_model_DiplomaticTrade$TradeContext = new Meta() {
+net.sf.freecol.common.model.DiplomaticTrade.TradeContext newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeContext)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.DiplomaticTrade$TradeContext", net.sf.freecol.common.model.DiplomaticTrade.TradeContext.class);
+metas.put(net.sf.freecol.common.model.DiplomaticTrade.TradeContext.class, common_model_DiplomaticTrade$TradeContext);
+// net.sf.freecol.common.model.DiplomaticTrade.TradeStatus
+final Meta common_model_DiplomaticTrade$TradeStatus = new Meta() {
+net.sf.freecol.common.model.DiplomaticTrade.TradeStatus newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.DiplomaticTrade$TradeStatus", net.sf.freecol.common.model.DiplomaticTrade.TradeStatus.class);
+metas.put(net.sf.freecol.common.model.DiplomaticTrade.TradeStatus.class, common_model_DiplomaticTrade$TradeStatus);
 // net.sf.freecol.common.model.DiplomaticTrade
 final Meta common_model_DiplomaticTrade = new Meta() {
 net.sf.freecol.common.model.DiplomaticTrade newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -2862,20 +3131,20 @@ net.sf.freecol.common.model.DiplomaticTrade newInstance(Class<?>[] types, Object
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getVersion": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getVersion();
   case "clear": ((net.sf.freecol.common.model.DiplomaticTrade)object).clear(); return null;
-  case "isEmpty": return ((net.sf.freecol.common.model.DiplomaticTrade)object).isEmpty();
   case "getContext": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getContext();
+  case "getItems": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getItems();
+  case "getRecipient": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getRecipient();
+  case "getSender": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getSender();
   case "getStance": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getStance();
   case "getStatus": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getStatus();
-  case "setStatus": ((net.sf.freecol.common.model.DiplomaticTrade)object).setStatus((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)params[0]); return null;
-  case "incrementVersion": ((net.sf.freecol.common.model.DiplomaticTrade)object).incrementVersion(); return null;
-  case "getSender": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getSender();
-  case "getRecipient": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getRecipient();
-  case "getItems": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getItems();
+  case "getVersion": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getVersion();
   case "getVictim": return ((net.sf.freecol.common.model.DiplomaticTrade)object).getVictim();
-  case "setSender": ((net.sf.freecol.common.model.DiplomaticTrade)object).setSender((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "incrementVersion": ((net.sf.freecol.common.model.DiplomaticTrade)object).incrementVersion(); return null;
+  case "isEmpty": return ((net.sf.freecol.common.model.DiplomaticTrade)object).isEmpty();
   case "setRecipient": ((net.sf.freecol.common.model.DiplomaticTrade)object).setRecipient((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setSender": ((net.sf.freecol.common.model.DiplomaticTrade)object).setSender((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setStatus": ((net.sf.freecol.common.model.DiplomaticTrade)object).setStatus((net.sf.freecol.common.model.DiplomaticTrade.TradeStatus)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -2897,31 +3166,63 @@ net.sf.freecol.common.model.AbstractUnit newInstance(Class<?>[] types, Object[] 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getNumber": return ((net.sf.freecol.common.model.AbstractUnit)object).getNumber();
-  case "getLabel": return ((net.sf.freecol.common.model.AbstractUnit)object).getLabel();
   case "getDescription": return ((net.sf.freecol.common.model.AbstractUnit)object).getDescription();
-  case "setNumber": ((net.sf.freecol.common.model.AbstractUnit)object).setNumber((int)params[0]); return null;
+  case "getLabel": return ((net.sf.freecol.common.model.AbstractUnit)object).getLabel();
+  case "getNumber": return ((net.sf.freecol.common.model.AbstractUnit)object).getNumber();
   case "getRoleId": return ((net.sf.freecol.common.model.AbstractUnit)object).getRoleId();
-  case "setRoleId": ((net.sf.freecol.common.model.AbstractUnit)object).setRoleId((java.lang.String)params[0]); return null;
   case "getSingleLabel": return ((net.sf.freecol.common.model.AbstractUnit)object).getSingleLabel();
+  case "setNumber": ((net.sf.freecol.common.model.AbstractUnit)object).setNumber((int)params[0]); return null;
+  case "setRoleId": ((net.sf.freecol.common.model.AbstractUnit)object).setRoleId((java.lang.String)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.AbstractUnit", net.sf.freecol.common.model.AbstractUnit.class);
 metas.put(net.sf.freecol.common.model.AbstractUnit.class, common_model_AbstractUnit);
+// net.sf.freecol.common.model.NationType.AggressionLevel
+final Meta common_model_NationType$AggressionLevel = new Meta() {
+net.sf.freecol.common.model.NationType.AggressionLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationType.AggressionLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationType$AggressionLevel", net.sf.freecol.common.model.NationType.AggressionLevel.class);
+metas.put(net.sf.freecol.common.model.NationType.AggressionLevel.class, common_model_NationType$AggressionLevel);
+// net.sf.freecol.common.model.NationType.SettlementNumber
+final Meta common_model_NationType$SettlementNumber = new Meta() {
+net.sf.freecol.common.model.NationType.SettlementNumber newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).getKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationType.SettlementNumber)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationType$SettlementNumber", net.sf.freecol.common.model.NationType.SettlementNumber.class);
+metas.put(net.sf.freecol.common.model.NationType.SettlementNumber.class, common_model_NationType$SettlementNumber);
 // net.sf.freecol.common.model.NationType
 final Meta common_model_NationType = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
+  case "getAggression": return ((net.sf.freecol.common.model.NationType)object).getAggression();
+  case "getCapitalType": return ((net.sf.freecol.common.model.NationType)object).getCapitalType();
+  case "getNumberOfSettlements": return ((net.sf.freecol.common.model.NationType)object).getNumberOfSettlements();
+  case "getSettlementTypes": return ((net.sf.freecol.common.model.NationType)object).getSettlementTypes();
   case "isEuropean": return ((net.sf.freecol.common.model.NationType)object).isEuropean();
   case "isIndian": return ((net.sf.freecol.common.model.NationType)object).isIndian();
   case "isREF": return ((net.sf.freecol.common.model.NationType)object).isREF();
-  case "getNumberOfSettlements": return ((net.sf.freecol.common.model.NationType)object).getNumberOfSettlements();
-  case "getSettlementTypes": return ((net.sf.freecol.common.model.NationType)object).getSettlementTypes();
   case "setSettlementTypes": ((net.sf.freecol.common.model.NationType)object).setSettlementTypes((java.util.List)params[0]); return null;
-  case "getCapitalType": return ((net.sf.freecol.common.model.NationType)object).getCapitalType();
-  case "getAggression": return ((net.sf.freecol.common.model.NationType)object).getAggression();
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -2996,20 +3297,20 @@ final Meta common_model_TradeRouteStop = new Meta() {
 net.sf.freecol.common.model.TradeRouteStop newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.TradeRouteStop.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.TradeRouteStop)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class))
+    return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class))
     return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class))
-    return new net.sf.freecol.common.model.TradeRouteStop((net.sf.freecol.common.model.Game)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
+  case "getCargo": return ((net.sf.freecol.common.model.TradeRouteStop)object).getCargo();
+  case "getCompactCargo": return ((net.sf.freecol.common.model.TradeRouteStop)object).getCompactCargo();
   case "getLocation": return ((net.sf.freecol.common.model.TradeRouteStop)object).getLocation();
   case "getTradeLocation": return ((net.sf.freecol.common.model.TradeRouteStop)object).getTradeLocation();
-  case "getCompactCargo": return ((net.sf.freecol.common.model.TradeRouteStop)object).getCompactCargo();
-  case "getCargo": return ((net.sf.freecol.common.model.TradeRouteStop)object).getCargo();
   case "setCargo": ((net.sf.freecol.common.model.TradeRouteStop)object).setCargo((java.util.List)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
@@ -3020,23 +3321,23 @@ metas.put(net.sf.freecol.common.model.TradeRouteStop.class, common_model_TradeRo
 // net.sf.freecol.common.model.TileItemContainer
 final Meta common_model_TileItemContainer = new Meta() {
 net.sf.freecol.common.model.TileItemContainer newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.common.model.TileItemContainer((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getResource": return ((net.sf.freecol.common.model.TileItemContainer)object).getResource();
-  case "getTile": return ((net.sf.freecol.common.model.TileItemContainer)object).getTile();
-  case "getLostCityRumour": return ((net.sf.freecol.common.model.TileItemContainer)object).getLostCityRumour();
+  case "getCompleteImprovements": return ((net.sf.freecol.common.model.TileItemContainer)object).getCompleteImprovements();
   case "getCompleteItems": return ((net.sf.freecol.common.model.TileItemContainer)object).getCompleteItems();
   case "getImprovements": return ((net.sf.freecol.common.model.TileItemContainer)object).getImprovements();
-  case "getCompleteImprovements": return ((net.sf.freecol.common.model.TileItemContainer)object).getCompleteImprovements();
+  case "getLostCityRumour": return ((net.sf.freecol.common.model.TileItemContainer)object).getLostCityRumour();
+  case "getResource": return ((net.sf.freecol.common.model.TileItemContainer)object).getResource();
   case "getRiver": return ((net.sf.freecol.common.model.TileItemContainer)object).getRiver();
-  case "removeIncompatibleImprovements": ((net.sf.freecol.common.model.TileItemContainer)object).removeIncompatibleImprovements(); return null;
   case "getRoad": return ((net.sf.freecol.common.model.TileItemContainer)object).getRoad();
+  case "getTile": return ((net.sf.freecol.common.model.TileItemContainer)object).getTile();
+  case "removeIncompatibleImprovements": ((net.sf.freecol.common.model.TileItemContainer)object).removeIncompatibleImprovements(); return null;
   case "setTileItems": ((net.sf.freecol.common.model.TileItemContainer)object).setTileItems((java.util.List)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
@@ -3053,15 +3354,32 @@ net.sf.freecol.common.model.ResourceType newInstance(Class<?>[] types, Object[] 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getMinValue": return ((net.sf.freecol.common.model.ResourceType)object).getMinValue();
-  case "getMaxValue": return ((net.sf.freecol.common.model.ResourceType)object).getMaxValue();
   case "getBestGoodsType": return ((net.sf.freecol.common.model.ResourceType)object).getBestGoodsType();
+  case "getMaxValue": return ((net.sf.freecol.common.model.ResourceType)object).getMaxValue();
+  case "getMinValue": return ((net.sf.freecol.common.model.ResourceType)object).getMinValue();
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.ResourceType", net.sf.freecol.common.model.ResourceType.class);
 metas.put(net.sf.freecol.common.model.ResourceType.class, common_model_ResourceType);
+// net.sf.freecol.common.model.FoundingFather.FoundingFatherType
+final Meta common_model_FoundingFather$FoundingFatherType = new Meta() {
+net.sf.freecol.common.model.FoundingFather.FoundingFatherType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).getKey();
+  case "getTypeKey": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).getTypeKey();
+  case "valueOf": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.FoundingFather$FoundingFatherType", net.sf.freecol.common.model.FoundingFather.FoundingFatherType.class);
+metas.put(net.sf.freecol.common.model.FoundingFather.FoundingFatherType.class, common_model_FoundingFather$FoundingFatherType);
 // net.sf.freecol.common.model.FoundingFather
 final Meta common_model_FoundingFather = new Meta() {
 net.sf.freecol.common.model.FoundingFather newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3071,12 +3389,12 @@ net.sf.freecol.common.model.FoundingFather newInstance(Class<?>[] types, Object[
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getType": return ((net.sf.freecol.common.model.FoundingFather)object).getType();
-  case "setType": ((net.sf.freecol.common.model.FoundingFather)object).setType((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)params[0]); return null;
-  case "getUnitList": return ((net.sf.freecol.common.model.FoundingFather)object).getUnitList();
   case "getEvents": return ((net.sf.freecol.common.model.FoundingFather)object).getEvents();
+  case "getType": return ((net.sf.freecol.common.model.FoundingFather)object).getType();
   case "getTypeKey": return ((net.sf.freecol.common.model.FoundingFather)object).getTypeKey();
+  case "getUnitList": return ((net.sf.freecol.common.model.FoundingFather)object).getUnitList();
   case "setEvents": ((net.sf.freecol.common.model.FoundingFather)object).setEvents((java.util.List)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.FoundingFather)object).setType((net.sf.freecol.common.model.FoundingFather.FoundingFatherType)params[0]); return null;
   case "setUnits": ((net.sf.freecol.common.model.FoundingFather)object).setUnits((java.util.List)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
@@ -3084,36 +3402,52 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.FoundingFather", net.sf.freecol.common.model.FoundingFather.class);
 metas.put(net.sf.freecol.common.model.FoundingFather.class, common_model_FoundingFather);
+// net.sf.freecol.common.model.HighScore.ScoreLevel
+final Meta common_model_HighScore$ScoreLevel = new Meta() {
+net.sf.freecol.common.model.HighScore.ScoreLevel newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getMinimumScore": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).getMinimumScore();
+  case "valueOf": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.HighScore.ScoreLevel)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.HighScore$ScoreLevel", net.sf.freecol.common.model.HighScore.ScoreLevel.class);
+metas.put(net.sf.freecol.common.model.HighScore.ScoreLevel.class, common_model_HighScore$ScoreLevel);
 // net.sf.freecol.common.model.HighScore
 final Meta common_model_HighScore = new Meta() {
 net.sf.freecol.common.model.HighScore newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.model.Player)params[0]);
   if (types.length == 0)
     return new net.sf.freecol.common.model.HighScore();
+  if (areSame(types, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.model.Player)params[0]);
   if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.HighScore((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getLevel": return ((net.sf.freecol.common.model.HighScore)object).getLevel();
-  case "getDate": return ((net.sf.freecol.common.model.HighScore)object).getDate();
-  case "getNationId": return ((net.sf.freecol.common.model.HighScore)object).getNationId();
-  case "getUnitCount": return ((net.sf.freecol.common.model.HighScore)object).getUnitCount();
-  case "getScore": return ((net.sf.freecol.common.model.HighScore)object).getScore();
-  case "getNewLandName": return ((net.sf.freecol.common.model.HighScore)object).getNewLandName();
-  case "loadHighScores": return ((net.sf.freecol.common.model.HighScore)object).loadHighScores();
-  case "getIndependenceTurn": return ((net.sf.freecol.common.model.HighScore)object).getIndependenceTurn();
-  case "getRetirementTurn": return ((net.sf.freecol.common.model.HighScore)object).getRetirementTurn();
-  case "getPlayerName": return ((net.sf.freecol.common.model.HighScore)object).getPlayerName();
-  case "getNationTypeId": return ((net.sf.freecol.common.model.HighScore)object).getNationTypeId();
-  case "getGameUUID": return ((net.sf.freecol.common.model.HighScore)object).getGameUUID();
-  case "getOldNationNameKey": return ((net.sf.freecol.common.model.HighScore)object).getOldNationNameKey();
-  case "getNationName": return ((net.sf.freecol.common.model.HighScore)object).getNationName();
-  case "getDifficulty": return ((net.sf.freecol.common.model.HighScore)object).getDifficulty();
   case "getColonyCount": return ((net.sf.freecol.common.model.HighScore)object).getColonyCount();
+  case "getDate": return ((net.sf.freecol.common.model.HighScore)object).getDate();
   case "getDateString": return ((net.sf.freecol.common.model.HighScore)object).getDateString();
+  case "getDifficulty": return ((net.sf.freecol.common.model.HighScore)object).getDifficulty();
+  case "getGameUUID": return ((net.sf.freecol.common.model.HighScore)object).getGameUUID();
+  case "getIndependenceTurn": return ((net.sf.freecol.common.model.HighScore)object).getIndependenceTurn();
+  case "getLevel": return ((net.sf.freecol.common.model.HighScore)object).getLevel();
+  case "getNationId": return ((net.sf.freecol.common.model.HighScore)object).getNationId();
+  case "getNationName": return ((net.sf.freecol.common.model.HighScore)object).getNationName();
+  case "getNationTypeId": return ((net.sf.freecol.common.model.HighScore)object).getNationTypeId();
+  case "getNewLandName": return ((net.sf.freecol.common.model.HighScore)object).getNewLandName();
+  case "getOldNationNameKey": return ((net.sf.freecol.common.model.HighScore)object).getOldNationNameKey();
+  case "getPlayerName": return ((net.sf.freecol.common.model.HighScore)object).getPlayerName();
+  case "getRetirementTurn": return ((net.sf.freecol.common.model.HighScore)object).getRetirementTurn();
+  case "getScore": return ((net.sf.freecol.common.model.HighScore)object).getScore();
+  case "getUnitCount": return ((net.sf.freecol.common.model.HighScore)object).getUnitCount();
+  case "loadHighScores": return ((net.sf.freecol.common.model.HighScore)object).loadHighScores();
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
@@ -3135,49 +3469,64 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.UnitTypeChange", net.sf.freecol.common.model.UnitTypeChange.class);
 metas.put(net.sf.freecol.common.model.UnitTypeChange.class, common_model_UnitTypeChange);
+// net.sf.freecol.common.model.Map.Layer
+final Meta common_model_Map$Layer = new Meta() {
+net.sf.freecol.common.model.Map.Layer newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Map.Layer)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Map.Layer)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Map$Layer", net.sf.freecol.common.model.Map.Layer.class);
+metas.put(net.sf.freecol.common.model.Map.Layer.class, common_model_Map$Layer);
 // net.sf.freecol.common.model.Map
 final Meta common_model_Map = new Meta() {
 net.sf.freecol.common.model.Map newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class, int.class, int.class))
-    return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (int)params[1], (int)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, int.class, int.class))
+    return new net.sf.freecol.common.model.Map((net.sf.freecol.common.model.Game)params[0], (int)params[1], (int)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "up": return ((net.sf.freecol.common.model.Map)object).up();
-  case "getUnits": return ((net.sf.freecol.common.model.Map)object).getUnits();
-  case "getLayer": return ((net.sf.freecol.common.model.Map)object).getLayer();
-  case "toShortString": return ((net.sf.freecol.common.model.Map)object).toShortString();
-  case "getUnitCount": return ((net.sf.freecol.common.model.Map)object).getUnitCount();
-  case "getWidth": return ((net.sf.freecol.common.model.Map)object).getWidth();
-  case "getHeight": return ((net.sf.freecol.common.model.Map)object).getHeight();
-  case "resetContiguity": ((net.sf.freecol.common.model.Map)object).resetContiguity(); return null;
-  case "getTile": return ((net.sf.freecol.common.model.Map)object).getTile();
-  case "getColony": return ((net.sf.freecol.common.model.Map)object).getColony();
-  case "getUnitList": return ((net.sf.freecol.common.model.Map)object).getUnitList();
-  case "getSettlement": return ((net.sf.freecol.common.model.Map)object).getSettlement();
-  case "getGoodsContainer": return ((net.sf.freecol.common.model.Map)object).getGoodsContainer();
-  case "getLocationLabel": return ((net.sf.freecol.common.model.Map)object).getLocationLabel();
-  case "getIndianSettlement": return ((net.sf.freecol.common.model.Map)object).getIndianSettlement();
-  case "getRank": return ((net.sf.freecol.common.model.Map)object).getRank();
-  case "setLayer": ((net.sf.freecol.common.model.Map)object).setLayer((net.sf.freecol.common.model.Map.Layer)params[0]); return null;
-  case "getMinimumLatitude": return ((net.sf.freecol.common.model.Map)object).getMinimumLatitude();
-  case "setMinimumLatitude": ((net.sf.freecol.common.model.Map)object).setMinimumLatitude((int)params[0]); return null;
-  case "getMaximumLatitude": return ((net.sf.freecol.common.model.Map)object).getMaximumLatitude();
-  case "setMaximumLatitude": ((net.sf.freecol.common.model.Map)object).setMaximumLatitude((int)params[0]); return null;
-  case "getLatitudePerRow": return ((net.sf.freecol.common.model.Map)object).getLatitudePerRow();
-  case "getRegions": return ((net.sf.freecol.common.model.Map)object).getRegions();
   case "clearRegions": ((net.sf.freecol.common.model.Map)object).clearRegions(); return null;
+  case "fixupRegions": ((net.sf.freecol.common.model.Map)object).fixupRegions(); return null;
+  case "getColony": return ((net.sf.freecol.common.model.Map)object).getColony();
   case "getFixedRegions": return ((net.sf.freecol.common.model.Map)object).getFixedRegions();
+  case "getGoodsContainer": return ((net.sf.freecol.common.model.Map)object).getGoodsContainer();
+  case "getHeight": return ((net.sf.freecol.common.model.Map)object).getHeight();
+  case "getIndianSettlement": return ((net.sf.freecol.common.model.Map)object).getIndianSettlement();
+  case "getLatitudePerRow": return ((net.sf.freecol.common.model.Map)object).getLatitudePerRow();
+  case "getLayer": return ((net.sf.freecol.common.model.Map)object).getLayer();
+  case "getLocationLabel": return ((net.sf.freecol.common.model.Map)object).getLocationLabel();
+  case "getMaximumLatitude": return ((net.sf.freecol.common.model.Map)object).getMaximumLatitude();
+  case "getMinimumLatitude": return ((net.sf.freecol.common.model.Map)object).getMinimumLatitude();
+  case "getRank": return ((net.sf.freecol.common.model.Map)object).getRank();
+  case "getRegions": return ((net.sf.freecol.common.model.Map)object).getRegions();
   case "getSearchTrace": return ((net.sf.freecol.common.model.Map)object).getSearchTrace();
-  case "setSearchTrace": return ((net.sf.freecol.common.model.Map)object).setSearchTrace((boolean)params[0]);
+  case "getSettlement": return ((net.sf.freecol.common.model.Map)object).getSettlement();
+  case "getTile": return ((net.sf.freecol.common.model.Map)object).getTile();
+  case "getUnitCount": return ((net.sf.freecol.common.model.Map)object).getUnitCount();
+  case "getUnitList": return ((net.sf.freecol.common.model.Map)object).getUnitList();
+  case "getUnits": return ((net.sf.freecol.common.model.Map)object).getUnits();
+  case "getWidth": return ((net.sf.freecol.common.model.Map)object).getWidth();
+  case "resetContiguity": ((net.sf.freecol.common.model.Map)object).resetContiguity(); return null;
   case "resetHighSeasCount": ((net.sf.freecol.common.model.Map)object).resetHighSeasCount(); return null;
   case "resetLayers": ((net.sf.freecol.common.model.Map)object).resetLayers(); return null;
-  case "fixupRegions": ((net.sf.freecol.common.model.Map)object).fixupRegions(); return null;
+  case "setLayer": ((net.sf.freecol.common.model.Map)object).setLayer((net.sf.freecol.common.model.Map.Layer)params[0]); return null;
+  case "setMaximumLatitude": ((net.sf.freecol.common.model.Map)object).setMaximumLatitude((int)params[0]); return null;
+  case "setMinimumLatitude": ((net.sf.freecol.common.model.Map)object).setMinimumLatitude((int)params[0]); return null;
+  case "setSearchTrace": return ((net.sf.freecol.common.model.Map)object).setSearchTrace((boolean)params[0]);
+  case "toShortString": return ((net.sf.freecol.common.model.Map)object).toShortString();
+  case "up": return ((net.sf.freecol.common.model.Map)object).up();
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -3223,8 +3572,8 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getBasicProductionInfo": return ((net.sf.freecol.common.model.ColonyTile)object).getBasicProductionInfo();
   case "getOccupyingUnit": return ((net.sf.freecol.common.model.ColonyTile)object).getOccupyingUnit();
-  case "isOccupied": return ((net.sf.freecol.common.model.ColonyTile)object).isOccupied();
   case "isColonyCenterTile": return ((net.sf.freecol.common.model.ColonyTile)object).isColonyCenterTile();
+  case "isOccupied": return ((net.sf.freecol.common.model.ColonyTile)object).isOccupied();
   case "setWorkTile": ((net.sf.freecol.common.model.ColonyTile)object).setWorkTile((net.sf.freecol.common.model.Tile)params[0]); return null;
   }
   return common_model_WorkLocation.invokeMethod(object, method, params);
@@ -3232,6 +3581,25 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.ColonyTile", net.sf.freecol.common.model.ColonyTile.class);
 metas.put(net.sf.freecol.common.model.ColonyTile.class, common_model_ColonyTile);
+// net.sf.freecol.common.model.Monarch.MonarchAction
+final Meta common_model_Monarch$MonarchAction = new Meta() {
+net.sf.freecol.common.model.Monarch.MonarchAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getHeaderKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getHeaderKey();
+  case "getNoKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getNoKey();
+  case "getTextKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getTextKey();
+  case "getYesKey": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).getYesKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Monarch.MonarchAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Monarch$MonarchAction", net.sf.freecol.common.model.Monarch.MonarchAction.class);
+metas.put(net.sf.freecol.common.model.Monarch.MonarchAction.class, common_model_Monarch$MonarchAction);
 // net.sf.freecol.common.model.Monarch
 final Meta common_model_Monarch = new Meta() {
 net.sf.freecol.common.model.Monarch newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3243,27 +3611,42 @@ net.sf.freecol.common.model.Monarch newInstance(Class<?>[] types, Object[] param
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setDispleasure": ((net.sf.freecol.common.model.Monarch)object).setDispleasure((boolean)params[0]); return null;
-  case "getInterventionForce": return ((net.sf.freecol.common.model.Monarch)object).getInterventionForce();
-  case "getExpeditionaryForce": return ((net.sf.freecol.common.model.Monarch)object).getExpeditionaryForce();
-  case "getNavalREFUnitType": return ((net.sf.freecol.common.model.Monarch)object).getNavalREFUnitType();
-  case "getNameKey": return ((net.sf.freecol.common.model.Monarch)object).getNameKey();
-  case "collectPotentialFriends": return ((net.sf.freecol.common.model.Monarch)object).collectPotentialFriends();
   case "collectPotentialEnemies": return ((net.sf.freecol.common.model.Monarch)object).collectPotentialEnemies();
-  case "updateInterventionForce": ((net.sf.freecol.common.model.Monarch)object).updateInterventionForce(); return null;
+  case "collectPotentialFriends": return ((net.sf.freecol.common.model.Monarch)object).collectPotentialFriends();
   case "getActionChoices": return ((net.sf.freecol.common.model.Monarch)object).getActionChoices();
-  case "getMercenaryForce": return ((net.sf.freecol.common.model.Monarch)object).getMercenaryForce();
-  case "getWarSupportForce": return ((net.sf.freecol.common.model.Monarch)object).getWarSupportForce();
-  case "getSupportSea": return ((net.sf.freecol.common.model.Monarch)object).getSupportSea();
-  case "setSupportSea": ((net.sf.freecol.common.model.Monarch)object).setSupportSea((boolean)params[0]); return null;
   case "getDispleasure": return ((net.sf.freecol.common.model.Monarch)object).getDispleasure();
+  case "getExpeditionaryForce": return ((net.sf.freecol.common.model.Monarch)object).getExpeditionaryForce();
+  case "getInterventionForce": return ((net.sf.freecol.common.model.Monarch)object).getInterventionForce();
+  case "getMercenaryForce": return ((net.sf.freecol.common.model.Monarch)object).getMercenaryForce();
+  case "getNameKey": return ((net.sf.freecol.common.model.Monarch)object).getNameKey();
+  case "getNavalREFUnitType": return ((net.sf.freecol.common.model.Monarch)object).getNavalREFUnitType();
+  case "getSupportSea": return ((net.sf.freecol.common.model.Monarch)object).getSupportSea();
+  case "getWarSupportForce": return ((net.sf.freecol.common.model.Monarch)object).getWarSupportForce();
+  case "setDispleasure": ((net.sf.freecol.common.model.Monarch)object).setDispleasure((boolean)params[0]); return null;
+  case "setSupportSea": ((net.sf.freecol.common.model.Monarch)object).setSupportSea((boolean)params[0]); return null;
   case "shouldAddNavalUnit": return ((net.sf.freecol.common.model.Monarch)object).shouldAddNavalUnit();
+  case "updateInterventionForce": ((net.sf.freecol.common.model.Monarch)object).updateInterventionForce(); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Monarch", net.sf.freecol.common.model.Monarch.class);
 metas.put(net.sf.freecol.common.model.Monarch.class, common_model_Monarch);
+// net.sf.freecol.common.model.TileType.RangeType
+final Meta common_model_TileType$RangeType = new Meta() {
+net.sf.freecol.common.model.TileType.RangeType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.TileType.RangeType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.TileType.RangeType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.TileType$RangeType", net.sf.freecol.common.model.TileType.RangeType.class);
+metas.put(net.sf.freecol.common.model.TileType.RangeType.class, common_model_TileType$RangeType);
 // net.sf.freecol.common.model.TileType
 final Meta common_model_TileType = new Meta() {
 net.sf.freecol.common.model.TileType newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3273,17 +3656,17 @@ net.sf.freecol.common.model.TileType newInstance(Class<?>[] types, Object[] para
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileType)object).getDisasterChoices();
-  case "isDirectlyHighSeasConnected": return ((net.sf.freecol.common.model.TileType)object).isDirectlyHighSeasConnected();
   case "canSettle": return ((net.sf.freecol.common.model.TileType)object).canSettle();
   case "getBasicMoveCost": return ((net.sf.freecol.common.model.TileType)object).getBasicMoveCost();
-  case "isWater": return ((net.sf.freecol.common.model.TileType)object).isWater();
-  case "isForested": return ((net.sf.freecol.common.model.TileType)object).isForested();
   case "getBasicWorkTurns": return ((net.sf.freecol.common.model.TileType)object).getBasicWorkTurns();
-  case "isElevation": return ((net.sf.freecol.common.model.TileType)object).isElevation();
-  case "isHighSeasConnected": return ((net.sf.freecol.common.model.TileType)object).isHighSeasConnected();
-  case "getResourceTypes": return ((net.sf.freecol.common.model.TileType)object).getResourceTypes();
+  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileType)object).getDisasterChoices();
   case "getResourceTypeValues": return ((net.sf.freecol.common.model.TileType)object).getResourceTypeValues();
+  case "getResourceTypes": return ((net.sf.freecol.common.model.TileType)object).getResourceTypes();
+  case "isDirectlyHighSeasConnected": return ((net.sf.freecol.common.model.TileType)object).isDirectlyHighSeasConnected();
+  case "isElevation": return ((net.sf.freecol.common.model.TileType)object).isElevation();
+  case "isForested": return ((net.sf.freecol.common.model.TileType)object).isForested();
+  case "isHighSeasConnected": return ((net.sf.freecol.common.model.TileType)object).isHighSeasConnected();
+  case "isWater": return ((net.sf.freecol.common.model.TileType)object).isWater();
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -3293,10 +3676,10 @@ metas.put(net.sf.freecol.common.model.TileType.class, common_model_TileType);
 // net.sf.freecol.common.model.TileTypeChange
 final Meta common_model_TileTypeChange = new Meta() {
 net.sf.freecol.common.model.TileTypeChange newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.TileTypeChange((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3310,6 +3693,23 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.TileTypeChange", net.sf.freecol.common.model.TileTypeChange.class);
 metas.put(net.sf.freecol.common.model.TileTypeChange.class, common_model_TileTypeChange);
+// net.sf.freecol.common.model.NativeTrade.NativeTradeAction
+final Meta common_model_NativeTrade$NativeTradeAction = new Meta() {
+net.sf.freecol.common.model.NativeTrade.NativeTradeAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isClosing": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).isClosing();
+  case "isEuropean": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).isEuropean();
+  case "valueOf": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NativeTrade.NativeTradeAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NativeTrade$NativeTradeAction", net.sf.freecol.common.model.NativeTrade.NativeTradeAction.class);
+metas.put(net.sf.freecol.common.model.NativeTrade.NativeTradeAction.class, common_model_NativeTrade$NativeTradeAction);
 // net.sf.freecol.common.model.NativeTrade
 final Meta common_model_NativeTrade = new Meta() {
 net.sf.freecol.common.model.NativeTrade newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3321,27 +3721,27 @@ net.sf.freecol.common.model.NativeTrade newInstance(Class<?>[] types, Object[] p
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getCount": return ((net.sf.freecol.common.model.NativeTrade)object).getCount();
-  case "initialize": ((net.sf.freecol.common.model.NativeTrade)object).initialize(); return null;
-  case "getKey": return ((net.sf.freecol.common.model.NativeTrade)object).getKey();
-  case "getUnit": return ((net.sf.freecol.common.model.NativeTrade)object).getUnit();
-  case "getIndianSettlement": return ((net.sf.freecol.common.model.NativeTrade)object).getIndianSettlement();
-  case "getItem": return ((net.sf.freecol.common.model.NativeTrade)object).getItem();
   case "canBuy": return ((net.sf.freecol.common.model.NativeTrade)object).canBuy();
-  case "canSell": return ((net.sf.freecol.common.model.NativeTrade)object).canSell();
   case "canGift": return ((net.sf.freecol.common.model.NativeTrade)object).canGift();
-  case "getSettlementToUnit": return ((net.sf.freecol.common.model.NativeTrade)object).getSettlementToUnit();
-  case "setItem": ((net.sf.freecol.common.model.NativeTrade)object).setItem((net.sf.freecol.common.model.NativeTradeItem)params[0]); return null;
-  case "getUnitToSettlement": return ((net.sf.freecol.common.model.NativeTrade)object).getUnitToSettlement();
+  case "canSell": return ((net.sf.freecol.common.model.NativeTrade)object).canSell();
+  case "getBuy": return ((net.sf.freecol.common.model.NativeTrade)object).getBuy();
+  case "getCount": return ((net.sf.freecol.common.model.NativeTrade)object).getCount();
   case "getDone": return ((net.sf.freecol.common.model.NativeTrade)object).getDone();
   case "getGift": return ((net.sf.freecol.common.model.NativeTrade)object).getGift();
-  case "setGift": ((net.sf.freecol.common.model.NativeTrade)object).setGift((boolean)params[0]); return null;
-  case "setBuy": ((net.sf.freecol.common.model.NativeTrade)object).setBuy((boolean)params[0]); return null;
-  case "setSell": ((net.sf.freecol.common.model.NativeTrade)object).setSell((boolean)params[0]); return null;
-  case "getBuy": return ((net.sf.freecol.common.model.NativeTrade)object).getBuy();
+  case "getIndianSettlement": return ((net.sf.freecol.common.model.NativeTrade)object).getIndianSettlement();
+  case "getItem": return ((net.sf.freecol.common.model.NativeTrade)object).getItem();
+  case "getKey": return ((net.sf.freecol.common.model.NativeTrade)object).getKey();
   case "getSell": return ((net.sf.freecol.common.model.NativeTrade)object).getSell();
+  case "getSettlementToUnit": return ((net.sf.freecol.common.model.NativeTrade)object).getSettlementToUnit();
+  case "getUnit": return ((net.sf.freecol.common.model.NativeTrade)object).getUnit();
+  case "getUnitToSettlement": return ((net.sf.freecol.common.model.NativeTrade)object).getUnitToSettlement();
   case "hasNotTraded": return ((net.sf.freecol.common.model.NativeTrade)object).hasNotTraded();
+  case "initialize": ((net.sf.freecol.common.model.NativeTrade)object).initialize(); return null;
+  case "setBuy": ((net.sf.freecol.common.model.NativeTrade)object).setBuy((boolean)params[0]); return null;
   case "setCount": ((net.sf.freecol.common.model.NativeTrade)object).setCount((int)params[0]); return null;
+  case "setGift": ((net.sf.freecol.common.model.NativeTrade)object).setGift((boolean)params[0]); return null;
+  case "setItem": ((net.sf.freecol.common.model.NativeTrade)object).setItem((net.sf.freecol.common.model.NativeTradeItem)params[0]); return null;
+  case "setSell": ((net.sf.freecol.common.model.NativeTrade)object).setSell((boolean)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -3372,18 +3772,18 @@ net.sf.freecol.common.model.Nation newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getType": return ((net.sf.freecol.common.model.Nation)object).getType();
-  case "setType": ((net.sf.freecol.common.model.Nation)object).setType((net.sf.freecol.common.model.NationType)params[0]); return null;
-  case "isUnknownEnemy": return ((net.sf.freecol.common.model.Nation)object).isUnknownEnemy();
+  case "getColor": return ((net.sf.freecol.common.model.Nation)object).getColor();
+  case "getPreferredLatitude": return ((net.sf.freecol.common.model.Nation)object).getPreferredLatitude();
+  case "getREFNation": return ((net.sf.freecol.common.model.Nation)object).getREFNation();
+  case "getRebelNation": return ((net.sf.freecol.common.model.Nation)object).getRebelNation();
   case "getRulerName": return ((net.sf.freecol.common.model.Nation)object).getRulerName();
   case "getRulerNameKey": return ((net.sf.freecol.common.model.Nation)object).getRulerNameKey();
-  case "getREFNation": return ((net.sf.freecol.common.model.Nation)object).getREFNation();
-  case "getColor": return ((net.sf.freecol.common.model.Nation)object).getColor();
-  case "setColor": ((net.sf.freecol.common.model.Nation)object).setColor((java.awt.Color)params[0]); return null;
-  case "isSelectable": return ((net.sf.freecol.common.model.Nation)object).isSelectable();
-  case "getRebelNation": return ((net.sf.freecol.common.model.Nation)object).getRebelNation();
-  case "getPreferredLatitude": return ((net.sf.freecol.common.model.Nation)object).getPreferredLatitude();
   case "getStartsOnEastCoast": return ((net.sf.freecol.common.model.Nation)object).getStartsOnEastCoast();
+  case "getType": return ((net.sf.freecol.common.model.Nation)object).getType();
+  case "isSelectable": return ((net.sf.freecol.common.model.Nation)object).isSelectable();
+  case "isUnknownEnemy": return ((net.sf.freecol.common.model.Nation)object).isUnknownEnemy();
+  case "setColor": ((net.sf.freecol.common.model.Nation)object).setColor((java.awt.Color)params[0]); return null;
+  case "setType": ((net.sf.freecol.common.model.Nation)object).setType((net.sf.freecol.common.model.NationType)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -3393,10 +3793,10 @@ metas.put(net.sf.freecol.common.model.Nation.class, common_model_Nation);
 // net.sf.freecol.common.model.ColonyTradeItem
 final Meta common_model_ColonyTradeItem = new Meta() {
 net.sf.freecol.common.model.ColonyTradeItem newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Colony.class))
-    return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Colony)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Colony.class))
+    return new net.sf.freecol.common.model.ColonyTradeItem((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Colony)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3418,17 +3818,34 @@ net.sf.freecol.common.model.Resource newInstance(Class<?>[] types, Object[] para
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getType": return ((net.sf.freecol.common.model.Resource)object).getType();
+  case "getBestGoodsType": return ((net.sf.freecol.common.model.Resource)object).getBestGoodsType();
   case "getQuantity": return ((net.sf.freecol.common.model.Resource)object).getQuantity();
+  case "getType": return ((net.sf.freecol.common.model.Resource)object).getType();
   case "isUnlimited": return ((net.sf.freecol.common.model.Resource)object).isUnlimited();
   case "setQuantity": ((net.sf.freecol.common.model.Resource)object).setQuantity((int)params[0]); return null;
-  case "getBestGoodsType": return ((net.sf.freecol.common.model.Resource)object).getBestGoodsType();
   }
   return common_model_TileItem.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Resource", net.sf.freecol.common.model.Resource.class);
 metas.put(net.sf.freecol.common.model.Resource.class, common_model_Resource);
+// net.sf.freecol.common.model.HistoryEvent.HistoryEventType
+final Meta common_model_HistoryEvent$HistoryEventType = new Meta() {
+net.sf.freecol.common.model.HistoryEvent.HistoryEventType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).getDescriptionKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).getNameKey();
+  case "valueOf": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.HistoryEvent.HistoryEventType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.HistoryEvent$HistoryEventType", net.sf.freecol.common.model.HistoryEvent.HistoryEventType.class);
+metas.put(net.sf.freecol.common.model.HistoryEvent.HistoryEventType.class, common_model_HistoryEvent$HistoryEventType);
 // net.sf.freecol.common.model.HistoryEvent
 final Meta common_model_HistoryEvent = new Meta() {
 net.sf.freecol.common.model.HistoryEvent newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3443,26 +3860,42 @@ net.sf.freecol.common.model.HistoryEvent newInstance(Class<?>[] types, Object[] 
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "getEventType": return ((net.sf.freecol.common.model.HistoryEvent)object).getEventType();
-  case "getTurn": return ((net.sf.freecol.common.model.HistoryEvent)object).getTurn();
-  case "getScore": return ((net.sf.freecol.common.model.HistoryEvent)object).getScore();
-  case "setScore": ((net.sf.freecol.common.model.HistoryEvent)object).setScore((int)params[0]); return null;
   case "getPlayerId": return ((net.sf.freecol.common.model.HistoryEvent)object).getPlayerId();
+  case "getScore": return ((net.sf.freecol.common.model.HistoryEvent)object).getScore();
+  case "getTurn": return ((net.sf.freecol.common.model.HistoryEvent)object).getTurn();
   case "setPlayerId": ((net.sf.freecol.common.model.HistoryEvent)object).setPlayerId((java.lang.String)params[0]); return null;
+  case "setScore": ((net.sf.freecol.common.model.HistoryEvent)object).setScore((int)params[0]); return null;
   }
   return common_model_StringTemplate.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.HistoryEvent", net.sf.freecol.common.model.HistoryEvent.class);
 metas.put(net.sf.freecol.common.model.HistoryEvent.class, common_model_HistoryEvent);
+// net.sf.freecol.common.model.LostCityRumour.RumourType
+final Meta common_model_LostCityRumour$RumourType = new Meta() {
+net.sf.freecol.common.model.LostCityRumour.RumourType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).getDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.LostCityRumour.RumourType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.LostCityRumour$RumourType", net.sf.freecol.common.model.LostCityRumour.RumourType.class);
+metas.put(net.sf.freecol.common.model.LostCityRumour.RumourType.class, common_model_LostCityRumour$RumourType);
 // net.sf.freecol.common.model.LostCityRumour
 final Meta common_model_LostCityRumour = new Meta() {
 net.sf.freecol.common.model.LostCityRumour newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.LostCityRumour.RumourType.class, java.lang.String.class))
-    return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.LostCityRumour.RumourType)params[2], (java.lang.String)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class))
     return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.LostCityRumour.RumourType.class, java.lang.String.class))
+    return new net.sf.freecol.common.model.LostCityRumour((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.LostCityRumour.RumourType)params[2], (java.lang.String)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3476,6 +3909,24 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.LostCityRumour", net.sf.freecol.common.model.LostCityRumour.class);
 metas.put(net.sf.freecol.common.model.LostCityRumour.class, common_model_LostCityRumour);
+// net.sf.freecol.common.model.Europe.MigrationType
+final Meta common_model_Europe$MigrationType = new Meta() {
+net.sf.freecol.common.model.Europe.MigrationType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDefaultSlot": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getDefaultSlot();
+  case "getMigrantCount": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getMigrantCount();
+  case "getUnspecificSlot": return ((net.sf.freecol.common.model.Europe.MigrationType)object).getUnspecificSlot();
+  case "valueOf": return ((net.sf.freecol.common.model.Europe.MigrationType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Europe.MigrationType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Europe$MigrationType", net.sf.freecol.common.model.Europe.MigrationType.class);
+metas.put(net.sf.freecol.common.model.Europe.MigrationType.class, common_model_Europe$MigrationType);
 // net.sf.freecol.common.model.Europe
 final Meta common_model_Europe = new Meta() {
 net.sf.freecol.common.model.Europe newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3485,11 +3936,11 @@ net.sf.freecol.common.model.Europe newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.Europe)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getOwner": return ((net.sf.freecol.common.model.Europe)object).getOwner();
+  case "canBeInput": return ((net.sf.freecol.common.model.Europe)object).canBeInput();
   case "getCurrentRecruitPrice": return ((net.sf.freecol.common.model.Europe)object).getCurrentRecruitPrice();
   case "getNameKey": return ((net.sf.freecol.common.model.Europe)object).getNameKey();
-  case "canBeInput": return ((net.sf.freecol.common.model.Europe)object).canBeInput();
+  case "getOwner": return ((net.sf.freecol.common.model.Europe)object).getOwner();
+  case "setOwner": ((net.sf.freecol.common.model.Europe)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
 }
@@ -3501,16 +3952,16 @@ final Meta common_model_Ability = new Meta() {
 net.sf.freecol.common.model.Ability newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.common.model.Ability.class))
     return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.model.Ability)params[0]);
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.model.Specification)params[0]);
-  if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.FreeColSpecObjectType.class, boolean.class))
-    return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (net.sf.freecol.common.model.FreeColSpecObjectType)params[1], (boolean)params[2]);
   if (areSame(types, java.lang.String.class))
     return new net.sf.freecol.common.model.Ability((java.lang.String)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.Ability((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
   if (areSame(types, java.lang.String.class, boolean.class))
     return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (boolean)params[1]);
+  if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.FreeColSpecObjectType.class, boolean.class))
+    return new net.sf.freecol.common.model.Ability((java.lang.String)params[0], (net.sf.freecol.common.model.FreeColSpecObjectType)params[1], (boolean)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3523,62 +3974,107 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Ability", net.sf.freecol.common.model.Ability.class);
 metas.put(net.sf.freecol.common.model.Ability.class, common_model_Ability);
-// net.sf.freecol.common.model.Game
-final Meta common_model_Game = new Meta() {
-net.sf.freecol.common.model.Game newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.common.model.Game((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.Game();
+// net.sf.freecol.common.model.Game.LogoutReason
+final Meta common_model_Game$LogoutReason = new Meta() {
+net.sf.freecol.common.model.Game.LogoutReason newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setMap": return ((net.sf.freecol.common.model.Game)object).setMap((net.sf.freecol.common.model.Map)params[0]);
-  case "getMap": return ((net.sf.freecol.common.model.Game)object).getMap();
-  case "getDifficultyOptionGroup": return ((net.sf.freecol.common.model.Game)object).getDifficultyOptionGroup();
-  case "getGameOptions": return ((net.sf.freecol.common.model.Game)object).getGameOptions();
-  case "setGameOptions": ((net.sf.freecol.common.model.Game)object).setGameOptions((net.sf.freecol.common.option.OptionGroup)params[0]); return null;
-  case "getMapGeneratorOptions": return ((net.sf.freecol.common.model.Game)object).getMapGeneratorOptions();
-  case "setMapGeneratorOptions": ((net.sf.freecol.common.model.Game)object).setMapGeneratorOptions((net.sf.freecol.common.option.OptionGroup)params[0]); return null;
-  case "getNextId": return ((net.sf.freecol.common.model.Game)object).getNextId();
-  case "getFreeColGameObjectList": return ((net.sf.freecol.common.model.Game)object).getFreeColGameObjectList();
-  case "getUUID": return ((net.sf.freecol.common.model.Game)object).getUUID();
-  case "getFirstPlayer": return ((net.sf.freecol.common.model.Game)object).getFirstPlayer();
-  case "getNextPlayer": return ((net.sf.freecol.common.model.Game)object).getNextPlayer();
-  case "getUnknownEnemy": return ((net.sf.freecol.common.model.Game)object).getUnknownEnemy();
-  case "setUnknownEnemy": ((net.sf.freecol.common.model.Game)object).setUnknownEnemy((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getClientUserName": return ((net.sf.freecol.common.model.Game)object).getClientUserName();
-  case "isInClient": return ((net.sf.freecol.common.model.Game)object).isInClient();
-  case "isInServer": return ((net.sf.freecol.common.model.Game)object).isInServer();
+  case "valueOf": return ((net.sf.freecol.common.model.Game.LogoutReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Game.LogoutReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Game$LogoutReason", net.sf.freecol.common.model.Game.LogoutReason.class);
+metas.put(net.sf.freecol.common.model.Game.LogoutReason.class, common_model_Game$LogoutReason);
+// net.sf.freecol.common.model.Game
+final Meta common_model_Game = new Meta() {
+net.sf.freecol.common.model.Game newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.Game();
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.common.model.Game((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "allPlayersReadyToLaunch": return ((net.sf.freecol.common.model.Game)object).allPlayersReadyToLaunch();
+  case "canAddNewPlayer": return ((net.sf.freecol.common.model.Game)object).canAddNewPlayer();
+  case "getAge": return ((net.sf.freecol.common.model.Game)object).getAge();
   case "getClientPlayer": return ((net.sf.freecol.common.model.Game)object).getClientPlayer();
-  case "isInRevengeMode": return ((net.sf.freecol.common.model.Game)object).isInRevengeMode();
+  case "getClientUserName": return ((net.sf.freecol.common.model.Game)object).getClientUserName();
+  case "getCombatModel": return ((net.sf.freecol.common.model.Game)object).getCombatModel();
   case "getCurrentPlayer": return ((net.sf.freecol.common.model.Game)object).getCurrentPlayer();
-  case "setCurrentPlayer": ((net.sf.freecol.common.model.Game)object).setCurrentPlayer((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "getDifficultyOptionGroup": return ((net.sf.freecol.common.model.Game)object).getDifficultyOptionGroup();
+  case "getFirstPlayer": return ((net.sf.freecol.common.model.Game)object).getFirstPlayer();
+  case "getFreeColGameObjectList": return ((net.sf.freecol.common.model.Game)object).getFreeColGameObjectList();
+  case "getGameOptions": return ((net.sf.freecol.common.model.Game)object).getGameOptions();
+  case "getInitialActiveUnit": return ((net.sf.freecol.common.model.Game)object).getInitialActiveUnit();
+  case "getInitialActiveUnitId": return ((net.sf.freecol.common.model.Game)object).getInitialActiveUnitId();
+  case "getMap": return ((net.sf.freecol.common.model.Game)object).getMap();
+  case "getMapGeneratorOptions": return ((net.sf.freecol.common.model.Game)object).getMapGeneratorOptions();
   case "getNationOptions": return ((net.sf.freecol.common.model.Game)object).getNationOptions();
-  case "setNationOptions": ((net.sf.freecol.common.model.Game)object).setNationOptions((net.sf.freecol.common.model.NationOptions)params[0]); return null;
+  case "getNextId": return ((net.sf.freecol.common.model.Game)object).getNextId();
+  case "getNextPlayer": return ((net.sf.freecol.common.model.Game)object).getNextPlayer();
+  case "getSpanishSuccession": return ((net.sf.freecol.common.model.Game)object).getSpanishSuccession();
+  case "getStatistics": return ((net.sf.freecol.common.model.Game)object).getStatistics();
+  case "getTurn": return ((net.sf.freecol.common.model.Game)object).getTurn();
+  case "getUUID": return ((net.sf.freecol.common.model.Game)object).getUUID();
+  case "getUnknownEnemy": return ((net.sf.freecol.common.model.Game)object).getUnknownEnemy();
   case "getVacantNation": return ((net.sf.freecol.common.model.Game)object).getVacantNation();
   case "getVacantNations": return ((net.sf.freecol.common.model.Game)object).getVacantNations();
-  case "canAddNewPlayer": return ((net.sf.freecol.common.model.Game)object).canAddNewPlayer();
-  case "getTurn": return ((net.sf.freecol.common.model.Game)object).getTurn();
-  case "setTurn": ((net.sf.freecol.common.model.Game)object).setTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
-  case "getAge": return ((net.sf.freecol.common.model.Game)object).getAge();
-  case "getCombatModel": return ((net.sf.freecol.common.model.Game)object).getCombatModel();
+  case "isInClient": return ((net.sf.freecol.common.model.Game)object).isInClient();
+  case "isInRevengeMode": return ((net.sf.freecol.common.model.Game)object).isInRevengeMode();
+  case "isInServer": return ((net.sf.freecol.common.model.Game)object).isInServer();
   case "setCombatModel": ((net.sf.freecol.common.model.Game)object).setCombatModel((net.sf.freecol.common.model.CombatModel)params[0]); return null;
-  case "getSpanishSuccession": return ((net.sf.freecol.common.model.Game)object).getSpanishSuccession();
-  case "setSpanishSuccession": ((net.sf.freecol.common.model.Game)object).setSpanishSuccession((boolean)params[0]); return null;
-  case "getInitialActiveUnitId": return ((net.sf.freecol.common.model.Game)object).getInitialActiveUnitId();
-  case "getInitialActiveUnit": return ((net.sf.freecol.common.model.Game)object).getInitialActiveUnit();
-  case "setInitialActiveUnitId": ((net.sf.freecol.common.model.Game)object).setInitialActiveUnitId((java.lang.String)params[0]); return null;
+  case "setCurrentPlayer": ((net.sf.freecol.common.model.Game)object).setCurrentPlayer((net.sf.freecol.common.model.Player)params[0]); return null;
   case "setFreeColGameObjectListener": ((net.sf.freecol.common.model.Game)object).setFreeColGameObjectListener((net.sf.freecol.common.model.FreeColGameObjectListener)params[0]); return null;
-  case "allPlayersReadyToLaunch": return ((net.sf.freecol.common.model.Game)object).allPlayersReadyToLaunch();
-  case "getStatistics": return ((net.sf.freecol.common.model.Game)object).getStatistics();
+  case "setGameOptions": ((net.sf.freecol.common.model.Game)object).setGameOptions((net.sf.freecol.common.option.OptionGroup)params[0]); return null;
+  case "setInitialActiveUnitId": ((net.sf.freecol.common.model.Game)object).setInitialActiveUnitId((java.lang.String)params[0]); return null;
+  case "setMap": return ((net.sf.freecol.common.model.Game)object).setMap((net.sf.freecol.common.model.Map)params[0]);
+  case "setMapGeneratorOptions": ((net.sf.freecol.common.model.Game)object).setMapGeneratorOptions((net.sf.freecol.common.option.OptionGroup)params[0]); return null;
+  case "setNationOptions": ((net.sf.freecol.common.model.Game)object).setNationOptions((net.sf.freecol.common.model.NationOptions)params[0]); return null;
+  case "setSpanishSuccession": ((net.sf.freecol.common.model.Game)object).setSpanishSuccession((boolean)params[0]); return null;
+  case "setTurn": ((net.sf.freecol.common.model.Game)object).setTurn((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "setUnknownEnemy": ((net.sf.freecol.common.model.Game)object).setUnknownEnemy((net.sf.freecol.common.model.Player)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.Game", net.sf.freecol.common.model.Game.class);
 metas.put(net.sf.freecol.common.model.Game.class, common_model_Game);
+// net.sf.freecol.common.model.Colony.ColonyChangeEvent
+final Meta common_model_Colony$ColonyChangeEvent = new Meta() {
+net.sf.freecol.common.model.Colony.ColonyChangeEvent newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Colony.ColonyChangeEvent)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Colony.ColonyChangeEvent)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Colony$ColonyChangeEvent", net.sf.freecol.common.model.Colony.ColonyChangeEvent.class);
+metas.put(net.sf.freecol.common.model.Colony.ColonyChangeEvent.class, common_model_Colony$ColonyChangeEvent);
+// net.sf.freecol.common.model.Colony.NoBuildReason
+final Meta common_model_Colony$NoBuildReason = new Meta() {
+net.sf.freecol.common.model.Colony.NoBuildReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Colony.NoBuildReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Colony.NoBuildReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Colony$NoBuildReason", net.sf.freecol.common.model.Colony.NoBuildReason.class);
+metas.put(net.sf.freecol.common.model.Colony.NoBuildReason.class, common_model_Colony$NoBuildReason);
 // net.sf.freecol.common.model.Colony
 final Meta common_model_Colony = new Meta() {
 net.sf.freecol.common.model.Colony newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3588,63 +4084,63 @@ net.sf.freecol.common.model.Colony newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "updateProductionTypes": ((net.sf.freecol.common.model.Colony)object).updateProductionTypes(); return null;
-  case "isUndead": return ((net.sf.freecol.common.model.Colony)object).isUndead();
-  case "getDisasterChoices": return ((net.sf.freecol.common.model.Colony)object).getDisasterChoices();
-  case "getLootableGoodsList": return ((net.sf.freecol.common.model.Colony)object).getLootableGoodsList();
-  case "getBurnableBuildings": return ((net.sf.freecol.common.model.Colony)object).getBurnableBuildings();
-  case "setDisplayUnitCount": ((net.sf.freecol.common.model.Colony)object).setDisplayUnitCount((int)params[0]); return null;
-  case "getStockade": return ((net.sf.freecol.common.model.Colony)object).getStockade();
+  case "canBeInput": return ((net.sf.freecol.common.model.Colony)object).canBeInput();
   case "canBePlundered": return ((net.sf.freecol.common.model.Colony)object).canBePlundered();
-  case "getAllWorkLocations": return ((net.sf.freecol.common.model.Colony)object).getAllWorkLocations();
+  case "canBuild": return ((net.sf.freecol.common.model.Colony)object).canBuild();
   case "canPayToFinishBuilding": return ((net.sf.freecol.common.model.Colony)object).canPayToFinishBuilding();
-  case "getPriceForBuilding": return ((net.sf.freecol.common.model.Colony)object).getPriceForBuilding();
-  case "setBuildQueue": ((net.sf.freecol.common.model.Colony)object).setBuildQueue((java.util.List)params[0]); return null;
-  case "getBuildings": return ((net.sf.freecol.common.model.Colony)object).getBuildings();
-  case "getColonyTiles": return ((net.sf.freecol.common.model.Colony)object).getColonyTiles();
-  case "getProductionBonus": return ((net.sf.freecol.common.model.Colony)object).getProductionBonus();
-  case "setProductionBonus": ((net.sf.freecol.common.model.Colony)object).setProductionBonus((int)params[0]); return null;
-  case "getEstablished": return ((net.sf.freecol.common.model.Colony)object).getEstablished();
-  case "setEstablished": ((net.sf.freecol.common.model.Colony)object).setEstablished((net.sf.freecol.common.model.Turn)params[0]); return null;
-  case "getBuildQueue": return ((net.sf.freecol.common.model.Colony)object).getBuildQueue();
-  case "getPopulationQueue": return ((net.sf.freecol.common.model.Colony)object).getPopulationQueue();
-  case "setPopulationQueue": ((net.sf.freecol.common.model.Colony)object).setPopulationQueue((java.util.List)params[0]); return null;
-  case "getDisplayUnitCount": return ((net.sf.freecol.common.model.Colony)object).getDisplayUnitCount();
-  case "getOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).getOccupationTrace();
-  case "setOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).setOccupationTrace((boolean)params[0]);
-  case "getCurrentlyBuilding": return ((net.sf.freecol.common.model.Colony)object).getCurrentlyBuilding();
-  case "setExportData": ((net.sf.freecol.common.model.Colony)object).setExportData((net.sf.freecol.common.model.ExportData)params[0]); return null;
-  case "getCurrentWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getCurrentWorkLocationsList();
+  case "canReducePopulation": return ((net.sf.freecol.common.model.Colony)object).canReducePopulation();
+  case "checkForGovMgtChangeMessage": return ((net.sf.freecol.common.model.Colony)object).checkForGovMgtChangeMessage();
+  case "copyColony": return ((net.sf.freecol.common.model.Colony)object).copyColony();
+  case "getAllWorkLocations": return ((net.sf.freecol.common.model.Colony)object).getAllWorkLocations();
   case "getAllWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getAllWorkLocationsList();
-  case "getAvailableWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getAvailableWorkLocationsList();
+  case "getApparentUnitCount": return ((net.sf.freecol.common.model.Colony)object).getApparentUnitCount();
   case "getAvailableWorkLocations": return ((net.sf.freecol.common.model.Colony)object).getAvailableWorkLocations();
+  case "getAvailableWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getAvailableWorkLocationsList();
+  case "getBestDefenderType": return ((net.sf.freecol.common.model.Colony)object).getBestDefenderType();
+  case "getBuildQueue": return ((net.sf.freecol.common.model.Colony)object).getBuildQueue();
+  case "getBuildableUnits": return ((net.sf.freecol.common.model.Colony)object).getBuildableUnits();
+  case "getBuildings": return ((net.sf.freecol.common.model.Colony)object).getBuildings();
+  case "getBurnableBuildings": return ((net.sf.freecol.common.model.Colony)object).getBurnableBuildings();
+  case "getColonyTiles": return ((net.sf.freecol.common.model.Colony)object).getColonyTiles();
+  case "getConsumers": return ((net.sf.freecol.common.model.Colony)object).getConsumers();
   case "getCurrentWorkLocations": return ((net.sf.freecol.common.model.Colony)object).getCurrentWorkLocations();
+  case "getCurrentWorkLocationsList": return ((net.sf.freecol.common.model.Colony)object).getCurrentWorkLocationsList();
+  case "getCurrentlyBuilding": return ((net.sf.freecol.common.model.Colony)object).getCurrentlyBuilding();
+  case "getDisasterChoices": return ((net.sf.freecol.common.model.Colony)object).getDisasterChoices();
+  case "getDisplayUnitCount": return ((net.sf.freecol.common.model.Colony)object).getDisplayUnitCount();
+  case "getEstablished": return ((net.sf.freecol.common.model.Colony)object).getEstablished();
+  case "getFoodProduction": return ((net.sf.freecol.common.model.Colony)object).getFoodProduction();
+  case "getLootableGoodsList": return ((net.sf.freecol.common.model.Colony)object).getLootableGoodsList();
+  case "getNewColonistTurns": return ((net.sf.freecol.common.model.Colony)object).getNewColonistTurns();
+  case "getOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).getOccupationTrace();
+  case "getPopulationQueue": return ((net.sf.freecol.common.model.Colony)object).getPopulationQueue();
+  case "getPreferredSizeChange": return ((net.sf.freecol.common.model.Colony)object).getPreferredSizeChange();
+  case "getPriceForBuilding": return ((net.sf.freecol.common.model.Colony)object).getPriceForBuilding();
+  case "getProductionBonus": return ((net.sf.freecol.common.model.Colony)object).getProductionBonus();
+  case "getReducePopulationMessage": return ((net.sf.freecol.common.model.Colony)object).getReducePopulationMessage();
+  case "getStarvationTurns": return ((net.sf.freecol.common.model.Colony)object).getStarvationTurns();
+  case "getStockade": return ((net.sf.freecol.common.model.Colony)object).getStockade();
+  case "getStockadeKey": return ((net.sf.freecol.common.model.Colony)object).getStockadeKey();
+  case "getTeachers": return ((net.sf.freecol.common.model.Colony)object).getTeachers();
+  case "getTileImprovementSuggestions": return ((net.sf.freecol.common.model.Colony)object).getTileImprovementSuggestions();
+  case "getTotalDefencePower": return ((net.sf.freecol.common.model.Colony)object).getTotalDefencePower();
+  case "getUnitsToAdd": return ((net.sf.freecol.common.model.Colony)object).getUnitsToAdd();
+  case "getUnitsToRemove": return ((net.sf.freecol.common.model.Colony)object).getUnitsToRemove();
   case "getWarehouse": return ((net.sf.freecol.common.model.Colony)object).getWarehouse();
   case "hasStockade": return ((net.sf.freecol.common.model.Colony)object).hasStockade();
-  case "getStockadeKey": return ((net.sf.freecol.common.model.Colony)object).getStockadeKey();
-  case "canBuild": return ((net.sf.freecol.common.model.Colony)object).canBuild();
-  case "getBuildableUnits": return ((net.sf.freecol.common.model.Colony)object).getBuildableUnits();
-  case "setCurrentlyBuilding": ((net.sf.freecol.common.model.Colony)object).setCurrentlyBuilding((net.sf.freecol.common.model.BuildableType)params[0]); return null;
-  case "updateSoL": ((net.sf.freecol.common.model.Colony)object).updateSoL(); return null;
-  case "getPreferredSizeChange": return ((net.sf.freecol.common.model.Colony)object).getPreferredSizeChange();
-  case "getUnitsToRemove": return ((net.sf.freecol.common.model.Colony)object).getUnitsToRemove();
-  case "getUnitsToAdd": return ((net.sf.freecol.common.model.Colony)object).getUnitsToAdd();
-  case "canReducePopulation": return ((net.sf.freecol.common.model.Colony)object).canReducePopulation();
-  case "getReducePopulationMessage": return ((net.sf.freecol.common.model.Colony)object).getReducePopulationMessage();
-  case "checkForGovMgtChangeMessage": return ((net.sf.freecol.common.model.Colony)object).checkForGovMgtChangeMessage();
-  case "updatePopulation": ((net.sf.freecol.common.model.Colony)object).updatePopulation(); return null;
-  case "getApparentUnitCount": return ((net.sf.freecol.common.model.Colony)object).getApparentUnitCount();
-  case "getBestDefenderType": return ((net.sf.freecol.common.model.Colony)object).getBestDefenderType();
-  case "getTotalDefencePower": return ((net.sf.freecol.common.model.Colony)object).getTotalDefencePower();
+  case "isUndead": return ((net.sf.freecol.common.model.Colony)object).isUndead();
   case "isUnderSiege": return ((net.sf.freecol.common.model.Colony)object).isUnderSiege();
-  case "getTeachers": return ((net.sf.freecol.common.model.Colony)object).getTeachers();
-  case "getConsumers": return ((net.sf.freecol.common.model.Colony)object).getConsumers();
-  case "getFoodProduction": return ((net.sf.freecol.common.model.Colony)object).getFoodProduction();
-  case "getStarvationTurns": return ((net.sf.freecol.common.model.Colony)object).getStarvationTurns();
-  case "getNewColonistTurns": return ((net.sf.freecol.common.model.Colony)object).getNewColonistTurns();
-  case "getTileImprovementSuggestions": return ((net.sf.freecol.common.model.Colony)object).getTileImprovementSuggestions();
-  case "copyColony": return ((net.sf.freecol.common.model.Colony)object).copyColony();
-  case "canBeInput": return ((net.sf.freecol.common.model.Colony)object).canBeInput();
+  case "setBuildQueue": ((net.sf.freecol.common.model.Colony)object).setBuildQueue((java.util.List)params[0]); return null;
+  case "setCurrentlyBuilding": ((net.sf.freecol.common.model.Colony)object).setCurrentlyBuilding((net.sf.freecol.common.model.BuildableType)params[0]); return null;
+  case "setDisplayUnitCount": ((net.sf.freecol.common.model.Colony)object).setDisplayUnitCount((int)params[0]); return null;
+  case "setEstablished": ((net.sf.freecol.common.model.Colony)object).setEstablished((net.sf.freecol.common.model.Turn)params[0]); return null;
+  case "setExportData": ((net.sf.freecol.common.model.Colony)object).setExportData((net.sf.freecol.common.model.ExportData)params[0]); return null;
+  case "setOccupationTrace": return ((net.sf.freecol.common.model.Colony)object).setOccupationTrace((boolean)params[0]);
+  case "setPopulationQueue": ((net.sf.freecol.common.model.Colony)object).setPopulationQueue((java.util.List)params[0]); return null;
+  case "setProductionBonus": ((net.sf.freecol.common.model.Colony)object).setProductionBonus((int)params[0]); return null;
+  case "updatePopulation": ((net.sf.freecol.common.model.Colony)object).updatePopulation(); return null;
+  case "updateProductionTypes": ((net.sf.freecol.common.model.Colony)object).updateProductionTypes(); return null;
+  case "updateSoL": ((net.sf.freecol.common.model.Colony)object).updateSoL(); return null;
   }
   return common_model_Settlement.invokeMethod(object, method, params);
 }
@@ -3660,48 +4156,48 @@ net.sf.freecol.common.model.UnitType newInstance(Class<?>[] types, Object[] para
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getSpace": return ((net.sf.freecol.common.model.UnitType)object).getSpace();
-  case "getPriority": return ((net.sf.freecol.common.model.UnitType)object).getPriority();
-  case "isDefaultUnitType": return ((net.sf.freecol.common.model.UnitType)object).isDefaultUnitType();
-  case "isNaval": return ((net.sf.freecol.common.model.UnitType)object).isNaval();
-  case "getSpaceTaken": return ((net.sf.freecol.common.model.UnitType)object).getSpaceTaken();
-  case "getLineOfSight": return ((net.sf.freecol.common.model.UnitType)object).getLineOfSight();
-  case "getDefaultRole": return ((net.sf.freecol.common.model.UnitType)object).getDefaultRole();
-  case "getOffence": return ((net.sf.freecol.common.model.UnitType)object).getOffence();
-  case "getScoreValue": return ((net.sf.freecol.common.model.UnitType)object).getScoreValue();
-  case "canCarryUnits": return ((net.sf.freecol.common.model.UnitType)object).canCarryUnits();
   case "canBuildColony": return ((net.sf.freecol.common.model.UnitType)object).canBuildColony();
-  case "canCarryTreasure": return ((net.sf.freecol.common.model.UnitType)object).canCarryTreasure();
-  case "getPrice": return ((net.sf.freecol.common.model.UnitType)object).getPrice();
-  case "hasPrice": return ((net.sf.freecol.common.model.UnitType)object).hasPrice();
-  case "getMercenaryPrice": return ((net.sf.freecol.common.model.UnitType)object).getMercenaryPrice();
-  case "isDefensive": return ((net.sf.freecol.common.model.UnitType)object).isDefensive();
-  case "isOffensive": return ((net.sf.freecol.common.model.UnitType)object).isOffensive();
-  case "getMovement": return ((net.sf.freecol.common.model.UnitType)object).getMovement();
-  case "hasSkill": return ((net.sf.freecol.common.model.UnitType)object).hasSkill();
-  case "getSkill": return ((net.sf.freecol.common.model.UnitType)object).getSkill();
-  case "getConsumedGoods": return ((net.sf.freecol.common.model.UnitType)object).getConsumedGoods();
-  case "getExpertProduction": return ((net.sf.freecol.common.model.UnitType)object).getExpertProduction();
-  case "canMoveToHighSeas": return ((net.sf.freecol.common.model.UnitType)object).canMoveToHighSeas();
   case "canCarryGoods": return ((net.sf.freecol.common.model.UnitType)object).canCarryGoods();
+  case "canCarryTreasure": return ((net.sf.freecol.common.model.UnitType)object).canCarryTreasure();
+  case "canCarryUnits": return ((net.sf.freecol.common.model.UnitType)object).canCarryUnits();
+  case "canMoveToHighSeas": return ((net.sf.freecol.common.model.UnitType)object).canMoveToHighSeas();
+  case "getBaseDefence": return ((net.sf.freecol.common.model.UnitType)object).getBaseDefence();
+  case "getBaseOffence": return ((net.sf.freecol.common.model.UnitType)object).getBaseOffence();
+  case "getConsumedGoods": return ((net.sf.freecol.common.model.UnitType)object).getConsumedGoods();
+  case "getDefaultRole": return ((net.sf.freecol.common.model.UnitType)object).getDefaultRole();
   case "getDefence": return ((net.sf.freecol.common.model.UnitType)object).getDefence();
-  case "isPerson": return ((net.sf.freecol.common.model.UnitType)object).isPerson();
+  case "getDisplayRoleId": return ((net.sf.freecol.common.model.UnitType)object).getDisplayRoleId();
+  case "getExpertProduction": return ((net.sf.freecol.common.model.UnitType)object).getExpertProduction();
   case "getExpertRoles": return ((net.sf.freecol.common.model.UnitType)object).getExpertRoles();
   case "getHitPoints": return ((net.sf.freecol.common.model.UnitType)object).getHitPoints();
-  case "getMaximumExperience": return ((net.sf.freecol.common.model.UnitType)object).getMaximumExperience();
-  case "getSkillTaught": return ((net.sf.freecol.common.model.UnitType)object).getSkillTaught();
-  case "setMercenaryPrice": ((net.sf.freecol.common.model.UnitType)object).setMercenaryPrice((int)params[0]); return null;
-  case "hasMaximumAttrition": return ((net.sf.freecol.common.model.UnitType)object).hasMaximumAttrition();
+  case "getLineOfSight": return ((net.sf.freecol.common.model.UnitType)object).getLineOfSight();
   case "getMaximumAttrition": return ((net.sf.freecol.common.model.UnitType)object).getMaximumAttrition();
+  case "getMaximumExperience": return ((net.sf.freecol.common.model.UnitType)object).getMaximumExperience();
+  case "getMercenaryPrice": return ((net.sf.freecol.common.model.UnitType)object).getMercenaryPrice();
+  case "getMovement": return ((net.sf.freecol.common.model.UnitType)object).getMovement();
+  case "getOffence": return ((net.sf.freecol.common.model.UnitType)object).getOffence();
+  case "getPrice": return ((net.sf.freecol.common.model.UnitType)object).getPrice();
+  case "getPriority": return ((net.sf.freecol.common.model.UnitType)object).getPriority();
+  case "getRecruitProbability": return ((net.sf.freecol.common.model.UnitType)object).getRecruitProbability();
+  case "getScoreValue": return ((net.sf.freecol.common.model.UnitType)object).getScoreValue();
+  case "getSkill": return ((net.sf.freecol.common.model.UnitType)object).getSkill();
+  case "getSkillTaught": return ((net.sf.freecol.common.model.UnitType)object).getSkillTaught();
+  case "getSpace": return ((net.sf.freecol.common.model.UnitType)object).getSpace();
+  case "getSpaceTaken": return ((net.sf.freecol.common.model.UnitType)object).getSpaceTaken();
   case "getWorkingAsKey": return ((net.sf.freecol.common.model.UnitType)object).getWorkingAsKey();
-  case "getBaseOffence": return ((net.sf.freecol.common.model.UnitType)object).getBaseOffence();
-  case "getBaseDefence": return ((net.sf.freecol.common.model.UnitType)object).getBaseDefence();
+  case "hasMaximumAttrition": return ((net.sf.freecol.common.model.UnitType)object).hasMaximumAttrition();
+  case "hasPrice": return ((net.sf.freecol.common.model.UnitType)object).hasPrice();
+  case "hasSkill": return ((net.sf.freecol.common.model.UnitType)object).hasSkill();
+  case "isDefaultUnitType": return ((net.sf.freecol.common.model.UnitType)object).isDefaultUnitType();
+  case "isDefensive": return ((net.sf.freecol.common.model.UnitType)object).isDefensive();
+  case "isNaval": return ((net.sf.freecol.common.model.UnitType)object).isNaval();
+  case "isOffensive": return ((net.sf.freecol.common.model.UnitType)object).isOffensive();
+  case "isPerson": return ((net.sf.freecol.common.model.UnitType)object).isPerson();
+  case "isRecruitable": return ((net.sf.freecol.common.model.UnitType)object).isRecruitable();
+  case "setMercenaryPrice": ((net.sf.freecol.common.model.UnitType)object).setMercenaryPrice((int)params[0]); return null;
+  case "setSkill": ((net.sf.freecol.common.model.UnitType)object).setSkill((int)params[0]); return null;
   case "setSpace": ((net.sf.freecol.common.model.UnitType)object).setSpace((int)params[0]); return null;
   case "setSpaceTaken": ((net.sf.freecol.common.model.UnitType)object).setSpaceTaken((int)params[0]); return null;
-  case "isRecruitable": return ((net.sf.freecol.common.model.UnitType)object).isRecruitable();
-  case "getRecruitProbability": return ((net.sf.freecol.common.model.UnitType)object).getRecruitProbability();
-  case "setSkill": ((net.sf.freecol.common.model.UnitType)object).setSkill((int)params[0]); return null;
-  case "getDisplayRoleId": return ((net.sf.freecol.common.model.UnitType)object).getDisplayRoleId();
   }
   return common_model_BuildableType.invokeMethod(object, method, params);
 }
@@ -3711,25 +4207,25 @@ metas.put(net.sf.freecol.common.model.UnitType.class, common_model_UnitType);
 // net.sf.freecol.common.model.TradeRoute
 final Meta common_model_TradeRoute = new Meta() {
 net.sf.freecol.common.model.TradeRoute newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class, net.sf.freecol.common.model.Player.class))
-    return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.Player)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class, net.sf.freecol.common.model.Player.class))
+    return new net.sf.freecol.common.model.TradeRoute((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1], (net.sf.freecol.common.model.Player)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.TradeRoute)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "getName": return ((net.sf.freecol.common.model.TradeRoute)object).getName();
-  case "setName": ((net.sf.freecol.common.model.TradeRoute)object).setName((java.lang.String)params[0]); return null;
-  case "verify": return ((net.sf.freecol.common.model.TradeRoute)object).verify();
-  case "getOwner": return ((net.sf.freecol.common.model.TradeRoute)object).getOwner();
-  case "getAssignedUnits": return ((net.sf.freecol.common.model.TradeRoute)object).getAssignedUnits();
-  case "isSilent": return ((net.sf.freecol.common.model.TradeRoute)object).isSilent();
-  case "getStopList": return ((net.sf.freecol.common.model.TradeRoute)object).getStopList();
-  case "getStopCount": return ((net.sf.freecol.common.model.TradeRoute)object).getStopCount();
-  case "setSilent": ((net.sf.freecol.common.model.TradeRoute)object).setSilent((boolean)params[0]); return null;
   case "clearStops": ((net.sf.freecol.common.model.TradeRoute)object).clearStops(); return null;
+  case "getAssignedUnits": return ((net.sf.freecol.common.model.TradeRoute)object).getAssignedUnits();
+  case "getName": return ((net.sf.freecol.common.model.TradeRoute)object).getName();
+  case "getOwner": return ((net.sf.freecol.common.model.TradeRoute)object).getOwner();
+  case "getStopCount": return ((net.sf.freecol.common.model.TradeRoute)object).getStopCount();
+  case "getStopList": return ((net.sf.freecol.common.model.TradeRoute)object).getStopList();
+  case "isSilent": return ((net.sf.freecol.common.model.TradeRoute)object).isSilent();
+  case "setName": ((net.sf.freecol.common.model.TradeRoute)object).setName((java.lang.String)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.TradeRoute)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
+  case "setSilent": ((net.sf.freecol.common.model.TradeRoute)object).setSilent((boolean)params[0]); return null;
+  case "verify": return ((net.sf.freecol.common.model.TradeRoute)object).verify();
   case "verifyUniqueName": return ((net.sf.freecol.common.model.TradeRoute)object).verifyUniqueName();
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
@@ -3748,11 +4244,11 @@ net.sf.freecol.common.model.Event newInstance(Class<?>[] types, Object[] params)
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getValue": return ((net.sf.freecol.common.model.Event)object).getValue();
-  case "setValue": ((net.sf.freecol.common.model.Event)object).setValue((java.lang.String)params[0]); return null;
-  case "getScoreValue": return ((net.sf.freecol.common.model.Event)object).getScoreValue();
   case "getLimitValues": return ((net.sf.freecol.common.model.Event)object).getLimitValues();
+  case "getScoreValue": return ((net.sf.freecol.common.model.Event)object).getScoreValue();
+  case "getValue": return ((net.sf.freecol.common.model.Event)object).getValue();
   case "setScoreValue": ((net.sf.freecol.common.model.Event)object).setScoreValue((int)params[0]); return null;
+  case "setValue": ((net.sf.freecol.common.model.Event)object).setValue((java.lang.String)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -3770,14 +4266,14 @@ net.sf.freecol.common.model.Force newInstance(Class<?>[] types, Object[] params)
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "isEmpty": return ((net.sf.freecol.common.model.Force)object).isEmpty();
-  case "getUnitList": return ((net.sf.freecol.common.model.Force)object).getUnitList();
-  case "getLandUnitsList": return ((net.sf.freecol.common.model.Force)object).getLandUnitsList();
-  case "getNavalUnitsList": return ((net.sf.freecol.common.model.Force)object).getNavalUnitsList();
-  case "getCapacity": return ((net.sf.freecol.common.model.Force)object).getCapacity();
-  case "getSpaceRequired": return ((net.sf.freecol.common.model.Force)object).getSpaceRequired();
   case "clearLandUnits": ((net.sf.freecol.common.model.Force)object).clearLandUnits(); return null;
   case "clearNavalUnits": ((net.sf.freecol.common.model.Force)object).clearNavalUnits(); return null;
+  case "getCapacity": return ((net.sf.freecol.common.model.Force)object).getCapacity();
+  case "getLandUnitsList": return ((net.sf.freecol.common.model.Force)object).getLandUnitsList();
+  case "getNavalUnitsList": return ((net.sf.freecol.common.model.Force)object).getNavalUnitsList();
+  case "getSpaceRequired": return ((net.sf.freecol.common.model.Force)object).getSpaceRequired();
+  case "getUnitList": return ((net.sf.freecol.common.model.Force)object).getUnitList();
+  case "isEmpty": return ((net.sf.freecol.common.model.Force)object).isEmpty();
   }
   return common_model_FreeColSpecObject.invokeMethod(object, method, params);
 }
@@ -3793,38 +4289,38 @@ net.sf.freecol.common.model.GoodsType newInstance(Class<?>[] types, Object[] par
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setDerivedAttributes": ((net.sf.freecol.common.model.GoodsType)object).setDerivedAttributes((net.sf.freecol.common.model.Specification)params[0]); return null;
-  case "isRawMaterialForUnstorableBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawMaterialForUnstorableBuildingMaterial();
-  case "getLabel": return ((net.sf.freecol.common.model.GoodsType)object).getLabel();
-  case "isStorable": return ((net.sf.freecol.common.model.GoodsType)object).isStorable();
-  case "getInitialAmount": return ((net.sf.freecol.common.model.GoodsType)object).getInitialAmount();
-  case "setPrice": ((net.sf.freecol.common.model.GoodsType)object).setPrice((int)params[0]); return null;
-  case "getPrice": return ((net.sf.freecol.common.model.GoodsType)object).getPrice();
-  case "getProductionWeight": return ((net.sf.freecol.common.model.GoodsType)object).getProductionWeight();
-  case "isFoodType": return ((net.sf.freecol.common.model.GoodsType)object).isFoodType();
-  case "getLowProductionThreshold": return ((net.sf.freecol.common.model.GoodsType)object).getLowProductionThreshold();
-  case "getZeroProductionFactor": return ((net.sf.freecol.common.model.GoodsType)object).getZeroProductionFactor();
-  case "isBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isBuildingMaterial();
-  case "isRefined": return ((net.sf.freecol.common.model.GoodsType)object).isRefined();
-  case "isFarmed": return ((net.sf.freecol.common.model.GoodsType)object).isFarmed();
-  case "getEquivalentTypes": return ((net.sf.freecol.common.model.GoodsType)object).getEquivalentTypes();
   case "getBreedingNumber": return ((net.sf.freecol.common.model.GoodsType)object).getBreedingNumber();
+  case "getEquivalentTypes": return ((net.sf.freecol.common.model.GoodsType)object).getEquivalentTypes();
+  case "getInitialAmount": return ((net.sf.freecol.common.model.GoodsType)object).getInitialAmount();
   case "getInputType": return ((net.sf.freecol.common.model.GoodsType)object).getInputType();
-  case "isBreedable": return ((net.sf.freecol.common.model.GoodsType)object).isBreedable();
-  case "limitIgnored": return ((net.sf.freecol.common.model.GoodsType)object).limitIgnored();
-  case "isLibertyType": return ((net.sf.freecol.common.model.GoodsType)object).isLibertyType();
-  case "isImmigrationType": return ((net.sf.freecol.common.model.GoodsType)object).isImmigrationType();
+  case "getLabel": return ((net.sf.freecol.common.model.GoodsType)object).getLabel();
+  case "getLowProductionThreshold": return ((net.sf.freecol.common.model.GoodsType)object).getLowProductionThreshold();
   case "getMilitary": return ((net.sf.freecol.common.model.GoodsType)object).getMilitary();
-  case "isTradeGoods": return ((net.sf.freecol.common.model.GoodsType)object).isTradeGoods();
-  case "isRawBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawBuildingMaterial();
-  case "isNewWorldLuxuryType": return ((net.sf.freecol.common.model.GoodsType)object).isNewWorldLuxuryType();
-  case "getStoredAs": return ((net.sf.freecol.common.model.GoodsType)object).getStoredAs();
-  case "isNewWorldGoodsType": return ((net.sf.freecol.common.model.GoodsType)object).isNewWorldGoodsType();
-  case "isRawMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawMaterial();
   case "getOutputType": return ((net.sf.freecol.common.model.GoodsType)object).getOutputType();
-  case "isStoredAs": return ((net.sf.freecol.common.model.GoodsType)object).isStoredAs();
-  case "getWorkingAsKey": return ((net.sf.freecol.common.model.GoodsType)object).getWorkingAsKey();
+  case "getPrice": return ((net.sf.freecol.common.model.GoodsType)object).getPrice();
   case "getProductionChain": return ((net.sf.freecol.common.model.GoodsType)object).getProductionChain();
+  case "getProductionWeight": return ((net.sf.freecol.common.model.GoodsType)object).getProductionWeight();
+  case "getStoredAs": return ((net.sf.freecol.common.model.GoodsType)object).getStoredAs();
+  case "getWorkingAsKey": return ((net.sf.freecol.common.model.GoodsType)object).getWorkingAsKey();
+  case "getZeroProductionFactor": return ((net.sf.freecol.common.model.GoodsType)object).getZeroProductionFactor();
+  case "isBreedable": return ((net.sf.freecol.common.model.GoodsType)object).isBreedable();
+  case "isBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isBuildingMaterial();
+  case "isFarmed": return ((net.sf.freecol.common.model.GoodsType)object).isFarmed();
+  case "isFoodType": return ((net.sf.freecol.common.model.GoodsType)object).isFoodType();
+  case "isImmigrationType": return ((net.sf.freecol.common.model.GoodsType)object).isImmigrationType();
+  case "isLibertyType": return ((net.sf.freecol.common.model.GoodsType)object).isLibertyType();
+  case "isNewWorldGoodsType": return ((net.sf.freecol.common.model.GoodsType)object).isNewWorldGoodsType();
+  case "isNewWorldLuxuryType": return ((net.sf.freecol.common.model.GoodsType)object).isNewWorldLuxuryType();
+  case "isRawBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawBuildingMaterial();
+  case "isRawMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawMaterial();
+  case "isRawMaterialForUnstorableBuildingMaterial": return ((net.sf.freecol.common.model.GoodsType)object).isRawMaterialForUnstorableBuildingMaterial();
+  case "isRefined": return ((net.sf.freecol.common.model.GoodsType)object).isRefined();
+  case "isStorable": return ((net.sf.freecol.common.model.GoodsType)object).isStorable();
+  case "isStoredAs": return ((net.sf.freecol.common.model.GoodsType)object).isStoredAs();
+  case "isTradeGoods": return ((net.sf.freecol.common.model.GoodsType)object).isTradeGoods();
+  case "limitIgnored": return ((net.sf.freecol.common.model.GoodsType)object).limitIgnored();
+  case "setDerivedAttributes": ((net.sf.freecol.common.model.GoodsType)object).setDerivedAttributes((net.sf.freecol.common.model.Specification)params[0]); return null;
+  case "setPrice": ((net.sf.freecol.common.model.GoodsType)object).setPrice((int)params[0]); return null;
   }
   return common_model_FreeColSpecObjectType.invokeMethod(object, method, params);
 }
@@ -3834,14 +4330,14 @@ metas.put(net.sf.freecol.common.model.GoodsType.class, common_model_GoodsType);
 // net.sf.freecol.common.model.LastSale
 final Meta common_model_LastSale = new Meta() {
 net.sf.freecol.common.model.LastSale newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (types.length == 0)
+    return new net.sf.freecol.common.model.LastSale();
   if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.common.model.LastSale((net.sf.freecol.common.io.FreeColXMLReader)params[0]);
   if (areSame(types, java.lang.String.class, net.sf.freecol.common.model.Turn.class, int.class))
     return new net.sf.freecol.common.model.LastSale((java.lang.String)params[0], (net.sf.freecol.common.model.Turn)params[1], (int)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, net.sf.freecol.common.model.Turn.class, int.class))
     return new net.sf.freecol.common.model.LastSale((net.sf.freecol.common.model.Location)params[0], (net.sf.freecol.common.model.GoodsType)params[1], (net.sf.freecol.common.model.Turn)params[2], (int)params[3]);
-  if (types.length == 0)
-    return new net.sf.freecol.common.model.LastSale();
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -3865,17 +4361,17 @@ net.sf.freecol.common.model.GoodsContainer newInstance(Class<?>[] types, Object[
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setOwner": ((net.sf.freecol.common.model.GoodsContainer)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
-  case "removeAll": ((net.sf.freecol.common.model.GoodsContainer)object).removeAll(); return null;
-  case "getOwner": return ((net.sf.freecol.common.model.GoodsContainer)object).getOwner();
-  case "getSpaceTaken": return ((net.sf.freecol.common.model.GoodsContainer)object).getSpaceTaken();
-  case "setLocation": ((net.sf.freecol.common.model.GoodsContainer)object).setLocation((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "fireChanges": return ((net.sf.freecol.common.model.GoodsContainer)object).fireChanges();
   case "getCompactGoodsList": return ((net.sf.freecol.common.model.GoodsContainer)object).getCompactGoodsList();
   case "getGoodsList": return ((net.sf.freecol.common.model.GoodsContainer)object).getGoodsList();
-  case "saveState": ((net.sf.freecol.common.model.GoodsContainer)object).saveState(); return null;
-  case "fireChanges": return ((net.sf.freecol.common.model.GoodsContainer)object).fireChanges();
-  case "restoreState": ((net.sf.freecol.common.model.GoodsContainer)object).restoreState(); return null;
+  case "getOwner": return ((net.sf.freecol.common.model.GoodsContainer)object).getOwner();
+  case "getSpaceTaken": return ((net.sf.freecol.common.model.GoodsContainer)object).getSpaceTaken();
   case "hasChanged": return ((net.sf.freecol.common.model.GoodsContainer)object).hasChanged();
+  case "removeAll": ((net.sf.freecol.common.model.GoodsContainer)object).removeAll(); return null;
+  case "restoreState": ((net.sf.freecol.common.model.GoodsContainer)object).restoreState(); return null;
+  case "saveState": ((net.sf.freecol.common.model.GoodsContainer)object).saveState(); return null;
+  case "setLocation": ((net.sf.freecol.common.model.GoodsContainer)object).setLocation((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "setOwner": ((net.sf.freecol.common.model.GoodsContainer)object).setOwner((net.sf.freecol.common.model.Player)params[0]); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -3895,35 +4391,69 @@ net.sf.freecol.common.model.ExportData newInstance(Class<?>[] types, Object[] pa
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setImportLevel": return ((net.sf.freecol.common.model.ExportData)object).setImportLevel((int)params[0]);
-  case "getHighLevel": return ((net.sf.freecol.common.model.ExportData)object).getHighLevel();
-  case "setHighLevel": return ((net.sf.freecol.common.model.ExportData)object).setHighLevel((int)params[0]);
-  case "getLowLevel": return ((net.sf.freecol.common.model.ExportData)object).getLowLevel();
-  case "setLowLevel": return ((net.sf.freecol.common.model.ExportData)object).setLowLevel((int)params[0]);
-  case "getImportLevel": return ((net.sf.freecol.common.model.ExportData)object).getImportLevel();
   case "getExportLevel": return ((net.sf.freecol.common.model.ExportData)object).getExportLevel();
-  case "setExportLevel": return ((net.sf.freecol.common.model.ExportData)object).setExportLevel((int)params[0]);
   case "getExported": return ((net.sf.freecol.common.model.ExportData)object).getExported();
+  case "getHighLevel": return ((net.sf.freecol.common.model.ExportData)object).getHighLevel();
+  case "getImportLevel": return ((net.sf.freecol.common.model.ExportData)object).getImportLevel();
+  case "getLowLevel": return ((net.sf.freecol.common.model.ExportData)object).getLowLevel();
+  case "setExportLevel": return ((net.sf.freecol.common.model.ExportData)object).setExportLevel((int)params[0]);
   case "setExported": ((net.sf.freecol.common.model.ExportData)object).setExported((boolean)params[0]); return null;
+  case "setHighLevel": return ((net.sf.freecol.common.model.ExportData)object).setHighLevel((int)params[0]);
+  case "setImportLevel": return ((net.sf.freecol.common.model.ExportData)object).setImportLevel((int)params[0]);
+  case "setLowLevel": return ((net.sf.freecol.common.model.ExportData)object).setLowLevel((int)params[0]);
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.ExportData", net.sf.freecol.common.model.ExportData.class);
 metas.put(net.sf.freecol.common.model.ExportData.class, common_model_ExportData);
-// net.sf.freecol.common.model.NationOptions
-final Meta common_model_NationOptions = new Meta() {
-net.sf.freecol.common.model.NationOptions newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
-  if (areSame(types, net.sf.freecol.common.model.Specification.class))
-    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.model.Specification)params[0]);
+// net.sf.freecol.common.model.NationOptions.Advantages
+final Meta common_model_NationOptions$Advantages = new Meta() {
+net.sf.freecol.common.model.NationOptions.Advantages newInstance(Class<?>[] types, Object[] params) throws Exception {
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getNations": return ((net.sf.freecol.common.model.NationOptions)object).getNations();
+  case "getNameKey": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).getNameKey();
+  case "getShortDescriptionKey": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).getShortDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationOptions.Advantages)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationOptions$Advantages", net.sf.freecol.common.model.NationOptions.Advantages.class);
+metas.put(net.sf.freecol.common.model.NationOptions.Advantages.class, common_model_NationOptions$Advantages);
+// net.sf.freecol.common.model.NationOptions.NationState
+final Meta common_model_NationOptions$NationState = new Meta() {
+net.sf.freecol.common.model.NationOptions.NationState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getNameKey": return ((net.sf.freecol.common.model.NationOptions.NationState)object).getNameKey();
+  case "getShortDescriptionKey": return ((net.sf.freecol.common.model.NationOptions.NationState)object).getShortDescriptionKey();
+  case "valueOf": return ((net.sf.freecol.common.model.NationOptions.NationState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.NationOptions.NationState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.NationOptions$NationState", net.sf.freecol.common.model.NationOptions.NationState.class);
+metas.put(net.sf.freecol.common.model.NationOptions.NationState.class, common_model_NationOptions$NationState);
+// net.sf.freecol.common.model.NationOptions
+final Meta common_model_NationOptions = new Meta() {
+net.sf.freecol.common.model.NationOptions newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.io.FreeColXMLReader.class, net.sf.freecol.common.model.Specification.class))
+    return new net.sf.freecol.common.model.NationOptions((net.sf.freecol.common.io.FreeColXMLReader)params[0], (net.sf.freecol.common.model.Specification)params[1]);
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
   case "getNationalAdvantages": return ((net.sf.freecol.common.model.NationOptions)object).getNationalAdvantages();
+  case "getNations": return ((net.sf.freecol.common.model.NationOptions)object).getNations();
   }
   return common_model_FreeColSpecObject.invokeMethod(object, method, params);
 }
@@ -3948,6 +4478,70 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("common.model.Effect", net.sf.freecol.common.model.Effect.class);
 metas.put(net.sf.freecol.common.model.Effect.class, common_model_Effect);
+// net.sf.freecol.common.model.Player.ColonyValueCategory
+final Meta common_model_Player$ColonyValueCategory = new Meta() {
+net.sf.freecol.common.model.Player.ColonyValueCategory newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Player.ColonyValueCategory)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.ColonyValueCategory)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$ColonyValueCategory", net.sf.freecol.common.model.Player.ColonyValueCategory.class);
+metas.put(net.sf.freecol.common.model.Player.ColonyValueCategory.class, common_model_Player$ColonyValueCategory);
+// net.sf.freecol.common.model.Player.NoClaimReason
+final Meta common_model_Player$NoClaimReason = new Meta() {
+net.sf.freecol.common.model.Player.NoClaimReason newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDescriptionKey": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).getDescriptionKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).getNameKey();
+  case "valueOf": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.NoClaimReason)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$NoClaimReason", net.sf.freecol.common.model.Player.NoClaimReason.class);
+metas.put(net.sf.freecol.common.model.Player.NoClaimReason.class, common_model_Player$NoClaimReason);
+// net.sf.freecol.common.model.Player.NoValueType
+final Meta common_model_Player$NoValueType = new Meta() {
+net.sf.freecol.common.model.Player.NoValueType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getDouble": return ((net.sf.freecol.common.model.Player.NoValueType)object).getDouble();
+  case "getValue": return ((net.sf.freecol.common.model.Player.NoValueType)object).getValue();
+  case "valueOf": return ((net.sf.freecol.common.model.Player.NoValueType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.NoValueType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$NoValueType", net.sf.freecol.common.model.Player.NoValueType.class);
+metas.put(net.sf.freecol.common.model.Player.NoValueType.class, common_model_Player$NoValueType);
+// net.sf.freecol.common.model.Player.PlayerType
+final Meta common_model_Player$PlayerType = new Meta() {
+net.sf.freecol.common.model.Player.PlayerType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Player.PlayerType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Player.PlayerType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Player$PlayerType", net.sf.freecol.common.model.Player.PlayerType.class);
+metas.put(net.sf.freecol.common.model.Player.PlayerType.class, common_model_Player$PlayerType);
 // net.sf.freecol.common.model.Player
 final Meta common_model_Player = new Meta() {
 net.sf.freecol.common.model.Player newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -3957,148 +4551,148 @@ net.sf.freecol.common.model.Player newInstance(Class<?>[] types, Object[] params
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getUnits": return ((net.sf.freecol.common.model.Player)object).getUnits();
-  case "getName": return ((net.sf.freecol.common.model.Player)object).getName();
-  case "setName": ((net.sf.freecol.common.model.Player)object).setName((java.lang.String)params[0]); return null;
-  case "isAdmin": return ((net.sf.freecol.common.model.Player)object).isAdmin();
-  case "isUnknownEnemy": return ((net.sf.freecol.common.model.Player)object).isUnknownEnemy();
-  case "isDead": return ((net.sf.freecol.common.model.Player)object).isDead();
-  case "getNationId": return ((net.sf.freecol.common.model.Player)object).getNationId();
-  case "getNation": return ((net.sf.freecol.common.model.Player)object).getNation();
-  case "invalidateCanSeeTiles": ((net.sf.freecol.common.model.Player)object).invalidateCanSeeTiles(); return null;
-  case "isEuropean": return ((net.sf.freecol.common.model.Player)object).isEuropean();
-  case "isIndian": return ((net.sf.freecol.common.model.Player)object).isIndian();
-  case "isUndead": return ((net.sf.freecol.common.model.Player)object).isUndead();
-  case "getHighSeas": return ((net.sf.freecol.common.model.Player)object).getHighSeas();
-  case "isReady": return ((net.sf.freecol.common.model.Player)object).isReady();
-  case "getColonies": return ((net.sf.freecol.common.model.Player)object).getColonies();
-  case "getSettlements": return ((net.sf.freecol.common.model.Player)object).getSettlements();
-  case "initializeHighSeas": ((net.sf.freecol.common.model.Player)object).initializeHighSeas(); return null;
-  case "setCurrentFather": ((net.sf.freecol.common.model.Player)object).setCurrentFather((net.sf.freecol.common.model.FoundingFather)params[0]); return null;
-  case "clearOfferedFathers": ((net.sf.freecol.common.model.Player)object).clearOfferedFathers(); return null;
-  case "getNameForTradeRoute": return ((net.sf.freecol.common.model.Player)object).getNameForTradeRoute();
-  case "getEurope": return ((net.sf.freecol.common.model.Player)object).getEurope();
-  case "getPlayerType": return ((net.sf.freecol.common.model.Player)object).getPlayerType();
-  case "getUnitCount": return ((net.sf.freecol.common.model.Player)object).getUnitCount();
-  case "getNumberOfPorts": return ((net.sf.freecol.common.model.Player)object).getNumberOfPorts();
-  case "getRebels": return ((net.sf.freecol.common.model.Player)object).getRebels();
-  case "hasSettlements": return ((net.sf.freecol.common.model.Player)object).hasSettlements();
-  case "setDead": ((net.sf.freecol.common.model.Player)object).setDead((boolean)params[0]); return null;
-  case "getSettlementList": return ((net.sf.freecol.common.model.Player)object).getSettlementList();
-  case "getNationLabel": return ((net.sf.freecol.common.model.Player)object).getNationLabel();
-  case "getRemainingFoundingFatherCost": return ((net.sf.freecol.common.model.Player)object).getRemainingFoundingFatherCost();
-  case "setLiberty": ((net.sf.freecol.common.model.Player)object).setLiberty((int)params[0]); return null;
-  case "getFatherCount": return ((net.sf.freecol.common.model.Player)object).getFatherCount();
-  case "getFoundingFathers": return ((net.sf.freecol.common.model.Player)object).getFoundingFathers();
+  case "addStartGameMessage": ((net.sf.freecol.common.model.Player)object).addStartGameMessage(); return null;
+  case "canBuildColonies": return ((net.sf.freecol.common.model.Player)object).canBuildColonies();
   case "canHaveFoundingFathers": return ((net.sf.freecol.common.model.Player)object).canHaveFoundingFathers();
-  case "getDebugName": return ((net.sf.freecol.common.model.Player)object).getDebugName();
-  case "getGold": return ((net.sf.freecol.common.model.Player)object).getGold();
-  case "getHistory": return ((net.sf.freecol.common.model.Player)object).getHistory();
-  case "getScore": return ((net.sf.freecol.common.model.Player)object).getScore();
-  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Player)object).getVisibleTileSet();
-  case "getNationType": return ((net.sf.freecol.common.model.Player)object).getNationType();
-  case "getUnitSet": return ((net.sf.freecol.common.model.Player)object).getUnitSet();
-  case "getMarket": return ((net.sf.freecol.common.model.Player)object).getMarket();
-  case "getConnection": return ((net.sf.freecol.common.model.Player)object).getConnection();
-  case "setConnection": ((net.sf.freecol.common.model.Player)object).setConnection((net.sf.freecol.common.networking.Connection)params[0]); return null;
-  case "isAI": return ((net.sf.freecol.common.model.Player)object).isAI();
-  case "getIndianSettlementList": return ((net.sf.freecol.common.model.Player)object).getIndianSettlementList();
-  case "setAI": ((net.sf.freecol.common.model.Player)object).setAI((boolean)params[0]); return null;
-  case "setReady": ((net.sf.freecol.common.model.Player)object).setReady((boolean)params[0]); return null;
-  case "isREF": return ((net.sf.freecol.common.model.Player)object).isREF();
-  case "isConnected": return ((net.sf.freecol.common.model.Player)object).isConnected();
-  case "restoreActiveUnit": return ((net.sf.freecol.common.model.Player)object).restoreActiveUnit();
-  case "getFallbackTile": return ((net.sf.freecol.common.model.Player)object).getFallbackTile();
-  case "setColonyComparator": ((net.sf.freecol.common.model.Player)object).setColonyComparator((java.util.Comparator)params[0]); return null;
-  case "getTax": return ((net.sf.freecol.common.model.Player)object).getTax();
-  case "getIndianSettlements": return ((net.sf.freecol.common.model.Player)object).getIndianSettlements();
+  case "canMoveToEurope": return ((net.sf.freecol.common.model.Player)object).canMoveToEurope();
+  case "checkDeclareIndependence": return ((net.sf.freecol.common.model.Player)object).checkDeclareIndependence();
+  case "checkEmigrate": return ((net.sf.freecol.common.model.Player)object).checkEmigrate();
+  case "clearModelMessages": ((net.sf.freecol.common.model.Player)object).clearModelMessages(); return null;
+  case "clearNationCache": ((net.sf.freecol.common.model.Player)object).clearNationCache(); return null;
+  case "clearOfferedFathers": ((net.sf.freecol.common.model.Player)object).clearOfferedFathers(); return null;
+  case "getAttackedByPrivateers": return ((net.sf.freecol.common.model.Player)object).getAttackedByPrivateers();
   case "getBankrupt": return ((net.sf.freecol.common.model.Player)object).getBankrupt();
-  case "setBankrupt": ((net.sf.freecol.common.model.Player)object).setBankrupt((boolean)params[0]); return null;
+  case "getClosestPortForEurope": return ((net.sf.freecol.common.model.Player)object).getClosestPortForEurope();
+  case "getColonies": return ((net.sf.freecol.common.model.Player)object).getColonies();
+  case "getColoniesPopulation": return ((net.sf.freecol.common.model.Player)object).getColoniesPopulation();
   case "getColonyList": return ((net.sf.freecol.common.model.Player)object).getColonyList();
-  case "getLabel": return ((net.sf.freecol.common.model.Player)object).getLabel();
-  case "getOfferedFathers": return ((net.sf.freecol.common.model.Player)object).getOfferedFathers();
-  case "setOfferedFathers": ((net.sf.freecol.common.model.Player)object).setOfferedFathers((java.util.List)params[0]); return null;
-  case "reduceImmigration": ((net.sf.freecol.common.model.Player)object).reduceImmigration(); return null;
-  case "updateImmigrationRequired": ((net.sf.freecol.common.model.Player)object).updateImmigrationRequired(); return null;
+  case "getConnectedPortList": return ((net.sf.freecol.common.model.Player)object).getConnectedPortList();
+  case "getConnectedPorts": return ((net.sf.freecol.common.model.Player)object).getConnectedPorts();
+  case "getConnection": return ((net.sf.freecol.common.model.Player)object).getConnection();
+  case "getCountryLabel": return ((net.sf.freecol.common.model.Player)object).getCountryLabel();
+  case "getCurrentFather": return ((net.sf.freecol.common.model.Player)object).getCurrentFather();
+  case "getDead": return ((net.sf.freecol.common.model.Player)object).getDead();
+  case "getDebugName": return ((net.sf.freecol.common.model.Player)object).getDebugName();
+  case "getElectionTurns": return ((net.sf.freecol.common.model.Player)object).getElectionTurns();
+  case "getEntryTile": return ((net.sf.freecol.common.model.Player)object).getEntryTile();
+  case "getEurope": return ((net.sf.freecol.common.model.Player)object).getEurope();
+  case "getEuropeNameKey": return ((net.sf.freecol.common.model.Player)object).getEuropeNameKey();
+  case "getEuropeanRecruitPrice": return ((net.sf.freecol.common.model.Player)object).getEuropeanRecruitPrice();
+  case "getFallbackTile": return ((net.sf.freecol.common.model.Player)object).getFallbackTile();
+  case "getFatherCount": return ((net.sf.freecol.common.model.Player)object).getFatherCount();
+  case "getForcesLabel": return ((net.sf.freecol.common.model.Player)object).getForcesLabel();
+  case "getFoundingFathers": return ((net.sf.freecol.common.model.Player)object).getFoundingFathers();
+  case "getGold": return ((net.sf.freecol.common.model.Player)object).getGold();
+  case "getHighSeas": return ((net.sf.freecol.common.model.Player)object).getHighSeas();
+  case "getHistory": return ((net.sf.freecol.common.model.Player)object).getHistory();
   case "getImmigration": return ((net.sf.freecol.common.model.Player)object).getImmigration();
   case "getImmigrationRequired": return ((net.sf.freecol.common.model.Player)object).getImmigrationRequired();
-  case "getAttackedByPrivateers": return ((net.sf.freecol.common.model.Player)object).getAttackedByPrivateers();
-  case "setAttackedByPrivateers": ((net.sf.freecol.common.model.Player)object).setAttackedByPrivateers((boolean)params[0]); return null;
-  case "setScore": ((net.sf.freecol.common.model.Player)object).setScore((int)params[0]); return null;
-  case "getTradeRoutes": return ((net.sf.freecol.common.model.Player)object).getTradeRoutes();
-  case "setTax": ((net.sf.freecol.common.model.Player)object).setTax((int)params[0]); return null;
-  case "getEntryTile": return ((net.sf.freecol.common.model.Player)object).getEntryTile();
-  case "getMonarch": return ((net.sf.freecol.common.model.Player)object).getMonarch();
-  case "getLiberty": return ((net.sf.freecol.common.model.Player)object).getLiberty();
-  case "checkEmigrate": return ((net.sf.freecol.common.model.Player)object).checkEmigrate();
-  case "isRebel": return ((net.sf.freecol.common.model.Player)object).isRebel();
-  case "getConnectedPortList": return ((net.sf.freecol.common.model.Player)object).getConnectedPortList();
-  case "getRulerNameKey": return ((net.sf.freecol.common.model.Player)object).getRulerNameKey();
   case "getIndependentNationName": return ((net.sf.freecol.common.model.Player)object).getIndependentNationName();
-  case "setIndependentNationName": ((net.sf.freecol.common.model.Player)object).setIndependentNationName((java.lang.String)params[0]); return null;
-  case "getNewLandName": return ((net.sf.freecol.common.model.Player)object).getNewLandName();
-  case "isNewLandNamed": return ((net.sf.freecol.common.model.Player)object).isNewLandNamed();
-  case "setNewLandName": ((net.sf.freecol.common.model.Player)object).setNewLandName((java.lang.String)params[0]); return null;
-  case "getNameForNewLand": return ((net.sf.freecol.common.model.Player)object).getNameForNewLand();
-  case "getEuropeNameKey": return ((net.sf.freecol.common.model.Player)object).getEuropeNameKey();
-  case "getNationResourceKey": return ((net.sf.freecol.common.model.Player)object).getNationResourceKey();
-  case "getCountryLabel": return ((net.sf.freecol.common.model.Player)object).getCountryLabel();
-  case "getForcesLabel": return ((net.sf.freecol.common.model.Player)object).getForcesLabel();
-  case "getWaitingLabel": return ((net.sf.freecol.common.model.Player)object).getWaitingLabel();
+  case "getIndianSettlementList": return ((net.sf.freecol.common.model.Player)object).getIndianSettlementList();
+  case "getIndianSettlements": return ((net.sf.freecol.common.model.Player)object).getIndianSettlements();
+  case "getLabel": return ((net.sf.freecol.common.model.Player)object).getLabel();
+  case "getLiberty": return ((net.sf.freecol.common.model.Player)object).getLiberty();
+  case "getLibertyProductionNextTurn": return ((net.sf.freecol.common.model.Player)object).getLibertyProductionNextTurn();
+  case "getMarket": return ((net.sf.freecol.common.model.Player)object).getMarket();
   case "getMarketName": return ((net.sf.freecol.common.model.Player)object).getMarketName();
-  case "isColonial": return ((net.sf.freecol.common.model.Player)object).isColonial();
-  case "getREFPlayer": return ((net.sf.freecol.common.model.Player)object).getREFPlayer();
-  case "setNationType": ((net.sf.freecol.common.model.Player)object).setNationType((net.sf.freecol.common.model.NationType)params[0]); return null;
-  case "canBuildColonies": return ((net.sf.freecol.common.model.Player)object).canBuildColonies();
-  case "setNation": ((net.sf.freecol.common.model.Player)object).setNation((net.sf.freecol.common.model.Nation)params[0]); return null;
-  case "getReady": return ((net.sf.freecol.common.model.Player)object).getReady();
-  case "getDead": return ((net.sf.freecol.common.model.Player)object).getDead();
-  case "isWorkForREF": return ((net.sf.freecol.common.model.Player)object).isWorkForREF();
+  case "getMaximumFoodConsumption": return ((net.sf.freecol.common.model.Player)object).getMaximumFoodConsumption();
+  case "getMilitaryUnits": return ((net.sf.freecol.common.model.Player)object).getMilitaryUnits();
+  case "getModelMessages": return ((net.sf.freecol.common.model.Player)object).getModelMessages();
+  case "getMonarch": return ((net.sf.freecol.common.model.Player)object).getMonarch();
+  case "getMostValuableGoods": return ((net.sf.freecol.common.model.Player)object).getMostValuableGoods();
+  case "getName": return ((net.sf.freecol.common.model.Player)object).getName();
+  case "getNameForNewLand": return ((net.sf.freecol.common.model.Player)object).getNameForNewLand();
+  case "getNameForTradeRoute": return ((net.sf.freecol.common.model.Player)object).getNameForTradeRoute();
+  case "getNation": return ((net.sf.freecol.common.model.Player)object).getNation();
   case "getNationColor": return ((net.sf.freecol.common.model.Player)object).getNationColor();
+  case "getNationId": return ((net.sf.freecol.common.model.Player)object).getNationId();
+  case "getNationLabel": return ((net.sf.freecol.common.model.Player)object).getNationLabel();
+  case "getNationResourceKey": return ((net.sf.freecol.common.model.Player)object).getNationResourceKey();
+  case "getNationType": return ((net.sf.freecol.common.model.Player)object).getNationType();
+  case "getNewLandName": return ((net.sf.freecol.common.model.Player)object).getNewLandName();
+  case "getNewModelMessages": return ((net.sf.freecol.common.model.Player)object).getNewModelMessages();
+  case "getNewestTradeRoute": return ((net.sf.freecol.common.model.Player)object).getNewestTradeRoute();
+  case "getNextActiveUnit": return ((net.sf.freecol.common.model.Player)object).getNextActiveUnit();
+  case "getNextGoingToUnit": return ((net.sf.freecol.common.model.Player)object).getNextGoingToUnit();
+  case "getNumberOfKingLandUnits": return ((net.sf.freecol.common.model.Player)object).getNumberOfKingLandUnits();
+  case "getNumberOfPorts": return ((net.sf.freecol.common.model.Player)object).getNumberOfPorts();
+  case "getOfferedFathers": return ((net.sf.freecol.common.model.Player)object).getOfferedFathers();
+  case "getPlayerType": return ((net.sf.freecol.common.model.Player)object).getPlayerType();
+  case "getREFPlayer": return ((net.sf.freecol.common.model.Player)object).getREFPlayer();
+  case "getREFUnits": return ((net.sf.freecol.common.model.Player)object).getREFUnits();
   case "getRank": return ((net.sf.freecol.common.model.Player)object).getRank();
+  case "getReady": return ((net.sf.freecol.common.model.Player)object).getReady();
+  case "getRebels": return ((net.sf.freecol.common.model.Player)object).getRebels();
+  case "getRemainingFoundingFatherCost": return ((net.sf.freecol.common.model.Player)object).getRemainingFoundingFatherCost();
+  case "getRulerNameKey": return ((net.sf.freecol.common.model.Player)object).getRulerNameKey();
+  case "getScore": return ((net.sf.freecol.common.model.Player)object).getScore();
+  case "getSettlementCount": return ((net.sf.freecol.common.model.Player)object).getSettlementCount();
+  case "getSettlementList": return ((net.sf.freecol.common.model.Player)object).getSettlementList();
+  case "getSettlements": return ((net.sf.freecol.common.model.Player)object).getSettlements();
+  case "getSoL": return ((net.sf.freecol.common.model.Player)object).getSoL();
   case "getSpanishSuccessionScore": return ((net.sf.freecol.common.model.Player)object).getSpanishSuccessionScore();
+  case "getTax": return ((net.sf.freecol.common.model.Player)object).getTax();
+  case "getTotalFoundingFatherCost": return ((net.sf.freecol.common.model.Player)object).getTotalFoundingFatherCost();
+  case "getTotalImmigrationProduction": return ((net.sf.freecol.common.model.Player)object).getTotalImmigrationProduction();
+  case "getTradeRouteCount": return ((net.sf.freecol.common.model.Player)object).getTradeRouteCount();
+  case "getTradeRoutes": return ((net.sf.freecol.common.model.Player)object).getTradeRoutes();
+  case "getUnitCount": return ((net.sf.freecol.common.model.Player)object).getUnitCount();
+  case "getUnitSet": return ((net.sf.freecol.common.model.Player)object).getUnitSet();
+  case "getUnits": return ((net.sf.freecol.common.model.Player)object).getUnits();
+  case "getVisibleTileSet": return ((net.sf.freecol.common.model.Player)object).getVisibleTileSet();
+  case "getWaitingLabel": return ((net.sf.freecol.common.model.Player)object).getWaitingLabel();
+  case "hasContactedEuropeans": return ((net.sf.freecol.common.model.Player)object).hasContactedEuropeans();
+  case "hasContactedIndians": return ((net.sf.freecol.common.model.Player)object).hasContactedIndians();
+  case "hasNextActiveUnit": return ((net.sf.freecol.common.model.Player)object).hasNextActiveUnit();
+  case "hasNextGoingToUnit": return ((net.sf.freecol.common.model.Player)object).hasNextGoingToUnit();
+  case "hasSettlements": return ((net.sf.freecol.common.model.Player)object).hasSettlements();
+  case "initializeHighSeas": ((net.sf.freecol.common.model.Player)object).initializeHighSeas(); return null;
+  case "invalidateCanSeeTiles": ((net.sf.freecol.common.model.Player)object).invalidateCanSeeTiles(); return null;
+  case "isAI": return ((net.sf.freecol.common.model.Player)object).isAI();
+  case "isAdmin": return ((net.sf.freecol.common.model.Player)object).isAdmin();
+  case "isAtWar": return ((net.sf.freecol.common.model.Player)object).isAtWar();
+  case "isColonial": return ((net.sf.freecol.common.model.Player)object).isColonial();
+  case "isConnected": return ((net.sf.freecol.common.model.Player)object).isConnected();
+  case "isDead": return ((net.sf.freecol.common.model.Player)object).isDead();
+  case "isEuropean": return ((net.sf.freecol.common.model.Player)object).isEuropean();
+  case "isIndian": return ((net.sf.freecol.common.model.Player)object).isIndian();
+  case "isNewLandNamed": return ((net.sf.freecol.common.model.Player)object).isNewLandNamed();
+  case "isREF": return ((net.sf.freecol.common.model.Player)object).isREF();
+  case "isReady": return ((net.sf.freecol.common.model.Player)object).isReady();
+  case "isRebel": return ((net.sf.freecol.common.model.Player)object).isRebel();
+  case "isUndead": return ((net.sf.freecol.common.model.Player)object).isUndead();
+  case "isUnknownEnemy": return ((net.sf.freecol.common.model.Player)object).isUnknownEnemy();
+  case "isWorkForREF": return ((net.sf.freecol.common.model.Player)object).isWorkForREF();
+  case "reduceImmigration": ((net.sf.freecol.common.model.Player)object).reduceImmigration(); return null;
+  case "reinitialiseMarket": ((net.sf.freecol.common.model.Player)object).reinitialiseMarket(); return null;
+  case "removeDisplayedModelMessages": ((net.sf.freecol.common.model.Player)object).removeDisplayedModelMessages(); return null;
+  case "resetIterators": ((net.sf.freecol.common.model.Player)object).resetIterators(); return null;
+  case "restoreActiveUnit": return ((net.sf.freecol.common.model.Player)object).restoreActiveUnit();
+  case "setAI": ((net.sf.freecol.common.model.Player)object).setAI((boolean)params[0]); return null;
+  case "setAttackedByPrivateers": ((net.sf.freecol.common.model.Player)object).setAttackedByPrivateers((boolean)params[0]); return null;
+  case "setBankrupt": ((net.sf.freecol.common.model.Player)object).setBankrupt((boolean)params[0]); return null;
+  case "setColonyComparator": ((net.sf.freecol.common.model.Player)object).setColonyComparator((java.util.Comparator)params[0]); return null;
+  case "setConnection": ((net.sf.freecol.common.model.Player)object).setConnection((net.sf.freecol.common.networking.Connection)params[0]); return null;
+  case "setCurrentFather": ((net.sf.freecol.common.model.Player)object).setCurrentFather((net.sf.freecol.common.model.FoundingFather)params[0]); return null;
+  case "setDead": ((net.sf.freecol.common.model.Player)object).setDead((boolean)params[0]); return null;
+  case "setEntryTile": ((net.sf.freecol.common.model.Player)object).setEntryTile((net.sf.freecol.common.model.Tile)params[0]); return null;
+  case "setEurope": ((net.sf.freecol.common.model.Player)object).setEurope((net.sf.freecol.common.model.Europe)params[0]); return null;
   case "setGold": ((net.sf.freecol.common.model.Player)object).setGold((int)params[0]); return null;
   case "setImmigration": ((net.sf.freecol.common.model.Player)object).setImmigration((int)params[0]); return null;
   case "setImmigrationRequired": ((net.sf.freecol.common.model.Player)object).setImmigrationRequired((int)params[0]); return null;
-  case "getTotalImmigrationProduction": return ((net.sf.freecol.common.model.Player)object).getTotalImmigrationProduction();
-  case "getLibertyProductionNextTurn": return ((net.sf.freecol.common.model.Player)object).getLibertyProductionNextTurn();
-  case "getSoL": return ((net.sf.freecol.common.model.Player)object).getSoL();
-  case "getCurrentFather": return ((net.sf.freecol.common.model.Player)object).getCurrentFather();
-  case "getTotalFoundingFatherCost": return ((net.sf.freecol.common.model.Player)object).getTotalFoundingFatherCost();
-  case "getElectionTurns": return ((net.sf.freecol.common.model.Player)object).getElectionTurns();
-  case "checkDeclareIndependence": return ((net.sf.freecol.common.model.Player)object).checkDeclareIndependence();
-  case "getREFUnits": return ((net.sf.freecol.common.model.Player)object).getREFUnits();
-  case "getMilitaryUnits": return ((net.sf.freecol.common.model.Player)object).getMilitaryUnits();
-  case "reinitialiseMarket": ((net.sf.freecol.common.model.Player)object).reinitialiseMarket(); return null;
-  case "getMostValuableGoods": return ((net.sf.freecol.common.model.Player)object).getMostValuableGoods();
-  case "setEurope": ((net.sf.freecol.common.model.Player)object).setEurope((net.sf.freecol.common.model.Europe)params[0]); return null;
-  case "canMoveToEurope": return ((net.sf.freecol.common.model.Player)object).canMoveToEurope();
-  case "getEuropeanRecruitPrice": return ((net.sf.freecol.common.model.Player)object).getEuropeanRecruitPrice();
+  case "setIndependentNationName": ((net.sf.freecol.common.model.Player)object).setIndependentNationName((java.lang.String)params[0]); return null;
+  case "setLiberty": ((net.sf.freecol.common.model.Player)object).setLiberty((int)params[0]); return null;
   case "setMonarch": ((net.sf.freecol.common.model.Player)object).setMonarch((net.sf.freecol.common.model.Monarch)params[0]); return null;
-  case "getNumberOfKingLandUnits": return ((net.sf.freecol.common.model.Player)object).getNumberOfKingLandUnits();
-  case "resetIterators": ((net.sf.freecol.common.model.Player)object).resetIterators(); return null;
-  case "getNextActiveUnit": return ((net.sf.freecol.common.model.Player)object).getNextActiveUnit();
-  case "hasNextActiveUnit": return ((net.sf.freecol.common.model.Player)object).hasNextActiveUnit();
-  case "getNextGoingToUnit": return ((net.sf.freecol.common.model.Player)object).getNextGoingToUnit();
+  case "setName": ((net.sf.freecol.common.model.Player)object).setName((java.lang.String)params[0]); return null;
+  case "setNation": ((net.sf.freecol.common.model.Player)object).setNation((net.sf.freecol.common.model.Nation)params[0]); return null;
+  case "setNationType": ((net.sf.freecol.common.model.Player)object).setNationType((net.sf.freecol.common.model.NationType)params[0]); return null;
+  case "setNewLandName": ((net.sf.freecol.common.model.Player)object).setNewLandName((java.lang.String)params[0]); return null;
   case "setNextGoingToUnit": return ((net.sf.freecol.common.model.Player)object).setNextGoingToUnit((net.sf.freecol.common.model.Unit)params[0]);
-  case "hasNextGoingToUnit": return ((net.sf.freecol.common.model.Player)object).hasNextGoingToUnit();
-  case "getTradeRouteCount": return ((net.sf.freecol.common.model.Player)object).getTradeRouteCount();
-  case "getNewestTradeRoute": return ((net.sf.freecol.common.model.Player)object).getNewestTradeRoute();
-  case "getSettlementCount": return ((net.sf.freecol.common.model.Player)object).getSettlementCount();
-  case "getConnectedPorts": return ((net.sf.freecol.common.model.Player)object).getConnectedPorts();
-  case "getColoniesPopulation": return ((net.sf.freecol.common.model.Player)object).getColoniesPopulation();
-  case "getClosestPortForEurope": return ((net.sf.freecol.common.model.Player)object).getClosestPortForEurope();
-  case "getModelMessages": return ((net.sf.freecol.common.model.Player)object).getModelMessages();
-  case "getNewModelMessages": return ((net.sf.freecol.common.model.Player)object).getNewModelMessages();
-  case "removeDisplayedModelMessages": ((net.sf.freecol.common.model.Player)object).removeDisplayedModelMessages(); return null;
-  case "clearModelMessages": ((net.sf.freecol.common.model.Player)object).clearModelMessages(); return null;
-  case "addStartGameMessage": ((net.sf.freecol.common.model.Player)object).addStartGameMessage(); return null;
-  case "setEntryTile": ((net.sf.freecol.common.model.Player)object).setEntryTile((net.sf.freecol.common.model.Tile)params[0]); return null;
-  case "isAtWar": return ((net.sf.freecol.common.model.Player)object).isAtWar();
-  case "hasContactedEuropeans": return ((net.sf.freecol.common.model.Player)object).hasContactedEuropeans();
-  case "hasContactedIndians": return ((net.sf.freecol.common.model.Player)object).hasContactedIndians();
-  case "clearNationCache": ((net.sf.freecol.common.model.Player)object).clearNationCache(); return null;
-  case "getMaximumFoodConsumption": return ((net.sf.freecol.common.model.Player)object).getMaximumFoodConsumption();
+  case "setOfferedFathers": ((net.sf.freecol.common.model.Player)object).setOfferedFathers((java.util.List)params[0]); return null;
+  case "setReady": ((net.sf.freecol.common.model.Player)object).setReady((boolean)params[0]); return null;
+  case "setScore": ((net.sf.freecol.common.model.Player)object).setScore((int)params[0]); return null;
+  case "setTax": ((net.sf.freecol.common.model.Player)object).setTax((int)params[0]); return null;
+  case "updateImmigrationRequired": ((net.sf.freecol.common.model.Player)object).updateImmigrationRequired(); return null;
   }
   return common_model_FreeColGameObject.invokeMethod(object, method, params);
 }
@@ -4114,22 +4708,22 @@ net.sf.freecol.common.model.BuildingType newInstance(Class<?>[] types, Object[] 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
+  case "getCompetenceFactor": return ((net.sf.freecol.common.model.BuildingType)object).getCompetenceFactor();
+  case "getExpertConnectionProduction": return ((net.sf.freecol.common.model.BuildingType)object).getExpertConnectionProduction();
+  case "getFirstLevel": return ((net.sf.freecol.common.model.BuildingType)object).getFirstLevel();
   case "getLevel": return ((net.sf.freecol.common.model.BuildingType)object).getLevel();
+  case "getMaximumSkill": return ((net.sf.freecol.common.model.BuildingType)object).getMaximumSkill();
+  case "getMinimumSkill": return ((net.sf.freecol.common.model.BuildingType)object).getMinimumSkill();
   case "getPriority": return ((net.sf.freecol.common.model.BuildingType)object).getPriority();
+  case "getProducedGoodsType": return ((net.sf.freecol.common.model.BuildingType)object).getProducedGoodsType();
+  case "getRebelFactor": return ((net.sf.freecol.common.model.BuildingType)object).getRebelFactor();
   case "getType": return ((net.sf.freecol.common.model.BuildingType)object).getType();
   case "getUpgradesFrom": return ((net.sf.freecol.common.model.BuildingType)object).getUpgradesFrom();
-  case "isDefenceType": return ((net.sf.freecol.common.model.BuildingType)object).isDefenceType();
-  case "getUpkeep": return ((net.sf.freecol.common.model.BuildingType)object).getUpkeep();
-  case "getFirstLevel": return ((net.sf.freecol.common.model.BuildingType)object).getFirstLevel();
-  case "isAutomaticBuild": return ((net.sf.freecol.common.model.BuildingType)object).isAutomaticBuild();
-  case "getRebelFactor": return ((net.sf.freecol.common.model.BuildingType)object).getRebelFactor();
-  case "getCompetenceFactor": return ((net.sf.freecol.common.model.BuildingType)object).getCompetenceFactor();
   case "getUpgradesTo": return ((net.sf.freecol.common.model.BuildingType)object).getUpgradesTo();
+  case "getUpkeep": return ((net.sf.freecol.common.model.BuildingType)object).getUpkeep();
   case "getWorkPlaces": return ((net.sf.freecol.common.model.BuildingType)object).getWorkPlaces();
-  case "getMinimumSkill": return ((net.sf.freecol.common.model.BuildingType)object).getMinimumSkill();
-  case "getMaximumSkill": return ((net.sf.freecol.common.model.BuildingType)object).getMaximumSkill();
-  case "getExpertConnectionProduction": return ((net.sf.freecol.common.model.BuildingType)object).getExpertConnectionProduction();
-  case "getProducedGoodsType": return ((net.sf.freecol.common.model.BuildingType)object).getProducedGoodsType();
+  case "isAutomaticBuild": return ((net.sf.freecol.common.model.BuildingType)object).isAutomaticBuild();
+  case "isDefenceType": return ((net.sf.freecol.common.model.BuildingType)object).isDefenceType();
   }
   return common_model_BuildableType.invokeMethod(object, method, params);
 }
@@ -4139,30 +4733,30 @@ metas.put(net.sf.freecol.common.model.BuildingType.class, common_model_BuildingT
 // net.sf.freecol.common.model.TileImprovement
 final Meta common_model_TileImprovement = new Meta() {
 net.sf.freecol.common.model.TileImprovement newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, net.sf.freecol.common.model.TileImprovementStyle.class))
-    return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (net.sf.freecol.common.model.TileImprovementStyle)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, net.sf.freecol.common.model.TileImprovementStyle.class))
+    return new net.sf.freecol.common.model.TileImprovement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (net.sf.freecol.common.model.TileImprovementStyle)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getType": return ((net.sf.freecol.common.model.TileImprovement)object).getType();
-  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileImprovement)object).getDisasterChoices();
-  case "getStyle": return ((net.sf.freecol.common.model.TileImprovement)object).getStyle();
-  case "setStyle": ((net.sf.freecol.common.model.TileImprovement)object).setStyle((net.sf.freecol.common.model.TileImprovementStyle)params[0]); return null;
-  case "setMagnitude": ((net.sf.freecol.common.model.TileImprovement)object).setMagnitude((int)params[0]); return null;
-  case "getTurnsToComplete": return ((net.sf.freecol.common.model.TileImprovement)object).getTurnsToComplete();
-  case "setTurnsToComplete": ((net.sf.freecol.common.model.TileImprovement)object).setTurnsToComplete((int)params[0]); return null;
-  case "setVirtual": ((net.sf.freecol.common.model.TileImprovement)object).setVirtual((boolean)params[0]); return null;
-  case "getVirtual": return ((net.sf.freecol.common.model.TileImprovement)object).getVirtual();
-  case "isRoad": return ((net.sf.freecol.common.model.TileImprovement)object).isRoad();
-  case "getMagnitude": return ((net.sf.freecol.common.model.TileImprovement)object).getMagnitude();
-  case "isRiver": return ((net.sf.freecol.common.model.TileImprovement)object).isRiver();
   case "getConnectionDirections": return ((net.sf.freecol.common.model.TileImprovement)object).getConnectionDirections();
   case "getConnections": return ((net.sf.freecol.common.model.TileImprovement)object).getConnections();
   case "getConnectionsFromStyle": return ((net.sf.freecol.common.model.TileImprovement)object).getConnectionsFromStyle();
+  case "getDisasterChoices": return ((net.sf.freecol.common.model.TileImprovement)object).getDisasterChoices();
+  case "getMagnitude": return ((net.sf.freecol.common.model.TileImprovement)object).getMagnitude();
+  case "getStyle": return ((net.sf.freecol.common.model.TileImprovement)object).getStyle();
+  case "getTurnsToComplete": return ((net.sf.freecol.common.model.TileImprovement)object).getTurnsToComplete();
+  case "getType": return ((net.sf.freecol.common.model.TileImprovement)object).getType();
+  case "getVirtual": return ((net.sf.freecol.common.model.TileImprovement)object).getVirtual();
+  case "isRiver": return ((net.sf.freecol.common.model.TileImprovement)object).isRiver();
+  case "isRoad": return ((net.sf.freecol.common.model.TileImprovement)object).isRoad();
+  case "setMagnitude": ((net.sf.freecol.common.model.TileImprovement)object).setMagnitude((int)params[0]); return null;
   case "setRiverStyle": ((net.sf.freecol.common.model.TileImprovement)object).setRiverStyle((java.lang.String)params[0]); return null;
+  case "setStyle": ((net.sf.freecol.common.model.TileImprovement)object).setStyle((net.sf.freecol.common.model.TileImprovementStyle)params[0]); return null;
+  case "setTurnsToComplete": ((net.sf.freecol.common.model.TileImprovement)object).setTurnsToComplete((int)params[0]); return null;
+  case "setVirtual": ((net.sf.freecol.common.model.TileImprovement)object).setVirtual((boolean)params[0]); return null;
   }
   return common_model_TileItem.invokeMethod(object, method, params);
 }
@@ -4172,16 +4766,16 @@ metas.put(net.sf.freecol.common.model.TileImprovement.class, common_model_TileIm
 // net.sf.freecol.common.model.HighSeas
 final Meta common_model_HighSeas = new Meta() {
 net.sf.freecol.common.model.HighSeas newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
-    return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class))
     return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
+    return new net.sf.freecol.common.model.HighSeas((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getDestinations": return ((net.sf.freecol.common.model.HighSeas)object).getDestinations();
   case "destinationsToString": return ((net.sf.freecol.common.model.HighSeas)object).destinationsToString();
+  case "getDestinations": return ((net.sf.freecol.common.model.HighSeas)object).getDestinations();
   }
   return common_model_UnitLocation.invokeMethod(object, method, params);
 }
@@ -4201,34 +4795,290 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getFoundingFathers": return ((net.sf.freecol.common.model.NationSummary)object).getFoundingFathers();
   case "getGold": return ((net.sf.freecol.common.model.NationSummary)object).getGold();
+  case "getMilitaryStrength": return ((net.sf.freecol.common.model.NationSummary)object).getMilitaryStrength();
+  case "getNavalStrength": return ((net.sf.freecol.common.model.NationSummary)object).getNavalStrength();
+  case "getNumberOfSettlements": return ((net.sf.freecol.common.model.NationSummary)object).getNumberOfSettlements();
+  case "getNumberOfUnits": return ((net.sf.freecol.common.model.NationSummary)object).getNumberOfUnits();
+  case "getSoL": return ((net.sf.freecol.common.model.NationSummary)object).getSoL();
   case "getStance": return ((net.sf.freecol.common.model.NationSummary)object).getStance();
   case "getTax": return ((net.sf.freecol.common.model.NationSummary)object).getTax();
-  case "getNumberOfSettlements": return ((net.sf.freecol.common.model.NationSummary)object).getNumberOfSettlements();
-  case "getSoL": return ((net.sf.freecol.common.model.NationSummary)object).getSoL();
-  case "getMilitaryStrength": return ((net.sf.freecol.common.model.NationSummary)object).getMilitaryStrength();
-  case "getNumberOfUnits": return ((net.sf.freecol.common.model.NationSummary)object).getNumberOfUnits();
-  case "getNavalStrength": return ((net.sf.freecol.common.model.NationSummary)object).getNavalStrength();
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
 };
 names.put("common.model.NationSummary", net.sf.freecol.common.model.NationSummary.class);
 metas.put(net.sf.freecol.common.model.NationSummary.class, common_model_NationSummary);
+// net.sf.freecol.common.model.Constants.MissionaryAction
+final Meta common_model_Constants$MissionaryAction = new Meta() {
+net.sf.freecol.common.model.Constants.MissionaryAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.MissionaryAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.MissionaryAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$MissionaryAction", net.sf.freecol.common.model.Constants.MissionaryAction.class);
+metas.put(net.sf.freecol.common.model.Constants.MissionaryAction.class, common_model_Constants$MissionaryAction);
+// net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction
+final Meta common_model_Constants$ArmedUnitSettlementAction = new Meta() {
+net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ArmedUnitSettlementAction", net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ArmedUnitSettlementAction.class, common_model_Constants$ArmedUnitSettlementAction);
+// net.sf.freecol.common.model.Constants.IndianDemandAction
+final Meta common_model_Constants$IndianDemandAction = new Meta() {
+net.sf.freecol.common.model.Constants.IndianDemandAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.IndianDemandAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.IndianDemandAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$IndianDemandAction", net.sf.freecol.common.model.Constants.IndianDemandAction.class);
+metas.put(net.sf.freecol.common.model.Constants.IndianDemandAction.class, common_model_Constants$IndianDemandAction);
+// net.sf.freecol.common.model.Constants.TradeBuyAction
+final Meta common_model_Constants$TradeBuyAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeBuyAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeBuyAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeBuyAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeBuyAction", net.sf.freecol.common.model.Constants.TradeBuyAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeBuyAction.class, common_model_Constants$TradeBuyAction);
+// net.sf.freecol.common.model.Direction
+final Meta common_model_Direction = new Meta() {
+net.sf.freecol.common.model.Direction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getEWMirroredDirection": return ((net.sf.freecol.common.model.Direction)object).getEWMirroredDirection();
+  case "getKey": return ((net.sf.freecol.common.model.Direction)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Direction)object).getNameKey();
+  case "getNextDirection": return ((net.sf.freecol.common.model.Direction)object).getNextDirection();
+  case "getPreviousDirection": return ((net.sf.freecol.common.model.Direction)object).getPreviousDirection();
+  case "getReverseDirection": return ((net.sf.freecol.common.model.Direction)object).getReverseDirection();
+  case "valueOf": return ((net.sf.freecol.common.model.Direction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Direction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Direction", net.sf.freecol.common.model.Direction.class);
+metas.put(net.sf.freecol.common.model.Direction.class, common_model_Direction);
+// net.sf.freecol.common.model.CombatModel.CombatResult
+final Meta common_model_CombatModel$CombatResult = new Meta() {
+net.sf.freecol.common.model.CombatModel.CombatResult newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.CombatModel.CombatResult)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.CombatModel.CombatResult)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.CombatModel$CombatResult", net.sf.freecol.common.model.CombatModel.CombatResult.class);
+metas.put(net.sf.freecol.common.model.CombatModel.CombatResult.class, common_model_CombatModel$CombatResult);
+// net.sf.freecol.common.model.Constants.TradeAction
+final Meta common_model_Constants$TradeAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeAction", net.sf.freecol.common.model.Constants.TradeAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeAction.class, common_model_Constants$TradeAction);
+// net.sf.freecol.common.model.Stance
+final Meta common_model_Stance = new Meta() {
+net.sf.freecol.common.model.Stance newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Stance)object).getKey();
+  case "getNameKey": return ((net.sf.freecol.common.model.Stance)object).getNameKey();
+  case "getOtherStanceChangeKey": return ((net.sf.freecol.common.model.Stance)object).getOtherStanceChangeKey();
+  case "getStanceChangeKey": return ((net.sf.freecol.common.model.Stance)object).getStanceChangeKey();
+  case "isIncitable": return ((net.sf.freecol.common.model.Stance)object).isIncitable();
+  case "valueOf": return ((net.sf.freecol.common.model.Stance)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Stance)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Stance", net.sf.freecol.common.model.Stance.class);
+metas.put(net.sf.freecol.common.model.Stance.class, common_model_Stance);
+// net.sf.freecol.common.model.Constants.TradeSellAction
+final Meta common_model_Constants$TradeSellAction = new Meta() {
+net.sf.freecol.common.model.Constants.TradeSellAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.TradeSellAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.TradeSellAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$TradeSellAction", net.sf.freecol.common.model.Constants.TradeSellAction.class);
+metas.put(net.sf.freecol.common.model.Constants.TradeSellAction.class, common_model_Constants$TradeSellAction);
+// net.sf.freecol.common.model.Constants.ScoutColonyAction
+final Meta common_model_Constants$ScoutColonyAction = new Meta() {
+net.sf.freecol.common.model.Constants.ScoutColonyAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ScoutColonyAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ScoutColonyAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ScoutColonyAction", net.sf.freecol.common.model.Constants.ScoutColonyAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ScoutColonyAction.class, common_model_Constants$ScoutColonyAction);
+// net.sf.freecol.common.model.Constants.ClaimAction
+final Meta common_model_Constants$ClaimAction = new Meta() {
+net.sf.freecol.common.model.Constants.ClaimAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ClaimAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ClaimAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ClaimAction", net.sf.freecol.common.model.Constants.ClaimAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ClaimAction.class, common_model_Constants$ClaimAction);
+// net.sf.freecol.common.model.BuildQueue.CompletionAction
+final Meta common_model_BuildQueue$CompletionAction = new Meta() {
+net.sf.freecol.common.model.BuildQueue.CompletionAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.BuildQueue.CompletionAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.BuildQueue.CompletionAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.BuildQueue$CompletionAction", net.sf.freecol.common.model.BuildQueue.CompletionAction.class);
+metas.put(net.sf.freecol.common.model.BuildQueue.CompletionAction.class, common_model_BuildQueue$CompletionAction);
+// net.sf.freecol.common.model.Constants.IntegrityType
+final Meta common_model_Constants$IntegrityType = new Meta() {
+net.sf.freecol.common.model.Constants.IntegrityType newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "fail": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).fail();
+  case "fix": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).fix();
+  case "safe": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).safe();
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.IntegrityType)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$IntegrityType", net.sf.freecol.common.model.Constants.IntegrityType.class);
+metas.put(net.sf.freecol.common.model.Constants.IntegrityType.class, common_model_Constants$IntegrityType);
+// net.sf.freecol.common.model.Constants.BoycottAction
+final Meta common_model_Constants$BoycottAction = new Meta() {
+net.sf.freecol.common.model.Constants.BoycottAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.BoycottAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.BoycottAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$BoycottAction", net.sf.freecol.common.model.Constants.BoycottAction.class);
+metas.put(net.sf.freecol.common.model.Constants.BoycottAction.class, common_model_Constants$BoycottAction);
+// net.sf.freecol.common.model.Tension.Level
+final Meta common_model_Tension$Level = new Meta() {
+net.sf.freecol.common.model.Tension.Level newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getKey": return ((net.sf.freecol.common.model.Tension.Level)object).getKey();
+  case "getLimit": return ((net.sf.freecol.common.model.Tension.Level)object).getLimit();
+  case "valueOf": return ((net.sf.freecol.common.model.Tension.Level)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Tension.Level)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Tension$Level", net.sf.freecol.common.model.Tension.Level.class);
+metas.put(net.sf.freecol.common.model.Tension.Level.class, common_model_Tension$Level);
+// net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction
+final Meta common_model_Constants$ScoutIndianSettlementAction = new Meta() {
+net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.model.Constants$ScoutIndianSettlementAction", net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction.class);
+metas.put(net.sf.freecol.common.model.Constants.ScoutIndianSettlementAction.class, common_model_Constants$ScoutIndianSettlementAction);
 // net.sf.freecol.server.model.ServerGame
 final Meta server_model_ServerGame = new Meta() {
 net.sf.freecol.server.model.ServerGame newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Specification.class, java.util.Random.class))
-    return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (java.util.Random)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class))
     return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0]);
+  if (areSame(types, net.sf.freecol.common.model.Specification.class, java.util.Random.class))
+    return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (java.util.Random)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Specification.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.model.ServerGame((net.sf.freecol.common.model.Specification)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "establishUnknownEnemy": return ((net.sf.freecol.server.model.ServerGame)object).establishUnknownEnemy();
   case "checkForWinner": return ((net.sf.freecol.server.model.ServerGame)object).checkForWinner();
+  case "establishUnknownEnemy": return ((net.sf.freecol.server.model.ServerGame)object).establishUnknownEnemy();
   case "isNextPlayerInNewTurn": return ((net.sf.freecol.server.model.ServerGame)object).isNextPlayerInNewTurn();
   }
   return common_model_Game.invokeMethod(object, method, params);
@@ -4257,10 +5107,10 @@ metas.put(net.sf.freecol.server.model.ServerEurope.class, server_model_ServerEur
 // net.sf.freecol.server.model.ServerColonyTile
 final Meta server_model_ServerColonyTile = new Meta() {
 net.sf.freecol.server.model.ServerColonyTile newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.Tile)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.server.model.ServerColonyTile((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.Tile)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4282,11 +5132,11 @@ net.sf.freecol.server.model.ServerRegion newInstance(Class<?>[] types, Object[] 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "setSize": ((net.sf.freecol.server.model.ServerRegion)object).setSize((int)params[0]); return null;
-  case "getSize": return ((net.sf.freecol.server.model.ServerRegion)object).getSize();
   case "getBounds": return ((net.sf.freecol.server.model.ServerRegion)object).getBounds();
-  case "isGeographic": return ((net.sf.freecol.server.model.ServerRegion)object).isGeographic();
   case "getCenter": return ((net.sf.freecol.server.model.ServerRegion)object).getCenter();
+  case "getSize": return ((net.sf.freecol.server.model.ServerRegion)object).getSize();
+  case "isGeographic": return ((net.sf.freecol.server.model.ServerRegion)object).isGeographic();
+  case "setSize": ((net.sf.freecol.server.model.ServerRegion)object).setSize((int)params[0]); return null;
   }
   return common_model_Region.invokeMethod(object, method, params);
 }
@@ -4296,10 +5146,10 @@ metas.put(net.sf.freecol.server.model.ServerRegion.class, server_model_ServerReg
 // net.sf.freecol.server.model.ServerColony
 final Meta server_model_ServerColony = new Meta() {
 net.sf.freecol.server.model.ServerColony newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class))
-    return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class))
+    return new net.sf.freecol.server.model.ServerColony((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4311,10 +5161,10 @@ metas.put(net.sf.freecol.server.model.ServerColony.class, server_model_ServerCol
 // net.sf.freecol.server.model.ServerBuilding
 final Meta server_model_ServerBuilding = new Meta() {
 net.sf.freecol.server.model.ServerBuilding newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.BuildingType.class))
-    return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.BuildingType)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Colony.class, net.sf.freecol.common.model.BuildingType.class))
+    return new net.sf.freecol.server.model.ServerBuilding((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Colony)params[1], (net.sf.freecol.common.model.BuildingType)params[2]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4326,12 +5176,12 @@ metas.put(net.sf.freecol.server.model.ServerBuilding.class, server_model_ServerB
 // net.sf.freecol.server.model.ServerUnit
 final Meta server_model_ServerUnit = new Meta() {
 net.sf.freecol.server.model.ServerUnit newInstance(Class<?>[] types, Object[] params) throws Exception {
+  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
+    return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Unit.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Unit)params[2]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.UnitType.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Player)params[2], (net.sf.freecol.common.model.UnitType)params[3]);
-  if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
-    return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Role.class))
     return new net.sf.freecol.server.model.ServerUnit((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.Player)params[2], (net.sf.freecol.common.model.UnitType)params[3], (net.sf.freecol.common.model.Role)params[4]);
   throw new IllegalArgumentException();
@@ -4342,6 +5192,21 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("server.model.ServerUnit", net.sf.freecol.server.model.ServerUnit.class);
 metas.put(net.sf.freecol.server.model.ServerUnit.class, server_model_ServerUnit);
+// net.sf.freecol.server.model.ServerPlayer.DeadCheck
+final Meta server_model_ServerPlayer$DeadCheck = new Meta() {
+net.sf.freecol.server.model.ServerPlayer.DeadCheck newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.server.model.ServerPlayer.DeadCheck)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.model.ServerPlayer.DeadCheck)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.model.ServerPlayer$DeadCheck", net.sf.freecol.server.model.ServerPlayer.DeadCheck.class);
+metas.put(net.sf.freecol.server.model.ServerPlayer.DeadCheck.class, server_model_ServerPlayer$DeadCheck);
 // net.sf.freecol.server.model.ServerPlayer
 final Meta server_model_ServerPlayer = new Meta() {
 net.sf.freecol.server.model.ServerPlayer newInstance(Class<?>[] types, Object[] params) throws Exception {
@@ -4355,13 +5220,13 @@ net.sf.freecol.server.model.ServerPlayer newInstance(Class<?>[] types, Object[] 
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "newTradeRoute": return ((net.sf.freecol.server.model.ServerPlayer)object).newTradeRoute();
-  case "checkForDeath": return ((net.sf.freecol.server.model.ServerPlayer)object).checkForDeath();
-  case "getRemainingEmigrants": return ((net.sf.freecol.server.model.ServerPlayer)object).getRemainingEmigrants();
-  case "setRemainingEmigrants": ((net.sf.freecol.server.model.ServerPlayer)object).setRemainingEmigrants((int)params[0]); return null;
   case "canRecruitFoundingFather": return ((net.sf.freecol.server.model.ServerPlayer)object).canRecruitFoundingFather();
+  case "checkForDeath": return ((net.sf.freecol.server.model.ServerPlayer)object).checkForDeath();
   case "getFreeBuildingTypes": return ((net.sf.freecol.server.model.ServerPlayer)object).getFreeBuildingTypes();
+  case "getRemainingEmigrants": return ((net.sf.freecol.server.model.ServerPlayer)object).getRemainingEmigrants();
   case "makeTeaPartyModifier": return ((net.sf.freecol.server.model.ServerPlayer)object).makeTeaPartyModifier();
+  case "newTradeRoute": return ((net.sf.freecol.server.model.ServerPlayer)object).newTradeRoute();
+  case "setRemainingEmigrants": ((net.sf.freecol.server.model.ServerPlayer)object).setRemainingEmigrants((int)params[0]); return null;
   }
   return common_model_Player.invokeMethod(object, method, params);
 }
@@ -4371,12 +5236,12 @@ metas.put(net.sf.freecol.server.model.ServerPlayer.class, server_model_ServerPla
 // net.sf.freecol.server.model.ServerIndianSettlement
 final Meta server_model_ServerIndianSettlement = new Meta() {
 net.sf.freecol.server.model.ServerIndianSettlement newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class, boolean.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Unit.class))
-    return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3], (boolean)params[4], (net.sf.freecol.common.model.UnitType)params[5], (net.sf.freecol.common.model.Unit)params[6]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, java.lang.String.class))
     return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (java.lang.String)params[1]);
   if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.IndianSettlement.class))
     return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (net.sf.freecol.common.model.Tile)params[2], (net.sf.freecol.common.model.IndianSettlement)params[3]);
+  if (areSame(types, net.sf.freecol.common.model.Game.class, net.sf.freecol.common.model.Player.class, java.lang.String.class, net.sf.freecol.common.model.Tile.class, boolean.class, net.sf.freecol.common.model.UnitType.class, net.sf.freecol.common.model.Unit.class))
+    return new net.sf.freecol.server.model.ServerIndianSettlement((net.sf.freecol.common.model.Game)params[0], (net.sf.freecol.common.model.Player)params[1], (java.lang.String)params[2], (net.sf.freecol.common.model.Tile)params[3], (boolean)params[4], (net.sf.freecol.common.model.UnitType)params[5], (net.sf.freecol.common.model.Unit)params[6]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4390,9 +5255,9 @@ final Meta server_ai_AIObject = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "dispose": ((net.sf.freecol.server.ai.AIObject)object).dispose(); return null;
-  case "setSpecification": ((net.sf.freecol.server.ai.AIObject)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   case "getAIMain": return ((net.sf.freecol.server.ai.AIObject)object).getAIMain();
   case "isDisposed": return ((net.sf.freecol.server.ai.AIObject)object).isDisposed();
+  case "setSpecification": ((net.sf.freecol.server.ai.AIObject)object).setSpecification((net.sf.freecol.common.model.Specification)params[0]); return null;
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
@@ -4403,17 +5268,17 @@ metas.put(net.sf.freecol.server.ai.AIObject.class, server_ai_AIObject);
 final Meta server_ai_AIPlayer = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "reconnectHandler": ((net.sf.freecol.server.ai.AIPlayer)object).reconnectHandler(); return null;
-  case "getPlayer": return ((net.sf.freecol.server.ai.AIPlayer)object).getPlayer();
-  case "getAIRandom": return ((net.sf.freecol.server.ai.AIPlayer)object).getAIRandom();
+  case "acceptMercenaries": return ((net.sf.freecol.server.ai.AIPlayer)object).acceptMercenaries();
   case "askServer": return ((net.sf.freecol.server.ai.AIPlayer)object).askServer();
   case "getAIColonies": return ((net.sf.freecol.server.ai.AIPlayer)object).getAIColonies();
-  case "acceptMercenaries": return ((net.sf.freecol.server.ai.AIPlayer)object).acceptMercenaries();
+  case "getAIRandom": return ((net.sf.freecol.server.ai.AIPlayer)object).getAIRandom();
+  case "getConnection": return ((net.sf.freecol.server.ai.AIPlayer)object).getConnection();
+  case "getPlayer": return ((net.sf.freecol.server.ai.AIPlayer)object).getPlayer();
+  case "pioneersNeeded": return ((net.sf.freecol.server.ai.AIPlayer)object).pioneersNeeded();
+  case "reconnectHandler": ((net.sf.freecol.server.ai.AIPlayer)object).reconnectHandler(); return null;
+  case "scoutsNeeded": return ((net.sf.freecol.server.ai.AIPlayer)object).scoutsNeeded();
   case "setCurrentPlayerHandler": ((net.sf.freecol.server.ai.AIPlayer)object).setCurrentPlayerHandler((net.sf.freecol.common.model.Player)params[0]); return null;
   case "startWorking": ((net.sf.freecol.server.ai.AIPlayer)object).startWorking(); return null;
-  case "pioneersNeeded": return ((net.sf.freecol.server.ai.AIPlayer)object).pioneersNeeded();
-  case "scoutsNeeded": return ((net.sf.freecol.server.ai.AIPlayer)object).scoutsNeeded();
-  case "getConnection": return ((net.sf.freecol.server.ai.AIPlayer)object).getConnection();
   }
   return server_ai_AIObject.invokeMethod(object, method, params);
 }
@@ -4439,8 +5304,8 @@ net.sf.freecol.server.ai.EuropeanAIPlayer newInstance(Class<?>[] types, Object[]
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getWishes": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).getWishes();
   case "getUrgentTransportables": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).getUrgentTransportables();
+  case "getWishes": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).getWishes();
   }
   return server_ai_MissionAIPlayer.invokeMethod(object, method, params);
 }
@@ -4463,21 +5328,21 @@ metas.put(net.sf.freecol.server.ai.ValuedAIObject.class, server_ai_ValuedAIObjec
 final Meta server_ai_TransportableAIObject = new Meta() {
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
+  case "canMove": return ((net.sf.freecol.server.ai.TransportableAIObject)object).canMove();
+  case "dropTransport": return ((net.sf.freecol.server.ai.TransportableAIObject)object).dropTransport();
   case "getLocation": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getLocation();
   case "getSpaceTaken": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getSpaceTaken();
-  case "setTransportPriority": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransportPriority((int)params[0]); return null;
-  case "setTransport": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransport((net.sf.freecol.server.ai.AIUnit)params[0]); return null;
-  case "leaveTransport": return ((net.sf.freecol.server.ai.TransportableAIObject)object).leaveTransport();
-  case "canMove": return ((net.sf.freecol.server.ai.TransportableAIObject)object).canMove();
-  case "getTransportPriority": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportPriority();
   case "getTransport": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransport();
-  case "dropTransport": return ((net.sf.freecol.server.ai.TransportableAIObject)object).dropTransport();
   case "getTransportDestination": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportDestination();
+  case "getTransportLocatable": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportLocatable();
+  case "getTransportPriority": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportPriority();
   case "getTransportSource": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportSource();
   case "incrementTransportPriority": ((net.sf.freecol.server.ai.TransportableAIObject)object).incrementTransportPriority(); return null;
-  case "setTransportDestination": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransportDestination((net.sf.freecol.common.model.Location)params[0]); return null;
   case "invalidReason": return ((net.sf.freecol.server.ai.TransportableAIObject)object).invalidReason();
-  case "getTransportLocatable": return ((net.sf.freecol.server.ai.TransportableAIObject)object).getTransportLocatable();
+  case "leaveTransport": return ((net.sf.freecol.server.ai.TransportableAIObject)object).leaveTransport();
+  case "setTransport": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransport((net.sf.freecol.server.ai.AIUnit)params[0]); return null;
+  case "setTransportDestination": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransportDestination((net.sf.freecol.common.model.Location)params[0]); return null;
+  case "setTransportPriority": ((net.sf.freecol.server.ai.TransportableAIObject)object).setTransportPriority((int)params[0]); return null;
   }
   return server_ai_ValuedAIObject.invokeMethod(object, method, params);
 }
@@ -4489,18 +5354,18 @@ final Meta server_ai_AIGoods = new Meta() {
 net.sf.freecol.server.ai.AIGoods newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Location.class))
-    return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3], (net.sf.freecol.common.model.Location)params[1]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, net.sf.freecol.common.model.GoodsType.class, int.class, net.sf.freecol.common.model.Location.class))
+    return new net.sf.freecol.server.ai.AIGoods((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (net.sf.freecol.common.model.GoodsType)params[2], (int)params[3], (net.sf.freecol.common.model.Location)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "getGoods": return ((net.sf.freecol.server.ai.AIGoods)object).getGoods();
+  case "getGoodsAmount": return ((net.sf.freecol.server.ai.AIGoods)object).getGoodsAmount();
   case "getGoodsType": return ((net.sf.freecol.server.ai.AIGoods)object).getGoodsType();
   case "setGoods": ((net.sf.freecol.server.ai.AIGoods)object).setGoods((net.sf.freecol.common.model.Goods)params[0]); return null;
-  case "getGoodsAmount": return ((net.sf.freecol.server.ai.AIGoods)object).getGoodsAmount();
   case "setGoodsAmount": ((net.sf.freecol.server.ai.AIGoods)object).setGoodsAmount((int)params[0]); return null;
   }
   return server_ai_TransportableAIObject.invokeMethod(object, method, params);
@@ -4514,9 +5379,9 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getDestination": return ((net.sf.freecol.server.ai.Wish)object).getDestination();
   case "getDestinationAIColony": return ((net.sf.freecol.server.ai.Wish)object).getDestinationAIColony();
-  case "shouldBeStored": return ((net.sf.freecol.server.ai.Wish)object).shouldBeStored();
   case "getTransportable": return ((net.sf.freecol.server.ai.Wish)object).getTransportable();
   case "setTransportable": ((net.sf.freecol.server.ai.Wish)object).setTransportable((net.sf.freecol.server.ai.TransportableAIObject)params[0]); return null;
+  case "shouldBeStored": return ((net.sf.freecol.server.ai.Wish)object).shouldBeStored();
   }
   return server_ai_ValuedAIObject.invokeMethod(object, method, params);
 }
@@ -4528,16 +5393,16 @@ final Meta server_ai_GoodsWish = new Meta() {
 net.sf.freecol.server.ai.GoodsWish newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, int.class, net.sf.freecol.common.model.GoodsType.class))
-    return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (int)params[2], (net.sf.freecol.common.model.GoodsType)params[4]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, int.class, net.sf.freecol.common.model.GoodsType.class))
+    return new net.sf.freecol.server.ai.GoodsWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (int)params[2], (net.sf.freecol.common.model.GoodsType)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getGoodsType": return ((net.sf.freecol.server.ai.GoodsWish)object).getGoodsType();
   case "getGoodsAmount": return ((net.sf.freecol.server.ai.GoodsWish)object).getGoodsAmount();
+  case "getGoodsType": return ((net.sf.freecol.server.ai.GoodsWish)object).getGoodsType();
   case "setGoodsAmount": ((net.sf.freecol.server.ai.GoodsWish)object).setGoodsAmount((int)params[0]); return null;
   }
   return server_ai_Wish.invokeMethod(object, method, params);
@@ -4548,18 +5413,18 @@ metas.put(net.sf.freecol.server.ai.GoodsWish.class, server_ai_GoodsWish);
 // net.sf.freecol.server.ai.AIMain
 final Meta server_ai_AIMain = new Meta() {
 net.sf.freecol.server.ai.AIMain newInstance(Class<?>[] types, Object[] params) throws Exception {
-  if (areSame(types, net.sf.freecol.server.FreeColServer.class, net.sf.freecol.common.io.FreeColXMLReader.class))
-    return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   if (areSame(types, net.sf.freecol.server.FreeColServer.class))
     return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0]);
+  if (areSame(types, net.sf.freecol.server.FreeColServer.class, net.sf.freecol.common.io.FreeColXMLReader.class))
+    return new net.sf.freecol.server.ai.AIMain((net.sf.freecol.server.FreeColServer)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getNextId": return ((net.sf.freecol.server.ai.AIMain)object).getNextId();
-  case "getFreeColServer": return ((net.sf.freecol.server.ai.AIMain)object).getFreeColServer();
-  case "getAIStatistics": return ((net.sf.freecol.server.ai.AIMain)object).getAIStatistics();
   case "checkSortConsistency": return ((net.sf.freecol.server.ai.AIMain)object).checkSortConsistency();
+  case "getAIStatistics": return ((net.sf.freecol.server.ai.AIMain)object).getAIStatistics();
+  case "getFreeColServer": return ((net.sf.freecol.server.ai.AIMain)object).getFreeColServer();
+  case "getNextId": return ((net.sf.freecol.server.ai.AIMain)object).getNextId();
   }
   return common_model_FreeColObject.invokeMethod(object, method, params);
 }
@@ -4571,21 +5436,21 @@ final Meta server_ai_TileImprovementPlan = new Meta() {
 net.sf.freecol.server.ai.TileImprovementPlan newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, int.class))
-    return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (int)params[3]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Tile.class, net.sf.freecol.common.model.TileImprovementType.class, int.class))
+    return new net.sf.freecol.server.ai.TileImprovementPlan((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Tile)params[1], (net.sf.freecol.common.model.TileImprovementType)params[2], (int)params[3]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "validate": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).validate();
-  case "getType": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).getType();
+  case "getPioneer": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).getPioneer();
   case "getTarget": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).getTarget();
-  case "setType": ((net.sf.freecol.server.ai.TileImprovementPlan)object).setType((net.sf.freecol.common.model.TileImprovementType)params[0]); return null;
+  case "getType": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).getType();
   case "isComplete": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).isComplete();
   case "setPioneer": ((net.sf.freecol.server.ai.TileImprovementPlan)object).setPioneer((net.sf.freecol.server.ai.AIUnit)params[0]); return null;
-  case "getPioneer": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).getPioneer();
+  case "setType": ((net.sf.freecol.server.ai.TileImprovementPlan)object).setType((net.sf.freecol.common.model.TileImprovementType)params[0]); return null;
+  case "validate": return ((net.sf.freecol.server.ai.TileImprovementPlan)object).validate();
   }
   return server_ai_ValuedAIObject.invokeMethod(object, method, params);
 }
@@ -4606,15 +5471,15 @@ net.sf.freecol.server.ai.AIColony newInstance(Class<?>[] types, Object[] params)
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
   case "getColony": return ((net.sf.freecol.server.ai.AIColony)object).getColony();
-  case "isBadlyDefended": return ((net.sf.freecol.server.ai.AIColony)object).isBadlyDefended();
   case "getExportGoods": return ((net.sf.freecol.server.ai.AIColony)object).getExportGoods();
-  case "getWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWishes();
-  case "requestRearrange": ((net.sf.freecol.server.ai.AIColony)object).requestRearrange(); return null;
   case "getGoodsWishes": return ((net.sf.freecol.server.ai.AIColony)object).getGoodsWishes();
-  case "getWorkerWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWorkerWishes();
   case "getPlannedBuildableTypes": return ((net.sf.freecol.server.ai.AIColony)object).getPlannedBuildableTypes();
-  case "planToString": return ((net.sf.freecol.server.ai.AIColony)object).planToString();
   case "getTileImprovementPlans": return ((net.sf.freecol.server.ai.AIColony)object).getTileImprovementPlans();
+  case "getWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWishes();
+  case "getWorkerWishes": return ((net.sf.freecol.server.ai.AIColony)object).getWorkerWishes();
+  case "isBadlyDefended": return ((net.sf.freecol.server.ai.AIColony)object).isBadlyDefended();
+  case "planToString": return ((net.sf.freecol.server.ai.AIColony)object).planToString();
+  case "requestRearrange": ((net.sf.freecol.server.ai.AIColony)object).requestRearrange(); return null;
   }
   return server_ai_AIObject.invokeMethod(object, method, params);
 }
@@ -4634,22 +5499,22 @@ net.sf.freecol.server.ai.AIUnit newInstance(Class<?>[] types, Object[] params) t
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
   switch (method) {
-  case "getOwner": return ((net.sf.freecol.server.ai.AIUnit)object).getOwner();
+  case "getAIOwner": return ((net.sf.freecol.server.ai.AIUnit)object).getAIOwner();
   case "getAIRandom": return ((net.sf.freecol.server.ai.AIUnit)object).getAIRandom();
-  case "getUnit": return ((net.sf.freecol.server.ai.AIUnit)object).getUnit();
-  case "hasCargo": return ((net.sf.freecol.server.ai.AIUnit)object).hasCargo();
+  case "getBuilderScore": return ((net.sf.freecol.server.ai.AIUnit)object).getBuilderScore();
+  case "getMission": return ((net.sf.freecol.server.ai.AIUnit)object).getMission();
+  case "getOwner": return ((net.sf.freecol.server.ai.AIUnit)object).getOwner();
   case "getPioneerScore": return ((net.sf.freecol.server.ai.AIUnit)object).getPioneerScore();
   case "getScoutScore": return ((net.sf.freecol.server.ai.AIUnit)object).getScoutScore();
-  case "moveToEurope": return ((net.sf.freecol.server.ai.AIUnit)object).moveToEurope();
-  case "getMission": return ((net.sf.freecol.server.ai.AIUnit)object).getMission();
-  case "setMission": ((net.sf.freecol.server.ai.AIUnit)object).setMission((net.sf.freecol.server.ai.mission.Mission)params[0]); return null;
   case "getTrivialTarget": return ((net.sf.freecol.server.ai.AIUnit)object).getTrivialTarget();
-  case "removeMission": ((net.sf.freecol.server.ai.AIUnit)object).removeMission(); return null;
+  case "getUnit": return ((net.sf.freecol.server.ai.AIUnit)object).getUnit();
+  case "hasCargo": return ((net.sf.freecol.server.ai.AIUnit)object).hasCargo();
   case "hasDefendSettlementMission": return ((net.sf.freecol.server.ai.AIUnit)object).hasDefendSettlementMission();
-  case "moveToAmerica": return ((net.sf.freecol.server.ai.AIUnit)object).moveToAmerica();
   case "hasMission": return ((net.sf.freecol.server.ai.AIUnit)object).hasMission();
-  case "getBuilderScore": return ((net.sf.freecol.server.ai.AIUnit)object).getBuilderScore();
-  case "getAIOwner": return ((net.sf.freecol.server.ai.AIUnit)object).getAIOwner();
+  case "moveToAmerica": return ((net.sf.freecol.server.ai.AIUnit)object).moveToAmerica();
+  case "moveToEurope": return ((net.sf.freecol.server.ai.AIUnit)object).moveToEurope();
+  case "removeMission": ((net.sf.freecol.server.ai.AIUnit)object).removeMission(); return null;
+  case "setMission": ((net.sf.freecol.server.ai.AIUnit)object).setMission((net.sf.freecol.server.ai.mission.Mission)params[0]); return null;
   }
   return server_ai_TransportableAIObject.invokeMethod(object, method, params);
 }
@@ -4682,8 +5547,8 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getGoodsType": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).getGoodsType();
   case "getWorkLocation": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).getWorkLocation();
-  case "setGoodsType": ((net.sf.freecol.server.ai.WorkLocationPlan)object).setGoodsType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
   case "isFoodPlan": return ((net.sf.freecol.server.ai.WorkLocationPlan)object).isFoodPlan();
+  case "setGoodsType": ((net.sf.freecol.server.ai.WorkLocationPlan)object).setGoodsType((net.sf.freecol.common.model.GoodsType)params[0]); return null;
   }
   return server_ai_AIObject.invokeMethod(object, method, params);
 }
@@ -4713,10 +5578,10 @@ final Meta server_ai_WorkerWish = new Meta() {
 net.sf.freecol.server.ai.WorkerWish newInstance(Class<?>[] types, Object[] params) throws Exception {
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.io.FreeColXMLReader.class))
     return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.io.FreeColXMLReader)params[1]);
-  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, net.sf.freecol.common.model.UnitType.class, boolean.class))
-    return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (net.sf.freecol.common.model.UnitType)params[3], (boolean)params[4]);
   if (areSame(types, net.sf.freecol.server.ai.AIMain.class, java.lang.String.class))
     return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (java.lang.String)params[1]);
+  if (areSame(types, net.sf.freecol.server.ai.AIMain.class, net.sf.freecol.common.model.Location.class, int.class, net.sf.freecol.common.model.UnitType.class, boolean.class))
+    return new net.sf.freecol.server.ai.WorkerWish((net.sf.freecol.server.ai.AIMain)params[0], (net.sf.freecol.common.model.Location)params[1], (int)params[2], (net.sf.freecol.common.model.UnitType)params[3], (boolean)params[4]);
   throw new IllegalArgumentException();
 }
 Object invokeMethod(Object object, String method, Object... params) throws Exception {
@@ -4728,5 +5593,52 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
 };
 names.put("server.ai.WorkerWish", net.sf.freecol.server.ai.WorkerWish.class);
 metas.put(net.sf.freecol.server.ai.WorkerWish.class, server_ai_WorkerWish);
+// net.sf.freecol.server.ai.Cargo.CargoMode
+final Meta server_ai_Cargo$CargoMode = new Meta() {
+net.sf.freecol.server.ai.Cargo.CargoMode newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "isCollection": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).isCollection();
+  case "valueOf": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.ai.Cargo.CargoMode)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.ai.Cargo$CargoMode", net.sf.freecol.server.ai.Cargo.CargoMode.class);
+metas.put(net.sf.freecol.server.ai.Cargo.CargoMode.class, server_ai_Cargo$CargoMode);
+// net.sf.freecol.common.option.UnitTypeOption.TypeSelector
+final Meta common_option_UnitTypeOption$TypeSelector = new Meta() {
+net.sf.freecol.common.option.UnitTypeOption.TypeSelector newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "valueOf": return ((net.sf.freecol.common.option.UnitTypeOption.TypeSelector)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.common.option.UnitTypeOption.TypeSelector)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("common.option.UnitTypeOption$TypeSelector", net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class);
+metas.put(net.sf.freecol.common.option.UnitTypeOption.TypeSelector.class, common_option_UnitTypeOption$TypeSelector);
+// net.sf.freecol.server.FreeColServer.ServerState
+final Meta server_FreeColServer$ServerState = new Meta() {
+net.sf.freecol.server.FreeColServer.ServerState newInstance(Class<?>[] types, Object[] params) throws Exception {
+  throw new IllegalArgumentException();
+}
+Object invokeMethod(Object object, String method, Object... params) throws Exception {
+  switch (method) {
+  case "getMetaServerState": return ((net.sf.freecol.server.FreeColServer.ServerState)object).getMetaServerState();
+  case "valueOf": return ((net.sf.freecol.server.FreeColServer.ServerState)object).valueOf((java.lang.String)params[0]);
+  case "values": return ((net.sf.freecol.server.FreeColServer.ServerState)object).values();
+  }
+  return super.invokeMethod(object, method, params);
+}
+};
+names.put("server.FreeColServer$ServerState", net.sf.freecol.server.FreeColServer.ServerState.class);
+metas.put(net.sf.freecol.server.FreeColServer.ServerState.class, server_FreeColServer$ServerState);
 }
 }

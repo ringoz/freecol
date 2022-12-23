@@ -552,7 +552,7 @@ public class FreeColXMLReader extends StreamReaderDelegate
         T result = defaultValue;
         if (attrib != null) {
             try {
-                result = Enum.valueOf(returnClass, upCase(attrib));
+                result = Introspector.valueOf(returnClass, upCase(attrib));
             } catch (Exception e) {
                 logger.warning(attributeName + " is not a "
                     + returnClass.getName() + ": " + attrib);

@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
 import net.sf.freecol.common.FreeColException;
+import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.networking.Message;
@@ -87,6 +88,7 @@ public final class AIInGameInputHandler extends FreeColServerHolder
     /**
      * {@inheritDoc}
      */
+    @Override
     public Message handle(Connection connection, Message message)
         throws FreeColException {
         message.aiHandler(getFreeColServer(), getMyAIPlayer());
@@ -96,8 +98,9 @@ public final class AIInGameInputHandler extends FreeColServerHolder
     /**
      * {@inheritDoc}
      */
-    public Message read(Connection connection)
+    @Override
+    public Message read(Connection connection, FreeColXMLReader xr)
         throws FreeColException, XMLStreamException {
-        return Message.read(getGame(), connection.getFreeColXMLReader());
+        return Message.read(getGame(), xr);
     }
 }

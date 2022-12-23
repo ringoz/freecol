@@ -174,6 +174,6 @@ public class LogoutMessage extends AttributeMessage {
      * @return The {@code LogoutReason}.
      */
     public LogoutReason getReason() {
-        return Enum.valueOf(LogoutReason.class, getStringAttribute(REASON_TAG));
+        return LogoutReason.valueOf(getStringAttribute(REASON_TAG));
     }
 }

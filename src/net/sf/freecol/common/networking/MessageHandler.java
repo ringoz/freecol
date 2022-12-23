@@ -23,6 +23,7 @@ package net.sf.freecol.common.networking;
 import javax.xml.stream.XMLStreamException;
 
 import net.sf.freecol.common.FreeColException;
+import net.sf.freecol.common.io.FreeColXMLReader;
 
 
 /**
@@ -50,6 +51,6 @@ public interface MessageHandler {
      * @exception XMLStreamException if there is a problem reading the
      *     message.
      */
-    public Message read(Connection connection)
+    public Message read(Connection connection, FreeColXMLReader xr)
         throws FreeColException, XMLStreamException;
 }

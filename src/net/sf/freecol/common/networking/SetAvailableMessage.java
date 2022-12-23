@@ -123,6 +123,6 @@ public class SetAvailableMessage extends AttributeMessage {
      * @return The new {@code NationState}.
      */
     public NationState getNationState() {
-        return Enum.valueOf(NationState.class, getStringAttribute(STATE_TAG));
+        return NationState.valueOf(getStringAttribute(STATE_TAG));
     }
 }

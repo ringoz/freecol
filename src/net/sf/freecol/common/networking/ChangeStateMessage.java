@@ -98,7 +98,7 @@ public class ChangeStateMessage extends AttributeMessage {
 
         UnitState state;
         try {
-            state = Enum.valueOf(UnitState.class, stateString);
+            state = UnitState.valueOf(stateString);
         } catch (Exception e) {
             return serverPlayer.clientError(e.getMessage());
         }
