@@ -104,7 +104,7 @@ public class FreeColDirectories {
     private static final String START_MAP_NAME = "startMap.fsg";
 
     private static final String SEPARATOR
-        = System.getProperty("file.separator");
+        = File.separator;
 
     private static final String USER_MAPS_DIRECTORY = "maps";
 

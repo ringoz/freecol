@@ -32,7 +32,7 @@ public class OSUtils {
     private static final Logger logger = Logger.getLogger(OSUtils.class.getName());
 
     private static final String SEPARATOR
-        = System.getProperty("file.separator");
+        = java.io.File.separator;
 
 
     /**
