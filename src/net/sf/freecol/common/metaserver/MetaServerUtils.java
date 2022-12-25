@@ -23,6 +23,9 @@ import static net.sf.freecol.common.util.CollectionUtils.find;
 import static net.sf.freecol.common.util.CollectionUtils.matchKeyEquals;
 import static net.sf.freecol.common.util.Utils.delay;
 
+import static com.ea.async.Async.await;
+import jsinterop.annotations.JsAsync;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +35,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -211,7 +215,8 @@ public class MetaServerUtils {
      *     by the meta-server.     
      * @return A {@code Connection}, or null on failure.
      */
-    private static Connection getMetaServerConnection(List<ServerInfo> lsi) {
+    @JsAsync
+    private static CompletableFuture<Connection> getMetaServerConnection(List<ServerInfo> lsi) {
         // Create a consumer for the response to meta-server
         // "serverList" messages.  Most of the time we do not care, so
         // the default is to do nothing, however if we have a non-null
@@ -229,15 +234,15 @@ public class MetaServerUtils {
         String host = FreeCol.getMetaServerAddress();
         int port = FreeCol.getMetaServerPort();
         try {
-            Connection c = Connection.open(host, port, "MetaServer").join()
+            Connection c = await(Connection.open(host, port, "MetaServer"))
                 .setMessageHandler(new MetaInputHandler(consumer));
             c.startReceiving();
-            return c;
+            return CompletableFuture.completedFuture(c);
         } catch (IOException ioe) {
             logger.log(Level.WARNING, "Could not connect to meta-server: "
                 + host + ":" + port, ioe);
         }
-        return null;
+        return CompletableFuture.completedFuture(null);
     }
 
     /**
@@ -247,38 +252,39 @@ public class MetaServerUtils {
      * @param si The associated {@code ServerInfo}.
      * @return True if the operation succeeds.
      */
-    private static boolean metaMessage(MetaMessageType type, ServerInfo si) {
-        try (Connection mc = getMetaServerConnection(null)) {
+    @JsAsync
+    private static CompletableFuture<Boolean> metaMessage(MetaMessageType type, ServerInfo si) {
+        try (Connection mc = await(getMetaServerConnection(null))) {
             switch (type) {
             case REGISTER:
                 startTimer(si);
                 if (mc != null) {
-                    final ConnectionVerificationMessage reply = (ConnectionVerificationMessage) mc.askMessage(
-                            new RegisterServerMessage(si), METASERVER_REPLY_TIMEOUT).get();
-                    return reply.isConnectable();
+                    final ConnectionVerificationMessage reply = (ConnectionVerificationMessage)await(mc.askMessage(
+                            new RegisterServerMessage(si), METASERVER_REPLY_TIMEOUT));
+                    return CompletableFuture.completedFuture(reply.isConnectable());
                 }
             case REMOVE:
                 stopTimer(si);
                 if (mc != null) {
                     mc.sendMessage(new RemoveServerMessage(si));
                 }
-                return true;
+                return CompletableFuture.completedFuture(true);
             case UPDATE:
                 updateTimer(si);
                 if (mc != null) {
                     mc.sendMessage(new UpdateServerMessage(si));
                 }
-                return true;
+                return CompletableFuture.completedFuture(true);
             default:
                 logger.log(Level.WARNING, "Wrong metaMessage type: " + type);
                 break;
             }
-        } catch (InterruptedException|ExecutionException ex) {
+        } catch (Exception ex) {
             logger.log(Level.WARNING, "Meta message " + type + " failure.", ex);
             // Do not fail: Try registering again later:
-            return true;
+            return CompletableFuture.completedFuture(true);
         }
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
 
@@ -289,10 +295,11 @@ public class MetaServerUtils {
      *
      * @return A list of {@link ServerInfo} objects, or null on error.
      */
-    public static List<ServerInfo> getServerList() {
+    @JsAsync
+    public static CompletableFuture<List<ServerInfo>> getServerList() {
         List<ServerInfo> lsi = new ArrayList<>();
         List<ServerInfo> ret = null;
-        Connection mc = getMetaServerConnection(lsi);
+        Connection mc = await(getMetaServerConnection(lsi));
         if (mc == null) {
             logger.warning("Could not connect to metaserver.");
             return null;
@@ -315,7 +322,7 @@ public class MetaServerUtils {
         } finally {
             mc.close();
         }
-        return ret;
+        return CompletableFuture.completedFuture(ret);
     }
 
     /**
@@ -328,7 +335,8 @@ public class MetaServerUtils {
      * @return True if the server was registered.
      */
     public static boolean registerServer(ServerInfo si) {
-        return metaMessage(MetaMessageType.REGISTER, si);
+        metaMessage(MetaMessageType.REGISTER, si);
+        return true;
     }
 
     /**
@@ -338,7 +346,8 @@ public class MetaServerUtils {
      * @return True if the server was removed.
      */
     public static boolean removeServer(ServerInfo si) {
-        return metaMessage(MetaMessageType.REMOVE, si);
+        metaMessage(MetaMessageType.REMOVE, si);
+        return true;
     }
 
     /**
@@ -348,6 +357,7 @@ public class MetaServerUtils {
      * @return True if the server was updated.
      */
     public static boolean updateServer(ServerInfo si) {
-        return metaMessage(MetaMessageType.UPDATE, si);
+        metaMessage(MetaMessageType.UPDATE, si);
+        return true;
     }
 }

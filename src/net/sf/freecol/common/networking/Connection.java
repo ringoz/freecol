@@ -222,7 +222,10 @@ public abstract class Connection implements Closeable {
      * @exception TimeoutException when the timeout is reached.
      */
     public abstract CompletableFuture<Message> askMessage(Message message, long timeout);
-    
+    public Message askMessageSync(Message message, long timeout) throws FreeColException {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * Send a message, do not consider a response.
      *
@@ -234,6 +237,9 @@ public abstract class Connection implements Closeable {
      * @exception XMLStreamException on stream problem.
      */
     public abstract CompletableFuture<Void> sendMessage(Message message);
+    public Void sendMessageSync(Message message) throws FreeColException {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Log a message.

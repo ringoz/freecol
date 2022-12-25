@@ -112,6 +112,8 @@ public abstract class ServerAPI {
      */
     public abstract Connection getConnection();
 
+    public static final CompletableFuture<Boolean> SUCCESS = CompletableFuture.completedFuture(true);
+    public static final CompletableFuture<Boolean> FAILURE = CompletableFuture.completedFuture(false);
 
     // Utilities
 
@@ -144,7 +146,7 @@ public abstract class ServerAPI {
      * @param type The proposed type of message.
      * @return The {@code Connection} if valid, or null if not.
      */
-    private Connection check(String operation, String type) {
+    protected Connection check(String operation, String type) {
         final Connection c = getConnection();
         if (c == null) {
             logger.log(Level.WARNING, "Not connected, did not " + operation
@@ -159,8 +161,8 @@ public abstract class ServerAPI {
      * @param message The {@code Message} to send.
      * @return True if the send succeeded.
      */
-    private CompletableFuture<Boolean> send(Message message) {
-        if (message == null) return CompletableFuture.completedFuture(true);
+    protected CompletableFuture<Boolean> send(Message message) {
+        if (message == null) return SUCCESS;
         final Connection c = check("send", message.getType());
         if (c != null) {
             return c.send(message).handle((v, e) -> {
@@ -169,7 +171,7 @@ public abstract class ServerAPI {
                 return false;
             });
         }
-        return CompletableFuture.completedFuture(false);
+        return FAILURE;
     }
 
     /**
@@ -186,8 +188,8 @@ public abstract class ServerAPI {
      * @return True if the server interaction succeeded, that is, there was
      *     no I/O problem and the reply was not an error message.
      */
-    private CompletableFuture<Boolean> ask(Message message) {
-        if (message == null) return CompletableFuture.completedFuture(true);
+    protected CompletableFuture<Boolean> ask(Message message) {
+        if (message == null) return SUCCESS;
         final Connection c = check("ask", message.getType());
         if (c != null) {
             return c.request(message).handle((v, e) -> {
@@ -196,7 +198,7 @@ public abstract class ServerAPI {
                 return false;
             });
         }
-        return CompletableFuture.completedFuture(false);
+        return FAILURE;
     }
 
 
@@ -818,7 +820,7 @@ public abstract class ServerAPI {
                                    Colony scratch) {
         RearrangeColonyMessage message
             = new RearrangeColonyMessage(colony, workers, scratch);
-        return (message.isEmpty()) ? CompletableFuture.completedFuture(true) : ask(message);
+        return (message.isEmpty()) ? SUCCESS : ask(message);
     }
 
     /**

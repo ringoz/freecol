@@ -90,9 +90,18 @@ public final class DummyConnection extends Connection {
      */
     @Override
     public CompletableFuture<Void> sendMessage(Message message) {
-        return askMessage(message, Connection.DEFAULT_REPLY_TIMEOUT).thenAccept((Message reply) -> {
-            assert reply == null;
-        });
+        try {
+            return CompletableFuture.completedFuture(sendMessageSync(message));
+        } catch (FreeColException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+    }
+
+    @Override
+    public Void sendMessageSync(Message message) throws FreeColException {
+        Message reply = askMessageSync(message, Connection.DEFAULT_REPLY_TIMEOUT);
+        assert reply == null;
+        return null;
     }
 
     /**
@@ -100,17 +109,22 @@ public final class DummyConnection extends Connection {
      */
     @Override
     public CompletableFuture<Message> askMessage(Message message, long timeout) {
+        try {
+            return CompletableFuture.completedFuture(askMessageSync(message, timeout));
+        } catch (FreeColException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+    }
+
+    @Override
+    public Message askMessageSync(Message message, long timeout) throws FreeColException {
         DummyConnection other = getOtherConnection();
         if (other == null) return null;
         if (message == null) return null;
         logMessage(message, true);
-        try {
-            Message reply = other.handle(message);
-            logMessage(reply, false);
-            return CompletableFuture.completedFuture(reply);
-        } catch (FreeColException e) {
-            return CompletableFuture.failedFuture(e);
-        }
+        Message reply = other.handle(message);
+        logMessage(reply, false);
+        return reply;
     }
 
 

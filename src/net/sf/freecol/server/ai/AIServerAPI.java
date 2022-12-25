@@ -21,8 +21,11 @@ package net.sf.freecol.server.ai;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.sf.freecol.common.networking.Connection;
+import net.sf.freecol.common.networking.Message;
 import net.sf.freecol.common.networking.ServerAPI;
 
 
@@ -31,6 +34,8 @@ import net.sf.freecol.common.networking.ServerAPI;
  * GUI nor real connection to the server.
  */
 public class AIServerAPI extends ServerAPI {
+
+    private static final Logger logger = Logger.getLogger(AIServerAPI.class.getName());
 
     /** The AI player that owns this wrapper. */
     private AIPlayer owner;
@@ -47,6 +52,31 @@ public class AIServerAPI extends ServerAPI {
         this.owner = owner;
     }
 
+    @Override
+    protected CompletableFuture<Boolean> send(Message message) {
+        if (message == null) return SUCCESS;
+        final Connection c = check("send", message.getType());
+        try {
+            c.sendMessageSync(message);
+            return SUCCESS;
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Failed to send", e);
+            return FAILURE;
+        }
+    }
+
+    @Override
+    protected CompletableFuture<Boolean> ask(Message message) {
+        if (message == null) return SUCCESS;
+        final Connection c = check("send", message.getType());
+        try {
+            c.handle(c.askMessageSync(message, Connection.DEFAULT_REPLY_TIMEOUT));
+            return SUCCESS;
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Failed to send", e);
+            return FAILURE;
+        }
+    }
 
     // Implement ServerAPI
     

@@ -57,7 +57,6 @@ import net.sf.freecol.common.model.Specification;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.networking.MessageHandler;
-import net.sf.freecol.common.networking.ServerAPI;
 import net.sf.freecol.common.resources.ResourceManager;
 import net.sf.freecol.server.FreeColServer;
 import net.sf.freecol.server.FreeColServer.ServerState;
@@ -87,7 +86,7 @@ public final class FreeColClient {
     private FreeColServer freeColServer = null;
 
     /** Encapsulation of the server API. */
-    private final ServerAPI serverAPI;
+    private final UserServerAPI serverAPI;
 
     /** The GUI encapsulation. */
     private GUI gui;
@@ -425,7 +424,7 @@ public final class FreeColClient {
      *
      * @return The user wrapper for the {@code ServerAPI}.
      */
-    public ServerAPI askServer() {
+    public UserServerAPI askServer() {
         return this.serverAPI;
     }
 

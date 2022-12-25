@@ -597,8 +597,9 @@ public final class NewPanel extends FreeColPanel implements ItemListener {
                         publicServerValue, serverAddress, serverPort);
                 return;
             case META_SERVER:
-                List<ServerInfo> servers = MetaServerUtils.getServerList();
-                if (servers != null) gui.showServerListPanel(servers);
+                MetaServerUtils.getServerList().thenAccept((List<ServerInfo> servers) -> {
+                    if (servers != null) gui.showServerListPanel(servers);
+                });
                 break;
             default:
                 break;
