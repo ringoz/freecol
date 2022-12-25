@@ -65,6 +65,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import jsinterop.annotations.JsAsync;
 import net.miginfocom.swing.MigLayout;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -950,6 +951,7 @@ public final class ColonyPanel extends PortPanel
     /**
      * Close this {@code ColonyPanel}.
      */
+    @JsAsync
     public CompletableFuture<Void> closeColonyPanel() {
         final Colony colony = getColony();
         final Player player = getMyPlayer();

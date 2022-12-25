@@ -48,6 +48,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jsinterop.annotations.JsAsync;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -412,6 +413,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to check.
      * @param direction The {@code Direction} to move the unit.
      */
+    @JsAsync
     private CompletableFuture<Void> getMissionaryChoice(final Unit unit,
         final IndianSettlement is, final Direction direction) {
         final Player player = unit.getOwner();
@@ -509,6 +511,7 @@ public final class InGameController extends FreeColClientHolder {
      *     be made active.
      * @return True if the active unit changes.
      */
+    @JsAsync
     private CompletableFuture<Boolean> updateActiveUnit(Tile tile) {
         // Make sure the active unit is done.
         final Player player = getMyPlayer();
@@ -608,6 +611,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param tradeRoute The {@code TradeRoute} to assign.
      * @return True if the assignment succeeds.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askAssignTradeRoute(Unit unit, TradeRoute tradeRoute) {
         if (tradeRoute == unit.getTradeRoute()) return CompletableFuture.completedFuture(true);
 
@@ -628,6 +632,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param price The price required.
      * @return True if the claim succeeded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askClaimTile(Player player, Tile tile,
                                  FreeColGameObject claimant, int price) {
         final Player owner = tile.getOwner();
@@ -661,6 +666,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the destination for.
      * @return True if the unit now has no destination or trade route.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askClearGotoOrders(Unit unit) {
         if (!await(askAssignTradeRoute(unit, null))
             || !await(askSetDestination(unit, null))) return CompletableFuture.completedFuture(false);
@@ -676,6 +682,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The carrier {@code Unit} to board.
      * @return True if boarding succeeded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askEmbark(Unit unit, Unit carrier) {
         ColonyWas colonyWas = (unit.getColony() != null)
             ? new ColonyWas(unit.getColony()) : null;
@@ -701,6 +708,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param slot The slot to choose, [0..RECRUIT_COUNT].
      * @return The new {@code Unit} or null on failure.
      */
+    @JsAsync
     private CompletableFuture<Unit> askEmigrate(Europe europe, int slot) {
         if (europe == null
             || !MigrationType.validMigrantSlot(slot)) return null;
@@ -728,6 +736,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param n The number of units known to be eligible to emigrate.
      * @param fountainOfYouth True if this migration if due to a FoY.
      */
+    @JsAsync
     private CompletableFuture<Void> emigration(Player player, int n, boolean fountainOfYouth) {
         final Europe europe = player.getEurope();
         if (europe == null) return CompletableFuture.completedFuture(null);
@@ -753,6 +762,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The {@code Unit} to load onto.
      * @return True if the load succeeded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askLoadGoods(Location loc, GoodsType type, int amount,
                                  Unit carrier) {
         TradeLocation trl = carrier.getTradeLocation();
@@ -791,6 +801,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param destination The destination {@code Location}.
      * @return True if the destination was set.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askSetDestination(Unit unit, Location destination) {
         if (unit.getDestination() == destination) return CompletableFuture.completedFuture(true);
 
@@ -806,6 +817,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The {@code Unit} carrying the goods.
      * @return True if the unload succeeded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> askUnloadGoods(GoodsType type, int amount, Unit carrier) {
         // Do not check for trade location, unloading can include dumping
         // which can happen anywhere
@@ -1037,6 +1049,7 @@ public final class InGameController extends FreeColClientHolder {
      * @return True if all goto orders have been performed and no units
      *     reached their destination and are free to move again.
      */
+    @JsAsync
     private CompletableFuture<Boolean> doExecuteGotoOrders() {
         final Player player = getMyPlayer();
         Unit active = getGUI().getActiveUnit();
@@ -1099,6 +1112,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @param showDialog Show the end turn dialog?
      */
+    @JsAsync
     private CompletableFuture<Void> doEndTurn(boolean showDialog) {
         final Player player = getMyPlayer();
         // Clear any panels first
@@ -1169,6 +1183,7 @@ public final class InGameController extends FreeColClientHolder {
      * @return True if all is well with the unit, false if the unit
      *     should be selected and examined by the user.
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveToDestination(Unit unit, List<ModelMessage> messages) {
         final Player player = getMyPlayer();
         Location destination = unit.getDestination();
@@ -1237,6 +1252,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param path The path to follow.
      * @return True if automatic movement of the unit can proceed.
      */
+    @JsAsync
     private CompletableFuture<Boolean> movePath(Unit unit, PathNode path) {
         for (; path != null; path = path.next) {
             if (unit.isAtLocation(path.getLocation())) continue;
@@ -1287,6 +1303,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param interactive Interactive mode: play sounds and emit errors.
      * @return True if automatic movement of the unit can proceed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> moveDirection(Unit unit, Direction direction,
                                  boolean interactive) {
         // Is the unit on the brink of reaching the destination with
@@ -1498,6 +1515,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param destination The {@code Location} to be moved to.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveAwayFromEurope(Unit unit, Location destination) {
         // Autoload emigrants.
         List<Unit> ul;
@@ -1527,6 +1545,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param europe The {@code Europe} to be moved to.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveTowardEurope(Unit unit, Europe europe) {
         UnitWas unitWas = new UnitWas(unit);
         if (await(askServer().moveTo(unit, europe))) {
@@ -1544,6 +1563,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to attack.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveAttack(Unit unit, Direction direction) {
         final Tile tile = unit.getTile();
         final Tile target = tile.getNeighbourOrNull(direction);
@@ -1572,6 +1592,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to attack.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveAttackSettlement(Unit unit, Direction direction) {
         final Tile tile = unit.getTile();
         final Tile target = tile.getNeighbourOrNull(direction);
@@ -1621,6 +1642,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param embark A list of {@code Unit}s to load.
      * @return True if automatic movement of the carrier can proceed.
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveAutoload(Unit carrier, List<Unit> embark) {
         boolean update = false;
         for (Unit u : embark) {
@@ -1644,6 +1666,7 @@ public final class InGameController extends FreeColClientHolder {
      *     begin the negotiation with.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveDiplomacy(Unit unit, Direction direction,
                                   DiplomaticTrade dt) {
         Settlement settlement = getSettlementAt(unit.getTile(), direction);
@@ -1671,6 +1694,7 @@ public final class InGameController extends FreeColClientHolder {
      * @return True if the disembark "succeeds" (which deliberately includes
      *     declined disembarks).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveDisembark(Unit unit, final Direction direction) {
         final Tile tile = unit.getTile().getNeighbourOrNull(direction);
         if (tile.getFirstUnit() != null
@@ -1724,6 +1748,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to embark.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveEmbark(Unit unit, Direction direction) {
         if (unit.getColony() != null
             && !await(getGUI().confirmLeaveColony(unit))) return CompletableFuture.completedFuture(false);
@@ -1766,6 +1791,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction of a rumour.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveExplore(Unit unit, Direction direction) {
         // Confirm the move.
         final Tile now = unit.getTile();
@@ -1800,6 +1826,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to move.
      * @return True if automatic movement of the unit can proceed.
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveHighSeas(Unit unit, Direction direction) {
         // Confirm moving to Europe if told to move to a null tile
         // (FIXME: can this still happen?), or if crossing the boundary
@@ -1837,6 +1864,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which the Indian settlement lies.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveLearnSkill(Unit unit, Direction direction) {
         // Refresh knowledge of settlement skill.  It may have been
         // learned by another player.
@@ -1877,6 +1905,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to move the Unit.
      * @return True if automatic movement of the unit can proceed.
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveTile(Unit unit, Direction direction) {
         final ClientOptions options = getClientOptions();
         List<Unit> ul;
@@ -1941,6 +1970,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which the foreign colony lies.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveScoutColony(Unit unit, Direction direction) {
         final Game game = getGame();
         Colony colony = (Colony) getSettlementAt(unit.getTile(), direction);
@@ -1982,6 +2012,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which the Indian settlement lies.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveScoutIndianSettlement(Unit unit, Direction direction) {
         if (!await(askClearGotoOrders(unit))
             || !await(askServer().scoutSettlement(unit, direction))) return CompletableFuture.completedFuture(false);
@@ -2024,6 +2055,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The {@code Direction} of a colony to spy on.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveSpy(Unit unit, Direction direction) {
         Settlement settlement = getSettlementAt(unit.getTile(), direction);
         if (settlement instanceof Colony && !unit.getOwner().owns(settlement)) {
@@ -2042,6 +2074,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction to the settlement.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveTrade(Unit unit, Direction direction) {
         if (!await(askClearGotoOrders(unit))) return CompletableFuture.completedFuture(false);
 
@@ -2072,6 +2105,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which to attack.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveTribute(Unit unit, int amount, Direction direction) {
         final Game game = getGame();
         Player player = unit.getOwner();
@@ -2102,6 +2136,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The direction in which the Indian settlement lies.
      * @return True if automatic movement of the unit can proceed (never).
      */
+    @JsAsync
     private CompletableFuture<Boolean> moveUseMissionary(Unit unit, Direction direction) {
         if (!await(askClearGotoOrders(unit))) return CompletableFuture.completedFuture(false);
 
@@ -2123,6 +2158,7 @@ public final class InGameController extends FreeColClientHolder {
      *     {@code ModelMessage}s generated.
      * @return True if automatic movement can proceed.
      */
+    @JsAsync
     private CompletableFuture<Boolean> followTradeRoute(Unit unit, List<ModelMessage> messages) {
         final Player player = unit.getOwner();
         final TradeRoute tr = unit.getTradeRoute();
@@ -2269,6 +2305,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param lb A {@code LogBuilder} to update.
      * @return True if goods were loaded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> loadUnitAtStop(Unit unit, LogBuilder lb) {
         final boolean enhancedTradeRoutes = getSpecification()
             .getBoolean(GameOptions.ENHANCED_TRADE_ROUTES);
@@ -2496,6 +2533,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param lb A {@code LogBuilder} to update.
      * @return True if something was unloaded.
      */
+    @JsAsync
     private CompletableFuture<Boolean> unloadUnitAtStop(Unit unit, LogBuilder lb) {
         final TradeLocation trl = unit.getTradeLocation();
         if (trl == null) return CompletableFuture.completedFuture(false);
@@ -2623,6 +2661,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param colony The {@code Colony} to be abandoned.
      * @return True if the colony was abandoned.
      */
+    @JsAsync
     public CompletableFuture<Boolean> abandonColony(Colony colony) {
         final Player player = getMyPlayer();
         if (colony == null || !player.owns(colony) || colony.getUnitCount() > 0
@@ -2684,6 +2723,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param teacher The teacher {@code Unit}.
      * @return True if the student was assigned.
      */
+    @JsAsync
     public CompletableFuture<Boolean> assignTeacher(Unit student, Unit teacher) {
         final Player player = getMyPlayer();
         if (student == null
@@ -2718,6 +2758,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param tradeRoute The {@code TradeRoute} to assign.
      * @return True if the route was successfully assigned.
      */
+    @JsAsync
     public CompletableFuture<Boolean> assignTradeRoute(Unit unit, TradeRoute tradeRoute) {
         if (unit == null) return CompletableFuture.completedFuture(false);
 
@@ -2740,6 +2781,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The location of this Unit.
      * @return True if the unit boards the carrier.
      */
+    @JsAsync
     public CompletableFuture<Boolean> boardShip(Unit unit, Unit carrier) {
         if (unit == null || unit.isCarrier()
             || carrier == null || !carrier.canCarryUnits()
@@ -2761,6 +2803,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to build the colony.
      * @return True if a colony was built.
      */
+    @JsAsync
     public CompletableFuture<Boolean> buildColony(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -2840,6 +2883,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The {@code Unit} acting as carrier.
      * @return True if the purchase succeeds.
      */
+    @JsAsync
     public CompletableFuture<Boolean> buyGoods(GoodsType type, int amount, Unit carrier) {
         final Player player = getMyPlayer();
         if (type == null || amount <= 0
@@ -2869,6 +2913,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param chat The text of the message.
      * @return True if the message was sent.
      */
+    @JsAsync
     public CompletableFuture<Boolean> chat(String chat) {
         if (chat == null) return CompletableFuture.completedFuture(false);
 
@@ -2900,6 +2945,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param state The state of the unit.
      * @return True if the state was changed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> changeState(Unit unit, UnitState state) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
         if (unit.getState() == state) return CompletableFuture.completedFuture(true);
@@ -2939,6 +2985,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param improvementType a {@code TileImprovementType} value
      * @return True if the improvement was changed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> changeWorkImprovementType(Unit unit,
         TileImprovementType improvementType) {
         if (unit == null || !unit.hasTile()
@@ -2976,6 +3023,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param workType The new {@code GoodsType} to produce.
      * @return True if the work type was changed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> changeWorkType(Unit unit, GoodsType workType) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -2998,6 +3046,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to be checked.
      * @return True if the unit was cashed in (and disposed).
      */
+    @JsAsync
     public CompletableFuture<Boolean> checkCashInTreasureTrain(Unit unit) {
         if (unit == null || !unit.canCarryTreasure()
             || !unit.canCashInTreasureTrain()
@@ -3069,6 +3118,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param claimant The {@code Unit} or {@code Colony} claiming.
      * @return True if the claim succeeded.
      */
+    @JsAsync
     public CompletableFuture<Boolean> claimTile(Tile tile, FreeColGameObject claimant) {
         if (tile == null
             || claimant == null
@@ -3099,6 +3149,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the destination for.
      * @return True if the unit has no destination.
      */
+    @JsAsync
     public CompletableFuture<Boolean> clearGotoOrders(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -3120,6 +3171,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the orders of
      * @return boolean <b>true</b> if the orders were cleared
      */
+    @JsAsync
     public CompletableFuture<Boolean> clearOrders(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -3149,6 +3201,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the speciality of.
      * @return True if the speciality was cleared.
      */
+    @JsAsync
     public CompletableFuture<Boolean> clearSpeciality(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -3215,19 +3268,20 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True if independence was declared.
      */
-    public boolean declareIndependence() {
-        if (!requireOurTurn()) return false;
+    @JsAsync
+    public CompletableFuture<Boolean> declareIndependence() {
+        if (!requireOurTurn()) return CompletableFuture.completedFuture(false);
 
         final Player player = getMyPlayer();
         if (player.getNewLandName() == null) {
-            return false; // Can only happen in debug mode.
+            return CompletableFuture.completedFuture(false); // Can only happen in debug mode.
         }
 
         // Check for adequate support.
         StringTemplate declare = player.checkDeclareIndependence();
         if (declare != null) {
             showInformationPanel(null, declare);
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
 
         // Confirm intention, and collect nation+country names.
@@ -3236,14 +3290,14 @@ public final class InGameController extends FreeColClientHolder {
             || names.get(0) == null || names.get(0).isEmpty()
             || names.get(1) == null || names.get(1).isEmpty()) {
             // Empty name => user cancelled.
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
 
         getGUI().showDeclarationPanel(() -> {
             askServer().declareIndependence(names.get(0), names.get(1));
             updateGUI(null, false);
         });
-        return true;
+        return CompletableFuture.completedFuture(true);
     }
 
     /**
@@ -3254,6 +3308,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param tradeRoute The {@code TradeRoute} to delete.
      * @return True if the route was successfully deleted.
      */
+    @JsAsync
     public CompletableFuture<Boolean> deleteTradeRoute(TradeRoute tradeRoute) {
         final Player player = getMyPlayer();
         final String name = tradeRoute.getName();
@@ -3325,6 +3380,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to disband.
      * @return True if the unit was disbanded.
      */
+    @JsAsync
     public CompletableFuture<Boolean> disbandUnit(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -3356,6 +3412,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param n The number of remaining units known to be eligible to migrate.
      * @param foY True if this migration is due to a fountain of youth event.
      */
+    @JsAsync
     private CompletableFuture<Void> emigrate(Player player, int slot, int n, boolean foY) {
         if (player == null || !player.isColonial()
             || !MigrationType.validMigrantSlot(slot)) return CompletableFuture.completedFuture(null);
@@ -3373,6 +3430,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @param showDialog If false, suppress showing the end turn dialog.
      */
+    @JsAsync
     public CompletableFuture<Void> endTurn(boolean showDialog) {
         if (!requireOurTurn()) {
             return CompletableFuture.completedFuture(null);
@@ -3392,6 +3450,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param roleCount The role count.
      * @return True if the role is taken.
      */
+    @JsAsync
     public CompletableFuture<Boolean> equipUnitForRole(Unit unit, Role role, int roleCount) {
         if (unit == null
             || role == null || 0 > roleCount || roleCount > role.getMaximumCount()
@@ -3546,6 +3605,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param result Whether the initial treaty was accepted.
      * @return True if first contact occurs.
      */
+    @JsAsync
     private CompletableFuture<Boolean> firstContact(Player player, Player other, Tile tile,
                                  boolean result) {
         if (player == null || player == other || tile == null) return CompletableFuture.completedFuture(false);
@@ -3600,6 +3660,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param path The {@code Path} to move along.
      * @return True if the destination change was successful.
      */
+    @JsAsync
     public CompletableFuture<Boolean> goToTile(Unit unit, PathNode path) {
         if (unit == null || !getMyPlayer().owns(unit)
             || path == null
@@ -3688,13 +3749,14 @@ public final class InGameController extends FreeColClientHolder {
                 .add("%player%", enemy.getName())
                 .addAmount("%amount%", gold));
         } else {
-            if (await(getGUI().confirm(unit.getTile(), StringTemplate
+            getGUI().confirm(unit.getTile(), StringTemplate
                     .template("missionarySettlement.inciteConfirm")
                     .addStringTemplate("%enemy%", enemy.getNationLabel())
                     .addAmount("%amount%", gold),
-                    unit, "yes", "no"))) {
-                askServer().incite(unit, is, enemy, gold);
-            }
+                    unit, "yes", "no").thenAccept((ret) -> {
+                if (ret)
+                    askServer().incite(unit, is, enemy, gold);
+            });
         }
     }
 
@@ -3759,6 +3821,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to use.
      * @return True if the unit joined a colony.
      */
+    @JsAsync
     private CompletableFuture<Boolean> joinColony(Unit unit) {
         final Tile tile = unit.getTile();
         final Colony colony = (tile == null) ? null : tile.getColony();
@@ -3780,6 +3843,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} which is to leave the ship.
      * @return True if the unit left the ship.
      */
+    @JsAsync
     public CompletableFuture<Boolean> leaveShip(Unit unit) {
         Unit carrier;
         if (unit == null || (carrier = unit.getCarrier()) == null
@@ -3806,6 +3870,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The {@code Unit} acting as carrier.
      * @return True if the goods were loaded.
      */
+    @JsAsync
     public CompletableFuture<Boolean> loadCargo(Goods goods, Unit carrier) {
         if (goods == null || goods.getAmount() <= 0
             || goods.getLocation() == null
@@ -3845,6 +3910,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * Returns no status as this game is stopped.
      */
+    @JsAsync
     public CompletableFuture<Void> loadGame() {
         File file = await(getGUI()
             .showLoadSaveFileDialog(FreeColDirectories.getSaveDirectory(),
@@ -3899,6 +3965,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param defenderId The identifier of the defender unit (may have sunk).
      * @return True if looting occurs.
      */
+    @JsAsync
     private CompletableFuture<Boolean> lootCargo(Unit unit, List<Goods> goods, String defenderId) {
         if (unit == null || goods == null || goods.isEmpty()
             || defenderId == null) return CompletableFuture.completedFuture(false);
@@ -3933,6 +4000,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param accept If true, accept the action.
      * @return True if the monarch was answered.
      */
+    @JsAsync
     public CompletableFuture<Boolean> monarchAction(MonarchAction action, boolean accept) {
         if (action == null) return CompletableFuture.completedFuture(false);
 
@@ -4015,6 +4083,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The {@code Direction} in which to move
      *     the active unit.
      */
+    @JsAsync
     public CompletableFuture<Void> moveUnit(Unit unit, Direction direction) {
         if (unit == null || !unit.hasTile()
             || direction == null
@@ -4068,6 +4137,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param player The {@code Player} to summarize.
      * @return A summary of that nation, or null on error.
      */
+    @JsAsync
     public CompletableFuture<NationSummary> nationSummary(Player player) {
         if (player == null) return CompletableFuture.completedFuture(null);
 
@@ -4201,6 +4271,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param nti The {@code NativeTradeItem} being haggled over, if any.
      * @param prompt An action-specific base prompt, if any.
      */
+    @JsAsync
     private CompletableFuture<Boolean> nativeTrade(NativeTrade nt, TradeAction act,
                              NativeTradeItem nti, StringTemplate prompt) {
         final IndianSettlement is = nt.getIndianSettlement();
@@ -4302,6 +4373,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param name The name to use.
      * @return True if the new land was named.
      */
+    @JsAsync
     private CompletableFuture<Boolean> newLandName(Unit unit, String name) {
         if (unit == null || name == null) return CompletableFuture.completedFuture(false);
 
@@ -4402,6 +4474,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param player The {@code Player} to get a new trade route for.
      * @return A new {@code TradeRoute}.
      */
+    @JsAsync
     public CompletableFuture<TradeRoute> newTradeRoute(Player player) {
         if (player == null) return CompletableFuture.completedFuture(null);
 
@@ -4513,6 +4586,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param type The type of goods for which to pay arrears.
      * @return True if the arrears were paid.
      */
+    @JsAsync
     public CompletableFuture<Boolean> payArrears(GoodsType type) {
         if (!requireOurTurn() || type == null) return CompletableFuture.completedFuture(false);
 
@@ -4547,6 +4621,7 @@ public final class InGameController extends FreeColClientHolder {
      *     bought.
      * @return True if the building was bought.
      */
+    @JsAsync
     public CompletableFuture<Boolean> payForBuilding(Colony colony) {
         if (!requireOurTurn() || colony == null) return CompletableFuture.completedFuture(false);
 
@@ -4583,6 +4658,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit}
      * @return True if the unit was successfully put outside the colony.
      */
+    @JsAsync
     public CompletableFuture<Boolean> putOutsideColony(Unit unit) {
         Colony colony;
         if (unit == null
@@ -4638,6 +4714,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param index The index in Europe to recruit from, [0..RECRUIT_COUNT).
      * @return True if a unit was recruited.
      */
+    @JsAsync
     public CompletableFuture<Boolean> recruitUnitInEurope(int index) {
         if (!requireOurTurn()
             || !MigrationType.validMigrantIndex(index)) return CompletableFuture.completedFuture(false);
@@ -4708,6 +4785,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param object The object to rename.
      * @return True if the object was renamed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> rename(Nameable object) {
         final Player player = getMyPlayer();
         if (!(object instanceof Ownable)
@@ -4759,6 +4837,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return False if the game was not saved, otherwise the game quits.
      */
+    @JsAsync
     public CompletableFuture<Boolean> saveAndQuit() {
         if (!await(saveGame())) return CompletableFuture.completedFuture(false);
         getFreeColClient().quit();
@@ -4773,6 +4852,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True if the game was saved.
      */
+    @JsAsync
     public CompletableFuture<Boolean> saveGame() {
         if (!getFreeColClient().canSaveCurrentGame()) return CompletableFuture.completedFuture(false);
 
@@ -4837,6 +4917,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The unit for which to select a destination.
      * @return True if the destination change succeeds.
      */
+    @JsAsync
     public CompletableFuture<Boolean> selectDestination(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
 
@@ -4876,6 +4957,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param goods The goods to be sold.
      * @return True if the sale succeeds.
      */
+    @JsAsync
     public CompletableFuture<Boolean> sellGoods(Goods goods) {
         if (goods == null || !(goods.getLocation() instanceof Unit)
             || !requireOurTurn()) return CompletableFuture.completedFuture(false);
@@ -4916,6 +4998,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param buildQueue List of {@code BuildableType}
      * @return True if the build queue was changed.
      */
+    @JsAsync
     public CompletableFuture<Boolean> setBuildQueue(Colony colony,
                                  List<BuildableType> buildQueue) {
         if (colony == null
@@ -4937,6 +5020,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param player The {@code Player} to be the new current player.
      * @return True if the current player changes.
      */
+    @JsAsync
     private CompletableFuture<Boolean> setCurrentPlayer(Player player) {
         if (FreeColDebugger.isInDebugMode(FreeColDebugger.DebugMode.MENUS)
             && currentPlayerIsMyPlayer()) {
@@ -5001,6 +5085,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True if the player has risen as the undead.
      */
+    @JsAsync
     private CompletableFuture<Boolean> setDead() {
         final FreeColClient fcc = getFreeColClient();
         final Player player = getMyPlayer();
@@ -5132,6 +5217,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unitType The type of unit to be trained.
      * @return True if a new unit was trained.
      */
+    @JsAsync
     public CompletableFuture<Boolean> trainUnitInEurope(UnitType unitType) {
         if (!requireOurTurn() || unitType == null) return CompletableFuture.completedFuture(false);
 
@@ -5162,6 +5248,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} that is dumping.
      * @return True if the unit unloaded.
      */
+    @JsAsync
     public CompletableFuture<Boolean> unload(Unit unit) {
         if (unit == null || !unit.isCarrier()
             || !requireOurTurn()) return CompletableFuture.completedFuture(false);
@@ -5209,6 +5296,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param dump If true, dump the goods.
      * @return True if the unload succeeds.
      */
+    @JsAsync
     public CompletableFuture<Boolean> unloadCargo(Goods goods, boolean dump) {
         if (goods == null || goods.getAmount() <= 0
             || !(goods.getLocation() instanceof Unit)
@@ -5279,6 +5367,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param quit If true, leave this game and start a new one.
      * @return True.
      */
+    @JsAsync
     private CompletableFuture<Boolean> victory(Boolean quit) {
         if (quit) {
             invokeLater(() ->
@@ -5312,6 +5401,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param workLocation The new {@code WorkLocation}.
      * @return True if the unit is now working at the new work location.
      */
+    @JsAsync
     public CompletableFuture<Boolean> work(Unit unit, WorkLocation workLocation) {
         if (unit == null
             || workLocation == null

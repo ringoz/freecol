@@ -81,6 +81,7 @@ import net.sf.freecol.common.option.IntegerOption;
 import net.sf.freecol.common.option.Option;
 import net.sf.freecol.common.option.OptionGroup;
 import net.sf.freecol.common.resources.Video;
+import net.sf.freecol.common.util.PromiseCompat;
 
 
 /**
@@ -1036,21 +1037,20 @@ public final class Canvas extends JDesktopPane {
     public <T> CompletableFuture<T> showFreeColDialog(FreeColDialog<T> dialog, PopupPosition pos) {
         viewFreeColDialog(dialog, pos);
 
-        final var promise = new CompletableFuture<T>();
-        final var listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!dialog.responded()) {
-                    final var timer = new javax.swing.Timer(100, this);
-                    timer.setRepeats(false);
-                    timer.start();
+        final CompletableFuture<T> promise = PromiseCompat.create((resolve, reject) -> new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!dialog.responded()) {
+                        final var timer = new javax.swing.Timer(100, this);
+                        timer.setRepeats(false);
+                        timer.start();
+                    }
+                    else
+                        resolve.accept(dialog.getResponse());
                 }
-                else
-                    promise.complete(dialog.getResponse());
-            }
-        };
+            }.actionPerformed(null)
+        );
 
-        listener.actionPerformed(null);
         return promise.thenApply((response) -> {
             remove(dialog);
             dialogRemove(dialog);

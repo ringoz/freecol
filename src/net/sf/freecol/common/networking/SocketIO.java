@@ -35,7 +35,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
+import jsinterop.annotations.JsAsync;
 import net.sf.freecol.common.util.CharsetCompat;
+import net.sf.freecol.common.util.PromiseCompat;
 
 public class SocketIO implements Channel {
     public static class Server implements Channel {
@@ -79,19 +81,19 @@ public class SocketIO implements Channel {
     static CompletableFuture<SocketIO> connect(String host, int port) throws IOException {
         final var socket = AsynchronousSocketChannel.open();
         final var addr = new InetSocketAddress(host, port);
-        final var result = new CompletableFuture<SocketIO>();
-        socket.connect(addr, result, new CompletionHandler<Void,CompletableFuture<SocketIO>>() {
-            @Override
-            public void completed(Void v, CompletableFuture<SocketIO> result) {
-                result.complete(new SocketIO(socket));
-            }
-
-            @Override
-            public void failed(Throwable exc, CompletableFuture<SocketIO> result) {
-                result.completeExceptionally(exc);
-            }
+        return PromiseCompat.create((resolve, reject) -> {
+            socket.connect(addr, socket, new CompletionHandler<Void,AsynchronousSocketChannel>() {
+                @Override
+                public void completed(Void v, AsynchronousSocketChannel socket) {
+                    resolve.accept(new SocketIO(socket));
+                }
+    
+                @Override
+                public void failed(Throwable exc, AsynchronousSocketChannel socket) {
+                    reject.accept(exc);
+                }
+            });
         });
-        return result;
     }
 
     public SocketAddress getRemoteAddress() throws IOException {
@@ -99,21 +101,22 @@ public class SocketIO implements Channel {
     }
 
     private CompletableFuture<ByteBuffer> readBytesAsync(final ByteBuffer buf) {
-        final var result = new CompletableFuture<ByteBuffer>();
-        socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
-            @Override
-            public void completed(Integer len, ByteBuffer buf) {
-                result.complete((len != -1) ? (ByteBuffer)buf.flip() : null);
-            }
+        return PromiseCompat.create((resolve, reject) -> {
+            socket.read(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
+                @Override
+                public void completed(Integer len, ByteBuffer buf) {
+                    resolve.accept((len != -1) ? (ByteBuffer)buf.flip() : null);
+                }
 
-            @Override
-            public void failed(Throwable exc, ByteBuffer buf) {
-                result.completeExceptionally(exc);
-            }
+                @Override
+                public void failed(Throwable exc, ByteBuffer buf) {
+                    reject.accept(exc);
+                }
+            });
         });
-        return result;
     }
 
+    @JsAsync
     public CompletableFuture<CharBuffer> readLineAsync() {
         final var all = ByteBuffer.allocate(1 << 20);
         for (ByteBuffer buf = this.readBuf; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
@@ -130,22 +133,22 @@ public class SocketIO implements Channel {
     }
 
     private CompletableFuture<Void> writeBytesAsync(final ByteBuffer buf) {
-        final var result = new CompletableFuture<Void>();
-        socket.write(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
-            @Override
-            public void completed(Integer len, ByteBuffer buf) {
-                if (buf.hasRemaining())
-                    socket.write(buf, buf, this);
-                else
-                    result.complete(null);
-            }
-
-            @Override
-            public void failed(Throwable exc, ByteBuffer buf) {
-                result.completeExceptionally(exc);
-            }
+        return PromiseCompat.create((resolve, reject) -> {
+            socket.write(buf, buf, new CompletionHandler<Integer,ByteBuffer>() {
+                @Override
+                public void completed(Integer len, ByteBuffer buf) {
+                    if (buf.hasRemaining())
+                        socket.write(buf, buf, this);
+                    else
+                        resolve.accept(null);
+                }
+    
+                @Override
+                public void failed(Throwable exc, ByteBuffer buf) {
+                    reject.accept(exc);
+                }
+            });
         });
-        return result;
     }
 
     public CompletableFuture<Void> writeLineAsync(final CharBuffer cbuf) throws IOException {

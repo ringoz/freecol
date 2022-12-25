@@ -134,6 +134,7 @@ import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.UnitType;
 import net.sf.freecol.common.option.Option;
 import net.sf.freecol.common.option.OptionGroup;
+import net.sf.freecol.common.util.PromiseCompat;
 import net.sf.freecol.common.util.Utils;
 
 
@@ -393,8 +394,9 @@ public final class Widgets {
                                             OptionGroup group,
                                             boolean editable) {
         final DifficultyDialog dialog = new DifficultyDialog(this.freeColClient, getFrame(), spec, group, editable);
-        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
-        dialog.setDialogHandler((response) -> result.complete(response));
+        final CompletableFuture<OptionGroup> result = PromiseCompat.create((resolve, reject) -> {
+            dialog.setDialogHandler((response) -> resolve.accept(response));
+        });
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
         return result;
     }
@@ -557,8 +559,9 @@ public final class Widgets {
      */
     public CompletableFuture<OptionGroup> showGameOptionsDialog(boolean editable) {
         final GameOptionsDialog dialog = new GameOptionsDialog(this.freeColClient, getFrame(), editable);
-        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
-        dialog.setDialogHandler((response) -> result.complete(response));
+        final CompletableFuture<OptionGroup> result = PromiseCompat.create((resolve, reject) -> {
+            dialog.setDialogHandler((response) -> resolve.accept(response));
+        });
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
         return result;
     }
@@ -664,8 +667,9 @@ public final class Widgets {
      */
     public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) {
         final MapGeneratorOptionsDialog dialog = new MapGeneratorOptionsDialog(this.freeColClient, getFrame(), editable);
-        final CompletableFuture<OptionGroup> result = new CompletableFuture<OptionGroup>();
-        dialog.setDialogHandler((response) -> result.complete(response));
+        final CompletableFuture<OptionGroup> result = PromiseCompat.create((resolve, reject) -> {
+            dialog.setDialogHandler((response) -> resolve.accept(response));
+        });
         this.canvas.showFreeColPanel(dialog, PopupPosition.CENTERED, true);
         return result;
     }

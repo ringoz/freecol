@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +39,7 @@ import javax.xml.stream.XMLStreamException;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
+import net.sf.freecol.common.util.PromiseCompat;
 
 public class SocketConnection extends Connection {
   
@@ -59,8 +61,8 @@ public class SocketConnection extends Connection {
     private final FreeColXMLWriter xw;
 
     /** A map of network ids to the corresponding waiting thread. */
-    private final Map<Integer, CompletableFuture<Object>> waitingThreads
-        = Collections.synchronizedMap(new HashMap<Integer, CompletableFuture<Object>>());
+    private final Map<Integer, Consumer<Object>> waitingThreads
+        = Collections.synchronizedMap(new HashMap<Integer, Consumer<Object>>());
 
     /** A counter for reply ids. */
     private int nextNetworkReplyId = 1;
@@ -121,7 +123,7 @@ public class SocketConnection extends Connection {
      */
     private void askToStop(String reason) {
         final var nros = this.waitingThreads.values();
-        for (var nro : nros) nro.cancel(true);
+        for (var nro : nros) nro.accept(null);
 
         logger.info(this.getName() + ": stopped receiving thread: " + reason);
     }
@@ -155,7 +157,7 @@ public class SocketConnection extends Connection {
                 if (nro == null) {
                     logger.warning(this.getName() + ": did not find reply " + replyId);
                 } else {
-                    nro.complete(message);
+                    nro.accept(message);
                 }
                 return;
             }
@@ -260,13 +262,12 @@ public class SocketConnection extends Connection {
         if (message == null) return CompletableFuture.completedFuture(null);
         final String tag = message.getType();
 
-        // Build the question message and establish an NRO for it.
-        // *Then* send the message.
         final int replyId = this.nextNetworkReplyId++;
-        QuestionMessage qm = new QuestionMessage(replyId, message);
-        final var nro = new CompletableFuture<Object>();
-        this.waitingThreads.put(replyId, nro);
+        final var nro = PromiseCompat.create((resolve, reject) -> {
+            this.waitingThreads.put(replyId, resolve);
+        });
 
+        final QuestionMessage qm = new QuestionMessage(replyId, message);
         return sendMessage(qm).thenCompose((v) -> nro.orTimeout(timeout, TimeUnit.MILLISECONDS)).thenApply((response) -> {
             if (response == null && this.io == null) {
                 return null;

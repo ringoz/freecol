@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import jsinterop.annotations.JsAsync;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -89,6 +90,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @return Null on success, an {@code StringTemplate} error
      *     message on failure.
      */
+    @JsAsync
     private CompletableFuture<StringTemplate> connect(String user, String host, int port) {
         if (askServer().isConnected()) return CompletableFuture.completedFuture(null);
 
@@ -339,6 +341,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param spec The {@code Specification} for the game.
      * @return True if the game starts successfully.
      */
+    @JsAsync
     public CompletableFuture<Boolean> startSinglePlayerGame(Specification spec) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);
@@ -371,6 +374,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param file The saved game.
      * @return True if the game starts successully.
      */
+    @JsAsync
     public CompletableFuture<Boolean> startSavedGame(File file) {
         final FreeColClient fcc = getFreeColClient();
         final GUI gui = getGUI();
@@ -476,6 +480,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param port The port in which the server should listen for new clients.
      * @return True if the game is started successfully.
      */
+    @JsAsync
     public CompletableFuture<Boolean> startMultiplayerGame(Specification specification,
                                         boolean publicServer,
                                         InetAddress address,
@@ -505,6 +510,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param port The port to use when connecting to the host.
      * @return True if the game starts successfully.
      */
+    @JsAsync
     public CompletableFuture<Boolean> joinMultiplayerGame(String host, int port) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);
@@ -564,6 +570,7 @@ public final class ConnectController extends FreeColClientHolder {
      *
      * Called from ShowMainAction.
      */
+    @JsAsync
     public CompletableFuture<Void> mainTitle() {
         final FreeColClient fcc = getFreeColClient();
         if ((fcc.isLoggedIn() || fcc.isMapEditor()) && !await(getGUI().confirmStopGame())) {
@@ -587,6 +594,7 @@ public final class ConnectController extends FreeColClientHolder {
     /**
      * Reset to the NewPanel (except in the map editor).
      */
+    @JsAsync
     public CompletableFuture<Void> newGame() {
         final FreeColClient fcc = getFreeColClient();
 
