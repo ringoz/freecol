@@ -112,6 +112,7 @@ public class FreeColXMLWriter implements Closeable, XMLStreamWriter {
             return this.player;
         }
 
+        @Override
         public String toString() {
             String ret = this.scopeType.toString();
             if (this.scopeType == WriteScopeType.CLIENT) {
