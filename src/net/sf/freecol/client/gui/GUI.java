@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 
+import jsinterop.annotations.JsConstructor;
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -99,6 +101,7 @@ import net.sf.freecol.common.resources.ResourceManager;
 /**
  * The API and common reusable functionality for the overall GUI.
  */
+@SuppressWarnings("unusable-by-js")
 public class GUI extends FreeColClientHolder {
 
     protected static final Logger logger = Logger.getLogger(GUI.class.getName());
@@ -120,6 +123,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param freeColClient The {@code FreeColClient} for the game.
      */
+    @JsConstructor
     public GUI(FreeColClient freeColClient) {
         super(freeColClient);
     }
@@ -1142,6 +1146,7 @@ public class GUI extends FreeColClientHolder {
      * 
      * @param desiredWindowSize The desired size of the GUI window.
      */
+    @JsMethod
     public void startGUI(final Dimension desiredWindowSize) {
         logger.info("It seems that the GraphicsEnvironment is headless!");
     }
