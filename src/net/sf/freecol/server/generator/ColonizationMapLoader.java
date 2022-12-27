@@ -126,8 +126,7 @@ public class ColonizationMapLoader implements MapLoader {
 
     public ColonizationMapLoader(File file) throws IOException {
 
-        try {
-            RandomAccessFile reader = new RandomAccessFile(file, "r");
+        try (RandomAccessFile reader = new RandomAccessFile(file, "r")) {
             reader.readFully(header);
 
             int size = header[WIDTH] * header[HEIGHT];

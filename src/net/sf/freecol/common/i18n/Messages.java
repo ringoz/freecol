@@ -208,27 +208,29 @@ public class Messages {
      * Loads messages from a resource file into the current message bundle.
      *
      * Public for the test suite.
+     * 
+     * The {@code InputStream} gets closed in this method.
      *
      * @param inputReader The {@code Reader} to read from.
      * @throws IOException on failure to read from the stream.
      */
     public static void loadMessages(Reader inputReader) throws IOException {
-        BufferedReader in = new BufferedReader(inputReader);
-
-        String line = null;
-        while((line = in.readLine()) != null) {
-            line = line.trim();
-            int index = line.indexOf('#');
-            if (index == 0) continue;
-            index = line.indexOf('=');
-            if (index > 0) {
-                String key = line.substring(0, index).trim();
-                String value = line.substring(index + 1).trim()
-                    .replace("\\n", "\n").replace("\\t", "\t");
-                messageBundle.put(key, value);
-                /*@net.ringoz.GwtIncompatible if (key.startsWith("FileChooser.")) {
-                    UIManager.put(key, value);
-                }*/
+        try (BufferedReader in = new BufferedReader(inputReader)) {
+            String line = null;
+            while((line = in.readLine()) != null) {
+                line = line.trim();
+                int index = line.indexOf('#');
+                if (index == 0) continue;
+                index = line.indexOf('=');
+                if (index > 0) {
+                    String key = line.substring(0, index).trim();
+                    String value = line.substring(index + 1).trim()
+                        .replace("\\n", "\n").replace("\\t", "\t");
+                    messageBundle.put(key, value);
+                    /*@net.ringoz.GwtIncompatible if (key.startsWith("FileChooser.")) {
+                        UIManager.put(key, value);
+                    }*/
+                }
             }
         }
     }

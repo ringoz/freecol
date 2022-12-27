@@ -1734,6 +1734,10 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         }
         if (nBuilders > 0) {
             for (AIUnit aiUnit : sort(aiUnits, builderComparator)) {
+                if (aiUnit.getUnit().isArmed() && getGame().getTurn().getNumber() > 20) {
+                    // Quickfix to avoid having all soldies being given a BuildColonyMission.
+                    continue;
+                }
                 final Location oldTarget = ((m = aiUnit.getMission()) == null)
                     ? null : m.getTarget();
                 if ((m = getBuildColonyMission(aiUnit, null)) == null)
@@ -1851,9 +1855,8 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
                     lb.add(", ", m);
                     updateTransport(aiUnit, oldTarget, lb);
                     reasons.put(unit, "To-work");
-                    ports.add(c);
                 }
-
+                ports.add(c);
             } else if (m instanceof IdleAtSettlementMission) {
                 reasons.put(unit, "Idle"); // already idle
             } else {
@@ -2164,9 +2167,11 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
      */
     public Mission getWorkInsideColonyMission(AIUnit aiUnit,
                                               AIColony aiColony) {
-        if (WorkInsideColonyMission.invalidMissionReason(aiUnit) != null) return null;
         if (aiColony == null) {
             aiColony = getAIColony(aiUnit.getUnit().getColony());
+        }
+        if (WorkInsideColonyMission.invalidMissionReason(aiUnit, aiColony.getColony()) != null) {
+            return null;
         }
         return (aiColony == null) ? null
             : new WorkInsideColonyMission(getAIMain(), aiUnit, aiColony);
@@ -2244,6 +2249,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
             buildWishMaps(lb);
         }
         cheat(lb);
+        buyUnitsInEurope(lb);
         buildTransportMaps(lb);
 
         // Note order of operations below.  We allow rearrange et al to run
@@ -2267,6 +2273,105 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         wagonsNeeded.clear();
         goodsWishes.clear();
         workerWishes.clear();
+    }
+
+    private void buyUnitsInEurope(LogBuilder lb) {
+        /*
+         * It seems that training/recruiting units, in other cases than cheating,
+         * was removed from the code in 2012. This prevents the AI from actually
+         * using the money it's gaining. This happened in commit:
+         * 9e68ade8d2876c8135524c5b396c93d6c4d5ed1f.
+         * 
+         * The code has changed a lot since then, so I have just added the quickfix
+         * below for buying units. This code does not prioritize wishes based on
+         * multiple units going to the same location, does not support recruiting etc.
+         * 
+         * A better implementation will be added some point in the future.
+         */
+                
+        final Player player = getPlayer();
+        final Europe europe = player.getEurope();
+        
+        boolean militaryUnitBought = false;
+        for (Wish w : getWishes()) {
+            if (!(w instanceof WorkerWish)) {
+                continue;
+            }
+            if (w.getTransportable() != null) {
+                continue;
+            }
+            
+            final WorkerWish workerWish = (WorkerWish) w;
+            final UnitType unitType = workerWish.getUnitType();
+            if (!unitType.isAvailableTo(player) ) {
+                continue;
+            }
+            
+            final int unitPrice = europe.getUnitPrice(unitType);
+            
+            if (unitPrice <= 0) {
+                continue;
+            }
+            
+            if (unitPrice > player.getGold()) {
+                return;
+            }
+            
+            final AIUnit newUnit = trainAIUnitInEurope(unitType);
+            if (newUnit != null) {
+                getWishRealizationMission(newUnit, workerWish);
+            }
+            
+            if (!militaryUnitBought) {
+                militaryUnitBought = true;
+                final Unit unitBought = buyDragoon();
+                if (unitBought == null) {
+                    return;
+                }
+            }
+        }
+    }
+    
+    private Unit buyDragoon() {
+        final Player player = getPlayer();
+        final Role dragoonRole = getSpecification().getMilitaryRolesList().stream()
+                .filter(r -> r.hasAbility(Ability.ARMED) && r.hasAbility(Ability.MOUNTED))
+                .findFirst()
+                .orElse(null);
+        
+        if (dragoonRole == null) {
+            return null;
+        }
+        
+        final UnitType cheapestUnitType = getSpecification().getUnitTypesTrainedInEurope(getPlayer())
+            .stream()
+            .filter(ut -> ut.getPrice() > 0 && ut.getPrice() != INFINITY)
+            .sorted((a, b) -> Integer.compare(a.getPrice(), b.getPrice()))
+            .findFirst()
+            .orElse(null);
+        
+        if (cheapestUnitType == null) {
+            return null;
+        }
+        
+        final AbstractUnit au = new AbstractUnit(cheapestUnitType, dragoonRole.getId(), 1);
+        final int purchasePrice = player.getEuropeanPurchasePrice(au);
+        if (purchasePrice <= 0 || purchasePrice == INFINITY) {
+            return null;
+        }
+        if (purchasePrice > getPlayer().getGold()) {
+            return null;
+        }
+        
+        player.modifyGold(-purchasePrice);
+        
+        final AbstractUnit auForCreation = new AbstractUnit(getSpecification().getDefaultUnitType(),
+                dragoonRole.getId(), 1);                
+        final List<Unit> createdUnit = ((ServerPlayer) player).createUnits(List.of(auForCreation), player.getEurope(), getAIRandom());
+        if (createdUnit.isEmpty()) {
+            return null;
+        }
+        return createdUnit.get(0);
     }
 
     /**
