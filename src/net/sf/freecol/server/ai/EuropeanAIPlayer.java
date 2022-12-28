@@ -2367,7 +2367,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         
         final AbstractUnit auForCreation = new AbstractUnit(getSpecification().getDefaultUnitType(),
                 dragoonRole.getId(), 1);                
-        final List<Unit> createdUnit = ((ServerPlayer) player).createUnits(List.of(auForCreation), player.getEurope(), getAIRandom());
+        final List<Unit> createdUnit = ((ServerPlayer) player).createUnits(net.ringoz.GwtCompat.List_of(auForCreation), player.getEurope(), getAIRandom());
         if (createdUnit.isEmpty()) {
             return null;
         }
