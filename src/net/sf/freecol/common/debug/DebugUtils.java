@@ -1134,6 +1134,7 @@ public class DebugUtils {
      *
      * @param freeColClient The {@code FreeColClient} for the game.
      */
+    @net.ringoz.GwtIncompatible
     public static void statistics(FreeColClient freeColClient) {
         final FreeColServer server = freeColClient.getFreeColServer();
         final Game sGame = server.getGame();

@@ -885,6 +885,7 @@ public class GUI extends FreeColClientHolder {
     /**
      * Shows the current difficulty as an uneditable dialog.
      */
+    @net.ringoz.GwtIncompatible
     public final CompletableFuture<OptionGroup> showDifficultyDialog() {
         final Specification spec = getSpecification();
         return showDifficultyDialog(spec, spec.getDifficultyOptionGroup(), false);
@@ -1055,6 +1056,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return Null here, real implementations will override.
      */
+    @net.ringoz.GwtIncompatible
     public ImageLibrary getScaledImageLibrary() { return null; }
 
     /**
@@ -1064,6 +1066,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True by default, real implementations will override.
      */
+    @net.ringoz.GwtIncompatible
     public boolean isWindowed() { return true; }
 
 
@@ -1091,6 +1094,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: ChangeWindowedModeAction
      */
+    @net.ringoz.GwtIncompatible
     public void changeWindowedMode() {}
 
     /** 
@@ -1108,6 +1112,7 @@ public class GUI extends FreeColClientHolder {
      * 
      * Used by: FreeColClient.quit
      */
+    @JsMethod
     public void quitGUI() {}
 
     /**
@@ -1119,6 +1124,7 @@ public class GUI extends FreeColClientHolder {
      * @param tile An optional {@code Tile} to focus on if there is no
      *     active unit.
      */
+    @JsMethod
     public void reconnectGUI(Unit active, Tile tile) {}
 
     /**
@@ -1127,6 +1133,7 @@ public class GUI extends FreeColClientHolder {
      * Used by: ContinueAction, ConnectController.{mainTitle,newGame}
      *     InGameController.loadGame, MapEditorController.newMap, StartMapAction
      */    
+    @JsMethod
     public void removeInGameComponents() {}
 
     /**
@@ -1137,6 +1144,7 @@ public class GUI extends FreeColClientHolder {
      * @param userMsg An optional user message.
      * @param callback A {@code Runnable} to run when the video completes.
      */
+    @JsMethod
     public void showOpeningVideo(final String userMsg, Runnable callback) {}
 
     /**
@@ -1151,6 +1159,7 @@ public class GUI extends FreeColClientHolder {
         logger.info("It seems that the GraphicsEnvironment is headless!");
     }
     
+    @net.ringoz.GwtIncompatible
     public Dimension getMapViewDimension() {
         return null;
     }
@@ -1160,6 +1169,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: NewPanel
      */
+    @JsMethod
     public void startMapEditorGUI() {}
 
 
@@ -1176,6 +1186,7 @@ public class GUI extends FreeColClientHolder {
      * @param defenderTile The {@code Tile} to show the defender on.
      * @param success Did the attack succeed?
      */
+    @JsMethod
     public void animateUnitAttack(Unit attacker, Unit defender,
                                   Tile attackerTile, Tile defenderTile,
                                   boolean success) {}
@@ -1189,6 +1200,7 @@ public class GUI extends FreeColClientHolder {
      * @param srcTile The {@code Tile} the unit starts at.
      * @param dstTile The {@code Tile} the unit moves to.
      */
+    @JsMethod
     public void animateUnitMove(Unit unit, Tile srcTile, Tile dstTile) {}
 
 
@@ -1204,6 +1216,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the message on the "cancel" button.
      * @return True if the "ok" button was selected.
      */
+    @JsMethod
     public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                            ImageIcon icon,
                            String okKey, String cancelKey) {
@@ -1222,6 +1235,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
+    @JsMethod
     protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                               ImageIcon icon, String cancelKey,
                               List<ChoiceItem<T>> choices) {
@@ -1238,6 +1252,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the message on the "cancel" button.
      * @return The chosen value.
      */
+    @JsMethod
     public CompletableFuture<String> getInput(Tile tile, StringTemplate template,
                            String defaultValue,
                            String okKey, String cancelKey) {
@@ -1279,6 +1294,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param path The new unit path.
      */
+    @net.ringoz.GwtIncompatible
     public void setUnitPath(PathNode path) {}
 
     /**
@@ -1286,6 +1302,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: GotoTileAction
      */
+    @net.ringoz.GwtIncompatible
     public void activateGotoPath() {}
 
     /**
@@ -1293,6 +1310,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: client InGameController.askClearGotoOrders
      */
+    @JsMethod
     public void clearGotoPath() {}
 
     /**
@@ -1302,6 +1320,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the user has toggled GoTo mode.
      */
+    @net.ringoz.GwtIncompatible
     public boolean isGotoStarted() {
         return false;
     }
@@ -1313,6 +1332,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} to go to.
      */
+    @JsMethod(name = "performGotoTile")
     public void performGoto(Tile tile) {}
 
     /**
@@ -1323,6 +1343,7 @@ public class GUI extends FreeColClientHolder {
      * @param x The x coordinate of the goto destination (pixels).
      * @param y The x coordinate of the goto destination (pixels).
      */
+    @net.ringoz.GwtIncompatible
     public void performGoto(int x, int y) {}
     
     /**
@@ -1330,6 +1351,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: CanvasMouseListener
      */
+    @net.ringoz.GwtIncompatible
     public void traverseGotoPath() {}
 
     /**
@@ -1341,6 +1363,7 @@ public class GUI extends FreeColClientHolder {
      * @param y The y coordinate for the new goto path destination (pixels).
      * @param start If true start a new goto if one is not underway.
      */
+    @net.ringoz.GwtIncompatible
     public void updateGoto(int x, int y, boolean start) {}
 
     /**
@@ -1352,6 +1375,7 @@ public class GUI extends FreeColClientHolder {
      * @param x Drag x coordinate (pixels).
      * @param y Drag x coordinate (pixels).
      */
+    @net.ringoz.GwtIncompatible
     public void prepareDrag(int x, int y) {}
 
     
@@ -1364,6 +1388,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the map can zoom in.
      */
+    @net.ringoz.GwtIncompatible
     public boolean canZoomInMapControls() {
         return false;
     }
@@ -1375,6 +1400,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the map can zoom out.
      */
+    @net.ringoz.GwtIncompatible
     public boolean canZoomOutMapControls() {
         return false;
     }
@@ -1386,6 +1412,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param enable If true then enable.
      */
+    @net.ringoz.GwtIncompatible
     public void enableMapControls(boolean enable) {}
 
     /**
@@ -1393,6 +1420,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: MiniMapToggleFogOfWarAction
      */
+    @net.ringoz.GwtIncompatible
     public void miniMapToggleFogOfWarControls() {}
 
     /**
@@ -1400,6 +1428,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: MiniMapToggleFogOfWarAction
      */
+    @net.ringoz.GwtIncompatible
     public void miniMapToggleViewControls() {}
 
     /**
@@ -1408,6 +1437,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: client InGameController.updateGUI, MapEditorController
      */
+    @JsMethod
     public void updateMapControls() {}
 
     /**
@@ -1415,6 +1445,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: MiniMapZoomInAction
      */
+    @net.ringoz.GwtIncompatible
     public void zoomInMapControls() {}
 
     /**
@@ -1422,6 +1453,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: MiniMapZoomOutAction
      */
+    @net.ringoz.GwtIncompatible
     public void zoomOutMapControls() {}
 
 
@@ -1434,6 +1466,7 @@ public class GUI extends FreeColClientHolder {
      *   client InGameController.{endTurn,setCurrentPlayer}
      *   MapEditorController, PreGameController
      */
+    @JsMethod
     public void closeMenus() {}
 
     /**
@@ -1442,6 +1475,7 @@ public class GUI extends FreeColClientHolder {
      * Used by: InGameController.updateGUI, MapEditorController,
      *   NewEmptyMapAction
      */
+    @JsMethod
     public void updateMenuBar() {}
 
     /**
@@ -1469,6 +1503,7 @@ public class GUI extends FreeColClientHolder {
      * @param ignoreTop If the top should be ignored
      * @return The {@code Direction} to scroll, or null if not.
      */
+    @net.ringoz.GwtIncompatible
     public Direction getScrollDirection(int x, int y, int scrollSpace,
                                         boolean ignoreTop) { return null; }
 
@@ -1478,18 +1513,22 @@ public class GUI extends FreeColClientHolder {
      * @param direction The {@code Direction} to scroll.
      * @return True if scrolling can continue.
      */
+    @net.ringoz.GwtIncompatible
     public boolean scrollMap(Direction direction) { return false; }
 
 
     // Tile image manipulation
 
     // Used by: InfoPanel
+    @net.ringoz.GwtIncompatible
     public BufferedImage createTileImageWithBeachBorderAndItems(Tile tile) { return null; }
 
     // Used by: TilePanel
+    @net.ringoz.GwtIncompatible
     public BufferedImage createTileImage(Tile tile, Player player) { return null; }
 
     // Used by: WorkProductionPanel
+    @net.ringoz.GwtIncompatible
     public BufferedImage createColonyTileImage(Tile tile, Colony colony) { return null; }
 
     /**
@@ -1518,6 +1557,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return One of the view mode constants, or negative on error.
      */
+    @net.ringoz.GwtIncompatible
     public ViewMode getViewMode() {
         return ViewMode.END_TURN;
     }
@@ -1529,6 +1569,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The current active {@code Unit}.
      */
+    @JsMethod
     public Unit getActiveUnit() {
         return null;
     }
@@ -1540,6 +1581,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The selected {@code Tile}.
      */
+    @net.ringoz.GwtIncompatible
     public Tile getSelectedTile() {
         return null;
     }
@@ -1552,6 +1594,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} to select.
      */
+    @JsMethod(name = "changeViewTile")
     public void changeView(Tile tile) {}
 
     /**
@@ -1565,6 +1608,7 @@ public class GUI extends FreeColClientHolder {
      * @param force Set true if the unit is the same, but *has*
      *     changed in some way (e.g. moves left).
      */
+    @JsMethod(name = "changeViewUnit")
     public void changeView(Unit unit, boolean force) {}
 
     /**
@@ -1581,6 +1625,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: client InGameController.updateActiveUnit
      */
+    @JsMethod
     public void changeView() {}
 
 
@@ -1593,6 +1638,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the map can zoom in.
      */
+    @net.ringoz.GwtIncompatible
     public boolean canZoomInMap() {
         return false;
     }
@@ -1604,6 +1650,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the map can zoom out.
      */
+    @net.ringoz.GwtIncompatible
     public boolean canZoomOutMap() {
         return false;
     }
@@ -1613,6 +1660,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: ZoomInAction
      */
+    @net.ringoz.GwtIncompatible
     public void zoomInMap() {}
 
     /**
@@ -1620,6 +1668,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: ZoomOutAction
      */
+    @net.ringoz.GwtIncompatible
     public void zoomOutMap() {}
 
 
@@ -1634,6 +1683,7 @@ public class GUI extends FreeColClientHolder {
      * @param x The x coordinate of the click.
      * @param y The y coordinate of the click.
      */
+    @net.ringoz.GwtIncompatible
     public void clickAt(int count, int x, int y) {}
 
     /**
@@ -1643,6 +1693,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param panel The identifier for the panel to close.
      */
+    @JsMethod
     public void closePanel(String panel) {}
 
     /**
@@ -1650,6 +1701,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: MapEditorController, PreGameController
      */
+    @JsMethod
     public void closeMainPanel() {}
 
     /**
@@ -1658,6 +1710,7 @@ public class GUI extends FreeColClientHolder {
      * Used by: FreeColClient, MapEditorController, client InGameController, 
      *   PreGameController
      */
+    @JsMethod
     public void closeStatusPanel() {}
 
     /**
@@ -1670,6 +1723,7 @@ public class GUI extends FreeColClientHolder {
      * @param color The message color.
      * @param privateChat True if the message is private.
      */
+    @JsMethod
     public void displayChat(String sender, String message, Color color,
                             boolean privateChat) {}
 
@@ -1678,6 +1732,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param fco The {@code FreeColObject} to display.
      */
+    @net.ringoz.GwtIncompatible
     public void displayObject(FreeColObject fco) {}
 
     /**
@@ -1689,6 +1744,7 @@ public class GUI extends FreeColClientHolder {
      * @param message The chat message.
      * @param privateChat True if the message is private.
      */
+    @JsMethod
     public void displayStartChat(String sender, String message,
                                  boolean privateChat) {}
 
@@ -1700,6 +1756,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if the client options are showing.
      */
+    @net.ringoz.GwtIncompatible
     public boolean isClientOptionsDialogShowing() {
         return false;
     }
@@ -1711,6 +1768,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return True if there is another panel present.
      */
+    @JsMethod
     public boolean isPanelShowing() {
         return false;
     }
@@ -1735,8 +1793,10 @@ public class GUI extends FreeColClientHolder {
      * 
      * @see #refresh()
      */
+    @JsMethod
     public void repaint() {}
     
+    @JsMethod
     public void refreshTile(Tile tile) {}
 
     /**
@@ -1744,6 +1804,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: SetNationMessage.clientHandler
      */
+    @JsMethod
     public void refreshPlayersTable() {}
 
     /**
@@ -1774,6 +1835,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param panel The {@code FreeColPanel} to remove.
      */
+    @net.ringoz.GwtIncompatible
     public void removeTradeRoutePanel(FreeColPanel panel) {}
             
     /**
@@ -1796,6 +1858,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} where the popup occurred.
      */
+    @net.ringoz.GwtIncompatible
     public void showTilePopup(Tile tile) {}
 
     /**
@@ -1805,6 +1868,7 @@ public class GUI extends FreeColClientHolder {
      * @param y The y coordinate.
      * @return The {@code Tile} found.
      */
+    @net.ringoz.GwtIncompatible
     public Tile tileAt(int x, int y) { return null; }
 
     /**
@@ -1812,6 +1876,7 @@ public class GUI extends FreeColClientHolder {
      *
      * Used by: NewUnitPanel, RecruitUnitPanel
      */
+    @net.ringoz.GwtIncompatible
     public void updateEuropeanSubpanels() {}
 
 
@@ -1822,6 +1887,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showAboutPanel() { return null; }
 
     /**
@@ -1830,6 +1896,7 @@ public class GUI extends FreeColClientHolder {
      * @param colony The {@code Colony} to show a panel for.
      * @return The build queue panel.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showBuildQueuePanel(Colony colony) { return null; }
 
     /**
@@ -1839,6 +1906,7 @@ public class GUI extends FreeColClientHolder {
      * @param gl The list of {@code Goods} to choose from.
      * @param handler A {@code DialogHandler} for the dialog response.
      */
+    @JsMethod
     public CompletableFuture<List<Goods>> showCaptureGoodsDialog(final Unit unit, List<Goods> gl) { return null; }
 
     /**
@@ -1846,6 +1914,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showChatPanel() { return null; }
 
     /**
@@ -1854,16 +1923,19 @@ public class GUI extends FreeColClientHolder {
      * @param ffs The list of {@code FoundingFather}s to choose from.
      * @param handler The callback to pass the choice to.
      */
+    @JsMethod
     public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) { return null; }
 
     /**
      * Show the client options dialog.
      */
+    @net.ringoz.GwtIncompatible
     public void showClientOptionsDialog() {}
 
     /**
      * Refreshes the GUI with settings from the client options.
      */
+    @JsMethod
     public void refreshGuiUsingClientOptions() {}
     
     /**
@@ -1873,6 +1945,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit An optional {@code Unit} to select within the panel.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showColonyPanel(Colony colony, Unit unit) { return null; }
 
     /**
@@ -1881,6 +1954,7 @@ public class GUI extends FreeColClientHolder {
      * @param nodeId The identifier for the colopedia node to show.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showColopediaPanel(String nodeId) { return null; }
 
     /**
@@ -1897,6 +1971,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showCompactLabourReport() { return null; }
 
     /**
@@ -1913,6 +1988,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return A list of new nation and country names.
      */
+    @JsMethod
     public CompletableFuture<List<String>> showConfirmDeclarationDialog() { return null; }
 
     /**
@@ -1921,6 +1997,7 @@ public class GUI extends FreeColClientHolder {
      * 
      * @param afterClosing A callback that is executed after the panel closes.
      */
+    @JsMethod
     public void showDeclarationPanel(Runnable afterClosing) { }
 
     /**
@@ -1931,6 +2008,7 @@ public class GUI extends FreeColClientHolder {
      * @param editable If true, the option group can be edited.
      * @return The (possibly modified) {@code OptionGroup}.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<OptionGroup> showDifficultyDialog(Specification spec,
                                             OptionGroup group,
                                             boolean editable) { return null; }
@@ -1941,6 +2019,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} that is dumping goods.
      * @param handler A callback to pass the dumped goods list to.
      */
+    @JsMethod
     public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit) { return null; }
 
     /**
@@ -1949,6 +2028,7 @@ public class GUI extends FreeColClientHolder {
      * @param option The {@code Option} to edit.
      * @return True if the option edit was accepted.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<Boolean> showEditOptionDialog(Option option) { return null; }
 
     /**
@@ -1957,6 +2037,7 @@ public class GUI extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to edit.
      * @return The settlement post-edit.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<IndianSettlement> showEditSettlementDialog(IndianSettlement is) { return null; }
 
     /**
@@ -1966,6 +2047,7 @@ public class GUI extends FreeColClientHolder {
      * @param fountainOfYouth True if a Fountain of Youth event occurred.
      * @param handler A callback to pass a selected emigration index to.
      */
+    @JsMethod
     public CompletableFuture<Integer> showEmigrationDialog(final Player player,
                                      final boolean fountainOfYouth) { return null; }
 
@@ -1975,6 +2057,7 @@ public class GUI extends FreeColClientHolder {
      * @param units A list of {@code Unit}s that can still move.
      * @param handler A callback to handle the user selected end turn state.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showEndTurnDialog(final List<Unit> units) { return null; }
 
     /**
@@ -1984,6 +2067,7 @@ public class GUI extends FreeColClientHolder {
      * @param callback An optional {@code Runnable} to run on close.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showErrorPanel(String message, Runnable callback) { return null; }
 
     /**
@@ -1991,6 +2075,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showEuropePanel() { return null; }
 
     /**
@@ -2001,6 +2086,7 @@ public class GUI extends FreeColClientHolder {
      * @param footer Optional footer text.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showEventPanel(String header, String image,
                                        String footer) { return null; }
 
@@ -2009,6 +2095,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showFindSettlementPanel() { return null; }
 
     /**
@@ -2021,6 +2108,7 @@ public class GUI extends FreeColClientHolder {
      *     other player.
      * @param handler A callback to handle the player decision to be friendly.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showFirstContactDialog(final Player player, final Player other,
                                        final Tile tile, int settlementCount) { return null; }
 
@@ -2030,6 +2118,7 @@ public class GUI extends FreeColClientHolder {
      * @param editable True if the options can be edited.
      * @param dialogHandler A callback for handling the closing of the dialog.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<OptionGroup> showGameOptionsDialog(boolean editable) { return null; }
 
     /**
@@ -2039,6 +2128,7 @@ public class GUI extends FreeColClientHolder {
      * @param scores The {@code HighScore}s to display.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showHighScoresPanel(String messageId,
                                             List<HighScore> scores) { return null; }
 
@@ -2048,6 +2138,7 @@ public class GUI extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to display.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showIndianSettlementPanel(IndianSettlement is) { return null; }
 
     /**
@@ -2057,6 +2148,7 @@ public class GUI extends FreeColClientHolder {
      * @param template The {@code StringTemplate} to display.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showInformationPanel(FreeColObject displayObject,
                                              StringTemplate template) { return null; }
 
@@ -2067,6 +2159,7 @@ public class GUI extends FreeColClientHolder {
      * @param extension An extension to select with.
      * @return The selected {@code File}.
      */
+    @JsMethod
     public CompletableFuture<File> showLoadDialog(File directory, String extension) { return null; }
 
     /**
@@ -2076,6 +2169,7 @@ public class GUI extends FreeColClientHolder {
      * @param singlePlayer FIXME
      * @return The {@code LoadingSavegameInfo} from the dialog.
      */
+    @JsMethod
     public CompletableFuture<LoadingSavegameInfo> showLoadingSavegameDialog(boolean publicServer,
                                                          boolean singlePlayer) { return null; }
 
@@ -2084,6 +2178,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showLogFilePanel() { return null; }
 
     /**
@@ -2092,11 +2187,13 @@ public class GUI extends FreeColClientHolder {
      * @param userMsg An optional user message to display.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showMainPanel(String userMsg) { return null; }
 
     /**
      * Complete reset back to the main panel.
      */
+    @JsMethod
     public void showMainTitle() {}
 
     /**
@@ -2104,6 +2201,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param editable If true, allow edits.
      */
+    @JsMethod
     public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) { return null; }
 
     /**
@@ -2111,6 +2209,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The selected map size as a {@code Dimension}.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<Dimension> showMapSizeDialog() { return null; }
 
     /**
@@ -2119,6 +2218,7 @@ public class GUI extends FreeColClientHolder {
      * @param modelMessages A list of {@code ModelMessage}s to display.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showModelMessages(List<ModelMessage> modelMessages) { return null; }
 
     /**
@@ -2130,6 +2230,7 @@ public class GUI extends FreeColClientHolder {
      * @param handler A callback to handle the user response to the
      *     monarch action.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showMonarchDialog(final MonarchAction action,
                                   StringTemplate template, String monarchKey) { return null; }
 
@@ -2141,6 +2242,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} that is naming.
      * @param handler A callback to handle the user response.
      */
+    @JsMethod
     public CompletableFuture<String> showNamingDialog(StringTemplate template,
                                  final String defaultName,
                                  final Unit unit) { return null; }
@@ -2154,6 +2256,7 @@ public class GUI extends FreeColClientHolder {
      * @param amount The amount of goods or gold demanded.
      * @param handler A callback to handle the user response.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showNativeDemandDialog(Unit unit, Colony colony,
                                        GoodsType type, int amount) { return null; }
 
@@ -2167,6 +2270,7 @@ public class GUI extends FreeColClientHolder {
      *     commentary message.
      * @return The negotiated {@code DiplomaticTrade} agreement.
      */
+    @JsMethod
     public CompletableFuture<DiplomaticTrade> showNegotiationDialog(FreeColGameObject our,
                                       FreeColGameObject other,
                                       DiplomaticTrade agreement,
@@ -2205,6 +2309,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showPurchasePanel() { return null; }
 
     /**
@@ -2212,6 +2317,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showRecruitPanel() { return null; }
 
     /**
@@ -2219,6 +2325,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportCargoPanel() { return null; }
 
     /**
@@ -2226,6 +2333,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportColonyPanel() { return null; }
 
     /**
@@ -2233,6 +2341,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportContinentalCongressPanel() { return null; }
 
     /**
@@ -2240,6 +2349,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportEducationPanel() { return null; }
 
     /**
@@ -2247,6 +2357,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportExplorationPanel() { return null; }
 
     /**
@@ -2254,6 +2365,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportForeignAffairPanel() { return null; }
 
     /**
@@ -2261,6 +2373,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportHistoryPanel() { return null; }
 
     /**
@@ -2268,6 +2381,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportIndianPanel() { return null; }
 
     /**
@@ -2275,6 +2389,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportLabourPanel() { return null; }
 
     /**
@@ -2286,6 +2401,7 @@ public class GUI extends FreeColClientHolder {
      * @param colonies The list of player {@code Colony}s.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportLabourDetailPanel(UnitType unitType,
         Map<UnitType, Map<Location, Integer>> data,
         TypeCountMap<UnitType> unitCount, List<Colony> colonies) { return null; }
@@ -2295,6 +2411,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportMilitaryPanel() { return null; }
 
     /**
@@ -2302,6 +2419,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportNavalPanel() { return null; }
 
     /**
@@ -2309,6 +2427,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportProductionPanel() { return null; }
 
     /**
@@ -2316,6 +2435,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportReligiousPanel() { return null; }
 
     /**
@@ -2323,6 +2443,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportRequirementsPanel() { return null; }
 
     /**
@@ -2330,6 +2451,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showReportTradePanel() { return null; }
 
     /**
@@ -2338,6 +2460,7 @@ public class GUI extends FreeColClientHolder {
      * @param messages The {@code ModelMessage}s that make up the report.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showReportTurnPanel(List<ModelMessage> messages) { return null; }
 
     /**
@@ -2346,6 +2469,7 @@ public class GUI extends FreeColClientHolder {
      * @param styles The river styles a choice is made from.
      * @return The response returned by the dialog.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<String> showRiverStyleDialog(List<String> styles) { return null; }
 
     /**
@@ -2355,6 +2479,7 @@ public class GUI extends FreeColClientHolder {
      * @param defaultName The default game to save.
      * @return The selected file.
      */
+    @JsMethod
     public CompletableFuture<File> showSaveDialog(File directory, String defaultName) { return null; }
 
     /**
@@ -2362,6 +2487,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The map scale as a {@code Dimension}.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<Dimension> showScaleMapSizeDialog() { return null; }
 
     /**
@@ -2373,6 +2499,7 @@ public class GUI extends FreeColClientHolder {
      * @param needToPay If true, check the player has sufficient funds.
      * @return The amount selected.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<Integer> showSelectAmountDialog(GoodsType goodsType, int available,
                                       int defaultAmount,
                                       boolean needToPay) { return null; }
@@ -2384,6 +2511,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} to select a destination for.
      * @return A destination for the unit, or null.
      */
+    @JsMethod
     public CompletableFuture<Location> showSelectDestinationDialog(Unit unit) { return null; }
 
     /**
@@ -2394,6 +2522,7 @@ public class GUI extends FreeColClientHolder {
      * @param maximum The maximum amount available.
      * @return The amount selected.
      */
+    @JsMethod
     public CompletableFuture<Integer> showSelectTributeAmountDialog(StringTemplate question,
                                              int maximum) { return null; }
 
@@ -2404,6 +2533,7 @@ public class GUI extends FreeColClientHolder {
      *     metaserver.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showServerListPanel(List<ServerInfo> serverList) { return null; }
 
     /**
@@ -2414,6 +2544,7 @@ public class GUI extends FreeColClientHolder {
      * @param singlePlayerMode True to start a single player game.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showStartGamePanel(Game game, Player player,
                                            boolean singlePlayerMode) { return null; }
 
@@ -2424,6 +2555,7 @@ public class GUI extends FreeColClientHolder {
      * @param clientStats A map of client statistics key,value pairs.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showStatisticsPanel(Map<String, String> serverStats,
                                             Map<String, String> clientStats) { return null; }
 
@@ -2433,6 +2565,7 @@ public class GUI extends FreeColClientHolder {
      * @param message The text message to display on the status panel.
      * @return The panel shown.
      */
+    @JsMethod
     public FreeColPanel showStatusPanel(String message) { return null; }
 
     /**
@@ -2441,6 +2574,7 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} to display.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showTilePanel(Tile tile) { return null; }
 
     /**
@@ -2449,6 +2583,7 @@ public class GUI extends FreeColClientHolder {
      * @param tr The {@code TradeRoute} to display.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showTradeRouteInputPanel(TradeRoute tr) { return null; }
 
     /**
@@ -2457,6 +2592,7 @@ public class GUI extends FreeColClientHolder {
      * @param unit An optional {@code Unit} to select a trade route for.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showTradeRoutePanel(Unit unit) { return null; }
 
     /**
@@ -2464,6 +2600,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showTrainPanel() { return null; }
 
     /**
@@ -2471,6 +2608,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param handler A callback to handle the continuation decision.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showVictoryDialog() { return null; }
 
     /**
@@ -2481,6 +2619,7 @@ public class GUI extends FreeColClientHolder {
      * @param colony The {@code Colony} to display.
      * @return The response returned by the dialog.
      */
+    @net.ringoz.GwtIncompatible
     public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) { return null; }
 
     /**
@@ -2489,11 +2628,13 @@ public class GUI extends FreeColClientHolder {
      * @param unit The {@code Unit} to display.
      * @return The panel shown.
      */
+    @net.ringoz.GwtIncompatible
     public FreeColPanel showWorkProductionPanel(Unit unit) { return null; }
 
     /**
      * Reloads all images managed by {@code ResourceManager}.
      */
+    @net.ringoz.GwtIncompatible
     public void reloadResources() {
 
     }
@@ -2501,6 +2642,7 @@ public class GUI extends FreeColClientHolder {
     /**
      * Prepares showing the main menu by removing almost everything from the view.
      */
+    @JsMethod
     public void prepareShowingMainMenu() {
        
     }
@@ -2508,6 +2650,7 @@ public class GUI extends FreeColClientHolder {
     /**
      * Checks if mods with a specification can be added now.
      */
+    @net.ringoz.GwtIncompatible
     public boolean canGameChangingModsBeAdded() {
         return true;
     }
@@ -2518,6 +2661,7 @@ public class GUI extends FreeColClientHolder {
      * to ensure sufficient memory for displaying an error
      * message.
      */
+    @net.ringoz.GwtIncompatible
     public void emergencyPurge() {
 
     }
