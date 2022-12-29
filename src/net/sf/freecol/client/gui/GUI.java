@@ -22,6 +22,7 @@ package net.sf.freecol.client.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -1077,14 +1079,30 @@ public class GUI extends FreeColClientHolder {
      *
      * @param runnable A {@code Runnable} to run.
      */
-    public void invokeNowOrLater(Runnable runnable) {}
+    public void invokeNowOrLater(Runnable runnable) {
+        if (EventQueue.isDispatchThread()) {
+            runnable.run();
+        } else {
+            EventQueue.invokeLater(runnable);
+        }
+    }
     
     /**
      * Run in the EDT, either immediately or wait for it.
      *
      * @param runnable A {@code Runnable} to run.
      */
-    public void invokeNowOrWait(Runnable runnable) {}
+    public void invokeNowOrWait(Runnable runnable) {
+        if (EventQueue.isDispatchThread()) {
+            runnable.run();
+        } else {
+            try {
+                EventQueue.invokeAndWait(runnable);
+            } catch (Exception ex) {
+                logger.log(Level.WARNING, "Client GUI interaction", ex);
+            }
+        }
+    }
 
 
     // Initialization and teardown
