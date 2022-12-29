@@ -1131,7 +1131,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: FreeColClient.quit
      */
     @JsMethod
-    public void quitGUI() {}
+    public void quitGUI() {
+        logger.info("quitGUI()");
+    }
 
     /**
      * Reset the GUI on reconnect.
@@ -1143,7 +1145,9 @@ public class GUI extends FreeColClientHolder {
      *     active unit.
      */
     @JsMethod
-    public void reconnectGUI(Unit active, Tile tile) {}
+    public void reconnectGUI(Unit active, Tile tile) {
+        logger.info("reconnectGUI(" + active + ", " + tile + ")");
+    }
 
     /**
      * Remove all in-game components (i.e. all the Listeners).
@@ -1152,7 +1156,9 @@ public class GUI extends FreeColClientHolder {
      *     InGameController.loadGame, MapEditorController.newMap, StartMapAction
      */    
     @JsMethod
-    public void removeInGameComponents() {}
+    public void removeInGameComponents() {
+        logger.info("removeInGameComponents()");
+    }
 
     /**
      * Shows the {@code VideoPanel}.
@@ -1163,7 +1169,9 @@ public class GUI extends FreeColClientHolder {
      * @param callback A {@code Runnable} to run when the video completes.
      */
     @JsMethod
-    public void showOpeningVideo(final String userMsg, Runnable callback) {}
+    public void showOpeningVideo(final String userMsg, Runnable callback) {
+        callback.run();
+    }
 
     /**
      * Starts the GUI by creating and displaying the GUI-objects.
@@ -1174,7 +1182,7 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public void startGUI(final Dimension desiredWindowSize) {
-        logger.info("It seems that the GraphicsEnvironment is headless!");
+        logger.info("startGUI(" + desiredWindowSize + ")");
     }
     
     @net.ringoz.GwtIncompatible
@@ -1188,7 +1196,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: NewPanel
      */
     @JsMethod
-    public void startMapEditorGUI() {}
+    public void startMapEditorGUI() {
+        logger.info("startMapEditorGUI()");
+    }
 
 
     // Animation handling
@@ -1207,7 +1217,9 @@ public class GUI extends FreeColClientHolder {
     @JsMethod
     public void animateUnitAttack(Unit attacker, Unit defender,
                                   Tile attackerTile, Tile defenderTile,
-                                  boolean success) {}
+                                  boolean success) {
+        logger.info("animateUnitAttack(" + attacker + ", " + defender + ", " + attackerTile + ", " + defenderTile + ", " + success + ")");
+    }
 
     /**
      * Animate a unit move.
@@ -1219,7 +1231,9 @@ public class GUI extends FreeColClientHolder {
      * @param dstTile The {@code Tile} the unit moves to.
      */
     @JsMethod
-    public void animateUnitMove(Unit unit, Tile srcTile, Tile dstTile) {}
+    public void animateUnitMove(Unit unit, Tile srcTile, Tile dstTile) {
+        logger.info("animateUnitMove(" + unit + ", " + srcTile + ", " + dstTile + ")");
+    }
 
 
     // Dialog primitives
@@ -1238,6 +1252,7 @@ public class GUI extends FreeColClientHolder {
     public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                            ImageIcon icon,
                            String okKey, String cancelKey) {
+        logger.info("confirm(" + tile + ", " + template + ", " + icon + "," + okKey + ", " + cancelKey + ")");
         return CompletableFuture.completedFuture(false);
     }
 
@@ -1257,6 +1272,7 @@ public class GUI extends FreeColClientHolder {
     protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                               ImageIcon icon, String cancelKey,
                               List<ChoiceItem<T>> choices) {
+        logger.info("getChoice(" + tile + ", " + template + ", " + icon + ", " + cancelKey + ", " + choices + ")");
         return null;
     }
 
@@ -1274,6 +1290,7 @@ public class GUI extends FreeColClientHolder {
     public CompletableFuture<String> getInput(Tile tile, StringTemplate template,
                            String defaultValue,
                            String okKey, String cancelKey) {
+        logger.info("getInput(" + tile + ", " + template + ", " + defaultValue + ", " + okKey + ", " + cancelKey + ")");
         return null;
     }
 
@@ -1329,7 +1346,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: client InGameController.askClearGotoOrders
      */
     @JsMethod
-    public void clearGotoPath() {}
+    public void clearGotoPath() {
+        logger.info("clearGotoPath()");
+    }
 
     /**
      * Check if the user has  GoTo mode enabled.
@@ -1351,7 +1370,9 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} to go to.
      */
     @JsMethod(name = "performGotoTile")
-    public void performGoto(Tile tile) {}
+    public void performGoto(Tile tile) {
+        logger.info("performGoto(" + tile + ")");
+    }
 
     /**
      * Perform an immediate goto to a point on the map.
@@ -1456,7 +1477,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: client InGameController.updateGUI, MapEditorController
      */
     @JsMethod
-    public void updateMapControls() {}
+    public void updateMapControls() {
+        logger.info("updateMapControls()");
+    }
 
     /**
      * Zoom in the map controls.
@@ -1485,7 +1508,9 @@ public class GUI extends FreeColClientHolder {
      *   MapEditorController, PreGameController
      */
     @JsMethod
-    public void closeMenus() {}
+    public void closeMenus() {
+        logger.info("closeMenus()");
+    }
 
     /**
      * Update the menu bar.
@@ -1494,7 +1519,9 @@ public class GUI extends FreeColClientHolder {
      *   NewEmptyMapAction
      */
     @JsMethod
-    public void updateMenuBar() {}
+    public void updateMenuBar() {
+        logger.info("updateMenuBar()");
+    }
 
     /**
      * Display a popup menu.
@@ -1589,6 +1616,7 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public Unit getActiveUnit() {
+        logger.info("getActiveUnit()");
         return null;
     }
 
@@ -1613,7 +1641,9 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} to select.
      */
     @JsMethod(name = "changeViewTile")
-    public void changeView(Tile tile) {}
+    public void changeView(Tile tile) {
+        logger.info("changeView(" + tile + ")");
+    }
 
     /**
      * Change to move units mode, and select a unit.
@@ -1627,7 +1657,9 @@ public class GUI extends FreeColClientHolder {
      *     changed in some way (e.g. moves left).
      */
     @JsMethod(name = "changeViewUnit")
-    public void changeView(Unit unit, boolean force) {}
+    public void changeView(Unit unit, boolean force) {
+        logger.info("changeView(" + unit + ", " + force + ")");
+    }
 
     /**
      * Change to map transform mode, and select a transform.
@@ -1644,7 +1676,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: client InGameController.updateActiveUnit
      */
     @JsMethod
-    public void changeView() {}
+    public void changeView() {
+        logger.info("changeView()");
+    }
 
 
     // Zoom controls
@@ -1712,7 +1746,9 @@ public class GUI extends FreeColClientHolder {
      * @param panel The identifier for the panel to close.
      */
     @JsMethod
-    public void closePanel(String panel) {}
+    public void closePanel(String panel) {
+        logger.info("closePanel(" + panel + ")");
+    }
 
     /**
      * Close the main panel if present.
@@ -1720,7 +1756,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: MapEditorController, PreGameController
      */
     @JsMethod
-    public void closeMainPanel() {}
+    public void closeMainPanel() {
+        logger.info("closeMainPanel()");
+    }
 
     /**
      * Close the status panel if present.
@@ -1729,7 +1767,9 @@ public class GUI extends FreeColClientHolder {
      *   PreGameController
      */
     @JsMethod
-    public void closeStatusPanel() {}
+    public void closeStatusPanel() {
+        logger.info("closeStatusPanel()");
+    }
 
     /**
      * Update with a new chat message.
@@ -1743,7 +1783,9 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public void displayChat(String sender, String message, Color color,
-                            boolean privateChat) {}
+                            boolean privateChat) {
+        logger.info("displayChat(" + sender + ", " + message + ", " + color + ", " + privateChat + ")");
+    }
 
     /**
      * Show the appropriate panel for an object.
@@ -1764,7 +1806,9 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public void displayStartChat(String sender, String message,
-                                 boolean privateChat) {}
+                                 boolean privateChat) {
+        logger.info("displayStartChat(" + sender + ", " + message + ", " + privateChat + ")");
+    }
 
 
     /**
@@ -1788,6 +1832,7 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public boolean isPanelShowing() {
+        logger.info("isPanelShowing()");
         return false;
     }
 
@@ -1812,10 +1857,14 @@ public class GUI extends FreeColClientHolder {
      * @see #refresh()
      */
     @JsMethod
-    public void repaint() {}
+    public void repaint() {
+        logger.info("repaint()");
+    }
     
     @JsMethod
-    public void refreshTile(Tile tile) {}
+    public void refreshTile(Tile tile) {
+        logger.info("refreshTile(" + tile + ")");
+    }
 
     /**
      * Refresh the players table in the StartGamePanel.
@@ -1823,7 +1872,9 @@ public class GUI extends FreeColClientHolder {
      * Used by: SetNationMessage.clientHandler
      */
     @JsMethod
-    public void refreshPlayersTable() {}
+    public void refreshPlayersTable() {
+        logger.info("refreshPlayersTable()");
+    }
 
     /**
      * Remove a component from the GUI.
@@ -1925,7 +1976,10 @@ public class GUI extends FreeColClientHolder {
      * @param handler A {@code DialogHandler} for the dialog response.
      */
     @JsMethod
-    public CompletableFuture<List<Goods>> showCaptureGoodsDialog(final Unit unit, List<Goods> gl) { return null; }
+    public CompletableFuture<List<Goods>> showCaptureGoodsDialog(final Unit unit, List<Goods> gl) {
+        logger.info("showCaptureGoodsDialog(" + unit + ", " + gl + ")");
+        return null; 
+    }
 
     /**
      * Show the chat panel.
@@ -1942,7 +1996,10 @@ public class GUI extends FreeColClientHolder {
      * @param handler The callback to pass the choice to.
      */
     @JsMethod
-    public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) { return null; }
+    public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) {
+        logger.info("showChooseFoundingFatherDialog(" + ffs + ")");
+        return null;
+    }
 
     /**
      * Show the client options dialog.
@@ -1954,7 +2011,9 @@ public class GUI extends FreeColClientHolder {
      * Refreshes the GUI with settings from the client options.
      */
     @JsMethod
-    public void refreshGuiUsingClientOptions() {}
+    public void refreshGuiUsingClientOptions() {
+        logger.info("refreshGuiUsingClientOptions()");
+    }
     
     /**
      * Show the colony panel
@@ -1964,7 +2023,10 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showColonyPanel(Colony colony, Unit unit) { return null; }
+    public FreeColPanel showColonyPanel(Colony colony, Unit unit) {
+        logger.info("showColonyPanel(" + colony + ", " + unit + ")");
+        return null;
+    }
 
     /**
      * Show a colopedia panel.
@@ -2007,7 +2069,10 @@ public class GUI extends FreeColClientHolder {
      * @return A list of new nation and country names.
      */
     @JsMethod
-    public CompletableFuture<List<String>> showConfirmDeclarationDialog() { return null; }
+    public CompletableFuture<List<String>> showConfirmDeclarationDialog() {
+        logger.info("showConfirmDeclarationDialog()");
+        return null;
+    }
 
     /**
      * Show the declaration panel with the declaration of independence and
@@ -2016,7 +2081,9 @@ public class GUI extends FreeColClientHolder {
      * @param afterClosing A callback that is executed after the panel closes.
      */
     @JsMethod
-    public void showDeclarationPanel(Runnable afterClosing) { }
+    public void showDeclarationPanel(Runnable afterClosing) {
+        logger.info("showDeclarationPanel(" + afterClosing + ")");
+    }
 
     /**
      * Show a dialog for a difficulty option group.
@@ -2038,7 +2105,10 @@ public class GUI extends FreeColClientHolder {
      * @param handler A callback to pass the dumped goods list to.
      */
     @JsMethod
-    public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit) { return null; }
+    public CompletableFuture<List<Goods>> showDumpCargoDialog(Unit unit) {
+        logger.info("showDumpCargoDialog(" + unit + ")");
+        return null;
+    }
 
     /**
      * Show a dialog for editing an individual option.
@@ -2067,7 +2137,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<Integer> showEmigrationDialog(final Player player,
-                                     final boolean fountainOfYouth) { return null; }
+                                     final boolean fountainOfYouth) {
+        logger.info("showEmigrationDialog(" + player + ", " + fountainOfYouth + ")");
+        return null;
+    }
 
     /**
      * Show a dialog for the end of turn.
@@ -2076,7 +2149,10 @@ public class GUI extends FreeColClientHolder {
      * @param handler A callback to handle the user selected end turn state.
      */
     @JsMethod
-    public CompletableFuture<Boolean> showEndTurnDialog(final List<Unit> units) { return null; }
+    public CompletableFuture<Boolean> showEndTurnDialog(final List<Unit> units) {
+        logger.info("showEndTurnDialog(" + units + ")");
+        return null;
+    }
 
     /**
      * Show an error panel.
@@ -2086,7 +2162,10 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showErrorPanel(String message, Runnable callback) { return null; }
+    public FreeColPanel showErrorPanel(String message, Runnable callback) {
+        logger.info("showErrorPanel(" + message + ", " + callback + ")");
+        return null;
+    }
 
     /**
      * Show the Europe panel.
@@ -2106,7 +2185,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public FreeColPanel showEventPanel(String header, String image,
-                                       String footer) { return null; }
+                                       String footer) {
+        logger.info("showEventPanel(" + header + ", " + image + ", " + footer + ")");
+        return null;
+    }
 
     /**
      * Show the FindSettlement panel.
@@ -2128,7 +2210,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<Boolean> showFirstContactDialog(final Player player, final Player other,
-                                       final Tile tile, int settlementCount) { return null; }
+                                       final Tile tile, int settlementCount) {
+        logger.info("showFirstContactDialog(" + player + ", " + other + ", " + tile + ", " + settlementCount + ")");
+        return null;
+    }
 
     /**
      * Show the Game options dialog.
@@ -2148,7 +2233,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public FreeColPanel showHighScoresPanel(String messageId,
-                                            List<HighScore> scores) { return null; }
+                                            List<HighScore> scores) {
+        logger.info("showHighScoresPanel(" + messageId + ", " + scores + ")");
+        return null;
+    }
 
     /**
      * Show a panel for a native settlement.
@@ -2168,7 +2256,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public FreeColPanel showInformationPanel(FreeColObject displayObject,
-                                             StringTemplate template) { return null; }
+                                             StringTemplate template) {
+        logger.info("showInformationPanel(" + displayObject + ", " + template + ")");
+        return null;
+    }
 
     /**
      * Show a dialog where the user may choose a file.
@@ -2178,7 +2269,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected {@code File}.
      */
     @JsMethod
-    public CompletableFuture<File> showLoadDialog(File directory, String extension) { return null; }
+    public CompletableFuture<File> showLoadDialog(File directory, String extension) {
+        logger.info("showLoadDialog(" + directory + ", " + extension + ")");
+        return null;
+    }
 
     /**
      * Show the LoadingSavegameDialog.
@@ -2189,7 +2283,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<LoadingSavegameInfo> showLoadingSavegameDialog(boolean publicServer,
-                                                         boolean singlePlayer) { return null; }
+                                                         boolean singlePlayer) {
+        logger.info("showLoadingSavegameDialog(" + publicServer + ", " + singlePlayer + ")");
+        return null;
+    }
 
     /**
      * Show the log file panel.
@@ -2206,13 +2303,18 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showMainPanel(String userMsg) { return null; }
+    public FreeColPanel showMainPanel(String userMsg) {
+        logger.info("showMainPanel(" + userMsg + ")");
+        return null;
+    }
 
     /**
      * Complete reset back to the main panel.
      */
     @JsMethod
-    public void showMainTitle() {}
+    public void showMainTitle() {
+        logger.info("showMainTitle()");
+    }
 
     /**
      * Show the map generator options.
@@ -2220,7 +2322,10 @@ public class GUI extends FreeColClientHolder {
      * @param editable If true, allow edits.
      */
     @JsMethod
-    public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) { return null; }
+    public CompletableFuture<OptionGroup> showMapGeneratorOptionsDialog(boolean editable) {
+        logger.info("showMapGeneratorOptionsDialog(" + editable + ")");
+        return null;
+    }
 
     /**
      * Show the map size dialog.
@@ -2237,7 +2342,10 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showModelMessages(List<ModelMessage> modelMessages) { return null; }
+    public FreeColPanel showModelMessages(List<ModelMessage> modelMessages) {
+        logger.info("showModelMessages(" + modelMessages + ")");
+        return null;
+    }
 
     /**
      * Show the monarch dialog.
@@ -2250,7 +2358,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<Boolean> showMonarchDialog(final MonarchAction action,
-                                  StringTemplate template, String monarchKey) { return null; }
+                                  StringTemplate template, String monarchKey) {
+        logger.info("showMonarchDialog(" + action + ", " + template + ", " + monarchKey + ")");
+        return null;
+    }
 
     /**
      * Show the naming dialog.
@@ -2263,7 +2374,10 @@ public class GUI extends FreeColClientHolder {
     @JsMethod
     public CompletableFuture<String> showNamingDialog(StringTemplate template,
                                  final String defaultName,
-                                 final Unit unit) { return null; }
+                                 final Unit unit) {
+        logger.info("showNamingDialog(" + template + ", " + defaultName + ", " + unit + ")");
+        return null;
+    }
 
     /**
      * Show the native demand dialog.
@@ -2276,7 +2390,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<Boolean> showNativeDemandDialog(Unit unit, Colony colony,
-                                       GoodsType type, int amount) { return null; }
+                                       GoodsType type, int amount) {
+        logger.info("showNativeDemandDialog(" + unit + ", " + colony + ", " + type + ", " + amount + ")");
+        return null;
+    }
 
     /**
      * Show the negotiation dialog.
@@ -2292,7 +2409,10 @@ public class GUI extends FreeColClientHolder {
     public CompletableFuture<DiplomaticTrade> showNegotiationDialog(FreeColGameObject our,
                                       FreeColGameObject other,
                                       DiplomaticTrade agreement,
-                                      StringTemplate comment) { return null; }
+                                      StringTemplate comment) {
+        logger.info("showNegotiationDialog(" + our + ", " + other + ", " + agreement + ", " + comment + ")");
+        return null;
+    }
 
     /**
      * Show the NewPanel.
@@ -2479,7 +2599,10 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showReportTurnPanel(List<ModelMessage> messages) { return null; }
+    public FreeColPanel showReportTurnPanel(List<ModelMessage> messages) {
+        logger.info("showReportTurnPanel(" + messages + ")");
+        return null;
+    }
 
     /**
      * Show the river style dialog.
@@ -2498,7 +2621,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected file.
      */
     @JsMethod
-    public CompletableFuture<File> showSaveDialog(File directory, String defaultName) { return null; }
+    public CompletableFuture<File> showSaveDialog(File directory, String defaultName) {
+        logger.info("showSaveDialog(" + directory + ", " + defaultName + ")");
+        return null;
+    }
 
     /**
      * Show the map scale dialog.
@@ -2530,7 +2656,10 @@ public class GUI extends FreeColClientHolder {
      * @return A destination for the unit, or null.
      */
     @JsMethod
-    public CompletableFuture<Location> showSelectDestinationDialog(Unit unit) { return null; }
+    public CompletableFuture<Location> showSelectDestinationDialog(Unit unit) {
+        logger.info("showSelectDestinationDialog(" + unit + ")");
+        return null;
+    }
 
     /**
      * Show the select-tribute-amount dialog.
@@ -2542,7 +2671,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<Integer> showSelectTributeAmountDialog(StringTemplate question,
-                                             int maximum) { return null; }
+                                             int maximum) {
+        logger.info("showSelectTributeAmountDialog(" + question + ", " + maximum + ")");
+        return null;
+    }
 
     /**
      * Show the {@code ServerListPanel}.
@@ -2564,7 +2696,10 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public FreeColPanel showStartGamePanel(Game game, Player player,
-                                           boolean singlePlayerMode) { return null; }
+                                           boolean singlePlayerMode) {
+        logger.info("showStartGamePanel(" + game + ", " + player + ", " + singlePlayerMode + ")");
+        return null;
+    }
 
     /**
      * Show the statistics panel.
@@ -2584,7 +2719,10 @@ public class GUI extends FreeColClientHolder {
      * @return The panel shown.
      */
     @JsMethod
-    public FreeColPanel showStatusPanel(String message) { return null; }
+    public FreeColPanel showStatusPanel(String message) {
+        logger.info("showStatusPanel(" + message + ")");
+        return null;
+    }
 
     /**
      * Show the tile panel for a given tile.
@@ -2627,7 +2765,10 @@ public class GUI extends FreeColClientHolder {
      * @param handler A callback to handle the continuation decision.
      */
     @JsMethod
-    public CompletableFuture<Boolean> showVictoryDialog() { return null; }
+    public CompletableFuture<Boolean> showVictoryDialog() {
+        logger.info("showVictoryDialog()");
+        return null;
+    }
 
     /**
      * Show the warehouse dialog for a colony.
@@ -2662,7 +2803,7 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public void prepareShowingMainMenu() {
-       
+        logger.info("prepareShowingMainMenu()");
     }
 
     /**
