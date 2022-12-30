@@ -37,6 +37,7 @@ import static net.sf.freecol.common.util.CollectionUtils.*;
 import net.sf.freecol.common.util.LogBuilder;
 import static net.sf.freecol.common.util.StringUtils.*;
 import net.sf.freecol.server.FreeColServer;
+import net.sf.freecol.server.ai.military.DefensiveMap;
 
 
 /**
@@ -99,6 +100,9 @@ public class FreeColDebugger {
     /** Stream for debugLog. */
     private static final AtomicReference<PrintStream> debugStream
         = new AtomicReference<PrintStream>(null);
+    
+    /** Displays the defence map for this player */
+    private static Player defenceMapPlayer = null;
 
 
     /**
@@ -382,6 +386,17 @@ public class FreeColDebugger {
      */
     public static void setDebugShowMissionInfo(boolean display) {
         showMissionInfo = display;
+    }
+    
+    /**
+     * Displays the {@link DefensiveMap} for a given player.
+     */
+    public static void setDebugShowDefenceMapForPlayer(Player defenceMapPlayer) {
+        FreeColDebugger.defenceMapPlayer = defenceMapPlayer;        
+    }
+    
+    public static Player debugShowDefenceMapForPlayer() {
+        return defenceMapPlayer;
     }
 
     /**
