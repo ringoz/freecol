@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static net.sf.freecol.common.util.StringUtils.*;
@@ -295,12 +296,12 @@ public class Introspector {
             out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
             final var ctors = Arrays.stream(clazz.getConstructors()).sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor[]::new);
             for (Constructor<?> ctor : ctors) {
-                final var types = Arrays.asList(ctor.getParameterTypes());
-                if (types.isEmpty())
+                final var types = ctor.getParameterTypes();
+                if (types.length == 0)
                     out.println("  if (types.length == 0)");
                 else
-                    out.println("  if (areSame(types, " + String.join(", ", types.stream().map((Class<?> type) -> type.getCanonicalName() + ".class").toArray(String[]::new)) + "))");
-                out.println("    return new " + clazz.getCanonicalName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + ");");
+                    out.println("  if (areSame(types, " + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> types[i].getCanonicalName() + ".class").toArray(String[]::new)) + "))");
+                out.println("    return new " + clazz.getCanonicalName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + ");");
             }
             out.println("  throw new IllegalArgumentException();");
             out.println("}");
@@ -324,11 +325,11 @@ public class Introspector {
         if (methods.length != 0) {
             out.println("  switch (method) {");
             for (Method meth : methods) {
-                final var types = Arrays.asList(meth.getParameterTypes());
+                final var types = meth.getParameterTypes();
                 if (meth.getReturnType().equals(Void.TYPE))
-                    out.println("  case \"" + meth.getName() + "\": ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + "); return null;");
+                    out.println("  case \"" + meth.getName() + "\": ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + "); return null;");
                 else
-                    out.println("  case \"" + meth.getName() + "\": return ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", types.stream().map((Class<?> type) -> "(" + type.getCanonicalName() + ")params[" + types.indexOf(type) + "]").toArray(String[]::new)) + ");");
+                    out.println("  case \"" + meth.getName() + "\": return ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + ");");
             }
             out.println("  }");
         }
