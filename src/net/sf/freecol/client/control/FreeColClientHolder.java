@@ -19,6 +19,7 @@
 
 package net.sf.freecol.client.control;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.GUI;
@@ -82,6 +83,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code ConnectController} held by the client.
      */
+    @JsMethod
     protected ConnectController getConnectController() {
         return this.freeColClient.getConnectController();
     }
@@ -91,6 +93,7 @@ public class FreeColClientHolder {
      * 
      * @return The {@code FreeColClient} held by this object.
      */
+    @JsMethod
     protected FreeColClient getFreeColClient() {
         return this.freeColClient;
     }
@@ -100,6 +103,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code FreeColServer} held by the client.
      */
+    @JsMethod
     protected FreeColServer getFreeColServer() {
         return this.freeColClient.getFreeColServer();
     }
@@ -109,6 +113,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code Game} held by the client.
      */
+    @JsMethod
     protected Game getGame() {
         return this.freeColClient.getGame();
     }
@@ -118,6 +123,7 @@ public class FreeColClientHolder {
      *
      * @return The game {@code Map}.
      */
+    @JsMethod
     protected Map getMap() {
         Game game = getGame();
         return (game == null) ? null : game.getMap();
@@ -128,6 +134,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code GUI} held by the client.
      */
+    @JsMethod
     protected GUI getGUI() {
         return this.freeColClient.getGUI();
     }
@@ -137,6 +144,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code Player} associated with the client.
      */
+    @JsMethod
     protected Player getMyPlayer() {
         return this.freeColClient.getMyPlayer();
     }
@@ -146,6 +154,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code Specification} held by the game.
      */
+    @JsMethod
     protected Specification getSpecification() {
         Game game = getGame();
         return (game == null) ? null : game.getSpecification();
@@ -156,6 +165,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code InGameController} for the client.
      */
+    @JsMethod
     protected InGameController igc() {
         return this.freeColClient.getInGameController();
     }
@@ -165,6 +175,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code PreGameController} for the client.
      */
+    @JsMethod
     protected PreGameController pgc() {
         return this.freeColClient.getPreGameController();
     }

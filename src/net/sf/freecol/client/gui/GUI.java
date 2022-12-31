@@ -103,7 +103,6 @@ import net.sf.freecol.common.resources.ResourceManager;
 /**
  * The API and common reusable functionality for the overall GUI.
  */
-@SuppressWarnings("unusable-by-js")
 public class GUI extends FreeColClientHolder {
 
     protected static final Logger logger = Logger.getLogger(GUI.class.getName());
