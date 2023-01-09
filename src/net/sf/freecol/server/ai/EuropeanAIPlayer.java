@@ -2482,7 +2482,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         }
         
         getPlayer().modifyGold(-purchasePrice);
-        final List<Unit> createdUnit = ((ServerPlayer) getPlayer()).createUnits(List.of(au), getPlayer().getEurope(), getAIRandom());
+        final List<Unit> createdUnit = ((ServerPlayer) getPlayer()).createUnits(net.ringoz.GwtCompat.List_of(au), getPlayer().getEurope(), getAIRandom());
         return true;
     }
 

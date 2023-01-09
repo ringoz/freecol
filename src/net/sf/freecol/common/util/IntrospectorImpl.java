@@ -3004,6 +3004,7 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "getScoreValue": return ((net.sf.freecol.common.model.Unit)object).getScoreValue();
   case "getScoutScore": return ((net.sf.freecol.common.model.Unit)object).getScoutScore();
   case "getSkillLevel": return ((net.sf.freecol.common.model.Unit)object).getSkillLevel();
+  case "getSortedMilitaryRoles": return ((net.sf.freecol.common.model.Unit)object).getSortedMilitaryRoles();
   case "getSpaceLeft": return ((net.sf.freecol.common.model.Unit)object).getSpaceLeft();
   case "getState": return ((net.sf.freecol.common.model.Unit)object).getState();
   case "getStop": return ((net.sf.freecol.common.model.Unit)object).getStop();
@@ -4130,6 +4131,7 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   case "hasStockade": return ((net.sf.freecol.common.model.Colony)object).hasStockade();
   case "isUndead": return ((net.sf.freecol.common.model.Colony)object).isUndead();
   case "isUnderSiege": return ((net.sf.freecol.common.model.Colony)object).isUnderSiege();
+  case "isVeryWellDefended": return ((net.sf.freecol.common.model.Colony)object).isVeryWellDefended();
   case "setBuildQueue": ((net.sf.freecol.common.model.Colony)object).setBuildQueue((java.util.List)params[0]); return null;
   case "setCurrentlyBuilding": ((net.sf.freecol.common.model.Colony)object).setCurrentlyBuilding((net.sf.freecol.common.model.BuildableType)params[0]); return null;
   case "setDisplayUnitCount": ((net.sf.freecol.common.model.Colony)object).setDisplayUnitCount((int)params[0]); return null;
@@ -5306,6 +5308,8 @@ Object invokeMethod(Object object, String method, Object... params) throws Excep
   switch (method) {
   case "getUrgentTransportables": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).getUrgentTransportables();
   case "getWishes": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).getWishes();
+  case "isAggressive": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).isAggressive();
+  case "isLikesAttackingNatives": return ((net.sf.freecol.server.ai.EuropeanAIPlayer)object).isLikesAttackingNatives();
   }
   return server_ai_MissionAIPlayer.invokeMethod(object, method, params);
 }
