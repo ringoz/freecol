@@ -29,15 +29,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import net.sf.freecol.common.model.Ability;
 import net.sf.freecol.common.model.PathNode;
+import net.sf.freecol.common.model.Settlement;
+import net.sf.freecol.common.model.Tile;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.server.ai.AIColony;
 import net.sf.freecol.server.ai.AIUnit;
 import net.sf.freecol.server.ai.EuropeanAIPlayer;
 import net.sf.freecol.server.ai.mission.DefendSettlementMission;
+import net.sf.freecol.server.ai.mission.EscortUnitMission;
 import net.sf.freecol.server.ai.mission.Mission;
 import net.sf.freecol.server.ai.mission.UnitSeekAndDestroyMission;
 import net.sf.freecol.server.ai.mission.UnitWanderHostileMission;
@@ -54,6 +58,7 @@ public final class MilitaryCoordinator {
     private final DefensiveMap defensiveMap;
     
     private final Set<Unit> targetedEnemies = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Map<Settlement, List<AIUnit>> targetedEnemySettlements = new HashMap<>();
     
     /**
      * Creates a new military coordinator for the given military units.
@@ -99,43 +104,123 @@ public final class MilitaryCoordinator {
          */
         
         // Do not move away artillery from attacked zones:
-        keepUnitsInColonies(defensiveMap.getAttackedColonies(), artilleryUnits, always());
-        
-        // Keep at least one decent defender in every colony:
+        keepUnitsInColonies(defensiveMap.getAttackedColonies(), artilleryUnits, always());        
         keepUnitsInColonies(defensiveMap.getAttackedColonies(), dragoonUnits, maxDefenders(1));
-        keepUnitsInColonies(ourColonies, artilleryUnits, maxDefenders(1));
-        placeUnitsInColonies(ourColonies, artilleryUnits, maxDefenders(1));
-        keepUnitsInColonies(ourColonies, dragoonUnits, maxDefenders(1));
-        placeUnitsInColonies(ourColonies, dragoonUnits, maxDefenders(1));
         
-        // Don't move unmounted soldiers out of the colonies:
-        keepUnitsInColonies(ourColonies, otherMilitaryUnits, always());
-        
-        keepUnitsInColonies(defensiveMap.getThreatenedColonies(), artilleryUnits, maxArtilleries(3));
-        keepUnitsInColonies(defensiveMap.getColoniesExposedWater(), artilleryUnits, maxArtilleries(2));
-        placeUnitsInColonies(defensiveMap.getThreatenedColonies(), artilleryUnits, maxArtilleries(2));
+        if (player.isAggressive()) {
+            final List<AIColony> importantWaterColonies = defensiveMap.getColoniesExposedWater().stream()
+                    .filter(ac -> ac.getColony().getUnitCount() > 3)
+                    .collect(Collectors.toList());
+            keepUnitsInColonies(importantWaterColonies, artilleryUnits, maxArtilleries(1));
+            placeUnitsInColonies(importantWaterColonies, artilleryUnits, maxArtilleries(1));
+            
+            placeUnitsInColonies(defensiveMap.getAttackedColonies(), dragoonUnits, maxDefenders(1));
+            placeUnitsInColonies(defensiveMap.getAttackedColonies(), dragoonUnits, maxDefenders(1));
+            keepUnitsInColonies(defensiveMap.getThreatenedColonies(), dragoonUnits, maxDefenders(1));
+            placeUnitsInColonies(defensiveMap.getThreatenedColonies(), dragoonUnits, maxDefenders(1));
+            
+            keepUnitsInColonies(defensiveMap.getColoniesExposedWater(), dragoonUnits, maxDefenders(1));
+            placeUnitsInColonies(defensiveMap.getColoniesExposedWater(), dragoonUnits, maxDefenders(1));
+            keepUnitsInColonies(defensiveMap.getColoniesExposedLand(), dragoonUnits, maxDefenders(1));
+            placeUnitsInColonies(defensiveMap.getColoniesExposedLand(), dragoonUnits, maxDefenders(1));
+            
+            // Don't move unmounted soldiers out of the colonies:
+            keepUnitsInColonies(ourColonies, otherMilitaryUnits, always());
+        } else {
+            // Keep at least one decent defender in every colony:
+            keepUnitsInColonies(ourColonies, artilleryUnits, maxDefenders(1));
+            placeUnitsInColonies(ourColonies, artilleryUnits, maxDefenders(1));
+            keepUnitsInColonies(ourColonies, dragoonUnits, maxDefenders(1));
+            placeUnitsInColonies(ourColonies, dragoonUnits, maxDefenders(1));
+            
+            // Don't move unmounted soldiers out of the colonies:
+            keepUnitsInColonies(ourColonies, otherMilitaryUnits, always());
+            
+            keepUnitsInColonies(defensiveMap.getThreatenedColonies(), artilleryUnits, maxArtilleries(3));
+            keepUnitsInColonies(defensiveMap.getColoniesExposedWater(), artilleryUnits, maxArtilleries(2));
+            placeUnitsInColonies(defensiveMap.getThreatenedColonies(), artilleryUnits, maxArtilleries(2));
+        }
                
         counterattackEnemyValuableUnitsReachableInTurns(dragoonUnits, 0);
         counterattackEnemyValuableUnitsReachableInTurns(dragoonUnits, 1);
         counterattackAllEnemyUnitsReachableInTurns(dragoonUnits, 1);
         counterattackAllEnemyUnitsReachableInTurns(dragoonUnits, 2);
         
-        // TODO: Here's the place for attacking enemy colonies etc.
+        attackEnemySettlements(artilleryUnits, dragoonUnits);
         
         keepUnitsInColonies(defensiveMap.getAttackedColonies(), dragoonUnits, always());
         keepUnitsInColonies(defensiveMap.getThreatenedColonies(), artilleryUnits, always());
+        if (player.isAggressive()) {
+            placeUnitsInColonies(defensiveMap.getColoniesExposedWater(), artilleryUnits, maxArtilleries(1));
+        }
         placeUnitsInColonies(defensiveMap.getColoniesExposedWater(), artilleryUnits, maxArtilleries(2));
         keepUnitsInColonies(defensiveMap.getThreatenedColonies(), dragoonUnits, always());
         
         keepUnitsInColonies(defensiveMap.getColoniesExposedLand(), artilleryUnits, maxArtilleries(2));
         placeUnitsInColonies(defensiveMap.getColoniesExposedLand(), dragoonUnits, maxDragoons(2));
         
-        assignDefendClosestColony(otherMilitaryUnits);
+        assignDefendClosestColony(unusedUnits);
+        if (!ourColonies.isEmpty()) {
+            transportMilitaryUnitsFromEurope(ourColonies.get(0), unusedUnits);
+        }
         assignWanderHostile();
     }
 
+    private void attackEnemySettlements(Set<AIUnit> artilleryUnits, Set<AIUnit> dragoonUnits) {
+        for (AIUnit artillery : new HashSet<>(artilleryUnits)) {
+            if (dragoonUnits.isEmpty()) {
+                continue;
+            }
+                
+            if (artillery.getUnit().getTile() == null) {
+                // Direct transport not supported at the moment.
+                continue;
+            }
+            final Settlement possibleTarget = (Settlement) UnitSeekAndDestroyMission.findMissionTarget(artillery, 10, true, !player.isLikesAttackingNatives());
+            if (possibleTarget == null) {
+                continue;
+            }
+            
+            List<AIUnit> settlementAttackers = targetedEnemySettlements.get(possibleTarget);
+            if (settlementAttackers == null) {
+                settlementAttackers = new ArrayList<>();
+                targetedEnemySettlements.put(possibleTarget, settlementAttackers);
+            }
+            
+            if (settlementAttackers.size() > possibleTarget.getUnitCount()) {
+                // Too many attackers.
+                continue;
+            }
+            
+            // TODO: Perhaps support going directly to possibleTarget instead?
+            final Tile escortTargetTile = artillery.getUnit().getTile();
+            
+            final AIUnit escort = dragoonUnits.stream()
+                .sorted((a, b) -> Integer.compare(a.getUnit().getTurnsToReach(escortTargetTile), b.getUnit().getTurnsToReach(escortTargetTile)))
+                .findFirst()
+                .orElse(null);
+            
+            if (escort == null
+                    || escort.getUnit().getTurnsToReach(escortTargetTile) > 8) {
+                continue;
+            }
+            
+            artillery.setMission(new UnitSeekAndDestroyMission(artillery.getAIMain(), artillery, possibleTarget));
+            artilleryUnits.remove(artillery);
+            unusedUnits.remove(artillery);
+            
+            escort.setMission(new EscortUnitMission(escort.getAIMain(), escort, artillery.getUnit()));
+            dragoonUnits.remove(escort);
+            unusedUnits.remove(escort);
+            
+            // TODO: Consider sending a second escort if dragoonUnits.size() / 2 > artilleryUnits.size()
+
+            settlementAttackers.add(artillery);
+        }
+    }
+
     private void counterattackEnemyValuableUnitsReachableInTurns(final Set<AIUnit> dragoonUnits, int turns) {
-        for (DefensiveZone defensiveZone : defensiveMap.getAttackedDefensiveZones()) {
+        for (DefensiveZone defensiveZone : defensiveMap.getDefensiveZones()) {
             final Set<Unit> unprotectedUnarmedSoldiers = identitySet(onlyUnprotectedUnarmedSoldierUnits(defensiveZone.getEnemies()));
             final Set<Unit> enemyArtillery = identitySet(onlyArtilleryUnits(defensiveZone.getEnemies()));
             
@@ -184,7 +269,7 @@ public final class MilitaryCoordinator {
     }
     
     private void counterattackAllEnemyUnitsReachableInTurns(final Set<AIUnit> dragoonUnits, int turns) {
-        for (DefensiveZone defensiveZone : defensiveMap.getAttackedDefensiveZones()) { 
+        for (DefensiveZone defensiveZone : defensiveMap.getDefensiveZones()) { 
             for (Unit enemy : defensiveZone.getEnemies()) {
                 if (targetedEnemies.contains(enemy)) {
                     continue;
@@ -198,7 +283,7 @@ public final class MilitaryCoordinator {
                     }
                     
                     final PathNode path = dragoon.getUnit().findPath(enemy.getTile()); // TODO: add max turns to the search.
-                    if (path != null & path.getTurns() <= turns) {
+                    if (path != null && path.getTurns() <= turns) {
                         dragoon.setMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
                         unusedUnits.remove(dragoon);
                         dragoonUnits.remove(dragoon);
@@ -210,13 +295,24 @@ public final class MilitaryCoordinator {
         }
     }
     
-    private void assignDefendClosestColony(Set<AIUnit> otherMilitaryUnits) {
+    private void assignDefendClosestColony(Set<AIUnit> militaryUnits) {
         for (AIUnit unit : new HashSet<>(unusedUnits)) {
             final Mission mission = player.getDefendSettlementMission(unit, true, true);
             if (mission != null) {
                 unit.setMission(mission);
                 unusedUnits.remove(unit);
             }
+        }
+    }
+    
+    private void transportMilitaryUnitsFromEurope(AIColony destination, Set<AIUnit> militaryUnits) {
+        // TODO: Better method for transporting military units from Europe.
+        for (AIUnit unit : new HashSet<>(unusedUnits)) {
+            if (unit.getUnit().getTile() != null) {
+                continue;
+            }
+            unit.setMission(new DefendSettlementMission(unit.getAIMain(), unit, destination.getColony()));
+            unusedUnits.remove(unit);
         }
     }
     
@@ -296,7 +392,7 @@ public final class MilitaryCoordinator {
     private static Set<Unit> onlyUnprotectedUnarmedSoldierUnits(Set<Unit> militaryUnits) {
         return militaryUnits.stream()
                 .filter(u -> !u.isArmed() && u.getSortedMilitaryRoles().stream().anyMatch(r -> r.getExpertUnit() == u.getType()))
-                .filter(u -> militaryUnits.stream().anyMatch(guard -> guard.getTile() == u.getTile() && guard.isOffensiveUnit()))
+                .filter(u -> militaryUnits.stream().noneMatch(guard -> guard.getTile() == u.getTile() && guard.isOffensiveUnit()))
                 .collect(Collectors.toSet());
     }
     
@@ -344,5 +440,12 @@ public final class MilitaryCoordinator {
     
     private static Function<List<AIUnit>, Boolean> always() {
         return units -> true;
+    }
+    
+    public static Predicate<? super AIUnit> isUnitHandledByMilitaryCoordinator() {
+        return u -> !u.getUnit().isNaval()
+                && u.getUnit().isOffensiveUnit()
+                && !u.getUnit().hasAbility(Ability.SPEAK_WITH_CHIEF)
+                ;
     }
 }

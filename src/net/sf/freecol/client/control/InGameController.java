@@ -35,6 +35,7 @@ import static com.ea.async.Async.await;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import jsinterop.annotations.JsAsync;
 import net.sf.freecol.FreeCol;
@@ -5022,9 +5025,10 @@ public final class InGameController extends FreeColClientHolder {
      */
     @JsAsync
     private CompletableFuture<Boolean> setCurrentPlayer(Player player) {
-        if (FreeColDebugger.isInDebugMode(FreeColDebugger.DebugMode.MENUS)
-            && currentPlayerIsMyPlayer()) {
-            getGUI().closeMenus();
+        if (FreeColDebugger.isInDebugMode(FreeColDebugger.DebugMode.MENUS) && currentPlayerIsMyPlayer()) {
+            getFreeColClient().getGUI().invokeNowOrWait(() -> {
+                getGUI().closeMenus();
+            });
         }
 
         final Game game = getGame();

@@ -94,6 +94,7 @@ import net.sf.freecol.common.model.Settlement;
 import net.sf.freecol.common.model.Specification;
 import net.sf.freecol.common.model.Stance;
 import net.sf.freecol.common.model.StanceTradeItem;
+import net.sf.freecol.common.model.Tension;
 import net.sf.freecol.common.model.Tile;
 import net.sf.freecol.common.model.TradeItem;
 import net.sf.freecol.common.model.Turn;
@@ -106,7 +107,6 @@ import net.sf.freecol.common.option.GameOptions;
 import net.sf.freecol.common.util.CachingFunction;
 import net.sf.freecol.common.util.LogBuilder;
 import net.sf.freecol.common.util.RandomChoice;
-import net.sf.freecol.server.ai.military.DefensiveMap;
 import net.sf.freecol.server.ai.military.MilitaryCoordinator;
 import net.sf.freecol.server.ai.mission.BuildColonyMission;
 import net.sf.freecol.server.ai.mission.CashInTreasureTrainMission;
@@ -300,6 +300,30 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         super(aiMain, xr);
     }
 
+    
+    /**
+     * Checks if this player should use military units more aggressively.
+     * 
+     * @return {@code true} if attacking other units and settlements are
+     *      preferred above defending its own colonies.
+     */
+    public boolean isAggressive() {
+        /*
+         * TODO: We need to decide where to put AI behavior parameters so that mod
+         *       authors can customize the AI feel. Perhaps just in the specification?
+         */
+        return getPlayer().getNation().getType().getId().equals("model.nationType.conquest")
+                || getPlayer().getNation().getType().getId().equals("model.nationType.immigration");
+    }
+    
+    /**
+     * Checks if this player should be attacking the natives.
+     * 
+     * @return {@code true} if native settlements should be targeted by this player.
+     */
+    public boolean isLikesAttackingNatives() {
+        return getPlayer().getNation().getType().getId().equals("model.nationType.conquest");
+    }
 
     /**
      * {@inheritDoc}
@@ -522,6 +546,18 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
                     player.logCheat("lift boycott at " + party.getName());
                 }
             }
+        }
+        
+        if (!getAIColonies().isEmpty()) {
+            /*
+             * It's no fun if the AI explores all the lost city rumours right from
+             * the beginning of the game, or if it's aggressively trading with the
+             * natives.
+             * 
+             * We need to compensate for the lack of such activities by gaining
+             * some gold every turn.
+             */
+            getPlayer().modifyGold(100);
         }
     
         if (!europe.isEmpty()
@@ -1113,9 +1149,14 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         List<TransportableAIObject> urgent
             = sort(transportSupply, ValuedAIObject.descendingValueComparator);
         // Do not let the list exceed 10% of all transports
+        /* Why? This just makes the transport-mission not consider possible overlapping
+         * destinations.
+         * 
         int urge = urgent.size();
         urge = Math.max(2, (urge + 5) / 10);
         while (urgent.size() > urge) urgent.remove(urge);
+        return urgent;
+        */
         return urgent;
     }
 
@@ -1631,7 +1672,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
      *
      * @param lb A {@code LogBuilder} to log to.
      */
-    protected void giveNormalMissions(LogBuilder lb) {
+    protected void giveNormalMissions(LogBuilder lb, List<AIUnit> aiUnits) {
         final AIMain aiMain = getAIMain();
         final Player player = getPlayer();
         BuildColonyMission bcm = null;
@@ -1641,7 +1682,6 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         nPioneers = pioneersNeeded();
         nScouts = scoutsNeeded();
 
-        List<AIUnit> aiUnits = getAIUnits();
         List<AIUnit> navalUnits = new ArrayList<>(aiUnits.size()/2);
         List<AIUnit> done = new ArrayList<>(aiUnits.size());
         List<TransportMission> transportMissions = new ArrayList<>(aiUnits.size()/2);
@@ -1915,12 +1955,6 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
             " naval-carriers=", nNavalCarrier,
             ")");
         logMissions(reasons, lb);
-        
-        final Set<AIUnit> militaryUnits = getAIUnits().stream()
-                .filter(u -> !u.getUnit().isNaval() && u.getUnit().isOffensiveUnit() && !u.getUnit().hasAbility(Ability.SPEAK_WITH_CHIEF))
-                .collect(Collectors.toSet());
-        final MilitaryCoordinator militaryCoordinator = new MilitaryCoordinator(this, militaryUnits);
-        militaryCoordinator.determineMissions();
     }
 
     /**
@@ -2264,6 +2298,16 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
                " v-land-REF=", player.getRebelStrengthRatio(false),
                " v-naval-REF=", player.getRebelStrengthRatio(true));
         if (turn.isFirstTurn()) initializeMissions(lb);
+        
+        if (isLikesAttackingNatives() && getGame().getTurn().getNumber() > 100) {
+            for (Player p : getGame().getLivePlayerList(player)) {
+                if (!p.isIndian()) {
+                    continue;
+                }
+                player.getTension(p).setValue(Tension.TENSION_MAX);
+            }
+        }
+        
         determineStances(lb);
 
         if (colonyCount > 0) {
@@ -2283,20 +2327,38 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         }
         cheat(lb);
         buyUnitsInEurope(lb);
-        buildTransportMaps(lb);
 
         // Note order of operations below.  We allow rearrange et al to run
         // even when there are no movable units left because this expedites
         // mission assignment.
         List<AIUnit> aiUnits = getAIUnits();
+        final Set<AIUnit> militaryUnits = getAIUnits().stream()
+                .filter(MilitaryCoordinator.isUnitHandledByMilitaryCoordinator())
+                .collect(Collectors.toSet());
+        
+        final MilitaryCoordinator militaryCoordinator = new MilitaryCoordinator(this, militaryUnits);
+        militaryCoordinator.determineMissions();
+        
+        buildTransportMaps(lb);
+        
+        for (AIUnit mu : militaryUnits) {
+            updateTransport(mu, null, lb);
+        }
+        
+        
+        final List<AIUnit> normalAiUnits = getAIUnits().stream()
+                .filter(MilitaryCoordinator.isUnitHandledByMilitaryCoordinator().negate())
+                .collect(Collectors.toList());
         for (int i = 0; i < 3; i++) {
             rearrangeColonies(lb);
-            giveNormalMissions(lb);
+            giveNormalMissions(lb, normalAiUnits);
             bringGifts(lb);
             demandTribute(lb);
             if (aiUnits.isEmpty()) break;
             aiUnits = doMissions(aiUnits, lb);
         }
+        
+        
         lb.log(logger, Level.FINE);
 
         clearAIUnits();
@@ -2325,7 +2387,34 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         final Player player = getPlayer();
         final Europe europe = player.getEurope();
         
-        boolean militaryUnitBought = false;
+        if (player.getEurope() == null) {
+            return;
+        }
+        
+        final long numberOfUnitsInDock = player.getEurope().getUnits().filter(unit -> !unit.isNaval()).count();
+        final long numberOfShips = getAIUnits().stream().filter(au -> au.getUnit().isNaval()).count();
+        
+        if (player.getEurope() != null
+                && numberOfUnitsInDock > 6
+                && numberOfShips < 15) {            
+            if (!buyShip()) {
+                return;
+            }
+        }
+        
+        if (numberOfUnitsInDock > 30) {
+            return;
+        }
+                
+        boolean militaryUnitBought = numberOfUnitsInDock >= 18;
+        if (!militaryUnitBought && isLikesAttackingNatives() && hasLessDragoonsThanColoniesPlusOne()) {
+            final Unit unitBought = buyDragoon();
+            if (unitBought == null) {
+                return;
+            }
+            militaryUnitBought = true;
+        }
+        
         for (Wish w : getWishes()) {
             if (!(w instanceof WorkerWish)) {
                 continue;
@@ -2363,6 +2452,42 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
                 }
             }
         }
+        
+        for (int i=0; i<6; i++) {
+            final Unit unitBought = buyDragoon();
+            if (unitBought == null) {
+                return;
+            }
+        }
+    }
+
+    private boolean buyShip() {
+        final List<UnitType> unitTypes = new ArrayList<>(transform(getSpecification().getUnitTypeList(),
+                ut -> ut.hasAbility(Ability.NAVAL_UNIT)
+                    && ut.isAvailableTo(getPlayer())
+                    && ut.hasPrice()
+                    && ut.getSpace() > 0));
+        Collections.shuffle(unitTypes);
+        if (unitTypes.isEmpty()) {
+            return false;
+        }
+
+        final AbstractUnit au = new AbstractUnit(unitTypes.get(0), Specification.DEFAULT_ROLE_ID, 1);
+        final int purchasePrice = getPlayer().getEuropeanPurchasePrice(au);
+        if (purchasePrice <= 0 || purchasePrice == INFINITY) {
+            return false;
+        }
+        if (purchasePrice > getPlayer().getGold()) {
+            return false;
+        }
+        
+        getPlayer().modifyGold(-purchasePrice);
+        final List<Unit> createdUnit = ((ServerPlayer) getPlayer()).createUnits(List.of(au), getPlayer().getEurope(), getAIRandom());
+        return true;
+    }
+
+    private boolean hasLessDragoonsThanColoniesPlusOne() {
+        return getAIColonies().size() + 1 > getAIUnits().stream().filter(au -> au.getUnit().isMounted() && au.getUnit().isArmed()).count();
     }
     
     private Unit buyDragoon() {

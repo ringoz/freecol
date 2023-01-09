@@ -323,7 +323,7 @@ public final class FreeColServer {
 
         this.setPublicServer(publicServer);
         this.singlePlayer = singlePlayer;
-        this.random = new Random(FreeColSeed.getFreeColSeed());
+        this.random = new Random();
         this.serverGame = new ServerGame(specification, random);
         this.inGameController.setRandom(this.random);
         this.mapGenerator = new SimpleMapGenerator(this.random);

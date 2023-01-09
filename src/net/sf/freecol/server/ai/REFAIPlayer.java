@@ -251,7 +251,7 @@ public final class REFAIPlayer extends EuropeanAIPlayer {
         final Function<Colony, TargetTuple> newTupleMapper = c -> {
             PathNode path = pathMapper.apply(c);
             return new TargetTuple(c, path,
-                UnitSeekAndDestroyMission.scorePath(aiu, path));
+                UnitSeekAndDestroyMission.scorePath(aiu, path, false, false));
         };
         final List<TargetTuple> targets
             = transform(flatten(player.getRebels(),
@@ -594,7 +594,7 @@ public final class REFAIPlayer extends EuropeanAIPlayer {
      * {@inheritDoc}
      */
     @Override
-    public void giveNormalMissions(LogBuilder lb) {
+    public void giveNormalMissions(LogBuilder lb, List<AIUnit> aiUnits) {
         final Player player = getPlayer();
         final Map<Location, List<AIUnit>> idlers = new HashMap<>();
         List<AIUnit> privateers = new ArrayList<>();
@@ -676,7 +676,7 @@ public final class REFAIPlayer extends EuropeanAIPlayer {
         // - go idle in a port
         for (AIUnit aiu : land) {
             Location target = UnitSeekAndDestroyMission.findMissionTarget(aiu, 
-                seekAndDestroyRange, false);
+                seekAndDestroyRange, false, false);
             if (target != null) {
                 Integer count = targetMap.get(target);
                 if (count == null) count = 0;
@@ -880,7 +880,7 @@ public final class REFAIPlayer extends EuropeanAIPlayer {
         }
 
         // Fall back to the normal EuropeanAI behaviour for remaining units.
-        super.giveNormalMissions(lb);
+        super.giveNormalMissions(lb, getAIUnits());
     }
 
 
