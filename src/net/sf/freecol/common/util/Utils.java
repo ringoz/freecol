@@ -20,6 +20,7 @@
 package net.sf.freecol.common.util;
 
 import java.awt.DisplayMode;
+import java.awt.EventQueue;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
@@ -40,6 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -330,6 +332,20 @@ public class Utils {
                 logger.log(Level.WARNING, warning, ie);
             }
         }
+    }
+
+    public static CompletableFuture<Void> delay(long ms) {
+        final boolean wasDispatchThread = EventQueue.isDispatchThread();
+        return PromiseCompat.create((resolve, reject) -> {
+            CompletableFuture.delayedExecutor(ms, TimeUnit.MILLISECONDS, (command) -> {
+                if (!wasDispatchThread || EventQueue.isDispatchThread())
+                    command.run();
+                else
+                    EventQueue.invokeLater(command);
+            }).execute(() -> {
+                resolve.accept(null);
+            });
+        });
     }
 
     /**

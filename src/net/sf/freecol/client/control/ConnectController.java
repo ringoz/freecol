@@ -522,7 +522,7 @@ public final class ConnectController extends FreeColClientHolder {
             getGUI().showErrorPanel(err);
             return CompletableFuture.completedFuture(false);
         }
-        while (fcc.getServerState() == null) Utils.delay(1000, null);
+        while (fcc.getServerState() == null) await(Utils.delay(100));
         askServer().disconnect();
         
         String nationId = null;
