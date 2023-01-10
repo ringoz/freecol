@@ -19,10 +19,9 @@
 
 package net.sf.freecol.common.networking;
 
-import java.io.CharArrayReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.Writer;
-import java.nio.CharBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,7 +83,7 @@ public class SocketConnection extends Connection {
             public void write(char[] cbuf, int off, int len) throws IOException {
                 if (cbuf[off + len - 1] != '\n')
                     throw new IOException();
-                io.writeLineAsync(CharBuffer.wrap(cbuf, off, len));
+                io.writeLineAsync(String.valueOf(cbuf, off, len));
             }
 
             @Override
@@ -113,7 +112,7 @@ public class SocketConnection extends Connection {
             } catch (IOException e) {
                 throw new CompletionException(e);
             }
-        }).orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
+        });//.orTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -141,7 +140,7 @@ public class SocketConnection extends Connection {
             if (line == null) return;
 
             String tag; Message message; int replyId = -1;
-            try (final FreeColXMLReader xr = new FreeColXMLReader(new CharArrayReader(line.array()))) {
+            try (final FreeColXMLReader xr = new FreeColXMLReader(new StringReader(line))) {
                 xr.nextTag();
                 tag = xr.getLocalName();
                 replyId = xr.getAttribute(NETWORK_REPLY_ID_TAG, -1);

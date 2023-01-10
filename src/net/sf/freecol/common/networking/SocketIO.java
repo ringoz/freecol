@@ -117,14 +117,14 @@ public class SocketIO implements Channel {
     }
 
     @JsAsync
-    public CompletableFuture<CharBuffer> readLineAsync() {
+    public CompletableFuture<String> readLineAsync() {
         final var all = ByteBuffer.allocate(1 << 20);
         for (ByteBuffer buf = this.readBuf; buf != null; buf = await(readBytesAsync((ByteBuffer)buf.clear()))) {
             while (buf.hasRemaining()) {
                 final byte b = buf.get();
                 if (b == '\n') {
                     final CharBuffer cbuf = CharsetCompat.decode(StandardCharsets.UTF_8, (ByteBuffer)all.flip());
-                    return CompletableFuture.completedFuture(cbuf);
+                    return CompletableFuture.completedFuture(cbuf.toString());
                 }
                 all.put(b);
             }
@@ -151,8 +151,8 @@ public class SocketIO implements Channel {
         });
     }
 
-    public CompletableFuture<Void> writeLineAsync(final CharBuffer cbuf) throws IOException {
-        final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, cbuf);
+    public CompletableFuture<Void> writeLineAsync(final String line) throws IOException {
+        final ByteBuffer buf = CharsetCompat.encode(StandardCharsets.UTF_8, CharBuffer.wrap(line));
         synchronized (this) {
             return pendingWrite = pendingWrite.thenCompose((v) -> writeBytesAsync(buf));
         }
