@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import jsinterop.annotations.JsAsync;
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -504,6 +505,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @return True if the game starts successfully.
      */
     @JsAsync
+    @JsMethod
     public CompletableFuture<Boolean> joinMultiplayerGame(String host, int port) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);

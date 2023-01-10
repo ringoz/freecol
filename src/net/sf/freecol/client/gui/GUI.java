@@ -2419,7 +2419,11 @@ public class GUI extends FreeColClientHolder {
      * @param spec The {@code Specification} to use.
      * @return The panel shown.
      */
-    public FreeColPanel showNewPanel(Specification spec) { return null; }
+    @JsMethod
+    public FreeColPanel showNewPanel(Specification spec) {
+        logger.info("showNewPanel(" + spec + ")");
+        return null;
+    }
 
     /**
      * Show the parameter choice dialog.
