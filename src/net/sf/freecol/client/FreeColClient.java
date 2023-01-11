@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.control.ClientInputHandler;
 import net.sf.freecol.client.control.ConnectController;
@@ -367,6 +368,7 @@ public final class FreeColClient {
      *
      * @return The {@code PreGameController}.
      */
+    @JsMethod
     public PreGameController getPreGameController() {
         return preGameController;
     }
@@ -376,6 +378,7 @@ public final class FreeColClient {
      *
      * @return The {@code InGameController}.
      */
+    @JsMethod
     public InGameController getInGameController() {
         return inGameController;
     }

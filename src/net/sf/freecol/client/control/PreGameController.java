@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -143,6 +144,7 @@ public final class PreGameController extends FreeColClientHolder {
      * Requests the game to be started.  This will only be successful
      * if all players are ready to start the game.
      */
+    @JsMethod
     public void requestLaunch() {
         if (getGame().allPlayersReadyToLaunch()) {
             getGUI().showStatusPanel(Messages.message("status.startingGame"));
@@ -235,6 +237,7 @@ public final class PreGameController extends FreeColClientHolder {
      * @param ready Indicates whether or not this client is ready to
      *     start the game.
      */
+    @JsMethod
     public void setReady(boolean ready) {
         getMyPlayer().setReady(ready);
         
