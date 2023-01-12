@@ -52,6 +52,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import jsinterop.annotations.JsAsync;
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -3434,6 +3435,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param showDialog If false, suppress showing the end turn dialog.
      */
     @JsAsync
+    @JsMethod
     public CompletableFuture<Void> endTurn(boolean showDialog) {
         if (!requireOurTurn()) {
             return CompletableFuture.completedFuture(null);

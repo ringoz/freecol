@@ -359,6 +359,7 @@ public final class FreeColClient {
      *
      * @return The {@code ConnectController}.
      */
+    @JsMethod
     public ConnectController getConnectController() {
         return connectController;
     }
@@ -407,6 +408,7 @@ public final class FreeColClient {
      * @return The {@code FreeColServer} or {@code null} if no
      *     server has been started.
      */
+    @JsMethod
     public FreeColServer getFreeColServer() {
         return freeColServer;
     }
@@ -436,6 +438,7 @@ public final class FreeColClient {
      *
      * @return The current {@code GUI}.
      */
+    @JsMethod
     public GUI getGUI() {
         return gui;
     }
@@ -455,6 +458,7 @@ public final class FreeColClient {
      * @return The current {@code Game}.
      * @see #setGame
      */
+    @JsMethod
     public Game getGame() {
         return this.game;
     }
@@ -475,6 +479,7 @@ public final class FreeColClient {
      * @return The {@code Player} made to represent this clients user.
      * @see #setMyPlayer(Player)
      */
+    @JsMethod
     public Player getMyPlayer() {
         return this.player;
     }
@@ -524,6 +529,7 @@ public final class FreeColClient {
      *
      * @return True if the game has started.
      */
+    @JsMethod
     public synchronized boolean isInGame() {
         return this.inGame;
     }
