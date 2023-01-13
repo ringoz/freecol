@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.ObjectWithId;
 import net.sf.freecol.common.io.FreeColDirectories;
 import net.sf.freecol.common.io.FreeColModFile;
@@ -338,6 +339,7 @@ public class Messages {
         return nameKey(object.getId());
     }
 
+    @JsMethod
     public static String getName(String id) {
         return message(nameKey(id));
     }
@@ -354,6 +356,7 @@ public class Messages {
         return descriptionKey(object.getId());
     }
 
+    @JsMethod
     public static String getDescription(String id) {
         return message(descriptionKey(id));
     }
@@ -367,6 +370,7 @@ public class Messages {
         return id + SHORT_DESCRIPTION_SUFFIX;
     }
 
+    @JsMethod
     public static String getShortDescription(String id) {
         return message(shortDescriptionKey(id));
     }
@@ -699,6 +703,7 @@ public class Messages {
      * @param messageId The key of the message to find.
      * @return String text mapping or the key
      */
+    @JsMethod
     public static String message(String messageId) {
         // Check that all the values are correct.
         if (messageId == null) {
