@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.NameCache;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -1400,6 +1401,7 @@ public class Game extends FreeColGameObject {
      * @param message The {@code ModelMessage} to find the object in.
      * @return The source object.
      */
+    @JsMethod
     public FreeColGameObject getMessageSource(ModelMessage message) {
         return getFreeColGameObject(message.getSourceId());
     }
@@ -1411,6 +1413,7 @@ public class Game extends FreeColGameObject {
      * @param message The {@code ModelMessage} to find the object in.
      * @return An object to display.
      */
+    @JsMethod
     public FreeColObject getMessageDisplay(ModelMessage message) {
         String id = message.getDisplayId();
         if (id == null) id = message.getSourceId();

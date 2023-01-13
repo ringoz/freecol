@@ -725,7 +725,7 @@ public class Messages {
      * @param template The {@code StringTemplate} to localize.
      * @return The localized string.
      */
-    @JsMethod(name = "template")
+    @JsMethod(name = "messageT")
     public static String message(StringTemplate template) {
         if (template == null) return null;
         String result = "";
