@@ -27,6 +27,7 @@ import java.util.logging.Level;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -128,6 +129,7 @@ public class StringTemplate extends FreeColObject {
         return new StringTemplate(id, template);
     }
 
+    @JsMethod
     public static StringTemplate name(String value) {
         return new StringTemplate(value, null, TemplateType.NAME);
     }
@@ -136,6 +138,7 @@ public class StringTemplate extends FreeColObject {
         return key(named.getNameKey());
     }
 
+    @JsMethod
     public static StringTemplate key(String value) {
         return new StringTemplate(value, null, TemplateType.KEY);
     }
@@ -144,10 +147,12 @@ public class StringTemplate extends FreeColObject {
         return template(named.getNameKey());
     }
 
+    @JsMethod
     public static StringTemplate template(String value) {
         return new StringTemplate(value, null, TemplateType.TEMPLATE);
     }
 
+    @JsMethod
     public static StringTemplate label(String value) {
         return new StringTemplate(value, null, TemplateType.LABEL);
     }
