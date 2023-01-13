@@ -129,7 +129,7 @@ public class StringTemplate extends FreeColObject {
         return new StringTemplate(id, template);
     }
 
-    @JsMethod
+    @JsMethod(name = "name$")
     public static StringTemplate name(String value) {
         return new StringTemplate(value, null, TemplateType.NAME);
     }

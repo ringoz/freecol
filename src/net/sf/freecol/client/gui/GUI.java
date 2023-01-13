@@ -1368,7 +1368,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} to go to.
      */
-    @JsMethod(name = "performGotoTile")
+    @JsMethod(name = "performGoto$")
     public void performGoto(Tile tile) {
         logger.info("performGoto(" + tile + ")");
     }
@@ -1639,7 +1639,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} to select.
      */
-    @JsMethod(name = "changeViewTile")
+    @JsMethod(name = "changeView$")
     public void changeView(Tile tile) {
         logger.info("changeView(" + tile + ")");
     }
@@ -1655,7 +1655,7 @@ public class GUI extends FreeColClientHolder {
      * @param force Set true if the unit is the same, but *has*
      *     changed in some way (e.g. moves left).
      */
-    @JsMethod(name = "changeViewUnit")
+    @JsMethod(name = "changeView$$")
     public void changeView(Unit unit, boolean force) {
         logger.info("changeView(" + unit + ", " + force + ")");
     }
