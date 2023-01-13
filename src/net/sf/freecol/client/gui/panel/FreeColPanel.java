@@ -38,7 +38,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import jsinterop.annotations.JsMethod;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.control.InGameController;
@@ -231,7 +230,6 @@ public abstract class FreeColPanel extends MigPanel implements ActionListener {
      * @param runnable Some code to run on close.
      * @return This panel.
      */
-    @JsMethod
     public FreeColPanel addClosingCallback(final Runnable runnable) {
         if (runnable != null) {
             addPropertyChangeListener(new PropertyChangeListener() {
