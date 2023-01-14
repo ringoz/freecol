@@ -61,6 +61,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
@@ -1060,6 +1061,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The {@code Color}.
      */
+    @JsMethod
     public Color getNationColor() {
         final Nation nation = getNation();
         return (nation == null) ? null : nation.getColor();
@@ -2900,6 +2902,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * @param tile The {@code Tile} to check.
      * @return True if this player can see the given {@code Tile}.
      */
+    @JsMethod
     public boolean canSee(Tile tile) {
         if (tile == null) return false;
         final Map map = getGame().getMap();

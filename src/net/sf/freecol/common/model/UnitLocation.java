@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -211,6 +212,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
      *
      * @return The first {@code Unit}.
      */
+    @JsMethod
     public final Unit getFirstUnit() {
         return first(getUnits());
     }

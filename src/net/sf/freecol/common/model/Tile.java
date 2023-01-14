@@ -56,6 +56,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Constants.IntegrityType;
@@ -288,6 +289,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return The {@code TileType}.
      */
+    @JsMethod
     public TileType getType() {
         return type;
     }
@@ -335,6 +337,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return The x-coordinate of this {@code Tile}.
      */
+    @JsMethod
     public int getX() {
         return x;
     }
@@ -344,6 +347,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return The y-coordinate of this {@code Tile}.
      */
+    @JsMethod
     public int getY() {
         return y;
     }
@@ -364,6 +368,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *     {@code Tile}, or null if none is present.
      * @see #setSettlement
      */
+    @JsMethod
     @Override
     public Settlement getSettlement() {
         return settlement;
@@ -448,6 +453,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return The tile {@code Region}.
      */
+    @JsMethod
     public Region getRegion() {
         return region;
     }
@@ -2415,6 +2421,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Player getOwner() {
         return owner;

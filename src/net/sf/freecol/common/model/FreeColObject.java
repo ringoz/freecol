@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.ObjectWithId;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -127,6 +128,7 @@ public abstract class FreeColObject
      *
      * @return The identifier.
      */
+    @JsMethod
     public String getId() {
         return this.id;
     }

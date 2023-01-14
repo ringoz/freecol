@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.option.GameOptions;
@@ -128,6 +129,7 @@ public final class TileType extends FreeColSpecObjectType
      *
      * @return True if this is a forested tile type.
      */
+    @JsMethod
     public boolean isForested() {
         return forest;
     }
@@ -137,6 +139,7 @@ public final class TileType extends FreeColSpecObjectType
      *
      * @return True if this is a water tile type.
      */
+    @JsMethod
     public boolean isWater() {
         return water;
     }

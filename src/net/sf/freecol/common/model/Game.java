@@ -1107,6 +1107,7 @@ public class Game extends FreeColGameObject {
      *
      * @return The game {@code Map}.
      */
+    @JsMethod
     public synchronized Map getMap() {
         return this.map;
     }

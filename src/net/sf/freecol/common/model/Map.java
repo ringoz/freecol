@@ -54,6 +54,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -359,6 +360,7 @@ public class Map extends FreeColGameObject implements Location {
      *
      * @return The width of this map.
      */
+    @JsMethod
     public int getWidth() {
         return this.width;
     }
@@ -368,6 +370,7 @@ public class Map extends FreeColGameObject implements Location {
      *
      * @return The height of this map.
      */
+    @JsMethod
     public int getHeight() {
         return this.height;
     }
@@ -454,6 +457,7 @@ public class Map extends FreeColGameObject implements Location {
      * @return The {@code Tile} at (x, y), or null if the
      *     position is invalid.
      */
+    @JsMethod
     public Tile getTile(int x, int y) {
         if (!isValid(x, y)) return null;
         return this.tileArray[x][y];
