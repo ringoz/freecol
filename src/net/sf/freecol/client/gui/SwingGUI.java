@@ -1974,8 +1974,9 @@ public class SwingGUI extends GUI {
      */
     @Override
     public FreeColPanel showEventPanel(String header, String image,
-                                       String footer) {
-        return this.widgets.showEventPanel(header, image, footer);
+                                       String footer, Runnable callback) {
+        return this.widgets.showEventPanel(header, image, footer)
+            .addClosingCallback(callback);
     }
 
     /**

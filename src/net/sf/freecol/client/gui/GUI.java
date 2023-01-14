@@ -2184,7 +2184,7 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public FreeColPanel showEventPanel(String header, String image,
-                                       String footer) {
+                                       String footer, Runnable callback) {
         logger.info("showEventPanel(" + header + ", " + image + ", " + footer + ")");
         return null;
     }

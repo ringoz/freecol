@@ -386,7 +386,7 @@ public final class InGameController extends FreeColClientHolder {
      */
     private void showEventPanel(String header, String imageKey,
                                 String footer) {
-        invokeLater(() -> getGUI().showEventPanel(header, imageKey, footer));
+        invokeLater(() -> getGUI().showEventPanel(header, imageKey, footer, null));
     }
 
     /**
@@ -4391,8 +4391,7 @@ public final class InGameController extends FreeColClientHolder {
             .addName("%name%", name);
 
         invokeLater(() -> {
-            final FreeColPanel firstLandinPanel = getGUI().showEventPanel(Messages.message(t), "image.flavor.event.firstLanding", null);
-            firstLandinPanel.addClosingCallback(() -> {
+            final FreeColPanel firstLandinPanel = getGUI().showEventPanel(Messages.message(t), "image.flavor.event.firstLanding", null, () -> {
                 // Add tutorial message.
                 final String key = "B"; /*@net.ringoz.GwtIncompatible FreeColActionUI
                     .getHumanKeyStrokeText(getFreeColClient()
