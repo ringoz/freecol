@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -4127,6 +4128,7 @@ public class Unit extends GoodsLocation
      *
      * @return The location of this {@code Unit}.
      */
+    @JsMethod
     @Override
     public Location getLocation() {
         return this.location;

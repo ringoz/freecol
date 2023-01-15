@@ -22,6 +22,7 @@ package net.sf.freecol.common.model;
 import java.util.List;
 import java.util.stream.Stream;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.ObjectWithId;
 
 
@@ -53,6 +54,7 @@ public interface Location extends ObjectWithId {
      *
      * @return The Tile associated with this Location, or null if none found.
      */
+    @JsMethod
     public Tile getTile();
 
     /**

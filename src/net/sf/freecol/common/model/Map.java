@@ -457,7 +457,7 @@ public class Map extends FreeColGameObject implements Location {
      * @return The {@code Tile} at (x, y), or null if the
      *     position is invalid.
      */
-    @JsMethod
+    @JsMethod(name = "getTileAt")
     public Tile getTile(int x, int y) {
         if (!isValid(x, y)) return null;
         return this.tileArray[x][y];
