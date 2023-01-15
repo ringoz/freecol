@@ -267,7 +267,7 @@ public class SocketConnection extends Connection {
         });
 
         final QuestionMessage qm = new QuestionMessage(replyId, message);
-        return sendMessage(qm).thenCompose((v) -> nro.orTimeout(timeout, TimeUnit.MILLISECONDS)).thenApply((response) -> {
+        return sendMessage(qm).thenCompose((v) -> nro/*.orTimeout(timeout, TimeUnit.MILLISECONDS)*/).thenApply((response) -> {
             if (response == null && this.io == null) {
                 return null;
             } else if (!(response instanceof ReplyMessage)) {
