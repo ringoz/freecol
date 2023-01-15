@@ -1303,6 +1303,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The focus {@code Tile}.
      */
+    @JsMethod
     public Tile getFocus() {
         return null;
     }
@@ -1316,7 +1317,10 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The new focus {@code Tile}.
      */
-    public void setFocus(Tile tile) {}
+    @JsMethod
+    public void setFocus(Tile tile) {
+        logger.info("setFocus(" + tile + ")");
+    }
 
 
     // Path handling
