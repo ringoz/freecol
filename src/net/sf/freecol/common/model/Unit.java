@@ -892,6 +892,7 @@ public class Unit extends GoodsLocation
      *
      * @return The {@code Role} of this {@code Unit}.
      */
+    @JsMethod
     public Role getRole() {
         return role;
     }
@@ -1620,6 +1621,7 @@ public class Unit extends GoodsLocation
      *
      * @return Whether this unit looks native or not.
      */
+    @JsMethod
     public boolean hasNativeEthnicity() {
         try {
             // FIXME: getNation() could fail, but getNationType()
