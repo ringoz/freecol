@@ -4107,6 +4107,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Player getOwner() {
         return owner;
@@ -4131,6 +4132,7 @@ public class Unit extends GoodsLocation
      *
      * @return The location of this {@code Unit}.
      */
+    @JsMethod
     @Override
     public Location getLocation() {
         return this.location;

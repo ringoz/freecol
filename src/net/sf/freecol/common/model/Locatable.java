@@ -20,8 +20,6 @@
 
 package net.sf.freecol.common.model;
 
-import jsinterop.annotations.JsMethod;
-
 /**
  * An object that can be put in a {@code Location}.
  */
@@ -32,7 +30,6 @@ public interface Locatable {
      *
      * @return The location of this {@code Locatable}.
      */
-    @JsMethod
     public Location getLocation();
 
     /**

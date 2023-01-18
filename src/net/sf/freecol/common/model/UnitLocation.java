@@ -305,6 +305,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Tile getTile() {
         return null; // Override this where it becomes meaningful.
@@ -412,6 +413,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public List<Unit> getUnitList() {
         synchronized (this.units) {
@@ -431,6 +433,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Settlement getSettlement() {
         return null;

@@ -20,8 +20,6 @@
 
 package net.sf.freecol.common.model;
 
-import jsinterop.annotations.JsMethod;
-
 /**
  * Interface for objects which can be owned by a {@code Player}.
  * @see Player
@@ -33,7 +31,6 @@ public interface Ownable {
      *
      * @return The {@code Player} controlling this {@code Ownable}.
      */
-    @JsMethod
     public Player getOwner();
 
     /**
