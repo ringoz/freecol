@@ -544,7 +544,6 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
-    @JsMethod
     @Override
     public Player getOwner() {
         return owner;

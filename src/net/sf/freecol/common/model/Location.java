@@ -126,6 +126,7 @@ public interface Location extends ObjectWithId {
      *
      * @return A list of all the units at this location.
      */
+    @JsMethod
     public List<Unit> getUnitList();
 
     /**
@@ -143,6 +144,7 @@ public interface Location extends ObjectWithId {
      *
      * @return The associated {@code Settlement}, or null if none.
      */
+    @JsMethod
     public Settlement getSettlement();
 
     /**

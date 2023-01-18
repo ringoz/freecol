@@ -567,6 +567,7 @@ public class Unit extends GoodsLocation
      *
      * @return The current {@code UnitType}.
      */
+    @JsMethod
     public final UnitType getType() {
         return this.type;
     }
@@ -4128,7 +4129,6 @@ public class Unit extends GoodsLocation
      *
      * @return The location of this {@code Unit}.
      */
-    @JsMethod
     @Override
     public Location getLocation() {
         return this.location;
