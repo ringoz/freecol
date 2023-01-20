@@ -4241,6 +4241,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Tile getTile() {
         return (getLocation() != null) ? getLocation().getTile() : null;
