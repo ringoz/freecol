@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import static net.sf.freecol.common.util.RandomUtils.*;
@@ -227,6 +228,7 @@ public enum Direction implements Named {
      * @param angle The angle to convert.
      * @return An equivalent {@code Direction}.
      */
+    @JsMethod
     public static Direction angleToDirection(double angle) {
         return Direction.values()[(int)Math.floor(angle / (Math.PI/4))];
     }

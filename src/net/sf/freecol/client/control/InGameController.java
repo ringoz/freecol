@@ -4088,6 +4088,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param direction The {@code Direction} in which to move
      *     the active unit.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Void> moveUnit(Unit unit, Direction direction) {
         if (unit == null || !unit.hasTile()
