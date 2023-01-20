@@ -5347,7 +5347,7 @@ public final class InGameController extends FreeColClientHolder {
                 logger.warning("Update copy-in failed: " + fco.getId());
                 continue;
             } else if (fco instanceof Tile) {
-                invokeLater(() -> getGUI().refreshTile((Tile)fco));
+                invokeLater(() -> getGUI().refreshTile((Tile)fcgo));
             }
         }
         player.invalidateCanSeeTiles(); //+vis(player)
