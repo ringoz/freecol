@@ -22,6 +22,7 @@ package net.sf.freecol.common.model;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import static net.sf.freecol.common.model.Constants.*;
 import net.sf.freecol.common.model.Map.Layer;
@@ -85,6 +86,7 @@ public abstract class TileItem extends FreeColGameObject
      *
      * @return The z-index.
      */
+    @JsMethod
     public abstract int getZIndex();
 
     /**
@@ -133,6 +135,7 @@ public abstract class TileItem extends FreeColGameObject
      *
      * @return True if this is a natural {@code TileItem}.
      */
+    @JsMethod
     public abstract boolean isNatural();
 
     /**
@@ -140,6 +143,7 @@ public abstract class TileItem extends FreeColGameObject
      *
      * @return True if complete.
      */
+    @JsMethod
     public abstract boolean isComplete();
 
     /**
@@ -202,6 +206,7 @@ public abstract class TileItem extends FreeColGameObject
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public abstract String getNameKey();
 

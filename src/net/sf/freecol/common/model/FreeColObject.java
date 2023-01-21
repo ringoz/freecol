@@ -846,6 +846,7 @@ public abstract class FreeColObject
      *
      * @return A suitable {@code FreeColObject} to display, defaults to this.
      */
+    @JsMethod
     public FreeColObject getDisplayObject() {
         return this;
     }
@@ -1388,6 +1389,7 @@ public abstract class FreeColObject
      *
      * @return The tag.
      */
+    @JsMethod
     public abstract String getXMLTagName();
 
 

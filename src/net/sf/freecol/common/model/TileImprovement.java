@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.model.Constants.*;
@@ -126,6 +127,7 @@ public class TileImprovement extends TileItem {
      *
      * @return The type of this improvement.
      */
+    @JsMethod
     public TileImprovementType getType() {
         return type;
     }
@@ -135,6 +137,7 @@ public class TileImprovement extends TileItem {
      *
      * @return True if this is a river improvement.
      */
+    @JsMethod
     public boolean isRiver() {
         return "model.improvement.river".equals(type.getId());
     }
@@ -144,6 +147,7 @@ public class TileImprovement extends TileItem {
      *
      * @return True if this is a road improvement.
      */
+    @JsMethod
     public boolean isRoad() {
         return "model.improvement.road".equals(type.getId());
     }

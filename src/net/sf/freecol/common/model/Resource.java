@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.model.Constants.*;
@@ -102,6 +103,7 @@ public class Resource extends TileItem {
      *
      * @return The resource type.
      */
+    @JsMethod
     public ResourceType getType() {
         return type;
     }
@@ -111,6 +113,7 @@ public class Resource extends TileItem {
      *
      * @return True if this is an unlimited resource.
      */
+    @JsMethod
     public boolean isUnlimited() {
         return quantity == UNLIMITED;
     }
@@ -120,6 +123,7 @@ public class Resource extends TileItem {
      *
      * @return The resource quantity.
      */
+    @JsMethod
     public int getQuantity() {
         return quantity;
     }

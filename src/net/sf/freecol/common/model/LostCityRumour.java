@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -143,6 +144,7 @@ public class LostCityRumour extends TileItem {
      *
      * @return The {@code RumourType}.
      */
+    @JsMethod
     public final RumourType getType() {
         return type;
     }
@@ -161,6 +163,7 @@ public class LostCityRumour extends TileItem {
      *
      * @return The name.
      */
+    @JsMethod
     public final String getName() {
         return name;
     }

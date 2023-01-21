@@ -442,6 +442,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return A list of completed {@code TileItem}s.
      */
+    @JsMethod
     public List<TileItem> getCompleteItems() {
         return (tileItemContainer == null) ? Collections.<TileItem>emptyList()
             : tileItemContainer.getCompleteItems();
