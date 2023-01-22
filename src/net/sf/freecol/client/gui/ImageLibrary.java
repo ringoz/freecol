@@ -1301,6 +1301,7 @@ public final class ImageLibrary {
      * @param settlement The {@code Settlement} to examine.
      * @return An image key.
      */
+    @JsMethod
     public static String getSettlementKey(Settlement settlement) {
         String key = getSettlementTypeKey(settlement.getType());
         if (settlement instanceof Colony) {
