@@ -4315,6 +4315,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Settlement getSettlement() {
         Location loc = getLocation();
@@ -4633,6 +4634,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColObject getDisplayObject() {
         return getType();

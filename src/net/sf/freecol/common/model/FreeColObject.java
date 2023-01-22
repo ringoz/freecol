@@ -305,7 +305,6 @@ public abstract class FreeColObject
      *
      * @return The {@code Game} this object belongs to.
      */
-    @JsMethod
     public Game getGame() {
         return null;
     }
@@ -1389,7 +1388,6 @@ public abstract class FreeColObject
      *
      * @return The tag.
      */
-    @JsMethod
     public abstract String getXMLTagName();
 
 

@@ -4172,6 +4172,7 @@ public class Player extends FreeColGameObject implements Nameable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColObject getDisplayObject() {
         return getNation();

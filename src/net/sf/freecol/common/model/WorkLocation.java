@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.util.LogBuilder;
@@ -672,6 +673,7 @@ public abstract class WorkLocation extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Tile getTile() {
         return getSettlement().getTile();
@@ -730,6 +732,7 @@ public abstract class WorkLocation extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Settlement getSettlement() {
         return this.colony;

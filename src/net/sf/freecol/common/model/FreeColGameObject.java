@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import static net.sf.freecol.common.model.Constants.*;
 import net.sf.freecol.common.util.LogBuilder;
@@ -278,6 +279,7 @@ public abstract class FreeColGameObject extends FreeColObject {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Game getGame() {
         return this.game;

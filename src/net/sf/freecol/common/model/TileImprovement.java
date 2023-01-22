@@ -515,6 +515,7 @@ public class TileImprovement extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public String getNameKey() {
         return (type == null) ? null : type.getNameKey();
@@ -526,6 +527,7 @@ public class TileImprovement extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final int getZIndex() {
         return type.getZIndex();
@@ -626,6 +628,7 @@ public class TileImprovement extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isNatural() {
         return type.isNatural();
@@ -634,6 +637,7 @@ public class TileImprovement extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isComplete() {
         return turnsToComplete <= 0;

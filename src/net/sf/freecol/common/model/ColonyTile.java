@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Player.NoClaimReason;
@@ -502,6 +503,7 @@ public class ColonyTile extends WorkLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColObject getDisplayObject() {
         return getTile().getDisplayObject();

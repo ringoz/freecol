@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.util.Utils;
@@ -240,6 +241,7 @@ public class Goods extends AbstractGoods implements Locatable, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColObject getDisplayObject() {
         return getType();

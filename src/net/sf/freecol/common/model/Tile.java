@@ -368,6 +368,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *     {@code Tile}, or null if none is present.
      * @see #setSettlement
      */
+    @JsMethod
     @Override
     public Settlement getSettlement() {
         return settlement;
@@ -2275,6 +2276,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod    
     @Override
     public Tile getTile() {
         return this;
@@ -2549,6 +2551,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColObject getDisplayObject() {
         return getType();

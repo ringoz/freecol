@@ -309,6 +309,7 @@ public class LostCityRumour extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public String getNameKey() {
         return Messages.nameKey("model.lostCityRumour");
@@ -320,6 +321,7 @@ public class LostCityRumour extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final int getZIndex() {
         return Tile.RUMOUR_ZINDEX;
@@ -364,6 +366,7 @@ public class LostCityRumour extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isNatural() {
         return false;
@@ -372,6 +375,7 @@ public class LostCityRumour extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isComplete() {
         return true;

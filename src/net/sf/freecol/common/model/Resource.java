@@ -187,6 +187,7 @@ public class Resource extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public String getNameKey() {
         return getType().getNameKey();
@@ -198,6 +199,7 @@ public class Resource extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final int getZIndex() {
         return Tile.RESOURCE_ZINDEX;
@@ -249,6 +251,7 @@ public class Resource extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isNatural() {
         return true;
@@ -257,6 +260,7 @@ public class Resource extends TileItem {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean isComplete() {
         return true;

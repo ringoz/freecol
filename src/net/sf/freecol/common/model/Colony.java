@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -2647,6 +2648,7 @@ public class Colony extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public List<Unit> getUnitList() {
         return toList(getUnits());

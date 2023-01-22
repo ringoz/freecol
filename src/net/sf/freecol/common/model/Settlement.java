@@ -575,6 +575,7 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Tile getTile() {
         return tile;
@@ -591,6 +592,7 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Settlement getSettlement() {
         return this;
