@@ -347,6 +347,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return The current production bonus of the colony.
      */
+    @JsMethod
     public int getProductionBonus() {
         return this.productionBonus;
     }
@@ -1741,6 +1742,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return The apparent number of {@code Unit}s at this colony.
      */
+    @JsMethod
     public int getApparentUnitCount() {
         return (this.displayUnitCount > 0) ? this.displayUnitCount
             : getUnitCount();
@@ -2581,6 +2583,7 @@ public class Colony extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabelFor(Player player) {
         // Everyone can always work out a colony name, but it can be invalid
@@ -2858,6 +2861,8 @@ public class Colony extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
+    @Override
     public boolean hasContacted(Player player) {
         return player != null
                 && (player.isEuropean()

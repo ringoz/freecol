@@ -51,6 +51,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -318,6 +319,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
      *
      * @return The missionary at this settlement, or null if there is none.
      */
+    @JsMethod
     public Unit getMissionary() {
         return missionary;
     }
@@ -493,6 +495,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
      *
      * @return The most hated nation.
      */
+    @JsMethod
     public Player getMostHated() {
         return mostHated;
     }
@@ -664,6 +667,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
      * @param player The {@code Player} contemplating scouting.
      * @return Whether it might be worth the player scouting this settlement.
      */
+    @JsMethod
     public boolean worthScouting(Player player) {
         ContactLevel cl = getContactLevel(player);
         switch (cl) {
@@ -706,6 +710,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
      * @return The current alarm level or null if the settlement has not
      *     encoutered the player.
      */
+    @JsMethod
     public Tension getAlarm(Player player) {
         synchronized (this.alarm) {
             return this.alarm.get(player);
@@ -1256,6 +1261,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabelFor(Player player) {
         return (player == null || hasContacted(player))
@@ -1439,6 +1445,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     public boolean hasContacted(Player player) {
         return player != null
             && (player.isIndian()

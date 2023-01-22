@@ -113,6 +113,7 @@ public abstract class Settlement extends GoodsLocation
      *
      * @return The settlement type.
      */
+    @JsMethod
     public final SettlementType getType() {
         return type;
     }
@@ -544,6 +545,7 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Player getOwner() {
         return owner;
@@ -760,6 +762,7 @@ public abstract class Settlement extends GoodsLocation
      * @param player The other {@code Player} to check.
      * @return True if the settlement has contacted the player.
      */
+    @JsMethod
     public abstract boolean hasContacted(Player player);
 
     /**

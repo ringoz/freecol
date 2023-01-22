@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -113,6 +114,7 @@ public class SettlementType extends FreeColSpecObjectType {
      *
      * @return True if this is a capital.
      */
+    @JsMethod
     public final boolean isCapital() {
         return capital;
     }

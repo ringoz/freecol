@@ -664,6 +664,7 @@ public abstract class WorkLocation extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabelFor(Player player) {
         return (getOwner() == player) ? getLocationLabel()

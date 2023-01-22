@@ -423,6 +423,7 @@ public abstract class FreeColObject
      * @param id The object identifier.
      * @return True if the ability is present.
      */
+    @JsMethod
     public final boolean hasAbility(String id) {
         return hasAbility(id, null);
     }
