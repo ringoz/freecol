@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.FreeColSeed;
@@ -841,6 +842,11 @@ public final class FreeColServer {
     public void saveGame(File file, OptionGroup options, Unit active)
         throws IOException {
         saveGame(file, null, options, active, null);
+    }
+
+    @JsMethod
+    public void saveGame(String path) throws IOException {
+        saveGame(new File(path), null, null);
     }
 
     /**
