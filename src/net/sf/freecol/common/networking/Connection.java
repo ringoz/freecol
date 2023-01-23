@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.io.FreeColDirectories;
@@ -113,6 +114,7 @@ public abstract class Connection implements Closeable {
      *
      * @return The host address, or an empty string on error.
      */
+    @JsMethod
     public String getHostAddress() {
         return "";
     }

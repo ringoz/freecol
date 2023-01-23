@@ -22,6 +22,7 @@ package net.sf.freecol.client.networking;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.networking.Connection;
@@ -168,6 +169,7 @@ public class UserServerAPI extends ServerAPI {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     public synchronized Connection getConnection() {
         return this.connection;
     }

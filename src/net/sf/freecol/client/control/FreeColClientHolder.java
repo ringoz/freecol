@@ -56,6 +56,7 @@ public class FreeColClientHolder {
      *
      * @return The {@code ServerAPI}.
      */
+    @JsMethod
     public UserServerAPI askServer() {
         return this.freeColClient.askServer();
     }

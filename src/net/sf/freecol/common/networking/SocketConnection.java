@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -223,6 +224,7 @@ public class SocketConnection extends Connection {
      *
      * @return The host address, or an empty string on error.
      */
+    @JsMethod
     @Override
     public String getHostAddress() {
         try {
