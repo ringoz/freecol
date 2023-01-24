@@ -29,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Colony.NoBuildReason;
@@ -451,6 +452,7 @@ public final class UnitType extends BuildableType implements Consumer {
      *
      * @return A suitable role identifier for display purposes.
      */
+    @JsMethod
     public String getDisplayRoleId() {
         Role r = first(getExpertRoles());
         return (r != null) ? r.getId() : Specification.DEFAULT_ROLE_ID;
