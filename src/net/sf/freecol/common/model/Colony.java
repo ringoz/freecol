@@ -921,6 +921,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return The stockade key, or null if no stockade-building is present.
      */
+    @JsMethod
     public String getStockadeKey() {
         Building stockade = getStockade();
         return (stockade == null) ? null : stockade.getType().getSuffix();
