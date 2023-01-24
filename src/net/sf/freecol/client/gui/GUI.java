@@ -170,11 +170,10 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
+    public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  GoodsType goodsType,
                                  String okKey, String cancelKey) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledGoodsTypeImage(goodsType));
+        ImageIcon icon = null;
         return confirm(tile, template, icon, okKey, cancelKey);
     }
 
@@ -188,11 +187,10 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
+    public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  Settlement settlement,
                                  String okKey, String cancelKey) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledSettlementImage(settlement));
+        ImageIcon icon = null;
         return confirm(tile, template, icon, okKey, cancelKey);
     }
 
@@ -206,10 +204,9 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
-    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template, Unit unit,
+    public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template, Unit unit,
                                  String okKey, String cancelKey) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledUnitImage(unit));
+        ImageIcon icon = null;
         return confirm(tile, template, icon, okKey, cancelKey);
     }
 
@@ -527,10 +524,9 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> CompletableFuture<T> getChoice(StringTemplate explain, String cancelKey,
+    public <T> CompletableFuture<T> getChoice(StringTemplate explain, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getPlaceholderImage());
+        ImageIcon icon = null;
         return getChoice(null, explain, icon, cancelKey, choices);
     }
 
@@ -546,11 +542,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    private final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+    protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   GoodsType goodsType, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledGoodsTypeImage(goodsType));
+        ImageIcon icon = null;
         return getChoice(tile, template, icon, cancelKey, choices);
     }
 
@@ -566,11 +561,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    private final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+    protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   Nation nation, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledNationImage(nation));
+        ImageIcon icon = null;
         return getChoice(tile, template, icon, cancelKey, choices);
     }
 
@@ -586,11 +580,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+    public <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Settlement settlement, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledSettlementImage(settlement));
+        ImageIcon icon = null;
         return getChoice(tile, template, icon, cancelKey, choices);
     }
 
@@ -606,11 +599,10 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
-    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+    public <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Unit unit, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
-        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
-            .getScaledUnitImage(unit));
+        ImageIcon icon = null;
         return getChoice(tile, template, icon, cancelKey, choices);
     }
 
@@ -1050,6 +1042,7 @@ public class GUI extends FreeColClientHolder {
      *
      * @return Null here, real implementations will override.
      */
+    @net.ringoz.GwtIncompatible
     public ImageLibrary getFixedImageLibrary() { return null; }
 
     /**

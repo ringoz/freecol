@@ -101,6 +101,7 @@ import net.sf.freecol.common.model.HighScore;
 import net.sf.freecol.common.model.IndianSettlement;
 import net.sf.freecol.common.model.Location;
 import net.sf.freecol.common.model.ModelMessage;
+import net.sf.freecol.common.model.Nation;
 import net.sf.freecol.common.model.Monarch.MonarchAction;
 import net.sf.freecol.common.model.PathNode;
 import net.sf.freecol.common.model.Player;
@@ -887,10 +888,104 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
+                                 GoodsType goodsType,
+                                 String okKey, String cancelKey) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledGoodsTypeImage(goodsType));
+        return confirm(tile, template, icon, okKey, cancelKey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
+                                 Settlement settlement,
+                                 String okKey, String cancelKey) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledSettlementImage(settlement));
+        return confirm(tile, template, icon, okKey, cancelKey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template, Unit unit,
+                                 String okKey, String cancelKey) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledUnitImage(unit));
+        return confirm(tile, template, icon, okKey, cancelKey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate tmpl, ImageIcon icon,
                               String cancelKey, List<ChoiceItem<T>> choices) {
         return this.widgets.getChoice(tmpl, icon, cancelKey, choices,
                                       getPopupPosition(tile));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final <T> CompletableFuture<T> getChoice(StringTemplate explain, String cancelKey,
+                                 List<ChoiceItem<T>> choices) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getPlaceholderImage());
+        return getChoice(null, explain, icon, cancelKey, choices);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+                                  GoodsType goodsType, String cancelKey,
+                                  List<ChoiceItem<T>> choices) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledGoodsTypeImage(goodsType));
+        return getChoice(tile, template, icon, cancelKey, choices);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+                                  Nation nation, String cancelKey,
+                                  List<ChoiceItem<T>> choices) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledNationImage(nation));
+        return getChoice(tile, template, icon, cancelKey, choices);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+                                 Settlement settlement, String cancelKey,
+                                 List<ChoiceItem<T>> choices) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledSettlementImage(settlement));
+        return getChoice(tile, template, icon, cancelKey, choices);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
+                                 Unit unit, String cancelKey,
+                                 List<ChoiceItem<T>> choices) {
+        ImageIcon icon = new ImageIcon(getFixedImageLibrary()
+            .getScaledUnitImage(unit));
+        return getChoice(tile, template, icon, cancelKey, choices);
     }
 
     /**

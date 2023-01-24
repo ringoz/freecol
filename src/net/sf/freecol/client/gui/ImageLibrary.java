@@ -327,7 +327,6 @@ public final class ImageLibrary {
     }
 
     // Animation handling
-    @net.ringoz.GwtIncompatible
     public static SimpleZippedAnimation getSZA(String key, float scale) {
         return (ResourceManager.getSZAResource(key, false) == null) ? null
             : ResourceManager.getSZA(key, scale);
@@ -459,7 +458,6 @@ public final class ImageLibrary {
      * @param text Optional text that the font must be able to represent.
      * @return The {@code Font} found.
      */
-    @net.ringoz.GwtIncompatible
     public Font getScaledFont(String spec, String text) {
         return FontLibrary.getScaledFont(spec, this.scaleFactor, text);
     }
@@ -551,7 +549,6 @@ public final class ImageLibrary {
         return getUnscaledImage("image.background.ColorCellRenderer");
     }
     
-    @net.ringoz.GwtIncompatible
     public JLabel getCompassRose() {
         return new JLabel(new ImageIcon(getScaledImage("image.skin.compass")));
     }
@@ -561,7 +558,6 @@ public final class ImageLibrary {
      *
      * @return A suitable default {@code Cursor}.
      */
-    @net.ringoz.GwtIncompatible
     public static Cursor getCursor() {
         String key = "image.icon.cursor.go";
         if (ResourceManager.getImageResource(key, false) != null) {
@@ -618,7 +614,6 @@ public final class ImageLibrary {
         return getUnscaledImage("image.background.FreeColList");
     }
 
-    @net.ringoz.GwtIncompatible
     public JLabel getLockLabel() {
         BufferedImage img = this.imageCache.getScaledImage(ICON_LOCK,
             this.scaleFactor * SMALLER_SCALE, false);
@@ -1676,7 +1671,6 @@ public final class ImageLibrary {
      * @param player The observing {@code Player}.
      * @return An alarm chip, or null if none suitable.
      */
-    @net.ringoz.GwtIncompatible
     public BufferedImage getAlarmChip(Graphics2D g, IndianSettlement is,
                                       Player player) {
         if (player == null || !is.hasContacted(player)) return null;
@@ -1710,7 +1704,6 @@ public final class ImageLibrary {
      * @param is The {@code IndianSettlement} to check.
      * @return A chip.
      */
-    @net.ringoz.GwtIncompatible
     public BufferedImage getIndianSettlementChip(Graphics2D g,
                                                  IndianSettlement is) {
         final String key = ResourceManager.getString("indianSettlementChip."
@@ -1728,7 +1721,6 @@ public final class ImageLibrary {
      * @param expert True if the unit is an expert.
      * @return A suitable chip, or null if no mission is present.
      */
-    @net.ringoz.GwtIncompatible
     public BufferedImage getMissionChip(Graphics2D g,
                                         Player owner, boolean expert) {
         final Color background = owner.getNationColor();
@@ -1749,7 +1741,6 @@ public final class ImageLibrary {
      * @param text The text for the chip.
      * @return A suitable chip.
      */
-    @net.ringoz.GwtIncompatible
     public BufferedImage getOccupationIndicatorChip(Graphics2D g,
                                                     Unit unit, String text) {
         final Color background = unit.getOwner().getNationColor();
@@ -1772,7 +1763,6 @@ public final class ImageLibrary {
      * @param filled Whether the chip is filled or not
      * @return A chip.
      */
-    @net.ringoz.GwtIncompatible
     private BufferedImage createChip(Graphics2D g, String text,
                                      Color border, Color background,
                                      double amount, Color fill,
@@ -1817,7 +1807,6 @@ public final class ImageLibrary {
      * @param font The {@code Font} to display the text with.
      * @return The {@code BufferedImage} found or created.
      */
-    @net.ringoz.GwtIncompatible
     public BufferedImage getStringImage(Graphics g, String text, Color color,
                                         Font font) {
         if (color == null) {
@@ -1847,7 +1836,6 @@ public final class ImageLibrary {
      * @param fm The {@code FontMetrics} to use with the font.
      * @return The image that was created.
      */
-    @net.ringoz.GwtIncompatible
     private BufferedImage createStringImage(String text, Color color,
                                             Font font, FontMetrics fm) {
         final int width = fm.stringWidth(text) + 4;
