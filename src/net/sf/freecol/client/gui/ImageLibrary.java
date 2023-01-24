@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import jsinterop.annotations.JsMethod;
 import net.sf.freecol.client.gui.images.ImageCreators;
 import net.sf.freecol.common.io.sza.SimpleZippedAnimation;
 import net.sf.freecol.common.model.Ability;
@@ -1301,7 +1300,6 @@ public final class ImageLibrary {
      * @param settlement The {@code Settlement} to examine.
      * @return An image key.
      */
-    @JsMethod
     public static String getSettlementKey(Settlement settlement) {
         String key = getSettlementTypeKey(settlement.getType());
         if (settlement instanceof Colony) {
@@ -1524,7 +1522,6 @@ public final class ImageLibrary {
      * @param nativeEthnicity If true the unit is a former native.
      * @return A suitable key.
      */
-    @JsMethod
     private static String getUnitTypeImageKey(UnitType unitType, Player owner,
                                               String roleId,
                                               boolean nativeEthnicity) {
