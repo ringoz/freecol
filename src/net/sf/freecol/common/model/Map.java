@@ -757,6 +757,7 @@ public class Map extends FreeColGameObject implements Location {
      * @return The adjacent {@code Tile} in the specified
      *     direction, or null if invalid.
      */
+    @JsMethod
     public Tile getAdjacentTile(int x, int y, Direction direction) {
         return getTile(direction.step(x, y));
     }

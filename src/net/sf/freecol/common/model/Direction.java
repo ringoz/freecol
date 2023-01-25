@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsProperty;
 import net.sf.freecol.common.i18n.Messages;
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import static net.sf.freecol.common.util.RandomUtils.*;
@@ -47,16 +48,19 @@ public enum Direction implements Named {
 
     public final static int NUMBER_OF_DIRECTIONS = values().length;
 
+    @JsProperty
     public static final List<Direction> allDirections
         = makeUnmodifiableList(Direction.N, Direction.NE,
                                Direction.E, Direction.SE,
                                Direction.S, Direction.SW,
                                Direction.W, Direction.NW);
 
+    @JsProperty
     public static final List<Direction> longSides
         = makeUnmodifiableList(Direction.NE, Direction.SE,
                                Direction.SW, Direction.NW);
 
+    @JsProperty
     public static final List<Direction> corners
         = makeUnmodifiableList(Direction.N, Direction.E,
                                Direction.S, Direction.W);
