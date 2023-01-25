@@ -319,6 +319,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return True if this a land {@code Tile}.
      */
+    @JsMethod
     public boolean isLand() {
         return type != null && !type.isWater();
     }
