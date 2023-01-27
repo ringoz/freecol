@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import jsinterop.annotations.JsMethod;
-import jsinterop.annotations.JsProperty;
+import jsinterop.annotations.JsIgnore;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import static net.sf.freecol.common.util.RandomUtils.*;
@@ -36,6 +36,7 @@ import static net.sf.freecol.common.util.RandomUtils.*;
  * to adjacent squares, which are required due to the isometric
  * map. Starting north and going clockwise.
 */
+@JsType
 public enum Direction implements Named {
     N  ( 0, -2,  0, -2),
     NE ( 1, -1,  0, -1),
@@ -48,19 +49,16 @@ public enum Direction implements Named {
 
     public final static int NUMBER_OF_DIRECTIONS = values().length;
 
-    @JsProperty
     public static final List<Direction> allDirections
         = makeUnmodifiableList(Direction.N, Direction.NE,
                                Direction.E, Direction.SE,
                                Direction.S, Direction.SW,
                                Direction.W, Direction.NW);
 
-    @JsProperty
     public static final List<Direction> longSides
         = makeUnmodifiableList(Direction.NE, Direction.SE,
                                Direction.SW, Direction.NW);
 
-    @JsProperty
     public static final List<Direction> corners
         = makeUnmodifiableList(Direction.N, Direction.E,
                                Direction.S, Direction.W);
@@ -202,6 +200,7 @@ public enum Direction implements Named {
      * @param random A {@code Random} number source.
      * @return An array of the {@code Direction}s favouring this one.
      */
+    @JsIgnore
     public Direction[] getClosestDirections(String logMe, Logger logger,
                                             Random random) {
         // Will need 3 bits of randomness --- 2 directions are known,
@@ -232,7 +231,6 @@ public enum Direction implements Named {
      * @param angle The angle to convert.
      * @return An equivalent {@code Direction}.
      */
-    @JsMethod
     public static Direction angleToDirection(double angle) {
         return Direction.values()[(int)Math.floor(angle / (Math.PI/4))];
     }
