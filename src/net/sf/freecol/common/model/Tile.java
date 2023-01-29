@@ -795,6 +795,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      *
      * @return A river {@code TileImprovement}, or null if none present.
      */
+    @JsMethod
     public TileImprovement getRiver() {
         return (tileItemContainer == null) ? null
             : tileItemContainer.getRiver();
