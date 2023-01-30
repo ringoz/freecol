@@ -209,6 +209,7 @@ public class TileImprovement extends TileItem {
      *
      * @return The style
      */
+    @JsMethod
     public TileImprovementStyle getStyle() {
         return style;
     }
@@ -248,6 +249,7 @@ public class TileImprovement extends TileItem {
      * @param direction The {@code Direction} to check.
      * @return The magnitude of the river branch or 0 if there is none.
      */
+    @JsMethod
     public int getRiverConnection(Direction direction) {
         int index = Direction.longSides.indexOf(direction);
         if (index == -1 || style == null)
