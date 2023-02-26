@@ -23,6 +23,8 @@ import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
 import static net.sf.freecol.common.model.Constants.*;
 
+import jsinterop.annotations.JsMethod;
+
 
 /**
  * Represents a given turn in the game.
@@ -198,6 +200,7 @@ public class Turn {
      *
      * @return A {@code StringTemplate} describing the turn.
      */
+    @JsMethod
     public StringTemplate getLabel() {
         return getTurnLabel(turn);
     }

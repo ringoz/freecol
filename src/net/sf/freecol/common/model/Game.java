@@ -1198,6 +1198,7 @@ public class Game extends FreeColGameObject {
      *
      * @return The current {@code Turn}.
      */
+    @JsMethod
     public Turn getTurn() {
         return turn;
     }

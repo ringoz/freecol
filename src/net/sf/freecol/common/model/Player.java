@@ -501,6 +501,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return A template for this nation name.
      */
+    @JsMethod
     public StringTemplate getNationLabel() {
         return (playerType == PlayerType.REBEL
                 || playerType == PlayerType.INDEPENDENT)
@@ -1121,6 +1122,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The amount of gold that this player has.
      */
+    @JsMethod
     public int getGold() {
         return gold;
     }
