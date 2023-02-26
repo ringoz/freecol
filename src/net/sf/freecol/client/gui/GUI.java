@@ -1857,6 +1857,14 @@ public class GUI extends FreeColClientHolder {
         logger.info("repaint()");
     }
     
+    @JsMethod 
+    public void refreshObject(FreeColGameObject fcgo) {
+        if (fcgo instanceof Tile)
+            refreshTile((Tile)fcgo);
+        else
+            logger.info("refreshObject(" + fcgo + ")");
+    }
+
     @JsMethod
     public void refreshTile(Tile tile) {
         logger.info("refreshTile(" + tile + ")");

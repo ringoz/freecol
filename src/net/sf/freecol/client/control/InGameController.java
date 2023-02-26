@@ -4540,7 +4540,10 @@ public final class InGameController extends FreeColClientHolder {
      * @param turn The new turn number.
      */
     public void newTurnHandler(int turn) {
-        invokeLater(() -> newTurn(turn));
+        invokeLater(() -> {
+            newTurn(turn);
+            getGUI().refreshObject(getGame());
+        });
     }
     
     /**
@@ -5346,8 +5349,8 @@ public final class InGameController extends FreeColClientHolder {
             if (!fcgo.copyIn(fco)) { // Possibly -vis(player)
                 logger.warning("Update copy-in failed: " + fco.getId());
                 continue;
-            } else if (fco instanceof Tile) {
-                invokeLater(() -> getGUI().refreshTile((Tile)fcgo));
+            } else {
+                invokeLater(() -> getGUI().refreshObject(fcgo));
             }
         }
         player.invalidateCanSeeTiles(); //+vis(player)
