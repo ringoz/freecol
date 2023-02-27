@@ -66,7 +66,6 @@ public class FreeColClientHolder {
      *
      * @return True if the client player is current.
      */
-    @JsMethod
     protected boolean currentPlayerIsMyPlayer() {
         return this.freeColClient.currentPlayerIsMyPlayer();
     }

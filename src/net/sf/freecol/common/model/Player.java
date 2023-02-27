@@ -2173,6 +2173,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return A {@code Unit} that can be made active.
      */
+    @JsMethod
     public Unit getNextActiveUnit() {
         return nextActiveUnitIterator.next();
     }
@@ -2182,6 +2183,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return True if there is a potential active unit.
      */
+    @JsMethod
     public boolean hasNextActiveUnit() {
         return nextActiveUnitIterator.hasNext();
     }
