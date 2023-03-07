@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -190,6 +191,7 @@ public class Unit extends GoodsLocation
         !u.isNaval() && u.getState() == UnitState.SENTRY;
 
     /** A state a Unit can have. */
+    @JsType
     public static enum UnitState {
         ACTIVE,
         FORTIFIED,
@@ -715,6 +717,7 @@ public class Unit extends GoodsLocation
      *
      * @return The state of this {@code Unit}.
      */
+    @JsMethod
     public UnitState getState() {
         return state;
     }
@@ -3637,6 +3640,7 @@ public class Unit extends GoodsLocation
      * @param full If true, return a more detailed result.
      * @return A {@code StringTemplate} for the unit occupation.
      */
+    @JsMethod
     public StringTemplate getOccupationLabel(Player player, boolean full) {
         final TradeRoute tradeRoute = getTradeRoute();
         StringTemplate ret;
