@@ -5394,6 +5394,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True, this can not fail.
      */
+    @JsMethod
     public boolean waitUnit() {
         if (!requireOurTurn()) return false;
 

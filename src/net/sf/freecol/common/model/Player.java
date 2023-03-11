@@ -4020,6 +4020,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * @param ownable The {@code Ownable} to check.
      * @return True if the {@code Ownable} is ours.
      */
+    @JsMethod
     public boolean owns(Ownable ownable) {
         return (ownable == null) ? false : this.equals(ownable.getOwner());
     }
