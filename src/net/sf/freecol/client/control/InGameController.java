@@ -2950,6 +2950,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param state The state of the unit.
      * @return True if the state was changed.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> changeState(Unit unit, UnitState state) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
