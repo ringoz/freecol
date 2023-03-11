@@ -3387,6 +3387,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to disband.
      * @return True if the unit was disbanded.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> disbandUnit(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
