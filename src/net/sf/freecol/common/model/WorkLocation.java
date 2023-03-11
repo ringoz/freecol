@@ -742,6 +742,7 @@ public abstract class WorkLocation extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Colony getColony() {
         return this.colony;

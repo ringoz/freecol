@@ -443,6 +443,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Colony getColony() {
         // Final as this will always work if getSettlement() does.
@@ -453,6 +454,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public IndianSettlement getIndianSettlement() {
         // Final as this will always work if getSettlement() does.

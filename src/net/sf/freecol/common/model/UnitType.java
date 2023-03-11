@@ -537,6 +537,7 @@ public final class UnitType extends BuildableType implements Consumer {
      *
      * @return True if this unit type has a skill.
      */
+    @JsMethod
     public boolean hasSkill() {
         return skill != UNDEFINED;
     }

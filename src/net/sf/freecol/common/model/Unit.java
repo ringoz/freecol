@@ -2634,6 +2634,7 @@ public class Unit extends GoodsLocation
      *
      * @return {@code true} if this unit can build a colony.
      */
+    @JsMethod
     public boolean canBuildColony() {
         final Specification spec = getSpecification();
         return hasTile() && this.type.canBuildColony() && getMovesLeft() > 0

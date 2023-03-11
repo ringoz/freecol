@@ -2661,6 +2661,7 @@ public class Colony extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final Colony getColony() {
         return this;

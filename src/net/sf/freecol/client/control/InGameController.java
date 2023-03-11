@@ -2807,6 +2807,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to build the colony.
      * @return True if a colony was built.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> buildColony(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);

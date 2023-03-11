@@ -1288,6 +1288,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final IndianSettlement getIndianSettlement() {
         return this;
