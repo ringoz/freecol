@@ -401,6 +401,7 @@ public class Unit extends GoodsLocation
      *
      * @return The {@code StringTemplate} to describe the given unit.
      */
+    @JsMethod
     public StringTemplate getLabel() {
         return getLabel(UnitLabelType.PLAIN);
     }
