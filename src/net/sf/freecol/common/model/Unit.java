@@ -730,6 +730,7 @@ public class Unit extends GoodsLocation
      * @return True if the {@code Unit} state can be changed to
      *     the new value.
      */
+    @JsMethod
     public boolean checkSetState(UnitState s) {
         if (getState() == s) return false;
         switch (s) {

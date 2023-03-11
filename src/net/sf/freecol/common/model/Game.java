@@ -1557,6 +1557,7 @@ public class Game extends FreeColGameObject {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public Specification getSpecification() {
         return this.specification;

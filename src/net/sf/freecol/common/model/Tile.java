@@ -1006,6 +1006,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      * @param type The {@code TileImprovementType} to check.
      * @return True if this tile can be improved with the improvement type.
      */
+    @JsMethod
     public boolean isImprovementTypeAllowed(TileImprovementType type) {
         TileImprovement ti;
         return type != null

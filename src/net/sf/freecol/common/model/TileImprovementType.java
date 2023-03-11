@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -260,6 +261,7 @@ public final class TileImprovementType extends FreeColSpecObjectType {
      * @param unit The {@code Unit} to check.
      * @return True if the {@code Unit} can build this improvement.
      */
+    @JsMethod
     public boolean isWorkerAllowed(Unit unit) {
         return isWorkerTypeAllowed(unit.getType())
             && (requiredRole == null || unit.getRole() == requiredRole);

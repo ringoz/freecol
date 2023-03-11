@@ -53,6 +53,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColDirectories;
 import net.sf.freecol.common.io.FreeColModFile;
 import net.sf.freecol.common.io.FreeColRules;
@@ -1505,6 +1506,7 @@ public final class Specification implements OptionContainer {
      * @param id The object identifier.
      * @return The {@code TileImprovementType} found.
      */
+    @JsMethod
     public TileImprovementType getTileImprovementType(String id) {
         return getType(id, TileImprovementType.class);
     }

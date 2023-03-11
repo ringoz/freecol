@@ -2990,6 +2990,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param improvementType a {@code TileImprovementType} value
      * @return True if the improvement was changed.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> changeWorkImprovementType(Unit unit,
         TileImprovementType improvementType) {
