@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
+import jsinterop.annotations.JsMethod;
+
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import net.sf.freecol.common.util.Utils;
 
@@ -91,6 +93,7 @@ public class AbstractGoods extends FreeColObject implements Named {
      *
      * @return The {@code GoodsType}.
      */
+    @JsMethod
     public final GoodsType getType() {
         return type;
     }

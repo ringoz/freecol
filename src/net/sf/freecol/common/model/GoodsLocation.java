@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -119,6 +120,7 @@ public abstract class GoodsLocation extends UnitLocation {
      * @param type The {@code GoodsType} to look for.
      * @return The amount of goods.
      */
+    @JsMethod
     public final int getGoodsCount(GoodsType type) {
         return (goodsContainer == null) ? 0
             : goodsContainer.getGoodsCount(type);

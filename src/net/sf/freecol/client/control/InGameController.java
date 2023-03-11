@@ -3877,6 +3877,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param carrier The {@code Unit} acting as carrier.
      * @return True if the goods were loaded.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> loadCargo(Goods goods, Unit carrier) {
         if (goods == null || goods.getAmount() <= 0
@@ -5259,6 +5260,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} that is dumping.
      * @return True if the unit unloaded.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> unload(Unit unit) {
         if (unit == null || !unit.isCarrier()

@@ -698,6 +698,7 @@ public class Unit extends GoodsLocation
      *
      * @return True if this unit can carry goods or other units.
      */
+    @JsMethod
     public boolean isCarrier() {
         return this.type.canCarryGoods() || this.type.canCarryUnits();
     }
@@ -3490,6 +3491,7 @@ public class Unit extends GoodsLocation
      *
      * @return A compact list of {@code Goods}.
      */
+    @JsMethod
     @Override
     public List<Goods> getCompactGoodsList() {
         return getGoodsInternal(true);
@@ -3542,6 +3544,7 @@ public class Unit extends GoodsLocation
      *
      * @return The number of free cargo slots on this unit.
      */
+    @JsMethod
     public int getSpaceLeft() {
         return getCargoCapacity() - getCargoSpaceTaken();
     }
@@ -3592,6 +3595,7 @@ public class Unit extends GoodsLocation
      *
      * @return The number of occupied cargo slots.
      */
+    @JsMethod
     public int getCargoSpaceTaken() {
         return getGoodsSpaceTaken() + getUnitSpaceTaken();
     }
@@ -3623,6 +3627,7 @@ public class Unit extends GoodsLocation
      * @param type The {@code GoodsType} to examine.
      * @return The amount of goods that could be loaded onto this unit.
      */
+    @JsMethod
     public int getLoadableAmount(GoodsType type) {
         if (!canCarryGoods()) return 0;
         int result = getSpaceLeft() * GoodsContainer.CARGO_SIZE;
