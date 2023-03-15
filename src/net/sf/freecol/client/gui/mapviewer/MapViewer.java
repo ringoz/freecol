@@ -306,6 +306,27 @@ public final class MapViewer extends FreeColClientHolder {
         }
         final long gotoPathMs = now();
 
+        if (mapViewerState.isRangedAttackMode()
+                && mapViewerState.getActiveUnit() != null
+                && mapViewerState.getActiveUnit().getTile() != null) {
+            final BufferedImage rangedTarget = lib.getRangedTargetCrosshair();
+            final Iterable<Tile> possibleTargets = map.getCircleTiles(mapViewerState.getActiveUnit().getTile(),
+                    true,
+                    mapViewerState.getActiveUnit().getType().getAttackRange());
+            for (Tile t : possibleTargets) {
+                if (mapViewerState.getActiveUnit().canAttackRanged(t)) {
+                    final Point point = mapViewerBounds.calculateTilePosition(t, false);
+                    if (point == null) {
+                        continue;
+                    }
+                    g2d.drawImage(rangedTarget,
+                            point.x + (tileBounds.getWidth() - rangedTarget.getWidth()) / 2,
+                            point.y + (tileBounds.getHeight() - rangedTarget.getHeight()) / 2,
+                            null);
+                }
+            }
+        }
+        
         // Draw the chat
         mapViewerState.getChatDisplay().display(g2d, mapViewerBounds.getSize());
         final long chatMs = now();
@@ -1028,6 +1049,28 @@ public final class MapViewer extends FreeColClientHolder {
                 g2d.drawLine(x1, unitLinesY, x2, unitLinesY);
                 unitLinesY += 2;
             }
+        }
+        
+        if (unit.getHitPoints() >= 0 && unit.getHitPoints() < unit.getMaximumHitPoints()) {
+            final int offsetX = lib.scaleInt(8);
+            final int hitpointsBarWidth = lib.scaleInt(5);
+            final int hitpointsBarMargin = lib.scaleInt(5);
+            final int fullHeight = tileBounds.getHeight() - 2 * hitpointsBarMargin;
+            final int filledHeight = (int) (fullHeight * (((float) unit.getHitPoints()) / unit.getMaximumHitPoints()));
+            g2d.setColor(new Color(0, 255, 0, 255));
+            g2d.fillRect(hitpointsBarMargin + hitpointsBarWidth + offsetX,
+                    hitpointsBarMargin - this.lib.scaleInt(TileBounds.UNIT_OFFSET)
+                    + fullHeight - filledHeight,
+                    hitpointsBarWidth,
+                    filledHeight);
+            final Stroke defaultStroke = g2d.getStroke();
+            g2d.setStroke(new BasicStroke(lib.scaleInt(1)));
+            g2d.setColor(Color.BLACK);
+            g2d.drawRect(hitpointsBarMargin + hitpointsBarWidth + offsetX,
+                    hitpointsBarMargin - this.lib.scaleInt(TileBounds.UNIT_OFFSET),
+                    hitpointsBarWidth,
+                    fullHeight);
+            g2d.setStroke(defaultStroke);
         }
 
         // FOR DEBUGGING

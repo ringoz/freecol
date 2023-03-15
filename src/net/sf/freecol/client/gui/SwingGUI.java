@@ -66,6 +66,7 @@ import net.sf.freecol.client.gui.dialog.FreeColDialog;
 import net.sf.freecol.client.gui.dialog.Parameters;
 import net.sf.freecol.client.gui.mapviewer.GUIMessage;
 import net.sf.freecol.client.gui.mapviewer.MapViewer;
+import net.sf.freecol.client.gui.mapviewer.MapViewerState;
 import net.sf.freecol.client.gui.mapviewer.TileViewer;
 import net.sf.freecol.client.gui.panel.ColonyPanel;
 import net.sf.freecol.client.gui.panel.FreeColImageBorder;
@@ -135,6 +136,11 @@ public class SwingGUI extends GUI {
         CENTERED,
         CENTERED_LEFT,
         CENTERED_RIGHT,
+        
+        /**
+         * Places centered even this means overlapping components.
+         */
+        CENTERED_FORCED
     }
 
     /** European subpanel classes. */
@@ -418,6 +424,25 @@ public class SwingGUI extends GUI {
         this.mapViewer.getMapViewerState().setActiveUnit(newUnit);
         clearGotoPath();
         return true;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setRangedAttackMode(boolean rangedAttackMode) {
+        final MapViewerState mvs = this.mapViewer.getMapViewerState();
+        if (mvs.isRangedAttackMode() == rangedAttackMode) {
+            return;
+        }
+        mvs.setRangedAttackMode(rangedAttackMode);
+        refresh();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void toggleRangedAttackMode() {
+        setRangedAttackMode(!this.mapViewer.getMapViewerState().isRangedAttackMode());
     }
 
     /**
@@ -1490,6 +1515,20 @@ public class SwingGUI extends GUI {
      */
     @Override
     public void clickAt(int count, int x, int y) {
+        if (mapViewer.getMapViewerState().isRangedAttackMode()) {
+            final Tile tile = tileAt(x, y);
+            final Unit activeUnit = mapViewer.getMapViewerState().getActiveUnit();
+            if (activeUnit == null
+                    || !activeUnit.isOffensiveUnit()
+                    || !activeUnit.canAttackRanged(tile)
+                    || activeUnit.getMovesLeft() <= 0
+                    || !getFreeColClient().currentPlayerIsMyPlayer()) {
+                return;
+            }
+            igc().attackRanged(activeUnit, tile);
+            return;
+        }
+        
         // This could be a drag, which would have already been processed
         // in @see CanvasMouseListener#mouseReleased
         if (count == 1 && isDrag(x, y)) return;
@@ -2145,10 +2184,11 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public CompletableFuture<File> showLoadDialog(File directory, String extension) {
-        FileFilter[] filters = new FileFilter[] {
-            FreeColDataFile.getFileFilter(extension)
-        };
+    public CompletableFuture<File> showLoadDialog(File directory, String... extension) {
+        final FileFilter[] filters = new FileFilter[extension.length];
+        for (int i=0; i<extension.length; i++) {
+            filters[i] = FreeColDataFile.getFileFilter(extension[i]);
+        }
         return this.widgets.showLoadDialog(directory, filters).thenApply((File file) -> {
             if (file != null && !file.isFile()) {
                 showErrorPanel(FreeCol.badFile("error.noSuchFile", file));
@@ -2236,7 +2276,7 @@ public class SwingGUI extends GUI {
         InformationPanel panel
             = new InformationPanel(getFreeColClient(), texts, fcos, icons);
         return this.canvas.showFreeColPanel(panel,
-            getPopupPosition(tile), true);
+            getPopupPosition(tile), false);
     }
 
     /**
@@ -2490,7 +2530,8 @@ public class SwingGUI extends GUI {
     public CompletableFuture<File> showSaveDialog(File directory, String defaultName) {
         String extension = lastPart(defaultName, ".");
         FileFilter[] filters = new FileFilter[] {
-            FreeColDataFile.getFileFilter(extension)
+            FreeColDataFile.getFileFilter(extension),
+            FreeColDataFile.getFileFilter("*")
         };
         return this.widgets.showSaveDialog(directory, filters, defaultName);
     }

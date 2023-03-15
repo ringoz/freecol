@@ -597,11 +597,12 @@ public class Unit extends GoodsLocation
     public boolean changeType(UnitType unitType) {
         if (!unitType.isAvailableTo(owner)) return false;
 
+        final double health = ((double) getHitPoints()) / getMaximumHitPoints(); 
         setType(unitType);
         if (getMovesLeft() > getInitialMovesLeft()) {
             setMovesLeft(getInitialMovesLeft());
         }
-        this.hitPoints = unitType.getHitPoints();
+        this.hitPoints = (int) (unitType.getHitPoints() * health);
         if (getTeacher() != null) {
             if (!canBeStudent(getTeacher())) {
                 getTeacher().setStudent(null);
@@ -1691,6 +1692,16 @@ public class Unit extends GoodsLocation
     public int getHitPoints() {
         return hitPoints;
     }
+    
+    /**
+     * Gets the maximum hitspoints for the unit.
+     *
+     * @return The hit points this {@code Unit} has at full health.
+     * @see UnitType#getHitPoints
+     */
+    public int getMaximumHitPoints() {
+        return type.getHitPoints();
+    }
 
     /**
      * Sets the hit points for this unit.
@@ -1706,8 +1717,12 @@ public class Unit extends GoodsLocation
      *
      * @return True if under repair.
      */
+    public boolean isDamagedAndUnderForcedRepair() {
+        return isDamaged() && !getSpecification().hasAbility(Ability.HITPOINTS_COMBAT_MODEL);
+    }
+    
     public boolean isDamaged() {
-        return hitPoints < this.type.getHitPoints();
+        return hitPoints < getMaximumHitPoints();
     }
 
     /**
@@ -1716,7 +1731,7 @@ public class Unit extends GoodsLocation
      * @return The number of turns left to be repaired.
      */
     public int getTurnsForRepair() {
-        return this.type.getHitPoints() - getHitPoints();
+        return getMaximumHitPoints() - getHitPoints();
     }
 
     /**
@@ -2350,7 +2365,7 @@ public class Unit extends GoodsLocation
         if (target == null) {
             return (getOwner().canMoveToEurope()) ? MoveType.MOVE_HIGH_SEAS
                 : MoveType.MOVE_NO_EUROPE;
-        } else if (isDamaged()) {
+        } else if (isDamagedAndUnderForcedRepair()) {
             return MoveType.MOVE_NO_REPAIR;
         }
 
@@ -2721,7 +2736,7 @@ public class Unit extends GoodsLocation
      */
     public boolean isReadyToTrade() {
         return !isDisposed()
-            && !isDamaged()
+            && !isDamagedAndUnderForcedRepair()
             && !isAtSea()
             && !isOnCarrier()
             && !isInColony()
@@ -2738,7 +2753,7 @@ public class Unit extends GoodsLocation
      */
     private boolean readyAndAble() {
         return !isDisposed()
-            && !isDamaged()
+            && !isDamagedAndUnderForcedRepair()
             && !isAtSea()
             && !isOnCarrier()
             && !isInColony()
@@ -3653,7 +3668,7 @@ public class Unit extends GoodsLocation
         final TradeRoute tradeRoute = getTradeRoute();
         StringTemplate ret;
         if (player != null && player.owns(this)) {
-            if (isDamaged()) {
+            if (isDamagedAndUnderForcedRepair()) {
                 if (full) {
                     ret = StringTemplate.label(":")
                         .add("model.unit.occupation.underRepair")
@@ -4431,6 +4446,13 @@ public class Unit extends GoodsLocation
         return getCargoCapacity();
     }
 
+    public boolean canAttackRanged(Tile tile) {
+        return getType().getAttackRange() >= getTile().getDistanceTo(tile)
+                && (
+                    tile.getSettlement() != null && tile.getSettlement().getOwner() != getOwner()
+                    || tile.getDefendingUnit(this) != null && tile.getDefendingUnit(this).getOwner() != getOwner()
+                );
+    }
 
     // Override FreeColGameObject
 
@@ -4708,6 +4730,8 @@ public class Unit extends GoodsLocation
         xw.writeAttribute(ROLE_TAG, role);
 
         xw.writeAttribute(ROLE_COUNT_TAG, roleCount);
+        
+        xw.writeAttribute(HIT_POINTS_TAG, hitPoints);
 
         if (!xw.validFor(getOwner()) && isOwnerHidden()) {
             // Pirates do not disclose national characteristics.
@@ -4749,8 +4773,6 @@ public class Unit extends GoodsLocation
             xw.writeAttribute(INDIAN_SETTLEMENT_TAG, indianSettlement);
 
             xw.writeAttribute(WORK_LEFT_TAG, workLeft);
-
-            xw.writeAttribute(HIT_POINTS_TAG, hitPoints);
 
             xw.writeAttribute(ATTRITION_TAG, attrition);
 

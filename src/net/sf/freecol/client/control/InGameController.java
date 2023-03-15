@@ -1587,6 +1587,23 @@ public final class InGameController extends FreeColClientHolder {
         // blocked.
         return CompletableFuture.completedFuture(false);
     }
+    
+    @JsAsync
+    public CompletableFuture<Void> attackRanged(Unit unit, Tile target) {
+        if (!unit.canAttackRanged(target)) {
+            return null;
+        }
+
+        if (await(askClearGotoOrders(unit))
+            && await(getGUI().confirmHostileAction(unit, target))
+            && await(getGUI().confirmPreCombat(unit, target))) {
+            askServer().attackRanged(unit, target);
+            // Immediately display resulting message, allowing
+            // next updateGUI to select another unit.
+            nextModelMessage();
+        }
+        return null;
+    }
 
     /**
      * Confirm attack or demand a tribute from a settlement, following
@@ -3924,7 +3941,7 @@ public final class InGameController extends FreeColClientHolder {
     public CompletableFuture<Void> loadGame() {
         File file = await(getGUI()
             .showLoadSaveFileDialog(FreeColDirectories.getSaveDirectory(),
-                                    FreeCol.FREECOL_SAVE_EXTENSION));
+                                    FreeCol.FREECOL_SAVE_EXTENSION, "*"));
         if (file == null) return CompletableFuture.completedFuture(null);
 
         final FreeColClient fcc = getFreeColClient();

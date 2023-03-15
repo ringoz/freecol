@@ -1629,14 +1629,17 @@ public class Map extends FreeColGameObject implements Location {
                 if (dst.getTile() != null && !dst.getTile().isExplored()) {
                     this.turns += 2;
                     this.movesLeft = 0;
+                    this.cost = PathNode.getNodeCost(this.turns, this.movesLeft);
                 } else {
-                    throw new RuntimeException("Invalid move candidate:"
-                        + " for " + unit + " to " + dst);
+                    this.turns = INFINITY;
+                    this.movesLeft = 0;
+                    this.cost = INFINITY;
                 }
+            } else {
+                this.turns += cd.getNewTurns();
+                this.movesLeft = cd.getMovesLeft();
+                this.cost = PathNode.getNodeCost(this.turns, this.movesLeft);
             }
-            this.turns += cd.getNewTurns();
-            this.movesLeft = cd.getMovesLeft();
-            this.cost = PathNode.getNodeCost(this.turns, this.movesLeft);
         }
 
         /**
@@ -2040,6 +2043,9 @@ ok:     while (!openMap.isEmpty()) {
                         continue;
                     }
                     stepLog = " " + step + "_";
+                }
+                if (move.cost >= INFINITY) {
+                    continue;
                 }
                 assert move.getCost() >= 0;
                 // Tighten the bounds on a previously seen case if possible

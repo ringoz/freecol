@@ -19,8 +19,23 @@
 
 package net.sf.freecol.common.model;
 
-import java.lang.ref.WeakReference;
+import static net.sf.freecol.common.util.CollectionUtils.all;
+import static net.sf.freecol.common.util.CollectionUtils.alwaysTrue;
+import static net.sf.freecol.common.util.CollectionUtils.any;
+import static net.sf.freecol.common.util.CollectionUtils.find;
+import static net.sf.freecol.common.util.CollectionUtils.first;
+import static net.sf.freecol.common.util.CollectionUtils.flatten;
+import static net.sf.freecol.common.util.CollectionUtils.forEachMapEntry;
+import static net.sf.freecol.common.util.CollectionUtils.matchKey;
+import static net.sf.freecol.common.util.CollectionUtils.matchKeyEquals;
+import static net.sf.freecol.common.util.CollectionUtils.toList;
+import static net.sf.freecol.common.util.CollectionUtils.toListNoNulls;
+import static net.sf.freecol.common.util.CollectionUtils.transform;
+import static net.sf.freecol.common.util.StringUtils.capitalize;
+import static net.sf.freecol.common.util.StringUtils.lastPart;
+
 import java.io.StringReader;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -30,9 +45,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
@@ -41,13 +56,11 @@ import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.NameCache;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
-import static net.sf.freecol.common.model.Constants.*;
+import net.sf.freecol.common.model.Constants.IntegrityType;
 import net.sf.freecol.common.model.NationOptions.NationState;
 import net.sf.freecol.common.option.OptionGroup;
 import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.LogBuilder;
-import static net.sf.freecol.common.util.CollectionUtils.*;
-import static net.sf.freecol.common.util.StringUtils.*;
 import net.sf.freecol.common.util.Utils;
 
 
@@ -183,16 +196,6 @@ public class Game extends FreeColGameObject {
     protected final HashMap<String, WeakReference<FreeColGameObject>>
         freeColGameObjects;
 
-    /**
-     * The combat model this game uses. At the moment, the only combat
-     * model available is the SimpleCombatModel, which strives to
-     * implement the combat model of the original game.  However, it is
-     * anticipated that other, more complex combat models will be
-     * implemented in future.  As soon as that happens, we will also
-     * have to make the combat model selectable.
-     */
-    protected CombatModel combatModel = null;
-
     /** The number of removed FCGOs that should trigger a cache clean. */
     private static final int REMOVE_GC_THRESHOLD = 64;
 
@@ -229,7 +232,6 @@ public class Game extends FreeColGameObject {
         this.spanishSuccession = false;
         this.initialActiveUnitId = null;
         this.specification = null;
-        this.combatModel = new SimpleCombatModel();
         this.removeCount = 0;
 
         this.initialized = true; // Explicit initialization needed for Games
@@ -1227,16 +1229,11 @@ public class Game extends FreeColGameObject {
      * @return The {@code CombatModel}.
      */
     public final CombatModel getCombatModel() {
-        return combatModel;
-    }
-
-    /**
-     * Set the game combat model.
-     *
-     * @param newCombatModel The new {@code CombatModel} value.
-     */
-    public final void setCombatModel(final CombatModel newCombatModel) {
-        this.combatModel = newCombatModel;
+        if (specification.hasAbility(Ability.HITPOINTS_COMBAT_MODEL)) {
+            return new HitpointsCombatModel();
+        } else {
+            return new SimpleCombatModel();
+        }
     }
 
     /**

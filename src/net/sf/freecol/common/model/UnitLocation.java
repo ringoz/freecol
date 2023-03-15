@@ -114,7 +114,12 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
         /**
          * Either unclaimed or claimed but could be acquired.
          */
-        CLAIM_REQUIRED;
+        CLAIM_REQUIRED,
+        
+        /**
+         * The worker is damaged (not at maximum hitpoints).
+         */
+        WORKER_DAMAGED;
 
         /**
          * Get a message key describing this reason.
@@ -248,7 +253,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
      * @see Unit#isCarrier
      */
     public boolean hasCarrierWithSpace(int space) {
-        return any(getUnits(), u -> u.isCarrier() && !u.isDamaged()
+        return any(getUnits(), u -> u.isCarrier() && !u.isDamagedAndUnderForcedRepair()
             && u.getSpaceLeft() >= space);
     }
 

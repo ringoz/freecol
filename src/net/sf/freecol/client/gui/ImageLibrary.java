@@ -327,6 +327,7 @@ public final class ImageLibrary {
     }
 
     // Animation handling
+
     public static SimpleZippedAnimation getSZA(String key, float scale) {
         return (ResourceManager.getSZAResource(key, false) == null) ? null
             : ResourceManager.getSZA(key, scale);
@@ -487,6 +488,10 @@ public final class ImageLibrary {
      */
     public BufferedImage getScaledImage(String key) {
         return this.imageCache.getScaledImage(key, this.scaleFactor, false);
+    }
+    
+    public BufferedImage getRangedTargetCrosshair() {
+        return getScaledImage("image.rangedTarget");
     }
 
     /**

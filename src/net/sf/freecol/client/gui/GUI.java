@@ -980,10 +980,10 @@ public class GUI extends FreeColClientHolder {
      * Show a save file dialog, selecting one to load.
      *
      * @param root The root directory to look in.
-     * @param extension The file extension to look for.
+     * @param extension The file extensions to look for.
      * @return The {@code File} selected, or null on error.
      */
-    public final CompletableFuture<File> showLoadSaveFileDialog(File root, String extension) {
+    public final CompletableFuture<File> showLoadSaveFileDialog(File root, String... extension) {
         return showLoadDialog(root, extension).thenApply((File file) -> {
             if (file != null && !file.isFile()) {
                 showErrorPanel(FreeCol.badFile("error.noSuchFile", file));
@@ -1676,6 +1676,21 @@ public class GUI extends FreeColClientHolder {
         logger.info("changeView()");
     }
 
+    /**
+     * Sets if ranged attack mode should be activated.
+     * 
+     * @param rangedAttackMode If {@code true}, then display tiles reachable
+     *      by ranged attack and allow the attack to be performed by clicking. 
+     */
+    public void setRangedAttackMode(boolean rangedAttackMode) {}
+    
+    /**
+     * Toggles if ranged attack mode should be activated.
+     * 
+     * @see #setRangedAttackMode(boolean)
+     */
+    public void toggleRangedAttackMode() {}
+    
 
     // Zoom controls
 
@@ -2273,7 +2288,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected {@code File}.
      */
     @JsMethod
-    public CompletableFuture<File> showLoadDialog(File directory, String extension) {
+    public CompletableFuture<File> showLoadDialog(File directory, String... extension) {
         logger.info("showLoadDialog(" + directory + ", " + extension + ")");
         return null;
     }

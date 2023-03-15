@@ -75,6 +75,14 @@ public class Introspector {
         this.field = field;
     }
 
+    private static String fromSnakeCase(String nameInSnakeCase) {
+        final StringBuilder sb = new StringBuilder();
+        for (String s : nameInSnakeCase.split("-")) {
+            sb.append(capitalize(s));
+        }
+        return sb.toString();
+    }
+
     /**
      * Get a function that converts from String to a given class.
      * We use Enum.valueOf(Class, String) for enums, and
@@ -119,7 +127,7 @@ public class Introspector {
      * @exception IntrospectorException encompasses many failures.
      */
     public String getter(Object obj) throws IntrospectorException {
-        final String methodName = "get" + capitalize(field);
+        final String methodName = "get" + fromSnakeCase(field);
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
             return meta.invokeMethod(obj, methodName).toString();
@@ -137,10 +145,10 @@ public class Introspector {
      * @exception IntrospectorException encompasses many failures.
      */
     public void setter(Object obj, String value) throws IntrospectorException {
-        final String methodName = "set" + capitalize(field);
+        final String methodName = "set" + fromSnakeCase(field);
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
-            final Class<?> fieldType = meta.invokeMethod(obj, "get" + capitalize(field)).getClass();
+            final Class<?> fieldType = meta.invokeMethod(obj, "get" + fromSnakeCase(field)).getClass();
             meta.invokeMethod(obj, methodName, valueOf(fieldType, value));
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);

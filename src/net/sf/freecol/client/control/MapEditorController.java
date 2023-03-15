@@ -299,7 +299,7 @@ public final class MapEditorController extends FreeColClientHolder {
     @net.ringoz.GwtIncompatible
     public void loadGame() {
         getGUI().showLoadSaveFileDialog(FreeColDirectories.getUserMapsDirectory(),
-                                    FreeCol.FREECOL_MAP_EXTENSION).thenAccept((File file) -> {
+                                    FreeCol.FREECOL_MAP_EXTENSION, "*").thenAccept((File file) -> {
             if (file != null) loadGame(file);
         });
     }

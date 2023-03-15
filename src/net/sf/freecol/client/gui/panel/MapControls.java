@@ -208,5 +208,10 @@ public abstract class MapControls extends FreeColClientHolder {
         return lastPart(className, ".").equals("CornerMapControls") 
             ? new net.sf.freecol.client.gui.panel.CornerMapControls(freeColClient)
             : new net.sf.freecol.client.gui.panel.ClassicMapControls(freeColClient);
+    }
+
+
+    public void clear() {
+        unitButtons.clear();
     } 
 }
