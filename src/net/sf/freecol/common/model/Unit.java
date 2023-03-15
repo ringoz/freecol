@@ -390,6 +390,7 @@ public class Unit extends GoodsLocation
     }
 
     /** What type of unit label do we want? */
+    @JsType
     public static enum UnitLabelType {
         PLAIN,      // Just the basics
         NATIONAL,   // Add the nation
@@ -401,7 +402,6 @@ public class Unit extends GoodsLocation
      *
      * @return The {@code StringTemplate} to describe the given unit.
      */
-    @JsMethod
     public StringTemplate getLabel() {
         return getLabel(UnitLabelType.PLAIN);
     }
@@ -419,6 +419,7 @@ public class Unit extends GoodsLocation
      * @param ult The type of label to get.
      * @return The {@code StringTemplate} to describe the given unit.
      */
+    @JsMethod
     public StringTemplate getLabel(UnitLabelType ult) {
         final UnitType type = getType();
         final Role role = getRole();
@@ -493,6 +494,7 @@ public class Unit extends GoodsLocation
      *
      * @return A {@code String} describing this unit.
      */
+    @JsMethod
     public String getDescription() {
         return Messages.message(getLabel());
     }
