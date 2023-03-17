@@ -2402,7 +2402,7 @@ public class GUI extends FreeColClientHolder {
                                  final String defaultName,
                                  final Unit unit) {
         logger.info("showNamingDialog(" + template + ", " + defaultName + ", " + unit + ")");
-        return null;
+        return CompletableFuture.completedFuture(defaultName);
     }
 
     /**
@@ -2653,7 +2653,7 @@ public class GUI extends FreeColClientHolder {
     @JsMethod
     public CompletableFuture<File> showSaveDialog(File directory, String defaultName) {
         logger.info("showSaveDialog(" + directory + ", " + defaultName + ")");
-        return null;
+        return CompletableFuture.completedFuture(new File(directory, defaultName));
     }
 
     /**
