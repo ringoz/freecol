@@ -1493,6 +1493,8 @@ public final class InGameController extends FreeColClientHolder {
             result = CompletableFuture.completedFuture(false);
             break;
         }
+
+        boolean ret = await(result);        
         if (destinationImminent && !unit.isDisposed()) {
             // The unit either reached the destination or failed at
             // the last step for some reason.  In either case, clear
@@ -1509,7 +1511,7 @@ public final class InGameController extends FreeColClientHolder {
             changeView(unit, true);
         }
 
-        return result;
+        return CompletableFuture.completedFuture(ret);
     }
 
     /**

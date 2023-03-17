@@ -3592,6 +3592,7 @@ public class Unit extends GoodsLocation
      *
      * @return The number cargo slots occupied by goods.
      */
+    @JsMethod
     public int getGoodsSpaceTaken() {
         if (!canCarryGoods()) return 0;
         GoodsContainer gc = getGoodsContainer();
@@ -3603,6 +3604,7 @@ public class Unit extends GoodsLocation
      *
      * @return The number of cargo slots occupied by units.
      */
+    @JsMethod
     public int getUnitSpaceTaken() {
         return (canCarryUnits()) ? sum(getUnits(), Unit::getSpaceTaken)
             : 0;
