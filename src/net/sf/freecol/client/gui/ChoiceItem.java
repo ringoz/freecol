@@ -21,6 +21,7 @@ package net.sf.freecol.client.gui;
 
 import javax.swing.ImageIcon;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.model.AbstractGoods;
 import net.sf.freecol.common.model.AbstractUnit;
@@ -96,6 +97,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return The {@code Object}.
      */
+    @JsMethod
     public T getObject() {
         return object;
     }
@@ -116,6 +118,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return The enable status.
      */
+    @JsMethod
     public boolean isEnabled() {
         return this.enabled;
     }
@@ -137,6 +140,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return An icon if present, or null if not found.
      */
+    @JsMethod
     public ImageIcon getIcon() {
         return icon;
     }
@@ -157,6 +161,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return True if this is the "OK" choice.
      */
+    @JsMethod
     public boolean isOK() {
         return optionOK;
     }
@@ -176,6 +181,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return True if this is the "cancel" choice.
      */
+    @JsMethod
     public boolean isCancel() {
         return optionCancel;
     }
@@ -195,6 +201,7 @@ public class ChoiceItem<T> implements Comparable<ChoiceItem<T>> {
      *
      * @return True if this is the default choice.
      */
+    @JsMethod
     public boolean isDefault() {
         return optionDefault;
     }
