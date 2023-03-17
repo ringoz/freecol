@@ -5097,7 +5097,7 @@ public final class InGameController extends FreeColClientHolder {
             }
 
             player.resetIterators();
-            updateGUI(player.getFallbackTile(), false);
+            updateGUI(null, false);
         }
         return CompletableFuture.completedFuture(true);
     }
