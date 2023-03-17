@@ -254,6 +254,7 @@ public class Building extends WorkLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return StringTemplate.template("model.building.locationLabel")

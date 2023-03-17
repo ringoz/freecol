@@ -2288,6 +2288,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return (settlement != null) ? settlement.getLocationLabel()

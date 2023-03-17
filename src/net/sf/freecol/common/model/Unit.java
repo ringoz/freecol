@@ -402,6 +402,7 @@ public class Unit extends GoodsLocation
      *
      * @return The {@code StringTemplate} to describe the given unit.
      */
+    @JsMethod
     public StringTemplate getLabel() {
         return getLabel(UnitLabelType.PLAIN);
     }
@@ -419,7 +420,7 @@ public class Unit extends GoodsLocation
      * @param ult The type of label to get.
      * @return The {@code StringTemplate} to describe the given unit.
      */
-    @JsMethod
+    @JsMethod(name = "getLabel$")
     public StringTemplate getLabel(UnitLabelType ult) {
         final UnitType type = getType();
         final Role role = getRole();
@@ -4282,6 +4283,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return StringTemplate.template("model.unit.onBoard")

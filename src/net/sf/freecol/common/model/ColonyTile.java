@@ -283,6 +283,7 @@ public class ColonyTile extends WorkLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return (workTile == null) ? null

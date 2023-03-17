@@ -586,6 +586,7 @@ public abstract class Settlement extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return StringTemplate.name(getName());

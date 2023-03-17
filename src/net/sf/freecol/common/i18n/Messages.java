@@ -344,6 +344,7 @@ public class Messages {
         return message(nameKey(id));
     }
 
+    @JsMethod(name = "getName$")
     public static String getName(Named named) {
         return message(named.getNameKey());
     }
@@ -361,6 +362,7 @@ public class Messages {
         return message(descriptionKey(id));
     }
 
+    @JsMethod(name = "getDescription$")
     public static String getDescription(ObjectWithId object) {
         return message(descriptionKey(object));
     }
@@ -375,6 +377,7 @@ public class Messages {
         return message(shortDescriptionKey(id));
     }
 
+    @JsMethod(name = "getShortDescription$")
     public static String getShortDescription(ObjectWithId object) {
         return getShortDescription(object.getId());
     }

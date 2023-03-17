@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.model.Constants.*;
@@ -407,6 +408,7 @@ public final class GoodsType extends FreeColSpecObjectType {
      *
      * @return The name of this {@code GoodsType}.
      */
+    @JsMethod
     public StringTemplate getLabel() {
         return StringTemplate.key(getNameKey());
     }

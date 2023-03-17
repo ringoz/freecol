@@ -170,6 +170,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
+    @JsMethod(name = "confirmGoods")
     public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  GoodsType goodsType,
                                  String okKey, String cancelKey) {
@@ -187,6 +188,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
+    @JsMethod(name = "confirmSettlememt")
     public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template,
                                  Settlement settlement,
                                  String okKey, String cancelKey) {
@@ -204,6 +206,7 @@ public class GUI extends FreeColClientHolder {
      * @param cancelKey A key for the "cancel" button.
      * @return True if the "ok" button was selected.
      */
+    @JsMethod(name = "confirmUnit")
     public CompletableFuture<Boolean> confirm(Tile tile, StringTemplate template, Unit unit,
                                  String okKey, String cancelKey) {
         ImageIcon icon = null;
@@ -542,6 +545,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
+    @JsMethod(name = "getChoiceGoods")
     protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   GoodsType goodsType, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
@@ -561,6 +565,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
+    @JsMethod(name = "getChoiceNation")
     protected <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                   Nation nation, String cancelKey,
                                   List<ChoiceItem<T>> choices) {
@@ -580,6 +585,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
+    @JsMethod(name = "getChoiceSettlement")
     public <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Settlement settlement, String cancelKey,
                                  List<ChoiceItem<T>> choices) {
@@ -599,6 +605,7 @@ public class GUI extends FreeColClientHolder {
      * @return The selected value of the selected {@code ChoiceItem},
      *     or null if cancelled.
      */
+    @JsMethod(name = "getChoiceUnit")
     public <T> CompletableFuture<T> getChoice(Tile tile, StringTemplate template,
                                  Unit unit, String cancelKey,
                                  List<ChoiceItem<T>> choices) {

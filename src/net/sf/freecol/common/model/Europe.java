@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import javax.swing.JLabel;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.client.gui.panel.Utility;
 import net.sf.freecol.common.FreeColException;
@@ -363,6 +364,7 @@ public class Europe extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public StringTemplate getLocationLabel() {
         return StringTemplate.key(this);
