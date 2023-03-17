@@ -148,7 +148,12 @@ public class Introspector {
         final String methodName = "set" + fromSnakeCase(field);
         try {
             final Meta meta = IntrospectorImpl.metas.get(theClass);
-            final Class<?> fieldType = meta.invokeMethod(obj, "get" + fromSnakeCase(field)).getClass();
+            Class<?> fieldType;
+            try {
+                fieldType = meta.invokeMethod(obj, "get" + fromSnakeCase(field)).getClass();
+            } catch (Throwable t) {
+                fieldType = String.class;
+            }
             meta.invokeMethod(obj, methodName, valueOf(fieldType, value));
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
