@@ -1283,7 +1283,7 @@ public class GUI extends FreeColClientHolder {
                            String defaultValue,
                            String okKey, String cancelKey) {
         logger.info("getInput(" + tile + ", " + template + ", " + defaultValue + ", " + okKey + ", " + cancelKey + ")");
-        return null;
+        return CompletableFuture.completedFuture(defaultValue);
     }
 
 
