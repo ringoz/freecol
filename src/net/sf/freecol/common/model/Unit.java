@@ -1090,6 +1090,7 @@ public class Unit extends GoodsLocation
      *
      * @return The carrier this unit is aboard, or null if none.
      */
+    @JsMethod
     public Unit getCarrier() {
         return (isOnCarrier()) ? ((Unit)getLocation()) : null;
     }
