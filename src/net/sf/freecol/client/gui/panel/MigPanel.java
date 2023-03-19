@@ -31,6 +31,7 @@ import net.miginfocom.swing.MigLayout;
  * A panel that clears its layout on close, working around a bug in
  * some versions of MigLayout.
  */
+@net.ringoz.GwtIncompatible
 public class MigPanel extends JPanel {
 
     private String uiClassId;

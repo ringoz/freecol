@@ -33,6 +33,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import jsinterop.annotations.JsPackage;
+import jsinterop.annotations.JsType;
+
 import static net.sf.freecol.common.util.StringUtils.*;
 
 
@@ -54,12 +57,8 @@ public class Introspector {
         }
     }
     
-    /** The class whose field we are to operate on. */
-    private final Class<?> theClass;
-
     /** The field whose get/set methods we wish to invoke. */
     private final String field;
-
 
     /**
      * Build a new Introspector for the specified class and field name.
@@ -71,7 +70,6 @@ public class Introspector {
         if (field == null || field.isEmpty()) {
             throw new RuntimeException("Field may not be empty: " + this);
         }
-        this.theClass = theClass;
         this.field = field;
     }
 
@@ -109,9 +107,8 @@ public class Introspector {
             if (argType == Character.TYPE) return (T)Character.valueOf(arg.charAt(0));
             throw new IllegalArgumentException("Need compatible class for primitive " + argType.getName());
         }
-        final Meta meta = IntrospectorImpl.metas.get(argType);
         try {
-            return (T)meta.invokeMethod(null, "valueOf", arg);
+            return (T)invokeFunction(argType, "valueOf", arg);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
@@ -129,8 +126,7 @@ public class Introspector {
     public String getter(Object obj) throws IntrospectorException {
         final String methodName = "get" + fromSnakeCase(field);
         try {
-            final Meta meta = IntrospectorImpl.metas.get(theClass);
-            return meta.invokeMethod(obj, methodName).toString();
+            return invokeFunction(obj, methodName).toString();
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }
@@ -147,14 +143,13 @@ public class Introspector {
     public void setter(Object obj, String value) throws IntrospectorException {
         final String methodName = "set" + fromSnakeCase(field);
         try {
-            final Meta meta = IntrospectorImpl.metas.get(theClass);
             Class<?> fieldType;
             try {
-                fieldType = meta.invokeMethod(obj, "get" + fromSnakeCase(field)).getClass();
+                fieldType = invokeFunction(obj, "get" + fromSnakeCase(field)).getClass();
             } catch (Throwable t) {
                 fieldType = String.class;
             }
-            meta.invokeMethod(obj, methodName, valueOf(fieldType, value));
+            invokeFunction(obj, methodName, valueOf(fieldType, value));
         } catch (Exception e) {
             throw new IntrospectorException(methodName, e);
         }
@@ -172,10 +167,10 @@ public class Introspector {
 
         final Class<?> clazz = IntrospectorImpl.names.get(name.substring(PACKAGE.length()));
         if (clazz == null)
-            throw new ClassNotFoundException(name);
-
+            return ReflectCompat.getClass(name);
+    
         return clazz;
-    }       
+    }
 
     /**
      * Constructs a new instance of an object of a class specified by name,
@@ -215,8 +210,8 @@ public class Introspector {
                                     Object[] params)
         throws IntrospectorException {
         try {
-            final Meta meta = IntrospectorImpl.metas.get(messageClass);
-            return (T)meta.newInstance(types, params);
+            final Factory ctor = IntrospectorImpl.ctors.get(messageClass);
+            return (T)ctor.call(types, params);
         } catch (Exception ex) {
             throw new IntrospectorException("Failed to construct " + messageClass.getName(), ex);
         }
@@ -234,18 +229,28 @@ public class Introspector {
      * @exception InvocationTargetException if the target can not be invoked.
      * @exception NoSuchMethodException if the invocation fails.
      */
+    @SuppressWarnings("unchecked")
     public static <T> T invokeMethod(Object object, String methodName,
                                      Class<T> returnClass)
         throws IllegalAccessException, InvocationTargetException,
                NoSuchMethodException {
         try {
-            final Meta meta = IntrospectorImpl.metas.get(object.getClass());
-            return net.ringoz.GwtCompat.class_cast(returnClass, meta.invokeMethod(object, methodName));
+            final Object result = invokeFunction(object, methodName);
+            if (returnClass == Integer.class && (result instanceof Number))
+                return (T)Integer.valueOf(((Number)result).intValue());
+            return net.ringoz.GwtCompat.class_cast(returnClass, result);
         } catch (NoSuchMethodException|IllegalAccessException e) {
             throw e;
         } catch (Exception e) {
             throw new InvocationTargetException(e);
         }
+    }
+
+    public static Object invokeFunction(Object object, String methodName, Object... params) throws Exception {
+        final Function meth = ReflectCompat.getFunction(object, methodName);
+        if (null == meth)
+            throw new NoSuchMethodException();
+        return meth.call(object, params);
     }
 
     /**
@@ -254,23 +259,21 @@ public class Introspector {
 
     static final String PACKAGE = "net.sf.freecol.";
 
-    static abstract class Meta {
-        static boolean areSame(Object[] types, Object... other) {
-            return Arrays.equals(types, other);
-        }
+    @JsType(isNative = true, namespace = JsPackage.GLOBAL)
+    interface Function {
+        Object call(Object self, Object... params) throws Exception;
+    }
 
-        Object newInstance(Class<?>[] types, Object[] params) throws Exception {
-            throw new InstantiationException();
-        }
+    interface Factory {
+        Object call(Object self, Object... params) throws Exception;
+    }
 
-        Object invokeMethod(Object object, String method, Object... params) throws Exception {
-            switch (method) {
-                case "toString": return object.toString();
-                case "hashCode": return object.hashCode();
-                case "equals": return object.equals(params[0]);
-                default: throw new NoSuchMethodException();
-            }
-        }
+    static boolean areSame(Object types) {
+        return ((Object[])types).length == 0;
+    }
+
+    static boolean areSame(Object types, Object... other) {
+        return Arrays.equals((Object[])types, other);
     }
 
     @net.ringoz.GwtIncompatible
@@ -301,57 +304,25 @@ public class Introspector {
             if (cls.isEnum())
                 emitClass(out, cls);
 
-        out.println("// " + clazz.getCanonicalName());
         emitted.add(clazz);
-
-        out.println("final Meta " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + " = new Meta() {");
-        if (!Modifier.isAbstract(clazz.getModifiers())) {
-            out.println(clazz.getCanonicalName() + " newInstance(Class<?>[] types, Object[] params) throws Exception {");
-            final var ctors = Arrays.stream(clazz.getConstructors()).sorted(Comparator.comparingInt(Constructor::getParameterCount)).toArray(Constructor[]::new);
-            for (Constructor<?> ctor : ctors) {
-                final var types = ctor.getParameterTypes();
-                if (types.length == 0)
-                    out.println("  if (types.length == 0)");
-                else
-                    out.println("  if (areSame(types, " + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> types[i].getCanonicalName() + ".class").toArray(String[]::new)) + "))");
-                out.println("    return new " + clazz.getCanonicalName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + ");");
-            }
-            out.println("  throw new IllegalArgumentException();");
-            out.println("}");
-        }
-
-        final var methods = Arrays.stream(clazz.getDeclaredMethods()).filter((Method meth) -> {
-            if (!Modifier.isPublic(meth.getModifiers()))
-                return false;
-            if (meth.getAnnotation(net.ringoz.GwtIncompatible.class) != null)
-                return false;
-            if (inheritsMethod(clazz, meth))
-                return false;
-            if (meth.getName().startsWith("set") && meth.getParameterCount() != 1)
-                return false;
-            if (!(meth.getName().startsWith("set") || meth.getName().equals("valueOf")) && meth.getParameterCount() != 0)
-                return false;
-            return true;
-        }).sorted(Comparator.comparing(Method::getName)).toArray(Method[]::new);
-
-        out.println("Object invokeMethod(Object object, String method, Object... params) throws Exception {");
-        if (methods.length != 0) {
-            out.println("  switch (method) {");
-            for (Method meth : methods) {
-                final var types = meth.getParameterTypes();
-                if (meth.getReturnType().equals(Void.TYPE))
-                    out.println("  case \"" + meth.getName() + "\": ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + "); return null;");
-                else
-                    out.println("  case \"" + meth.getName() + "\": return ((" + clazz.getCanonicalName() + ")object)." + meth.getName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + ");");
-            }
-            out.println("  }");
-        }
-        out.println("  return " + (emitted.contains(clazz.getSuperclass()) ? clazz.getSuperclass().getName().substring(PACKAGE.length()).replace(".", "_") : "super") + ".invokeMethod(object, method, params);");
-        out.println("}");
-
-        out.println("};");
         out.println("names.put(\"" + clazz.getName().substring(PACKAGE.length()) + "\", " + clazz.getCanonicalName() + ".class);");
-        out.println("metas.put(" + clazz.getCanonicalName() + ".class, " + clazz.getName().substring(PACKAGE.length()).replace(".", "_") + ");");
+
+        if (!Modifier.isAbstract(clazz.getModifiers())) {
+            final var ctors = Arrays.stream(clazz.getConstructors()).sorted(Comparator.comparing(Constructor::toString)).toArray(Constructor[]::new);
+            if (ctors.length > 0) {
+                out.println("ctors.put(" + clazz.getCanonicalName() + ".class, (types, params) -> {");
+                for (Constructor<?> ctor : ctors) {
+                    final var types = ctor.getParameterTypes();
+                    if (types.length == 0)
+                        out.println("  if (areSame(types))");
+                    else
+                        out.println("  if (areSame(types, " + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> types[i].getCanonicalName() + ".class").toArray(String[]::new)) + "))");
+                    out.println("    return new " + clazz.getCanonicalName() + "(" + String.join(", ", IntStream.range(0, types.length).mapToObj((i) -> "(" + types[i].getCanonicalName() + ")params[" + i + "]").toArray(String[]::new)) + ");");
+                }
+                out.println("  throw new IllegalArgumentException();");
+                out.println("});");
+            }
+        }
     }
 
     @net.ringoz.GwtIncompatible
@@ -383,10 +354,11 @@ public class Introspector {
         try (PrintStream out = new PrintStream(args[0])) {
             out.println("// generated by Introspector::main");
             out.println("package net.sf.freecol.common.util;");
-            out.println("import net.sf.freecol.common.util.Introspector.Meta;");
+            out.println("import net.sf.freecol.common.util.Introspector.Factory;");
+            out.println("import static net.sf.freecol.common.util.Introspector.areSame;");
             out.println("class IntrospectorImpl {");
             out.println("static final java.util.Map<String,Class<?>> names = new java.util.HashMap<>();");
-            out.println("static final java.util.Map<Class<?>,Meta> metas = new java.util.HashMap<>();");
+            out.println("static final java.util.Map<Class<?>,Factory> ctors = new java.util.HashMap<>();");
             out.println("static {");
             emitClasses(out, "net.sf.freecol.common.networking", net.sf.freecol.common.networking.Message.class);
             emitClasses(out, "net.sf.freecol.common.networking", Enum.class);
