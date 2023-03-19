@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -46,6 +47,7 @@ public class NativeTrade extends FreeColGameObject {
         = StringTemplate.template("");
 
     /** The type of native trade command. */
+    @JsType
     public static enum NativeTradeAction {
         // Requests from European trader
         OPEN(false, true),         // Start a new trade session

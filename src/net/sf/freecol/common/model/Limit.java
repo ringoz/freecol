@@ -21,6 +21,7 @@ package net.sf.freecol.common.model;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Operand.OperandType;
@@ -39,6 +40,7 @@ public final class Limit extends FreeColSpecObjectType {
     public static final String TAG = "limit";
 
     /** The basic operation used in evaluating this limit. */
+    @JsType
     public static enum Operator {
         EQ, LT, GT, LE, GE
     }

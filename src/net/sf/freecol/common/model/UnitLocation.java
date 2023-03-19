@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -54,6 +55,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
 
     private static final Logger logger = Logger.getLogger(UnitLocation.class.getName());
 
+    @JsType
     public static enum NoAddReason {
         /**
          * No reason why Locatable can not be added.

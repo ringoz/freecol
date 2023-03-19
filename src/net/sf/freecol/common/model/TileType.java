@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.option.GameOptions;
@@ -46,6 +47,7 @@ public final class TileType extends FreeColSpecObjectType
 
     public static final String TAG = "tile-type";
 
+    @JsType
     public static enum RangeType { HUMIDITY, TEMPERATURE, ALTITUDE };
     
     public static final int HILLS_ALTITUDE = 15;

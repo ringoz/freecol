@@ -25,12 +25,15 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+import jsinterop.annotations.JsType;
+
 
 /**
  * A abstract requirements for a FreeCol combat model.
  */
 public abstract class CombatModel {
 
+    @JsType
     public static enum CombatEffectType {
         // Special results that set the sense of the result.
         NO_RESULT,

@@ -21,6 +21,7 @@ package net.sf.freecol.common.model;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -140,6 +141,7 @@ public class Scope extends FreeColObject {
         this.matchNegated = newMatchNegated;
     }
 
+    @JsMethod
     public String getType() {
         return type;
     }

@@ -28,6 +28,8 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 
@@ -41,6 +43,7 @@ public class FoundingFather extends FreeColSpecObjectType {
 
     public static final String TAG = "founding-father";
 
+    @JsType
     public static enum FoundingFatherType {
         TRADE,
         EXPLORATION,
@@ -99,6 +102,7 @@ public class FoundingFather extends FreeColSpecObjectType {
      *
      * @return The type of this FoundingFather.
      */
+    @JsMethod
     public FoundingFatherType getType() {
         return type;
     }

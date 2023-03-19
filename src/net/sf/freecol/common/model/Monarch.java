@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Player.PlayerType;
@@ -54,6 +55,7 @@ public final class Monarch extends FreeColGameObject implements Named {
     public static final String TAG = "monarch";
 
     /** Constants describing monarch actions. */
+    @JsType
     public static enum MonarchAction {
         NO_ACTION,
         RAISE_TAX_ACT,

@@ -21,6 +21,7 @@ package net.sf.freecol.common.model;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -35,6 +36,7 @@ public class HistoryEvent extends StringTemplate {
 
     public static final String TAG = "historyEvent";
 
+    @JsType
     public static enum HistoryEventType implements Named {
         DISCOVER_NEW_WORLD,
         DISCOVER_REGION,

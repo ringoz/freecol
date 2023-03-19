@@ -23,6 +23,8 @@ import net.sf.freecol.common.i18n.Messages;
 import static net.sf.freecol.common.util.CollectionUtils.*;
 import static net.sf.freecol.common.util.StringUtils.*;
 
+import jsinterop.annotations.JsType;
+
 
 /**
  * A measure of the tension between nations.
@@ -68,6 +70,7 @@ public class Tension implements Named {
     /** 
      * Constants for describing alarm levels.
      */
+    @JsType
     public static enum Level { 
         HAPPY(100),
         CONTENT(600), 

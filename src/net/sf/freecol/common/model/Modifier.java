@@ -24,6 +24,8 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.util.Utils;
@@ -161,6 +163,7 @@ public class Modifier extends Feature {
     public static final int ROLE_COMBAT_INDEX = 30;
     public static final int GENERAL_COMBAT_INDEX = 50;
 
+    @JsType
     public static enum ModifierType {
         ADDITIVE,
         MULTIPLICATIVE,
@@ -301,6 +304,7 @@ public class Modifier extends Feature {
      *
      * @return The {@code ModifierType}.
      */
+    @JsMethod
     public final ModifierType getType() {
         return modifierType;
     }

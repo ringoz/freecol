@@ -352,6 +352,7 @@ public abstract class Settlement extends GoodsLocation
      *
      * @return True if the settlement is connected to the high seas.
      */
+    @JsMethod
     public boolean isConnectedPort() {
         return any(getTile().getSurroundingTiles(1, 1),
                    t -> !t.isLand() && t.isHighSeasConnected());
@@ -522,6 +523,7 @@ public abstract class Settlement extends GoodsLocation
      *
      * @return The settlement name.
      */
+    @JsMethod
     @Override
     public String getName() {
         return name;
@@ -534,6 +536,7 @@ public abstract class Settlement extends GoodsLocation
      *
      * @param newName The new name.
      */
+    @JsMethod
     @Override
     public void setName(String newName) {
         this.name = newName;

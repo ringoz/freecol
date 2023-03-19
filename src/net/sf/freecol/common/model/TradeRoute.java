@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -321,6 +322,7 @@ public class TradeRoute extends FreeColGameObject
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final String getName() {
         return this.name;
@@ -329,6 +331,7 @@ public class TradeRoute extends FreeColGameObject
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final void setName(final String newName) {
         this.name = newName;

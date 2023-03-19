@@ -138,6 +138,7 @@ public abstract class FreeColObject
      *
      * @param newId The new object identifier.
      */
+    @JsMethod
     public void setId(final String newId) {
         this.id = newId;
     }
@@ -832,7 +833,7 @@ public abstract class FreeColObject
             try {
                 return Introspector.invokeMethod(this, methodName, returnClass);
             } catch (Exception ex) {
-                logger.log(Level.WARNING, "Invoke failed: " + methodName, ex);
+                logger.log(Level.WARNING, "Invoke failed: " + this.getClass().getName() + "::" + methodName, ex);
             }
         }
         return defaultValue;

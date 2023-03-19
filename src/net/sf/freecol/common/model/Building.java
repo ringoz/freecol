@@ -96,6 +96,7 @@ public class Building extends WorkLocation
      *
      * @return The building type.
      */
+    @JsMethod
     public BuildingType getType() {
         return buildingType;
     }

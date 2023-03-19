@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.option.GameOptions;
@@ -50,10 +51,12 @@ public class Operand extends Scope {
 
     private static final Logger logger = Logger.getLogger(Operand.class.getName());
 
+    @JsType
     public static enum OperandType {
         UNITS, BUILDINGS, SETTLEMENTS, FOUNDING_FATHERS, YEAR, OPTION, NONE
     }
 
+    @JsType
     public static enum ScopeLevel {
         SETTLEMENT, PLAYER, GAME, NONE
     }

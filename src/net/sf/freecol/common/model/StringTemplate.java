@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -64,6 +65,7 @@ public class StringTemplate extends FreeColObject {
      * value of the key, or LABEL, a separator string that will be
      * used to join the replacement values.
      */
+    @JsType
     public static enum TemplateType { NAME, KEY, TEMPLATE, LABEL }
 
     /** The TemplateType of this StringTemplate. Defaults to KEY. */

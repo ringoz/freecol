@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -57,6 +58,7 @@ public class LostCityRumour extends TileItem {
     private static int rumourNothing = -1;
 
     /** Constants describing types of Lost City Rumours. */
+    @JsType
     public static enum RumourType {
         NO_SUCH_RUMOUR,
         BURIAL_GROUND,

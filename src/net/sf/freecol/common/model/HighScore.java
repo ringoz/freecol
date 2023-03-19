@@ -38,6 +38,7 @@ import java.util.UUID;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColDirectories;
@@ -70,6 +71,7 @@ public class HighScore extends FreeColObject {
      * On retirement, an object will be named in honour of the
      * player.  The nature of the object depends on the player's score.
      */
+    @JsType
     public static enum ScoreLevel {
         CONTINENT(40000),
         COUNTRY(35000),

@@ -21,6 +21,7 @@ package net.sf.freecol.common.model.mission;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Unit;
 
@@ -34,6 +35,7 @@ import net.sf.freecol.common.model.Unit;
  */
 public interface Mission {
 
+    @JsType
     public static enum MissionState {
         /**
          * Mission is in progress.

@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -56,6 +57,7 @@ public final class Market extends FreeColGameObject implements Ownable {
      * Constant for specifying the access to this {@code Market}
      * when selling goods.
      */
+    @JsType
     public static enum Access {
         EUROPE,
         CUSTOM_HOUSE,

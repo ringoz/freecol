@@ -23,6 +23,7 @@ import net.sf.freecol.common.i18n.Messages;
 import static net.sf.freecol.common.util.StringUtils.*;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import jsinterop.annotations.JsType;
 
 
 /**
@@ -38,6 +39,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *   WAR          |  x  d  ds dt -    |   s = surrender
  *   ----------------------------------   x = invalid
  */
+@JsType
 public enum Stance implements Named {
     UNCONTACTED,
     ALLIANCE,

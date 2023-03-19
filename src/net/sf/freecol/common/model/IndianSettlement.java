@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -70,6 +71,7 @@ public class IndianSettlement extends Settlement implements TradeLocation {
     public static final String TAG = "indianSettlement";
 
     /** The level of contact between a player and this settlement. */
+    @JsType
     public static enum ContactLevel {
         UNCONTACTED,     // Nothing known other than location?
         CONTACTED,       // Name, wanted-goods now visible

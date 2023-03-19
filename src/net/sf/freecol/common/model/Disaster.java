@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.util.RandomChoice;
@@ -45,6 +46,7 @@ public class Disaster extends FreeColSpecObjectType {
     public static final String BANKRUPTCY = "model.disaster.bankruptcy";
 
     /** Whether to apply one, many or all applicable disasters. */
+    @JsType
     public static enum Effects { ONE, SEVERAL, ALL };
 
 

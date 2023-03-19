@@ -37,6 +37,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.model.Colony.NoBuildReason;
@@ -212,6 +213,7 @@ public final class BuildingType extends BuildableType
      *
      * @return This.
      */
+    @JsMethod
     public FreeColSpecObjectType getType() {
         return this;
     }

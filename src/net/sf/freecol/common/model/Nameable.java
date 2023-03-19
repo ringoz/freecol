@@ -20,6 +20,8 @@
 
 package net.sf.freecol.common.model;
 
+import jsinterop.annotations.JsMethod;
+
 /**
  * An object with a name that can be changed.
  */
@@ -30,6 +32,7 @@ public interface Nameable {
      *
      * @return The name of the {@code Nameable}.
      */
+    @JsMethod
     public String getName();
 
     /**
@@ -37,6 +40,7 @@ public interface Nameable {
      *
      * @param newName The new name for the {@code Nameable}.
      */
+    @JsMethod
     public void setName(String newName);
 
 }

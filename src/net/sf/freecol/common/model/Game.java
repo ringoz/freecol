@@ -53,6 +53,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.NameCache;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -74,6 +75,7 @@ public class Game extends FreeColGameObject {
     public static final String TAG = "game";
 
     /** Reasons for logging out. */
+    @JsType
     public static enum LogoutReason {
         DEFEATED,   // Game over, player lost
         LOGIN,      // Logging in again FIXME: this should go away
@@ -85,6 +87,7 @@ public class Game extends FreeColGameObject {
     };
     
     /** State for the FCGO iterator, out here because it has to be static. */
+    @JsType
     private static enum FcgoState {
         INVALID,
         VALID,
@@ -1241,6 +1244,7 @@ public class Game extends FreeColGameObject {
      *
      * @return True if the Spanish Succession has occurred.
      */
+    @JsMethod
     public final boolean getSpanishSuccession() {
         return spanishSuccession;
     }
@@ -1250,6 +1254,7 @@ public class Game extends FreeColGameObject {
      *
      * @param spanishSuccession The new Spanish Succession value.
      */
+    @JsMethod
     public final void setSpanishSuccession(final boolean spanishSuccession) {
         this.spanishSuccession = spanishSuccession;
     }

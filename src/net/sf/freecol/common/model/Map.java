@@ -55,6 +55,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -97,6 +98,7 @@ public class Map extends FreeColGameObject implements Location {
      * The layers included in the map. The RIVERS layer includes all
      * natural tile improvements that are not resources.
      */
+    @JsType
     public static enum Layer {
         NONE, LAND, TERRAIN, REGIONS, RIVERS, RESOURCES, RUMOURS, NATIVES, ALL;
     };

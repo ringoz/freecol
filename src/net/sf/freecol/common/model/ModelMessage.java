@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.client.gui.panel.Utility;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -47,6 +48,7 @@ public class ModelMessage extends StringTemplate {
      * When this changes, be sure to update client-options.xml and the
      * messages file appropriately.
      */
+    @JsType
     public static enum MessageType implements Named {
         DEFAULT(""),
         BUILDING_COMPLETED("model.option.guiShowBuildingCompleted"),

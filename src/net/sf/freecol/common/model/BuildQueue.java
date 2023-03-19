@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.option.GameOptions;
 import static net.sf.freecol.common.util.CollectionUtils.*;
 
@@ -33,6 +34,7 @@ import static net.sf.freecol.common.util.CollectionUtils.*;
  */
 public class BuildQueue<T extends BuildableType> implements Consumer {
 
+    @JsType
     public static enum CompletionAction {
         /**
          * Always remove the completed item. Not used by any build

@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.client.gui.panel.Utility;
 import net.sf.freecol.common.FreeColException;
@@ -81,6 +82,7 @@ public class Europe extends UnitLocation
      * The following constant should be used when the random choice
      * behaviour is desired.
      */
+    @JsType
     public static enum MigrationType {
         NORMAL,     // Unit decided to migrate
         RECRUIT,    // Player is paying

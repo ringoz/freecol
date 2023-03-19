@@ -62,6 +62,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
@@ -97,11 +98,13 @@ public class Player extends FreeColGameObject implements Nameable {
     //
 
     /** Types of players. */
+    @JsType
     public static enum PlayerType {
         NATIVE, COLONIAL, REBEL, INDEPENDENT, ROYAL, UNDEAD, RETIRED
     }
 
     /** Colony value categories. */
+    @JsType
     public static enum ColonyValueCategory {
         A_OVERRIDE, // override slot containing showstopper NoValueType values
         A_PROD,     // general production level
@@ -128,6 +131,7 @@ public class Player extends FreeColGameObject implements Nameable {
     }
 
     /** Special return values for showstopper getColonyValue fail. */
+    @JsType
     public static enum NoValueType {
         BOGUS(-1),       // bad value from canClaimToFoundSettlementReason
         TERRAIN(-2),     // can not settle on tile (e.g. moutain, water)
@@ -386,6 +390,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The name of this player.
      */
+    @JsMethod
     @Override
     public String getName() {
         return name;
@@ -396,6 +401,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param newName The new name value.
      */
+    @JsMethod
     @Override
     public void setName(String newName) {
         this.name = newName;
@@ -428,6 +434,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The post-declaration player name.
      */
+    @JsMethod
     public final String getIndependentNationName() {
         return independentNationName;
     }
@@ -437,6 +444,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param newIndependentNationName The new player name.
      */
+    @JsMethod
     public final void setIndependentNationName(final String newIndependentNationName) {
         this.independentNationName = newIndependentNationName;
     }
@@ -447,6 +455,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * @return The name of the new world as chosen by the {@code Player},
      *     or null if none chosen yet.
      */
+    @JsMethod
     public String getNewLandName() {
         return newLandName;
     }
@@ -465,6 +474,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param newLandName This {@code Player}'s name for the new world.
      */
+    @JsMethod
     public void setNewLandName(String newLandName) {
         this.newLandName = newLandName;
     }
@@ -706,6 +716,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The player type.
      */
+    @JsMethod
     public PlayerType getPlayerType() {
         return playerType;
     }
@@ -990,6 +1001,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return True if this {@code Player} is dead.
      */
+    @JsMethod
     public boolean getDead() {
         return dead;
     }
@@ -1000,6 +1012,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * @param dead The new death state.
      * @see #getDead
      */
+    @JsMethod
     public void setDead(boolean dead) {
         this.dead = dead;
     }
@@ -1009,6 +1022,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return True if this player has been attacked by privateers.
      */
+    @JsMethod
     public boolean getAttackedByPrivateers() {
         return attackedByPrivateers;
     }
@@ -1018,6 +1032,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param attacked True if the player has been attacked by privateers.
      */
+    @JsMethod
     public void setAttackedByPrivateers(boolean attacked) {
         attackedByPrivateers = attacked;
     }
@@ -1091,6 +1106,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The score.
      */
+    @JsMethod
     public int getScore() {
         return score;
     }
@@ -1100,6 +1116,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param score The new score.
      */
+    @JsMethod
     public void setScore(int score) {
         this.score = score;
     }
@@ -1132,6 +1149,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param newGold The new player gold value.
      */
+    @JsMethod
     public void setGold(int newGold) {
         gold = newGold;
     }
@@ -1181,6 +1199,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return True if this player is bankrupt.
      */
+    @JsMethod
     public final boolean getBankrupt() {
         return bankrupt;
     }
@@ -1190,6 +1209,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param newBankrupt The new bankruptcy value.
      */
+    @JsMethod
     public final void setBankrupt(final boolean newBankrupt) {
         this.bankrupt = newBankrupt;
     }
@@ -1205,6 +1225,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * @return The immigration value.
      * @see #reduceImmigration
      */
+    @JsMethod
     public int getImmigration() {
         return (isColonial()) ? immigration : 0;
     }
@@ -1214,6 +1235,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param immigration The immigration value for this player.
      */
+    @JsMethod
     public void setImmigration(int immigration) {
         if (!isColonial()) return;
         this.immigration = immigration;
@@ -1250,6 +1272,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The immigration points required to trigger emigration.
      */
+    @JsMethod
     public int getImmigrationRequired() {
         return immigrationRequired;
     }
@@ -1260,6 +1283,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param immigrationRequired The new number of immigration points.
      */
+    @JsMethod
     public void setImmigrationRequired(int immigrationRequired) {
         this.immigrationRequired = immigrationRequired;
     }
@@ -1338,6 +1362,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The amount of liberty points.
      */
+    @JsMethod
     public int getLiberty() {
         return (canHaveFoundingFathers()) ? liberty : 0;
     }
@@ -1347,6 +1372,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param liberty The new amount of liberty.
      */
+    @JsMethod
     public void setLiberty(int liberty) {
         if (!canHaveFoundingFathers()) return;
         this.liberty = liberty;
@@ -1410,6 +1436,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The total percentage of rebels in all this player's colonies.
      */
+    @JsMethod
     public int getSoL() {
         final List<Colony> colonies = getColonyList();
         return (colonies.isEmpty()) ? 0
@@ -1665,6 +1692,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The current tax.
      */
+    @JsMethod
     public int getTax() {
         return tax;
     }
@@ -1674,6 +1702,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @param amount The new tax amount.
      */
+    @JsMethod
     public void setTax(int amount) {
         tax = amount;
         if (recalculateBellsBonus()) {
@@ -3348,6 +3377,7 @@ public class Player extends FreeColGameObject implements Nameable {
      * to found a settlement or just to be used by one, including the
      * double negative NONE == "no reason" case.
      */
+    @JsType
     public static enum NoClaimReason implements Named {
         NONE,            // Actually, tile can be claimed
         TERRAIN,         // Not on settleable terrain

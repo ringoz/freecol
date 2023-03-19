@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -56,6 +58,7 @@ public class Region extends FreeColGameObject implements Nameable {
     public static final String PACIFIC_KEY = "model.region.pacific";
 
     /** The type of region. */
+    @JsType
     public static enum RegionType implements Named {
         OCEAN(false),
         COAST(false),
@@ -233,6 +236,7 @@ public class Region extends FreeColGameObject implements Nameable {
      *
      * @return The region type.
      */
+    @JsMethod
     public final RegionType getType() {
         return this.type;
     }
@@ -486,6 +490,7 @@ public class Region extends FreeColGameObject implements Nameable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public String getName() {
         return this.name;
@@ -494,6 +499,7 @@ public class Region extends FreeColGameObject implements Nameable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public void setName(final String newName) {
         this.name = newName;

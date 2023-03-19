@@ -1196,6 +1196,7 @@ public class Unit extends GoodsLocation
      *
      * @return The number of moves this {@code Unit} has left.
      */
+    @JsMethod
     @Override
     public int getMovesLeft() {
         return movesLeft;
@@ -1221,6 +1222,7 @@ public class Unit extends GoodsLocation
      * @param moves The new amount of moves left this {@code Unit}
      *     should have.
      */
+    @JsMethod
     public void setMovesLeft(int moves) {
         this.movesLeft = (moves < 0) ? 0 : moves;
     }
@@ -1286,6 +1288,7 @@ public class Unit extends GoodsLocation
      *     experienceType.
      * @see #modifyExperience
      */
+    @JsMethod
     public int getExperience() {
         return experience;
     }
@@ -1298,6 +1301,7 @@ public class Unit extends GoodsLocation
      *     at its current experienceType.
      * @see #modifyExperience
      */
+    @JsMethod
     public void setExperience(int experience) {
         this.experience = Math.min(experience,
                                    getType().getMaximumExperience());
@@ -1693,6 +1697,7 @@ public class Unit extends GoodsLocation
      * @return The hit points this {@code Unit} has.
      * @see UnitType#getHitPoints
      */
+    @JsMethod
     public int getHitPoints() {
         return hitPoints;
     }
@@ -1712,6 +1717,7 @@ public class Unit extends GoodsLocation
      *
      * @param hitPoints The new hit points for this unit.
      */
+    @JsMethod
     public void setHitPoints(int hitPoints) {
         this.hitPoints = hitPoints;
     }
@@ -2129,6 +2135,7 @@ public class Unit extends GoodsLocation
      *
      * @see Unit#getMoveType(Direction)
      */
+    @JsType
     public static enum MoveType {
         MOVE(null, true),
         MOVE_HIGH_SEAS(null, true),

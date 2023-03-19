@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -73,6 +74,7 @@ public class Colony extends Settlement implements TradeLocation {
     /** Number of colonies that a player will trade down to. */
     public static final int TRADE_MARGIN = 5;
 
+    @JsType
     public static enum ColonyChangeEvent {
         POPULATION_CHANGE,
         PRODUCTION_CHANGE,
@@ -83,6 +85,7 @@ public class Colony extends Settlement implements TradeLocation {
     }
 
     /** Reasons for not building a buildable. */
+    @JsType
     public static enum NoBuildReason {
         NONE,
         NOT_BUILDING,

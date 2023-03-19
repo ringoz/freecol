@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColXMLReader;
@@ -43,6 +44,7 @@ public class NationOptions extends FreeColSpecObject {
     public static final String TAG = "nationOptions";
 
     /** Type of national advantages for European players. */
+    @JsType
     public static enum Advantages implements Named {
         NONE,
         FIXED,
@@ -76,6 +78,7 @@ public class NationOptions extends FreeColSpecObject {
      * Nations may be available to all players, to AI players only, or
      * to no players.
      */
+    @JsType
     public static enum NationState implements Named {
         AVAILABLE,
         AI_ONLY,

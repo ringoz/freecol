@@ -49,6 +49,7 @@ import javax.imageio.ImageIO;
 import javax.xml.stream.XMLStreamException;
 
 import jsinterop.annotations.JsMethod;
+import jsinterop.annotations.JsType;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.FreeColSeed;
@@ -168,6 +169,7 @@ public final class FreeColServer {
     public static final String DEFAULT_SPEC = "freecol";
 
     /** The server is either starting, loading, being played, or ending. */
+    @JsType
     public static enum ServerState {
         PRE_GAME(0),
         LOAD_GAME(0),

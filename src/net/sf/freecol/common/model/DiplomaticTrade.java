@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -42,6 +43,7 @@ public class DiplomaticTrade extends FreeColGameObject {
     public static final String TAG = "diplomaticTrade";
 
     /** A context for the trade. */
+    @JsType
     public static enum TradeContext {
         CONTACT,    /** First contact between Europeans */
         DIPLOMATIC, /** Scout negotiating */
@@ -59,6 +61,7 @@ public class DiplomaticTrade extends FreeColGameObject {
     }
 
     /** A type for the trade status. */
+    @JsType
     public static enum TradeStatus {
         PROPOSE_TRADE,
         ACCEPT_TRADE,

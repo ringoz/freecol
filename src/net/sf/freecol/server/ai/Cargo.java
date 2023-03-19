@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsType;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -58,6 +59,7 @@ public final class Cargo {
     private static final int MAX_TRY = 3;
 
     /** The actions to perform at the target. */
+    @JsType
     public static enum CargoMode {
         LOAD,       // Go to target and load transportable
         UNLOAD,     // Go to target and unload transportable
