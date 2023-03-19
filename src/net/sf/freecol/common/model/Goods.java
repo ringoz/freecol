@@ -109,6 +109,11 @@ public class Goods extends AbstractGoods implements Locatable, Ownable {
         this.location = location;
     }
 
+    @JsMethod
+    public static Goods of(Game game, Location location, GoodsType type, int amount) {
+        return new Goods(game, location, type, amount);
+    }
+
     /**
      * Creates a new {@code Goods} instance.
      *
