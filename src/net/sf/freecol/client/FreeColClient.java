@@ -956,6 +956,7 @@ public final class FreeColClient {
     /**
      * Retire from the game.
      */
+    @JsMethod
     public void retire() {
         gui.confirm("retireDialog.areYouSure.text", "ok", "cancel").thenAccept((ret) -> {
             if (!ret) return;
