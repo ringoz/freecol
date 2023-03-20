@@ -3294,6 +3294,7 @@ public final class InGameController extends FreeColClientHolder {
      *
      * @return True if independence was declared.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> declareIndependence() {
         if (!requireOurTurn()) return CompletableFuture.completedFuture(false);
