@@ -3175,6 +3175,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the destination for.
      * @return True if the unit has no destination.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> clearGotoOrders(Unit unit) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
@@ -3689,6 +3690,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param path The {@code Path} to move along.
      * @return True if the destination change was successful.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> goToTile(Unit unit, PathNode path) {
         if (unit == null || !getMyPlayer().owns(unit)

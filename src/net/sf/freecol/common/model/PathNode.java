@@ -21,6 +21,10 @@
 package net.sf.freecol.common.model;
 
 import static net.sf.freecol.common.model.Constants.*;
+
+import java.util.Iterator;
+
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.util.LogBuilder;
 
 
@@ -31,7 +35,7 @@ import net.sf.freecol.common.util.LogBuilder;
  * {@link #getTile} and {@link #getTotalTurns}, when
  * evaluating/following a path.
  */
-public class PathNode {
+public class PathNode implements Iterable<PathNode> {
 
     /** Weight turns much greater than moves. */
     private static final int TURN_FACTOR = 100;
@@ -60,6 +64,25 @@ public class PathNode {
     /** The previous node in the path. */
     public PathNode previous = null;
 
+    @Override
+    public Iterator<PathNode> iterator() {
+        final PathNode head = this;
+        return new Iterator<PathNode>() {
+            PathNode curr = head;
+
+            @Override
+            public boolean hasNext() {
+                return curr != null;
+            }
+        
+            @Override
+            public PathNode next() {
+                final PathNode node = curr;
+                curr = curr.next;
+                return node;
+            }
+        };
+    }
 
     /**
      * Creates a new {@code PathNode}.
@@ -91,6 +114,7 @@ public class PathNode {
      *
      * @return The {@code Location}.
      */
+    @JsMethod
     public Location getLocation() {
         return location;
     }
@@ -224,6 +248,7 @@ public class PathNode {
      *
      * @return The first {@code PathNode}.
      */
+    @JsMethod
     public PathNode getFirstNode() {
         PathNode path;
         for (path = this; path.previous != null; path = path.previous);
@@ -235,6 +260,7 @@ public class PathNode {
      *
      * @return The last {@code PathNode}.
      */
+    @JsMethod
     public PathNode getLastNode() {
         PathNode path;
         for (path = this; path.next != null; path = path.next);

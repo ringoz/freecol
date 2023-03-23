@@ -1372,10 +1372,8 @@ public class GUI extends FreeColClientHolder {
      *
      * @param tile The {@code Tile} to go to.
      */
-    @JsMethod(name = "performGoto$")
-    public void performGoto(Tile tile) {
-        logger.info("performGoto(" + tile + ")");
-    }
+    @net.ringoz.GwtIncompatible
+    public void performGoto(Tile tile) {}
 
     /**
      * Perform an immediate goto to a point on the map.

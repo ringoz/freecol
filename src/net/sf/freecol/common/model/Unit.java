@@ -2342,6 +2342,7 @@ public class Unit extends GoodsLocation
      * @return The move type, which will be one of the extended illegal move
      *         types on failure.
      */
+    @JsMethod
     public MoveType getSimpleMoveType(Tile target) {
         return (!hasTile()) ? MoveType.MOVE_NO_TILE
             : getSimpleMoveType(getTile(), target);
@@ -2958,6 +2959,7 @@ public class Unit extends GoodsLocation
      * @return A {@code PathNode} from the current location to the
      *     end location, or null if none found.
      */
+    @JsMethod
     public PathNode findPath(Location end) {
         return this.findPath(getLocation(), end);
     }
