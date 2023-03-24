@@ -156,6 +156,7 @@ public class PathNode implements Iterable<PathNode> {
      *     move. {@code -1} is returned if the number of turns
      *     has not been calculated.
      */
+    @JsMethod
     public int getTurns() {
         return turns;
     }
