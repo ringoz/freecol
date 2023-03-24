@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.util.CollectionUtils.*;
@@ -64,6 +65,7 @@ public class IndianNationType extends NationType {
      *
      * @return False.
      */
+    @JsMethod
     @Override
     public boolean isEuropean() {
         return false;
@@ -74,6 +76,7 @@ public class IndianNationType extends NationType {
      *
      * @return True.
      */
+    @JsMethod
     @Override
     public boolean isIndian() {
         return true;

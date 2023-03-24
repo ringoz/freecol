@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.option.GameOptions;
@@ -158,6 +159,7 @@ public class EuropeanNationType extends NationType {
      *
      * @return True.
      */
+    @JsMethod
     @Override
     public boolean isEuropean() {
         return true;
@@ -168,6 +170,7 @@ public class EuropeanNationType extends NationType {
      *
      * @return False.
      */
+    @JsMethod
     @Override
     public boolean isIndian() {
         return false;
