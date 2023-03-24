@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -186,6 +187,7 @@ public abstract class NationType extends FreeColSpecObjectType {
      *
      * @return True if this is an European nation.
      */
+    @JsMethod
     public abstract boolean isEuropean();
 
     /**
@@ -193,6 +195,7 @@ public abstract class NationType extends FreeColSpecObjectType {
      *
      * @return True if this is a native nation.
      */
+    @JsMethod
     public abstract boolean isIndian();
 
     /**
@@ -200,6 +203,7 @@ public abstract class NationType extends FreeColSpecObjectType {
      *
      * @return True if this is a REF nation.
      */
+    @JsMethod
     public abstract boolean isREF();
 
 

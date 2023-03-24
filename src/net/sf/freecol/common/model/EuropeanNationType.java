@@ -149,6 +149,7 @@ public class EuropeanNationType extends NationType {
      *
      * @return True if this is a REF nation type.
      */
+    @JsMethod
     @Override
     public final boolean isREF() {
         return ref;

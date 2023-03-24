@@ -87,6 +87,7 @@ public class IndianNationType extends NationType {
      *
      * @return False.
      */
+    @JsMethod
     @Override
     public boolean isREF() {
         return false;
