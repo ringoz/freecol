@@ -1354,6 +1354,7 @@ public class Unit extends GoodsLocation
      *
      * @return The {@code TileImprovement} the pioneer is working on.
      */
+    @JsMethod
     public TileImprovement getWorkImprovement() {
         return workImprovement;
     }
