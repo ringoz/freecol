@@ -670,6 +670,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit} to clear the destination for.
      * @return True if the unit now has no destination or trade route.
      */
+    @JsMethod
     @JsAsync
     private CompletableFuture<Boolean> askClearGotoOrders(Unit unit) {
         if (!await(askAssignTradeRoute(unit, null))

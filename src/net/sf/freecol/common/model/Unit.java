@@ -1750,6 +1750,7 @@ public class Unit extends GoodsLocation
      *
      * @return The destination {@code Location} of this {@code Unit}.
      */
+    @JsMethod
     public Location getDestination() {
         return destination;
     }
