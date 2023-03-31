@@ -2680,6 +2680,7 @@ public class Unit extends GoodsLocation
      * @param loc The {@code Location} to test.
      * @return True if the locations are the same, or on the same tile.
      */
+    @JsMethod
     public boolean isAtLocation(Location loc) {
         Location ourLoc = getLocation(),
             otherLoc = (loc instanceof Unit) ? ((Unit)loc).getLocation() : loc;

@@ -147,6 +147,7 @@ public abstract class FreeColGameObject extends FreeColObject {
      * @return True if this object has been disposed.
      * @see #dispose
      */
+    @JsMethod
     public final boolean isDisposed() {
         return this.disposed;
     }
