@@ -854,6 +854,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The {@code NationType} of this player.
      */
+    @JsMethod
     public NationType getNationType() {
         return this.nationType;
     }
@@ -903,6 +904,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The nation identifier.
      */
+    @JsMethod
     public String getNationId() {
         return this.nationId;
     }
@@ -912,6 +914,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *
      * @return The player {@code Nation}.
      */
+    @JsMethod
     public Nation getNation() {
         return getSpecification().getNation(this.nationId);
     }

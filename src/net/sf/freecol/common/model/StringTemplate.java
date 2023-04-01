@@ -306,6 +306,7 @@ public class StringTemplate extends FreeColObject {
      * @param value The corresponding replacement.
      * @return This.
      */
+    @JsMethod
     public <T extends StringTemplate> T add(String key, String value) {
         if (this.templateType != TemplateType.TEMPLATE) {
             throw new RuntimeException("Cannot add key-value pair"
@@ -341,6 +342,7 @@ public class StringTemplate extends FreeColObject {
      * @param value The corresponding replacement.
      * @return This.
      */
+    @JsMethod
     public <T extends StringTemplate> T addName(String key, String value) {
         if (this.templateType != TemplateType.TEMPLATE) {
             throw new RuntimeException("Cannot add key-name pair"
@@ -429,6 +431,7 @@ public class StringTemplate extends FreeColObject {
      * @param template The {@code StringTemplate} value.
      * @return This.
      */
+    @JsMethod
     public <T extends StringTemplate> T addStringTemplate(String key,
                                                           StringTemplate template) {
         if (this.templateType != TemplateType.TEMPLATE) {

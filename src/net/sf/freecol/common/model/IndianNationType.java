@@ -99,6 +99,7 @@ public class IndianNationType extends NationType {
      * @param plural Choose the plural form or not.
      * @return A suitable message id.
      */
+    @JsMethod
     public final String getSettlementTypeKey(boolean plural) {
         return getSettlementType(false).getId() + ((plural) ? ".plural" : "");
     }
