@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -147,6 +148,7 @@ public class DiplomaticTrade extends FreeColGameObject {
      *
      * @return The context of this agreement.
      */
+    @JsMethod
     public TradeContext getContext() {
         return this.context;
     }
@@ -165,6 +167,7 @@ public class DiplomaticTrade extends FreeColGameObject {
      *
      * @param status The new {@code TradeStatus} for this agreement.
      */
+    @JsMethod
     public void setStatus(TradeStatus status) {
         this.status = status;
     }
@@ -250,6 +253,7 @@ public class DiplomaticTrade extends FreeColGameObject {
      *
      * @param newItem The {@code TradeItem} to add.
      */
+    @JsMethod
     public void add(TradeItem newItem) {
         if (newItem.isUnique()) removeType(newItem.getClass());
         this.items.add(newItem);
@@ -260,6 +264,7 @@ public class DiplomaticTrade extends FreeColGameObject {
      *
      * @param newItem The {@code TradeItem} to remove.
      */
+    @JsMethod
     public void remove(TradeItem newItem) {
         this.items.remove(newItem);
     }
@@ -286,6 +291,7 @@ public class DiplomaticTrade extends FreeColGameObject {
     /**
      * Remove all trade items from this agreement.
      */
+    @JsMethod
     public void clear() {
         this.items.clear();
     }
