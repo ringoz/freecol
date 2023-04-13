@@ -95,6 +95,7 @@ import net.sf.freecol.common.model.TradeRoute;
 import net.sf.freecol.common.model.TypeCountMap;
 import net.sf.freecol.common.model.Unit;
 import net.sf.freecol.common.model.UnitType;
+import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.option.Option;
 import net.sf.freecol.common.option.OptionGroup;
 import net.sf.freecol.common.resources.ResourceManager;
@@ -1810,7 +1811,25 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public void displayObject(FreeColObject fco) {
-        logger.info("displayObject(" + fco + ")");
+        // TODO: Improve OO.
+        if (fco instanceof Colony) {
+            showColonyPanel((Colony)fco, null);
+        } else if (fco instanceof Europe) {
+            showEuropePanel();
+        } else if (fco instanceof IndianSettlement) {
+            showIndianSettlementPanel((IndianSettlement)fco);
+        } else if (fco instanceof Tile) {
+            setFocus((Tile)fco);
+        } else if (fco instanceof Unit) {
+            Location loc = ((Unit)fco).up();
+            if (loc instanceof Colony) {
+                showColonyPanel((Colony)loc, (Unit)fco);
+            } else {
+                displayObject((FreeColObject)loc);
+            }
+        } else if (fco instanceof WorkLocation) {
+            showColonyPanel(((WorkLocation)fco).getColony(), null);
+        }
     }
 
     /**
@@ -2198,8 +2217,11 @@ public class GUI extends FreeColClientHolder {
      *
      * @return The panel shown.
      */
-    @net.ringoz.GwtIncompatible
-    public FreeColPanel showEuropePanel() { return null; }
+    @JsMethod
+    public FreeColPanel showEuropePanel() {
+        logger.info("showEuropePanel()");
+        return null;
+    }
 
     /**
      * Show an event panel.
@@ -2270,8 +2292,11 @@ public class GUI extends FreeColClientHolder {
      * @param is The {@code IndianSettlement} to display.
      * @return The panel shown.
      */
-    @net.ringoz.GwtIncompatible
-    public FreeColPanel showIndianSettlementPanel(IndianSettlement is) { return null; }
+    @JsMethod
+    public FreeColPanel showIndianSettlementPanel(IndianSettlement is) {
+        logger.info("showIndianSettlementPanel(" + is + ")");
+        return null;
+    }
 
     /**
      * Show an information message.

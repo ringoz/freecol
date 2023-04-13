@@ -1625,32 +1625,6 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public void displayObject(FreeColObject fco) {
-        // TODO: Improve OO.
-        if (fco instanceof Colony) {
-            showColonyPanel((Colony)fco, null);
-        } else if (fco instanceof Europe) {
-            showEuropePanel();
-        } else if (fco instanceof IndianSettlement) {
-            showIndianSettlementPanel((IndianSettlement)fco);
-        } else if (fco instanceof Tile) {
-            setFocus((Tile)fco);
-        } else if (fco instanceof Unit) {
-            Location loc = ((Unit)fco).up();
-            if (loc instanceof Colony) {
-                showColonyPanel((Colony)loc, (Unit)fco);
-            } else {
-                displayObject((FreeColObject)loc);
-            }
-        } else if (fco instanceof WorkLocation) {
-            showColonyPanel(((WorkLocation)fco).getColony(), null);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void displayStartChat(String sender, String message,
                                  boolean privateChat) {
         StartGamePanel panel
