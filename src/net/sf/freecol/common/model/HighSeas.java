@@ -190,6 +190,7 @@ public class HighSeas extends UnitLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColGameObject getLinkTarget(Player player) {
         return player.getEurope();

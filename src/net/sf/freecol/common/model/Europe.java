@@ -574,6 +574,7 @@ public class Europe extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColGameObject getLinkTarget(Player player) {
         return (getOwner() == player) ? this : null;

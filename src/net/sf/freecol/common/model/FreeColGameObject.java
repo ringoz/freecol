@@ -244,6 +244,7 @@ public abstract class FreeColGameObject extends FreeColObject {
      * @param player The {@code Player} to make a link for.
      * @return A suitable link target if available, although usually null.
      */
+    @JsMethod
     public FreeColGameObject getLinkTarget(Player player) {
         return null;
     }

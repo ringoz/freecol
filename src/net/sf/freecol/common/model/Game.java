@@ -398,6 +398,7 @@ public class Game extends FreeColGameObject {
      * @param id The object identifier.
      * @return The game object, or null if not found.
      */
+    @JsMethod
     public FreeColGameObject getFreeColGameObject(String id) {
         if (id == null || id.isEmpty()) return null;
         final WeakReference<FreeColGameObject> ro;

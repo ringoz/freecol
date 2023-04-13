@@ -1808,8 +1808,10 @@ public class GUI extends FreeColClientHolder {
      *
      * @param fco The {@code FreeColObject} to display.
      */
-    @net.ringoz.GwtIncompatible
-    public void displayObject(FreeColObject fco) {}
+    @JsMethod
+    public void displayObject(FreeColObject fco) {
+        logger.info("displayObject(" + fco + ")");
+    }
 
     /**
      * A chat message was received during the pre-game setup.

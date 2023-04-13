@@ -4509,6 +4509,7 @@ public class Unit extends GoodsLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColGameObject getLinkTarget(Player player) {
         return (hasTile()) ? (FreeColGameObject)getTile().up()

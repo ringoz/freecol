@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import jsinterop.annotations.JsType;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -534,6 +535,7 @@ public final class Market extends FreeColGameObject implements Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public FreeColGameObject getLinkTarget(Player player) {
         return (player == getOwner()) ? getOwner().getEurope() : null;
