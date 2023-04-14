@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
@@ -2042,8 +2043,12 @@ public class GUI extends FreeColClientHolder {
      */
     @JsMethod
     public CompletableFuture<FoundingFather> showChooseFoundingFatherDialog(final List<FoundingFather> ffs) {
-        logger.info("showChooseFoundingFatherDialog(" + ffs + ")");
-        return null;
+        return getChoice(StringTemplate.key("chooseFoundingFatherDialog.title"), null, ffs.stream().map((father) -> {
+            String name = Messages.getName(father);
+            String type = Messages.message(father.getTypeKey());
+            String text = name + " (" + type + ")";
+            return new ChoiceItem<>(text, father);
+        }).collect(Collectors.toList()));
     }
 
     /**
