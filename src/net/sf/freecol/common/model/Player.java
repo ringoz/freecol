@@ -3281,6 +3281,7 @@ public class Player extends FreeColGameObject implements Nameable {
      *     already ours, unclaimed or unwanted, negative if it is not
      *     for sale.
      */
+    @JsMethod
     public int getLandPrice(Tile tile) {
         final Specification spec = getSpecification();
         Player nationOwner = tile.getOwner();

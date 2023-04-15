@@ -110,6 +110,7 @@ public class ColonyTile extends WorkLocation {
      *     {@code ColonyTile} represents a
      *     {@code WorkLocation} for.
      */
+    @JsMethod
     public Tile getWorkTile() {
         return workTile;
     }
@@ -130,6 +131,7 @@ public class ColonyTile extends WorkLocation {
      * @return A {@code Unit} who is occupying the work tile, if any.
      * @see #isOccupied()
      */
+    @JsMethod
     public Unit getOccupyingUnit() {
         return workTile.getOccupyingUnit();
     }
@@ -370,6 +372,7 @@ public class ColonyTile extends WorkLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public NoAddReason getNoWorkReason() {
         Tile tile = getWorkTile();

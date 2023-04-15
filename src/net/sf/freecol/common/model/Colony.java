@@ -279,6 +279,7 @@ public class Colony extends Settlement implements TradeLocation {
      * @param tile The {@code Tile} to check.
      * @return The corresponding {@code ColonyTile}, or null if not found.
      */
+    @JsMethod
     public ColonyTile getColonyTile(Tile tile) {
         return find(getColonyTiles(), matchKey(tile, ColonyTile::getWorkTile));
     }
