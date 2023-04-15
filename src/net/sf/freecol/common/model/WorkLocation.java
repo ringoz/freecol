@@ -940,6 +940,7 @@ public abstract class WorkLocation extends UnitLocation
      * @return The {@code Player} controlling this
      *         {@link Ownable}.
      */
+    @JsMethod
     @Override
     public Player getOwner() {
         final Colony colony = getColony(); // Defend against init-time NPE
