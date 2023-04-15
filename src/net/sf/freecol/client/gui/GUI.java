@@ -2498,9 +2498,13 @@ public class GUI extends FreeColClientHolder {
      * @param tile The {@code Tile} where the attack occurs.
      * @return True if the player decided to attack.
      */
+    @JsMethod
     public CompletableFuture<Boolean> showPreCombatDialog(Unit attacker,
                                        FreeColGameObject defender,
-                                       Tile tile) { return null; }
+                                       Tile tile) {
+        logger.info("showPreCombatDialog(" + attacker + ", " + defender + ", " + tile + ")");
+        return CompletableFuture.completedFuture(true);
+    }
 
     /**
      * Displays the purchase panel.
