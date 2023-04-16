@@ -2163,6 +2163,7 @@ public class Colony extends Settlement implements TradeLocation {
      * @param object an {@code Object} value
      * @return a {@code ProductionInfo} value
      */
+    @JsMethod
     public ProductionInfo getProductionInfo(Object object) {
         return productionCache.getProductionInfo(object);
     }

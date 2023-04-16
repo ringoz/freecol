@@ -121,6 +121,7 @@ public class AbstractGoods extends FreeColObject implements Named {
      *
      * @return The goods amount.
      */
+    @JsMethod
     public final int getAmount() {
         return amount;
     }

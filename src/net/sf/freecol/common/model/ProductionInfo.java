@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import jsinterop.annotations.JsMethod;
+
 import static net.sf.freecol.common.util.CollectionUtils.*;
 
 
@@ -44,6 +46,7 @@ public class ProductionInfo {
     private List<AbstractGoods> consumption = new ArrayList<>();
 
 
+    @JsMethod
     public final List<AbstractGoods> getConsumption() {
         return consumption;
     }
@@ -56,6 +59,7 @@ public class ProductionInfo {
         consumption.add(goods);
     }
 
+    @JsMethod
     public final List<AbstractGoods> getProduction() {
         return production;
     }
@@ -72,6 +76,7 @@ public class ProductionInfo {
         production.addAll(goods);
     }
 
+    @JsMethod
     public final List<AbstractGoods> getMaximumProduction() {
         return maximumProduction;
     }
