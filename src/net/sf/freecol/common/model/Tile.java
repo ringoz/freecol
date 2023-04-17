@@ -1223,6 +1223,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
      * @return The neighbouring {@code Tile} in the given
      *     {@code Direction}, or null if none present.
      */
+    @JsMethod
     public Tile getNeighbourOrNull(Direction direction) {
         return getMap().getAdjacentTile(x, y, direction);
     }
