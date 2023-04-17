@@ -1437,6 +1437,7 @@ public final class Specification implements OptionContainer {
         return new ArrayList<>(goodsTypeList);
     }
 
+    @JsMethod
     public List<GoodsType> getStorableGoodsTypeList() {
         return new ArrayList<>(storableGoodsTypeList);
     }

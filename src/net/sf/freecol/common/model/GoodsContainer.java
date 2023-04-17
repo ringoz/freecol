@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
 import static net.sf.freecol.common.model.Constants.*;
@@ -184,6 +185,7 @@ public class GoodsContainer extends FreeColGameObject implements Ownable {
      * @param type The {@code GoodsType} being looked for.
      * @return The amount of this type of goods in this container.
      */
+    @JsMethod
     public int getGoodsCount(GoodsType type) {
         synchronized (this.storedGoods) {
             Integer val = this.storedGoods.get(type);

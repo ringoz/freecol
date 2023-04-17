@@ -233,6 +233,7 @@ public abstract class GoodsLocation extends UnitLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public final GoodsContainer getGoodsContainer() {
         // Marked final, as this is where the goods container is.
