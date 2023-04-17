@@ -2137,6 +2137,7 @@ public class Colony extends Settlement implements TradeLocation {
      * @param goodsType a {@code GoodsType} value
      * @return an {@code int} value
      */
+    @JsMethod
     public int getAdjustedNetProductionOf(final GoodsType goodsType) {
         final ToIntFunction<BuildQueue> consumes = q -> {
             ProductionInfo pi = productionCache.getProductionInfo(q);
