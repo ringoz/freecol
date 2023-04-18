@@ -203,6 +203,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return A list of {@code Building}s.
      */
+    @JsMethod
     public List<Building> getBuildings() {
         synchronized (this.buildingMap) {
             return new ArrayList<>(this.buildingMap.values());
@@ -218,6 +219,7 @@ public class Colony extends Settlement implements TradeLocation {
      * @param type The type of the building to get.
      * @return The {@code Building} found.
      */
+    @JsMethod
     public Building getBuilding(BuildingType type) {
         synchronized (this.buildingMap) {
             return this.buildingMap.get(type.getFirstLevel().getId());

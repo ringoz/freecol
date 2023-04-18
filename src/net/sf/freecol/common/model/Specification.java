@@ -1379,6 +1379,7 @@ public final class Specification implements OptionContainer {
      * @param id The object identifier.
      * @return The {@code BuildingType} found.
      */
+    @JsMethod
     public BuildingType getBuildingType(String id) {
         return getType(id, BuildingType.class);
     }
