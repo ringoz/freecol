@@ -261,6 +261,7 @@ public class Turn {
      * @param turns The number of turns.
      * @return A descriptive string.
      */
+    @JsMethod
     public static String getTurnsText(int turns) {
         return (turns == UNDEFINED)
             ? Messages.message("notApplicable")

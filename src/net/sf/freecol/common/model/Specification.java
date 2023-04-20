@@ -1369,6 +1369,7 @@ public final class Specification implements OptionContainer {
 
     // -- Buildings --
 
+    @JsMethod
     public List<BuildingType> getBuildingTypeList() {
         return buildingTypeList;
     }

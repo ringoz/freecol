@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import javax.swing.JList;
 import javax.xml.stream.XMLStreamException;
 
+import jsinterop.annotations.JsMethod;
 import net.sf.freecol.common.model.Colony.NoBuildReason;
 import net.sf.freecol.common.io.FreeColXMLReader;
 import net.sf.freecol.common.io.FreeColXMLWriter;
@@ -185,6 +186,7 @@ public abstract class BuildableType extends FreeColSpecObjectType {
      *
      * @return A deep copy of the list of required goods.
      */
+    @JsMethod
     public List<AbstractGoods> getRequiredGoodsList() {
         return (this.requiredGoods == null)
                 ? Collections.<AbstractGoods>emptyList()
@@ -239,6 +241,7 @@ public abstract class BuildableType extends FreeColSpecObjectType {
      *
      * @return True if goods are required to build this buildable.
      */
+    @JsMethod
     public boolean needsGoodsToBuild() {
         return this.requiredGoods != null && !this.requiredGoods.isEmpty();
     }

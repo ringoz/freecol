@@ -401,6 +401,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return A list of {@code Buildable}s.
      */
+    @JsMethod
     public List<BuildableType> getBuildQueue() {
         return this.buildQueue.getValues();
     }
@@ -996,6 +997,7 @@ public class Colony extends Settlement implements TradeLocation {
      *     the negation of (turns-to-blockage + 1), and if the needed
      *     argument is supplied it is set to the goods deficit).
      */
+    @JsMethod
     public int getTurnsToComplete(BuildableType buildable,
                                   AbstractGoods needed) {
         final List<AbstractGoods> required = buildable.getRequiredGoodsList();
