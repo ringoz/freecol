@@ -4657,6 +4657,7 @@ public final class InGameController extends FreeColClientHolder {
      *     bought.
      * @return True if the building was bought.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> payForBuilding(Colony colony) {
         if (!requireOurTurn() || colony == null) return CompletableFuture.completedFuture(false);
@@ -5034,6 +5035,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param buildQueue List of {@code BuildableType}
      * @return True if the build queue was changed.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> setBuildQueue(Colony colony,
                                  List<BuildableType> buildQueue) {

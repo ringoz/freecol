@@ -1061,6 +1061,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return The type of building currently being built.
      */
+    @JsMethod
     public BuildableType getCurrentlyBuilding() {
         return buildQueue.getCurrentlyBuilding();
     }
@@ -1085,6 +1086,7 @@ public class Colony extends Settlement implements TradeLocation {
      * @param buildableType a {@code BuildableType} value
      * @return a {@code boolean} value
      */
+    @JsMethod
     public boolean canBuild(BuildableType buildableType) {
         return getNoBuildReason(buildableType, null) == NoBuildReason.NONE;
     }
@@ -1231,6 +1233,7 @@ public class Colony extends Settlement implements TradeLocation {
      *     {@code Colony} has an insufficient amount of gold.
      * @see #getPriceForBuilding
      */
+    @JsMethod
     public boolean canPayToFinishBuilding(BuildableType buildableType) {
         return buildableType != null
                 && getOwner().checkGold(getPriceForBuilding(buildableType));
