@@ -1934,6 +1934,7 @@ public final class Specification implements OptionContainer {
      *
      * @return The list of buildable unit types.
      */
+    @JsMethod
     public List<UnitType> getBuildableUnitTypes() {
         return buildableUnitTypes;
     }
