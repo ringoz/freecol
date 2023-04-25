@@ -200,6 +200,7 @@ public class Building extends WorkLocation
      * @param unitType The {@code UnitType} to check.
      * @return True if unit type can be added to this building.
      */
+    @JsMethod
     public boolean canAddType(UnitType unitType) {
         return canBeWorked() && getType().canAdd(unitType);
     }
@@ -288,6 +289,7 @@ public class Building extends WorkLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public NoAddReason getNoAddReason(Locatable locatable) {
         NoAddReason reason = super.getNoAddReason(locatable);
@@ -301,6 +303,7 @@ public class Building extends WorkLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public int getUnitCapacity() {
         return getType().getWorkPlaces();

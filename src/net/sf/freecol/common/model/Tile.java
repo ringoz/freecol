@@ -2360,6 +2360,7 @@ public final class Tile extends UnitLocation implements Named, Ownable {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean canAdd(Locatable locatable) {
         if (locatable instanceof Unit) {

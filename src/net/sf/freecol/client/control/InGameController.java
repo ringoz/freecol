@@ -3050,6 +3050,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param workType The new {@code GoodsType} to produce.
      * @return True if the work type was changed.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> changeWorkType(Unit unit, GoodsType workType) {
         if (!requireOurTurn() || unit == null) return CompletableFuture.completedFuture(false);
@@ -5442,6 +5443,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param workLocation The new {@code WorkLocation}.
      * @return True if the unit is now working at the new work location.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> work(Unit unit, WorkLocation workLocation) {
         if (unit == null

@@ -277,6 +277,7 @@ public abstract class WorkLocation extends UnitLocation
      * @return The best work {@code GoodsType} for the unit, or null
      *     if none found.
      */
+    @JsMethod
     public GoodsType getWorkFor(Unit unit) {
         Occupation occupation = getOccupation(unit, true);
         return (occupation == null) ? null : occupation.workType;
@@ -460,6 +461,7 @@ public abstract class WorkLocation extends UnitLocation
      *
      * @return True if the work location can be worked.
      */
+    @JsMethod
     public boolean canBeWorked() {
         return getNoWorkReason() == NoAddReason.NONE;
     }
@@ -768,6 +770,7 @@ public abstract class WorkLocation extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public NoAddReason getNoAddReason(Locatable locatable) {
         if (locatable instanceof Unit && ((Unit) locatable).isDamaged()) {

@@ -1232,6 +1232,7 @@ public class Unit extends GoodsLocation
      *
      * @return The type of goods this unit is producing.
      */
+    @JsMethod
     public GoodsType getWorkType() {
         return workType;
     }

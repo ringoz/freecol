@@ -389,6 +389,7 @@ public class Europe extends UnitLocation
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean canAdd(Locatable locatable) {
         if (locatable instanceof Goods) return true; // Can always land goods.

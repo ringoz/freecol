@@ -137,6 +137,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
          *
          * @return The description key.
          */
+        @JsMethod
         public String getDescriptionKey() {
             return Messages.descriptionKey("model." + getKey());
         }
@@ -394,6 +395,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public boolean canAdd(Locatable locatable) {
         return getNoAddReason(locatable) == NoAddReason.NONE;
@@ -541,6 +543,7 @@ public abstract class UnitLocation extends FreeColGameObject implements Location
      *
      * @return Integer.MAX_VALUE, denoting no effective limit.
      */
+    @JsMethod
     public int getUnitCapacity() {
         return Integer.MAX_VALUE;
     }

@@ -321,6 +321,7 @@ public class ColonyTile extends WorkLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public NoAddReason getNoAddReason(Locatable locatable) {
         NoAddReason reason = super.getNoAddReason(locatable);
@@ -330,6 +331,7 @@ public class ColonyTile extends WorkLocation {
     /**
      * {@inheritDoc}
      */
+    @JsMethod
     @Override
     public int getUnitCapacity() {
         return (isColonyCenterTile()) ? 0 : UNIT_CAPACITY;
