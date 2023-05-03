@@ -2785,6 +2785,15 @@ public class Unit extends GoodsLocation
      *
      * @return True if this unit could still be moved by the player.
      */
+    public boolean isCandidateForNextActiveUnit() {
+        return couldMove() && !isInEurope();
+    }
+    
+    /**
+     * Checks if the unit is currently movable by the player.
+     *
+     * @return True if this unit could still be moved by the player.
+     */
     public boolean couldMove() {
         return readyAndAble()
             && getDestination() == null

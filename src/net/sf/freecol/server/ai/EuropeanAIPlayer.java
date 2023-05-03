@@ -1141,23 +1141,40 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
     }
 
     /**
+     * Gets all transportables sorted by values.
+     *
+     * @return The transportables in descending order.
+     */
+    public List<TransportableAIObject> getTransportables() {
+        return sort(transportSupply, ValuedAIObject.descendingValueComparator);
+    }
+    
+    /**
      * Gets the most urgent transportables.
      *
-     * @return The most urgent 10% of the available transportables.
+     * @return The most urgent of the available transportables.
      */
     public List<TransportableAIObject> getUrgentTransportables() {
+        /*
         List<TransportableAIObject> urgent
             = sort(transportSupply, ValuedAIObject.descendingValueComparator);
         // Do not let the list exceed 10% of all transports
-        /* Why? This just makes the transport-mission not consider possible overlapping
-         * destinations.
-         * 
         int urge = urgent.size();
         urge = Math.max(2, (urge + 5) / 10);
         while (urgent.size() > urge) urgent.remove(urge);
         return urgent;
         */
-        return urgent;
+
+        /*
+         * Deactived the code above for now since I cannot detect any difference
+         * when activated ... and if we activate it again, please use something
+         * like this instead::
+         * 
+         * final int urgentNumber = Math.max(2, (urgent.size() + 5) / 10;
+         * return urgent.subList(0, Math.min(urgent.size(), urgentNumber));
+         */
+        
+        return net.ringoz.GwtCompat.List_of();
     }
 
     /**
@@ -1795,10 +1812,21 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
             done.clear();
         }
         if (nBuilders > 0) {
+            /*
+             * Temporary fix for endless amount of colonists not being assigned
+             * any mission. See BR#3322
+             */
+            final int MAX_BUILDING_MISSION_TRIES = 50;
+            
+            int tries = 0;
             for (AIUnit aiUnit : sort(aiUnits, builderComparator)) {
                 if (aiUnit.getUnit().isArmed() && getGame().getTurn().getNumber() > 20) {
                     // Quickfix to avoid having all soldies being given a BuildColonyMission.
                     continue;
+                }
+                tries++;
+                if (tries > MAX_BUILDING_MISSION_TRIES) {
+                    break;
                 }
                 final Location oldTarget = ((m = aiUnit.getMission()) == null)
                     ? null : m.getTarget();

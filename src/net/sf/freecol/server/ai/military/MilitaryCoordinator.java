@@ -94,11 +94,7 @@ public final class MilitaryCoordinator {
     /**
      * Determines the missions for the units this coordinator controls.
      */
-    public void determineMissions() {
-        for (AIUnit au : unusedUnits) {
-            au.setMission(null);
-        }
-        
+    public void determineMissions() {        
         final Set<AIUnit> artilleryUnits = identitySet(onlyArtillery(unusedUnits));
         final Set<AIUnit> dragoonUnits = identitySet(onlyDragoons(unusedUnits));
         final Set<AIUnit> otherMilitaryUnits = identitySet(neitherArtilleryNorDragoons(unusedUnits));
@@ -209,11 +205,11 @@ public final class MilitaryCoordinator {
                 continue;
             }
             
-            artillery.setMission(new UnitSeekAndDestroyMission(artillery.getAIMain(), artillery, possibleTarget));
+            artillery.changeMission(new UnitSeekAndDestroyMission(artillery.getAIMain(), artillery, possibleTarget));
             artilleryUnits.remove(artillery);
             unusedUnits.remove(artillery);
             
-            escort.setMission(new EscortUnitMission(escort.getAIMain(), escort, artillery.getUnit()));
+            escort.changeMission(new EscortUnitMission(escort.getAIMain(), escort, artillery.getUnit()));
             dragoonUnits.remove(escort);
             unusedUnits.remove(escort);
             
@@ -251,7 +247,7 @@ public final class MilitaryCoordinator {
                     
                     final PathNode path = dragoon.getUnit().findPath(enemy.getTile()); // TODO: add max turns to the search.
                     if (path != null && path.getTurns() <= turns) {
-                        dragoon.setMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
+                        dragoon.changeMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
                         unusedUnits.remove(dragoon);
                         dragoonUnits.remove(dragoon);
                         targetedEnemies.add(enemy);
@@ -272,7 +268,7 @@ public final class MilitaryCoordinator {
                         
                         final PathNode path = dragoon.getUnit().findPath(enemy.getTile()); // TODO: add max turns to the search.
                         if (path != null && path.getTurns() <= turns) {
-                            dragoon.setMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
+                            dragoon.changeMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
                             unusedUnits.remove(dragoon);
                             dragoonUnits.remove(dragoon);
                             targetedEnemies.add(enemy);
@@ -300,7 +296,7 @@ public final class MilitaryCoordinator {
                     
                     final PathNode path = dragoon.getUnit().findPath(enemy.getTile()); // TODO: add max turns to the search.
                     if (path != null && path.getTurns() <= turns) {
-                        dragoon.setMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
+                        dragoon.changeMission(new UnitSeekAndDestroyMission(dragoon.getAIMain(), dragoon, enemy));
                         unusedUnits.remove(dragoon);
                         dragoonUnits.remove(dragoon);
                         targetedEnemies.add(enemy);
@@ -315,7 +311,7 @@ public final class MilitaryCoordinator {
         for (AIUnit unit : new HashSet<>(unusedUnits)) {
             final Mission mission = player.getDefendSettlementMission(unit, true, true);
             if (mission != null) {
-                unit.setMission(mission);
+                unit.changeMission(mission);
                 unusedUnits.remove(unit);
             }
         }
@@ -327,7 +323,7 @@ public final class MilitaryCoordinator {
             if (unit.getUnit().getTile() != null) {
                 continue;
             }
-            unit.setMission(new DefendSettlementMission(unit.getAIMain(), unit, destination.getColony()));
+            unit.changeMission(new DefendSettlementMission(unit.getAIMain(), unit, destination.getColony()));
             unusedUnits.remove(unit);
         }
     }
@@ -361,20 +357,27 @@ public final class MilitaryCoordinator {
     
     private void assignWanderHostile() {
         for (AIUnit unit : new HashSet<>(unusedUnits)) {
-            unit.setMission(new UnitWanderHostileMission(unit.getAIMain(), unit));
+            unit.changeMission(new UnitWanderHostileMission(unit.getAIMain(), unit));
             unusedUnits.remove(unit);
         }
         assert unusedUnits.isEmpty();
     }
     
     private void placeDefender(AIUnit unit, AIColony colony) {
-        unit.setMission(new DefendSettlementMission(unit.getAIMain(), unit, colony.getColony()));
+        unit.changeMission(new DefendSettlementMission(unit.getAIMain(), unit, colony.getColony()));
         final List<AIUnit> units = defenders.get(colony);
         units.add(unit);
         unusedUnits.remove(unit);
     }
 
     private AIUnit findUnitClosestToColony(AIColony colony, Set<AIUnit> units) {
+        for (AIUnit au : units) {
+            if (au.getMission() instanceof DefendSettlementMission
+                    && au.getMission().getTarget() == colony.getColony()) {
+                return au;
+            }
+        }
+        
         // TODO: Handle Europe, handle with/without carrier
         return units.stream()
             .sorted((a, b) -> Integer.compare(getTurnsToReach(a.getUnit(), colony.getColony().getTile()), getTurnsToReach(b.getUnit(), colony.getColony().getTile())))

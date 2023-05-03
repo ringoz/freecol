@@ -667,6 +667,11 @@ public final class FreeColClient {
     public void addSpecificationActions(Specification specification) {
         SwingUtilities.invokeLater(() -> {
             actionManager.addSpecificationActions(specification);
+            // XXX: The actions are loaded asynchronously without a callback.
+            SwingUtilities.invokeLater(() -> {
+                getGUI().resetMenuBar();
+                getGUI().resetMapControls();
+            });
         });
     }
 

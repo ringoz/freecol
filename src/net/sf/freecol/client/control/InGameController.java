@@ -594,7 +594,7 @@ public final class InGameController extends FreeColClientHolder {
         // been captured.
         Unit active = gui.getActiveUnit();
         final boolean update = updateUnit || active == null
-                || (!active.couldMove() && !active.isInEurope())
+                || !active.isCandidateForNextActiveUnit()
                 || !getMyPlayer().owns(active);
         // Tile is displayed if no new active unit is found,
         // which is useful when the last unit might have died
@@ -1124,7 +1124,7 @@ public final class InGameController extends FreeColClientHolder {
         if (getGUI().isPanelShowing()) return CompletableFuture.completedFuture(null);
         
         if (showDialog) {
-            List<Unit> units = transform(player.getUnits(), Unit::couldMove);
+            List<Unit> units = transform(player.getUnits(), Unit::isCandidateForNextActiveUnit);
             if (!units.isEmpty()) {
                 // Modal dialog takes over
                 getGUI().showEndTurnDialog(units).thenAccept(
@@ -2723,8 +2723,9 @@ public final class InGameController extends FreeColClientHolder {
     public void animateAttackHandler(Unit attacker, Unit defender,
                                      Tile attackerTile, Tile defenderTile,
                                      boolean success) {
-        getGUI().animateUnitAttack(attacker, defender,
-                                   attackerTile, defenderTile, success);
+        invokeLater(() -> {
+            getGUI().animateUnitAttack(attacker, defender, attackerTile, defenderTile, success);
+        });
     }
 
     /**
@@ -2735,7 +2736,9 @@ public final class InGameController extends FreeColClientHolder {
      * @param newTile The {@code Tile} the move ends at.
      */
     public void animateMoveHandler(Unit unit, Tile oldTile, Tile newTile) {
-        getGUI().animateUnitMove(unit, oldTile, newTile);
+        invokeLater(() -> {
+            getGUI().animateUnitMove(unit, oldTile, newTile);
+        });
     }
 
     /**
@@ -3118,7 +3121,13 @@ public final class InGameController extends FreeColClientHolder {
      */
     private CompletableFuture<Boolean> chooseFoundingFather(List<FoundingFather> ffs,
                                          FoundingFather ff) {
-        if (ffs == null) return CompletableFuture.completedFuture(false);
+        if (ffs == null) {
+            return CompletableFuture.completedFuture(false);
+        }
+        if (ff == null) {
+            // The player has postponed the selection.
+            return CompletableFuture.completedFuture(false);
+        }
 
         final Player player = getMyPlayer();
         player.setCurrentFather(ff);

@@ -1110,6 +1110,12 @@ public class DebugUtils {
      * @param freeColClient The {@code FreeColClient} for the game.
      */
     public static void skipTurns(FreeColClient freeColClient) {
+        final FreeColServer server = freeColClient.getFreeColServer();
+        if (server != null && server.getInGameController().getSkippedTurns() > 0) {
+            freeColClient.skipTurns(0); // Clear existing skipping
+            return;
+        }
+
         freeColClient.skipTurns(0); // Clear existing skipping
 
         freeColClient.getGUI().getInput(null,

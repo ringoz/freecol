@@ -743,8 +743,6 @@ public class SwingGUI extends GUI {
     public void reconnectGUI(Unit active, Tile tile) {
         this.canvas.requestFocusInWindow();
         this.canvas.initializeInGame();
-        enableMapControls(getClientOptions()
-            .getBoolean(ClientOptions.DISPLAY_MAP_CONTROLS));
         closeMenus();
         clearGotoPath();
         this.canvas.resetMenuBar();
@@ -765,6 +763,10 @@ public class SwingGUI extends GUI {
             changeView((Unit)null, false);
         }
         this.mapViewer.getMapViewerBounds().setFocus(tile);
+
+        enableMapControls(false);
+        enableMapControls(getClientOptions().getBoolean(ClientOptions.DISPLAY_MAP_CONTROLS));
+
         refresh();
     }
         
@@ -1071,11 +1073,11 @@ public class SwingGUI extends GUI {
     public void enableMapControls(boolean enable) {
         if (this.mapControls == null) return;
         if (enable) {
+            updateMapControls();
             this.canvas.addMapControls();
         } else {
             this.canvas.removeMapControls();
         }
-        updateMapControls();
     }
 
     /**
@@ -1137,6 +1139,14 @@ public class SwingGUI extends GUI {
         this.canvas.closeMenus();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void resetMenuBar() {
+        this.canvas.resetMenuBar();
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -1855,13 +1865,21 @@ public class SwingGUI extends GUI {
         }
         if (this.canvas != null) { 
             this.canvas.resetMenuBar();
-            if (this.canvas.removeMapControls()) {
-                this.canvas.addMapControls();
-            }
+            resetMapControls();
         }
         
-        updateMapControls();
         refresh();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void resetMapControls() {
+        if (this.canvas.removeMapControls()) {
+            updateMapControls();
+            this.canvas.addMapControls();
+        }
     }
 
     private int determineMainFontSizeUsingClientOptions(final int dpi) {
