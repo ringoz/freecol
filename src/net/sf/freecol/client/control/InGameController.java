@@ -4705,6 +4705,7 @@ public final class InGameController extends FreeColClientHolder {
      * @param unit The {@code Unit}
      * @return True if the unit was successfully put outside the colony.
      */
+    @JsMethod
     @JsAsync
     public CompletableFuture<Boolean> putOutsideColony(Unit unit) {
         Colony colony;

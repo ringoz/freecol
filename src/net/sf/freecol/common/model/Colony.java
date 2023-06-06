@@ -1496,6 +1496,7 @@ public class Colony extends Settlement implements TradeLocation {
      *
      * @return True if the population can be reduced.
      */
+    @JsMethod
     public boolean canReducePopulation() {
         return getUnitCount() > apply(0f, getGame().getTurn(),
                 Modifier.MINIMUM_COLONY_SIZE);
