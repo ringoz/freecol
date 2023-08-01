@@ -312,9 +312,8 @@ public final class Canvas extends JDesktopPane {
     }
     
     private Dimension capSizeToMaximum(JInternalFrame f, Dimension maxSize) {
-        final int FRAME_EMPTY_SPACE = 60;
-        final int width = Math.max(f.getMinimumSize().width, Math.min(f.getWidth(), maxSize.width - FRAME_EMPTY_SPACE));
-        final int height = Math.max(f.getMinimumSize().height, Math.min(f.getHeight(), maxSize.height - FRAME_EMPTY_SPACE));
+        final int width = Math.max(f.getMinimumSize().width, Math.min(f.getWidth(), maxSize.width));
+        final int height = Math.max(f.getMinimumSize().height, Math.min(f.getHeight(), maxSize.height));
         return new Dimension(width, height);
     }
 
@@ -800,6 +799,17 @@ public final class Canvas extends JDesktopPane {
      */
     public void removeInGameComponents() {
         // remove listeners, they will be added when launching the new game...
+        removeKeyAndMouseListeners();
+
+        for (Component c : getComponents()) {
+            if (c instanceof CanvasMapViewer) {
+                continue;
+            }
+            removeFromCanvas(c);
+        }
+    }
+
+    private void removeKeyAndMouseListeners() {
         KeyListener[] keyListeners = getKeyListeners();
         for (KeyListener keyListener : keyListeners) {
             removeKeyListener(keyListener);
@@ -814,19 +824,14 @@ public final class Canvas extends JDesktopPane {
         for (MouseMotionListener mouseMotionListener : mouseMotionListeners) {
             removeMouseMotionListener(mouseMotionListener);
         }
-
-        for (Component c : getComponents()) {
-            if (c instanceof CanvasMapViewer) {
-                continue;
-            }
-            removeFromCanvas(c);
-        }
     }
 
     /**
      * Map editor initialization.
      */
     public void startMapEditorGUI() {
+        removeKeyAndMouseListeners();
+        
         freeColClient.updateActions();
         this.parentFrame.setMenuBar(new MapEditorMenuBar(this.freeColClient,
                 new MenuMouseMotionListener(scrolling)));
@@ -840,6 +845,8 @@ public final class Canvas extends JDesktopPane {
      * In game initializations.
      */
     public void initializeInGame() {
+        removeKeyAndMouseListeners();
+        
         this.parentFrame.setMenuBar(new InGameMenuBar(this.freeColClient,
                 new MenuMouseMotionListener(scrolling)));
         addMouseListener(new CanvasMouseListener(this.freeColClient));

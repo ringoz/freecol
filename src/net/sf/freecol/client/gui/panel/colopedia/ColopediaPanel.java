@@ -74,7 +74,7 @@ public final class ColopediaPanel extends FreeColPanel
      */
     public ColopediaPanel(FreeColClient freeColClient, String id) {
         super(freeColClient, "ColopediaPanelUI",
-              new MigLayout("fill", "[750:, grow, fill]",
+              new MigLayout("fill", "[grow, fill]",
                             "[][grow, fill][]"));
 
         add(Utility.localizedHeader("colopedia", Utility.FONTSPEC_TITLE),
@@ -103,7 +103,7 @@ public final class ColopediaPanel extends FreeColPanel
         detailPanel.setOpaque(true);
         JScrollPane detail = new JScrollPane(detailPanel,
                                              JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                             JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         detail.getVerticalScrollBar().setUnitIncrement(16);
         detail.getViewport().setOpaque(false);
         
@@ -116,7 +116,7 @@ public final class ColopediaPanel extends FreeColPanel
         final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sl, detail);
 
         add(splitPane, "grow");
-        add(okButton, "newline 20, span, tag ok");
+        add(okButton, "newline, span, tag ok");
         
         setEscapeAction(new AbstractAction() {
             @Override

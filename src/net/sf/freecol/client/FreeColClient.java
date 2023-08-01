@@ -967,8 +967,9 @@ public final class FreeColClient {
             if (!ret) return;
             final Player player = getMyPlayer();
             player.changePlayerType(Player.PlayerType.RETIRED);
-            getInGameController().highScore(null);
-            askServer().retire();
+            askServer().retire().thenAccept((highScore) -> {
+                getInGameController().highScore(highScore);
+            });
         });
     }
 

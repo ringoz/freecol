@@ -547,18 +547,6 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
                 }
             }
         }
-        
-        if (!getAIColonies().isEmpty()) {
-            /*
-             * It's no fun if the AI explores all the lost city rumours right from
-             * the beginning of the game, or if it's aggressively trading with the
-             * natives.
-             * 
-             * We need to compensate for the lack of such activities by gaining
-             * some gold every turn.
-             */
-            getPlayer().modifyGold(100);
-        }
     
         if (!europe.isEmpty()
             && scoutsNeeded() > 0
@@ -1450,28 +1438,30 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         Player player = getPlayer();
         if (!player.canBuildColonies()) return 0;
 
-        int nColonies = 0, nPorts = 0, nWorkers = 0, nEuropean = 0;
+        int nColonies = 0, nPorts = 0, nColonySize1 = 0;
         for (Settlement settlement : player.getSettlementList()) {
             nColonies++;
             if (settlement.isConnectedPort()) nPorts++;
-            nWorkers += count(settlement.getAllUnitsList(), Unit::isPerson);
+            final int colonySize = settlement.getUnitList().size();
+            if (colonySize == 1) {
+                nColonySize1++;
+            }
         }
-        Europe europe = player.getEurope();
-        nEuropean = (europe == null) ? 0
-            : count(europe.getUnits(), Unit::isPerson);
-            
-        // If would be good to have at least two colonies, and at least
-        // one port.  After that, determine the ratio of workers to colonies
-        // (which should be the average colony size), and if that is above
-        // a threshold, send out another colonist.
-        // The threshold probably should be configurable.  2 is too
-        // low IMHO as it makes a lot of brittle colonies, 3 is too
-        // high at least initially as it makes it hard for the initial
-        // colonies to become substantial.  For now, arbitrarily choose e.
-        return (nColonies == 0 || nPorts == 0) ? 2
-            : ((nPorts <= 1) && (nWorkers + nEuropean) >= 3) ? 1
-            : ((double)(nWorkers + nEuropean) / nColonies > Math.E) ? 1
-            : 0;
+        
+        if (nPorts == 0) {
+            return 2;
+        }
+        if (nPorts == 1) {
+            return 1;
+        }
+        if (nColonies < 3) {
+            return 1;
+        }
+        if (nColonySize1 < 2) {
+            return 1;
+        }
+        
+        return 0;
     }
 
 
@@ -2369,11 +2359,6 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         
         buildTransportMaps(lb);
         
-        for (AIUnit mu : militaryUnits) {
-            updateTransport(mu, null, lb);
-        }
-        
-        
         final List<AIUnit> normalAiUnits = getAIUnits().stream()
                 .filter(MilitaryCoordinator.isUnitHandledByMilitaryCoordinator().negate())
                 .collect(Collectors.toList());
@@ -2435,12 +2420,21 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         }
                 
         boolean militaryUnitBought = numberOfUnitsInDock >= 18;
-        if (!militaryUnitBought && isLikesAttackingNatives() && hasLessDragoonsThanColoniesPlusOne()) {
-            final Unit unitBought = buyDragoon();
-            if (unitBought == null) {
-                return;
+        if (!militaryUnitBought) {
+            if (reallyNeedsMoreArtillery() || isLikesAttackingNatives() && needsMoreArtillery()) {
+                final Unit unitBought = buyArtillery();
+                if (unitBought == null) {
+                    return;
+                }
+                militaryUnitBought = true;
             }
-            militaryUnitBought = true;
+            if (reallyNeedsMoreDragoons() || isLikesAttackingNatives() && needsMoreDragoons()) {
+                final Unit unitBought = buyDragoon();
+                if (unitBought == null) {
+                    return;
+                }
+                militaryUnitBought = true;
+            }
         }
         
         for (Wish w : getWishes()) {
@@ -2514,8 +2508,20 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         return true;
     }
 
-    private boolean hasLessDragoonsThanColoniesPlusOne() {
+    private boolean needsMoreDragoons() {
+        return 2 * (getAIColonies().size() + 1) > getAIUnits().stream().filter(au -> au.getUnit().isMounted() && au.getUnit().isArmed()).count();
+    }
+    
+    private boolean reallyNeedsMoreDragoons() {
         return getAIColonies().size() + 1 > getAIUnits().stream().filter(au -> au.getUnit().isMounted() && au.getUnit().isArmed()).count();
+    }
+    
+    public boolean reallyNeedsMoreArtillery() {
+        return getAIColonies().size() / 2 + 1 > getAIUnits().stream().filter(au -> au.getUnit().hasAbility(Ability.BOMBARD)).count();
+    }
+    
+    public boolean needsMoreArtillery() {
+        return getAIColonies().size() + 1 > getAIUnits().stream().filter(au -> au.getUnit().hasAbility(Ability.BOMBARD)).count();
     }
     
     private Unit buyDragoon() {
@@ -2558,6 +2564,35 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
             return null;
         }
         return createdUnit.get(0);
+    }
+    
+    private Unit buyArtillery() {
+        final Player player = getPlayer();
+        final Europe europe = player.getEurope();
+        final UnitType cheapestArtilleryUnitType = getSpecification().getUnitTypesPurchasedInEurope(getPlayer())
+            .stream()
+            .filter(ut -> ut.getPrice() > 0 && ut.getPrice() != INFINITY)
+            .filter(ut -> ut.hasAbility(Ability.BOMBARD))
+            .filter(ut -> ut.isAvailableTo(player))
+            .sorted((a, b) -> Integer.compare(a.getPrice(), b.getPrice()))
+            .findFirst()
+            .orElse(null);
+        
+        if (cheapestArtilleryUnitType == null) {
+            return null;
+        }
+        
+        final int unitPrice = europe.getUnitPrice(cheapestArtilleryUnitType);
+        if (unitPrice > player.getGold()) {
+            return null;
+        }
+        
+        final AIUnit newUnit = trainAIUnitInEurope(cheapestArtilleryUnitType);
+        if (newUnit == null) {
+            return null;
+        }
+        
+        return newUnit.getUnit();
     }
 
     /**

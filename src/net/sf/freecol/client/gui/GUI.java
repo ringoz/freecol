@@ -2852,10 +2852,10 @@ public class GUI extends FreeColClientHolder {
      * Run out of ColonyPanel, so the tile is already displayed.
      *
      * @param colony The {@code Colony} to display.
-     * @return The response returned by the dialog.
+     * @param dialogHandler A {@code DialogHandler} for the dialog response.
      */
     @net.ringoz.GwtIncompatible
-    public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) { return null; }
+    public void showWarehouseDialog(Colony colony, DialogHandler<Boolean> dialogHandler) {  }
 
     /**
      * Show the production of a unit.

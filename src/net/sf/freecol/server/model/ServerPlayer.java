@@ -586,11 +586,6 @@ public class ServerPlayer extends Player implements TurnTaker {
             }
         }
 
-        // Do not surrender until at least presenceFactor of the land
-        // army has arrived on the map
-        final double presenceFactor = 2.0/3.0; // FIXME: magic number
-        if (landOnMap < presenceFactor * land) return false;
-
         // The REF is arrogant and overestimates its strength by a fudge factor
         final double refLandPower = 1.5 * calculateStrength(false);
         // Do not surrender if there is a rebel whose land army seems weaker
@@ -1301,8 +1296,19 @@ public class ServerPlayer extends Player implements TurnTaker {
                  * For example, the human player can still actively reduce the amount of
                  * money the AI gets by stopping cargo / capture colonies with custom houses.
                  */
+                
                 final int tradeProfitMultiplierCheat = getSpecification().getInteger(GameOptions.TRADE_PROFIT_MULTIPLIER_CHEAT);
-                modifyGold(incomeAfterTaxes * tradeProfitMultiplierCheat);
+                final int tradeProfitMultiplierCheatTurns = getSpecification().getInteger(GameOptions.TRADE_PROFIT_MULTIPLIER_CHEAT_TURNS);
+                
+                /*
+                 * Linear reduction of the tradeProfitMultiplierCheat from the first year
+                 * until turn number tradeProfitMultiplierCheatTurns.
+                 */
+                final double currentMultiplier = Math.max(1.0D,
+                        tradeProfitMultiplierCheat * ((double) tradeProfitMultiplierCheatTurns - getGame().getTurn().getNumber()) / tradeProfitMultiplierCheatTurns);
+                
+                final int adjustedGoldAfterCheating = (int) (incomeAfterTaxes * currentMultiplier);
+                modifyGold(adjustedGoldAfterCheating);
             } else {
                 modifyGold(incomeAfterTaxes);
             }

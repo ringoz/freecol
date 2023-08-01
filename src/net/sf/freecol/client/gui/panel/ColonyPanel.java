@@ -213,9 +213,11 @@ public final class ColonyPanel extends PortPanel
     };
 
     private final ActionListener warehouseCmd = ae -> {
-        getGUI().showWarehouseDialog(getColony()).thenAccept((ret) -> { if (ret) {
-            updateWarehousePanel();
-        }});
+        getGUI().showWarehouseDialog(getColony(), updated -> {
+            if (updated) {
+                updateWarehousePanel();
+            }
+        });
     };
 
     private final ActionListener buildQueueCmd = ae -> {
@@ -358,7 +360,7 @@ public final class ColonyPanel extends PortPanel
         this.nameBox.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"),
                                        "selectNext2");
 
-        netProductionPanel = new JPanel();
+        netProductionPanel = new JPanel(new MigLayout("align center, center, nogrid"));
         netProductionPanel.setOpaque(false);
 
         buildingsPanel = new BuildingsPanel();
@@ -419,7 +421,7 @@ public final class ColonyPanel extends PortPanel
         }
         
         initialize(colony);
-        getGUI().restoreSavedSize(this, new Dimension(1050, 725));
+        getGUI().restoreSavedSize(this, new Dimension(1050, 675));
         
         setEscapeAction(new AbstractAction() {
             @Override
@@ -506,20 +508,18 @@ public final class ColonyPanel extends PortPanel
         tilesPanel.initialize();
         warehousePanel.initialize();
 
-        add(this.nameBox, "height 42:, grow");
-        int tmp = (int) (ImageLibrary.ICON_SIZE.height * getImageLibrary().getScaleFactor());
-        
         final Dimension tilesScrollDimension = getTilesScrollGuiScaledDimension();
-        add(netProductionPanel,
-            "grow, height " + (tmp+10) + ":" + (tmp+10) + ":" + (2*tmp+10));
+        
+        add(this.nameBox, "grow");
+        add(netProductionPanel, "grow");
         add(tilesScroll, "width " + tilesScrollDimension.width + "px!, height " + tilesScrollDimension.height +"px!, top");
         add(buildingsScroll, "span 1 3, grow");
         add(populationPanel, "grow");
         add(constructionPanel, "grow, top");
-        add(inPortScroll, "span, split 3, grow, sg, height 60:121:");
-        add(cargoScroll, "grow, sg, height 60:121:");
-        add(outsideColonyScroll, "grow, sg, height 60:121:");
-        add(warehouseScroll, "span, height 40:60:, growx");
+        add(inPortScroll, "span, split 3, grow, sg, height 30:80:");
+        add(cargoScroll, "grow, sg, height 30:80:");
+        add(outsideColonyScroll, "grow, sg, height 30:80:");
+        add(warehouseScroll, "span, height " + (ImageLibrary.ICON_SIZE.height) + ":" + (ImageLibrary.ICON_SIZE.height) + ":" + (2*ImageLibrary.ICON_SIZE.height) + ", growx");
         int buttonFields = 6;
         if (setGoodsButton != null) buttonFields++;
         if (traceWorkButton != null) buttonFields++;
@@ -1712,8 +1712,7 @@ public final class ColonyPanel extends PortPanel
          * Creates this BuildingsPanel.
          */
         public BuildingsPanel() {
-            super("BuildingsPanelUI",
-                  new MigLayout("fill, wrap 4, insets 0, gap 0:10:10:push"));
+            super("BuildingsPanelUI", new MigLayout("fill, wrap 4, insets 0, gap 0:10:10:push 0:10:10:push"));
         }
 
 

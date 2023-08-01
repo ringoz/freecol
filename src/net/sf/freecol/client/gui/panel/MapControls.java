@@ -196,21 +196,6 @@ public abstract class MapControls extends FreeColClientHolder {
         repaint();
     }
 
-    /**
-     * Create a new map controls instance for a FreeColClient.
-     *
-     * @param freeColClient The {@code FreeColClient} to query.
-     * @return A new {@code MapControls} or null on error.
-     */
-    public static MapControls newInstance(final FreeColClient freeColClient) {
-        final String className = freeColClient.getClientOptions()
-            .getString(ClientOptions.MAP_CONTROLS);
-        return lastPart(className, ".").equals("CornerMapControls") 
-            ? new net.sf.freecol.client.gui.panel.CornerMapControls(freeColClient)
-            : new net.sf.freecol.client.gui.panel.ClassicMapControls(freeColClient);
-    }
-
-
     public void clear() {
         unitButtons.clear();
     } 

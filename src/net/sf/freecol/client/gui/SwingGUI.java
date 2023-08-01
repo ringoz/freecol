@@ -53,6 +53,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import net.miginfocom.layout.PlatformDefaults;
+import net.miginfocom.layout.UnitValue;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
@@ -69,6 +71,7 @@ import net.sf.freecol.client.gui.mapviewer.MapViewer;
 import net.sf.freecol.client.gui.mapviewer.MapViewerState;
 import net.sf.freecol.client.gui.mapviewer.TileViewer;
 import net.sf.freecol.client.gui.panel.ColonyPanel;
+import net.sf.freecol.client.gui.panel.CornerMapControls;
 import net.sf.freecol.client.gui.panel.FreeColImageBorder;
 import net.sf.freecol.client.gui.panel.FreeColPanel;
 import net.sf.freecol.client.gui.panel.InformationPanel;
@@ -217,7 +220,29 @@ public class SwingGUI extends GUI {
         this.widgets = null;
         this.dragPoint = null;
         
+        configureMigLayout(scaleFactor);
+        
         logger.info("GUI constructed using scale factor " + scaleFactor);
+    }
+
+
+    private void configureMigLayout(final float scaleFactor) {
+        /*
+         * We should avoid having platform dependent layout and behavior
+         * since this introduces platform specific bugs. Using the defaults
+         * in GNOME as the basis regardless of platform.
+         */
+        PlatformDefaults.setPlatform(PlatformDefaults.GNOME);
+        
+        /*
+         * This scales the numbers without units using the current
+         * interface scaleFactor. We can use "px" as a unit when we want to
+         * provide a size regardless of the current scaling factor.
+         */
+        PlatformDefaults.setHorizontalScaleFactor(scaleFactor);
+        PlatformDefaults.setVerticalScaleFactor(scaleFactor);
+        
+        PlatformDefaults.setMinimumButtonWidth(new UnitValue(48, UnitValue.LPX, null));
     }
 
 
@@ -366,6 +391,10 @@ public class SwingGUI extends GUI {
      */
     private void setDragPoint(int x, int y) {
         this.dragPoint = new Point(x, y);
+    }
+    
+    private void clearDrag() {
+        this.dragPoint = null;
     }
 
     /**
@@ -797,7 +826,8 @@ public class SwingGUI extends GUI {
     public void startGUI(final Dimension desiredWindowSize) {
         final FreeColClient fcc = getFreeColClient();
         final ClientOptions opts = getClientOptions();
-        this.mapControls = MapControls.newInstance(fcc);
+        this.mapControls = new CornerMapControls(fcc);
+        
         final ActionListener al = (ActionEvent ae) -> {
             final Tile tile = mapViewer.getMapViewerState().getCursorTile();
             if (tile != null) {
@@ -847,6 +877,7 @@ public class SwingGUI extends GUI {
     @Override
     public void startMapEditorGUI() {
         resetMapZoom(); // Reset zoom to the default
+        mapViewer.getMapViewerState().setActiveUnit(null);
         this.canvas.startMapEditorGUI();
         this.canvas.showMapEditorTransformPanel();
     }
@@ -1284,6 +1315,16 @@ public class SwingGUI extends GUI {
             stopGoto();
             repaint();
         }
+        
+        final Tile tile = tileAt(x, y);
+        final Unit dragUnit = this.mapViewer.getMapViewerState().findUnitInFront(tile);
+        if (dragUnit == null || !getMyPlayer().owns(dragUnit)) {
+            clearDrag();
+            return;
+        }
+        
+        this.mapViewer.getMapViewerState().setActiveUnit(dragUnit);
+        
         setDragPoint(x, y);
         this.canvas.requestFocus();
     }
@@ -1548,7 +1589,7 @@ public class SwingGUI extends GUI {
         Unit other = null;
 
         if (!tile.isExplored()) { // Select unexplored tiles
-            changeView(tile);
+            setFocus(tile);
         } else if (tile.hasSettlement()) { // Pop up settlements if any
             Settlement settlement = tile.getSettlement();
             if (settlement instanceof Colony) {
@@ -1561,7 +1602,6 @@ public class SwingGUI extends GUI {
             } else if (settlement instanceof IndianSettlement) {
                 showIndianSettlementPanel((IndianSettlement)settlement);
             }
-            changeView(tile);
         } else if ((other = this.mapViewer.getMapViewerState().findUnitInFront(tile)) != null) {
             if (getMyPlayer().owns(other)) {
                 // If there is one of the player units present, select it,
@@ -1585,10 +1625,14 @@ public class SwingGUI extends GUI {
                 }
                 changeView(other, false);
             } else { // Select the tile under the unit if it is not ours
-                changeView(tile);
+                setFocus(tile);
             }
         } else { // Otherwise select the tile in terrain mode on multiclick
-            if (count > 1) changeView(tile);
+            if (count > 1) {
+                changeView(tile);
+            } else {
+                setFocus(tile);
+            }
         }
     }    
 
@@ -1842,6 +1886,8 @@ public class SwingGUI extends GUI {
         if (this.tileViewer != null) {
             this.tileViewer.updateScaledVariables();
         }
+        
+        configureMigLayout(scaleFactor);
         
         FreeColImageBorder.setScaleFactor(scaleFactor);
         
@@ -2668,8 +2714,8 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public CompletableFuture<Boolean> showWarehouseDialog(Colony colony) {
-        return this.widgets.showWarehouseDialog(colony);
+    public void showWarehouseDialog(Colony colony, DialogHandler<Boolean> handler) {
+        this.widgets.showWarehouseDialog(colony, handler);
     }
 
     /**
