@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -47,6 +48,8 @@ import net.sf.freecol.client.control.FreeColClientHolder;
 import net.sf.freecol.client.control.MapTransform;
 import net.sf.freecol.client.gui.dialog.FreeColDialog;
 import net.sf.freecol.client.gui.dialog.Parameters;
+import net.sf.freecol.client.gui.mapviewer.MapAsyncPainter;
+import net.sf.freecol.client.gui.mapviewer.MapViewer;
 import net.sf.freecol.client.gui.mapviewer.MapViewerRepaintManager;
 import net.sf.freecol.client.gui.panel.FreeColPanel;
 import net.sf.freecol.client.gui.panel.report.LabourData.UnitData;
@@ -1309,6 +1312,17 @@ public class GUI extends FreeColClientHolder {
     public Tile getFocus() {
         return null;
     }
+    
+    /**
+     * Gets the current focus of the visible map given in pixels.
+     * 
+     * @return The current focus map point that is between {@code 0}
+     *   and <code>map.getWidth() * tileBounds.getWidth()</code>.
+     */
+    @net.ringoz.GwtIncompatible
+    public Point getFocusMapPoint() {
+        return null;
+    }
 
     /**
      * Set the current focus tile.
@@ -1323,7 +1337,17 @@ public class GUI extends FreeColClientHolder {
     public void setFocus(Tile tile) {
         logger.info("setFocus(" + tile + ")");
     }
-
+    
+    /**
+     * The current focus of the visible map given in pixels.
+     * 
+     * The maximum width of the map in pixels is:
+     * <code>map.getWidth() * tileBounds.getWidth()</code>.
+     * 
+     * @param pointToFocus The new focus point.
+     */
+    @net.ringoz.GwtIncompatible
+    public void setFocusMapPoint(Point pointToFocus) {}
 
     // Path handling
 
@@ -1571,11 +1595,51 @@ public class GUI extends FreeColClientHolder {
      * Scroll the map in a given direction.
      *
      * @param direction The {@code Direction} to scroll.
+     * @param performRepaints If {@code true}, then repaints are performed
+     *      after scrolling.
      * @return True if scrolling can continue.
      */
+     @net.ringoz.GwtIncompatible
+     public boolean scrollMap(Direction direction, boolean performRepaints) { return false; }
+    
+    /**
+     * Sets the scroll speed back to the initial value. This is needed
+     * when the scrolling stops, since the scrolling accelerates.
+     */
     @net.ringoz.GwtIncompatible
-    public boolean scrollMap(Direction direction) { return false; }
-
+    public void resetScrollSpeed() { }
+    
+    /**
+     * Paint the whole canvas now.
+     * 
+     * This should only be called for very special cases, like animations.
+     * Normally, use {@link #repaint()} instead.
+     */
+    @net.ringoz.GwtIncompatible
+    public void paintImmediately() {}
+    
+    /**
+     * Enables asynchronous painting. That is, the painting of the
+     * {@link MapViewer} is performed in a thread other than the EDT
+     * (normal GUI thread).
+     * 
+     * This allows better performance and lower latency, but will sometimes
+     * produce visual artifacts when the game state changes during painting.
+     *    
+     * @see #stopMapAsyncPainter()
+     */
+    @net.ringoz.GwtIncompatible
+    public MapAsyncPainter useMapAsyncPainter() {
+        return null;
+    }
+    
+    /**
+     * Stops asynchronous painting.
+     * 
+     * @see #useMapAsyncPainter()
+     */
+    @net.ringoz.GwtIncompatible
+    public void stopMapAsyncPainter() {}
 
     // Tile image manipulation
 

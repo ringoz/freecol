@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ import net.sf.freecol.client.gui.dialog.ClientOptionsDialog;
 import net.sf.freecol.client.gui.dialog.FreeColDialog;
 import net.sf.freecol.client.gui.dialog.Parameters;
 import net.sf.freecol.client.gui.mapviewer.GUIMessage;
+import net.sf.freecol.client.gui.mapviewer.MapAsyncPainter;
 import net.sf.freecol.client.gui.mapviewer.MapViewer;
 import net.sf.freecol.client.gui.mapviewer.MapViewerState;
 import net.sf.freecol.client.gui.mapviewer.TileViewer;
@@ -123,6 +125,7 @@ import net.sf.freecol.common.option.LanguageOption.Language;
 import net.sf.freecol.common.option.Option;
 import net.sf.freecol.common.option.OptionGroup;
 import net.sf.freecol.common.resources.ImageCache;
+import net.sf.freecol.common.resources.ImageResource;
 import net.sf.freecol.common.resources.ResourceManager;
 import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.Utils;
@@ -445,6 +448,9 @@ public class SwingGUI extends GUI {
         		&& !mapViewer.getMapViewerBounds().onScreen(newUnit.getTile())) {
         	this.mapViewer.getMapViewerBounds().setFocus(newUnit.getTile());
         	mapViewer.getMapViewerRepaintManager().markAsDirty(newUnit.getTile());
+        	if (this.mapControls != null) {
+        	    this.mapControls.updateMinimap();
+        	}
         	repaint();
         }
         
@@ -626,11 +632,31 @@ public class SwingGUI extends GUI {
     }
 
     /**
-     * Paint the whole canvas now.
+     * {@inheritDoc}
      */
+    @Override
     public void paintImmediately() {
         this.canvas.paintImmediately(this.canvas.getBounds());
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MapAsyncPainter useMapAsyncPainter() {
+        canvas.updateRepaintTimer(true);
+        return mapViewer.useMapAsyncPainter();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stopMapAsyncPainter() {
+        canvas.updateRepaintTimer(false);
+        mapViewer.stopMapAsyncPainter();
+    }
+
 
     /**
      * Schedule a tile to be repainted.
@@ -647,6 +673,10 @@ public class SwingGUI extends GUI {
              */
             if (tile.hasSettlement()) {
                 mapViewer.getMapViewerRepaintManager().markAsDirty(tile.getSurroundingTiles(1, 1));
+            }
+            
+            if (this.mapControls != null) {
+                this.mapControls.updateMinimap();
             }
             
             this.canvas.repaint();
@@ -926,6 +956,11 @@ public class SwingGUI extends GUI {
             final List<Tile> possibleDirtyTiles = dstTile.getSurroundingTiles(0, unit.getLineOfSight());
             mapViewer.getMapViewerRepaintManager().markAsDirty(possibleDirtyTiles);
         }
+        
+        if (this.mapControls != null) {
+            this.mapControls.updateMinimap();
+        }
+        
         repaint();
     }
 
@@ -1066,6 +1101,14 @@ public class SwingGUI extends GUI {
     public Tile getFocus() {
         return this.mapViewer.getMapViewerBounds().getFocus();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Point getFocusMapPoint() {
+        return this.mapViewer.getMapViewerBounds().getFocusMapPoint();
+    }
 
     /**
      * {@inheritDoc}
@@ -1073,6 +1116,15 @@ public class SwingGUI extends GUI {
     @Override
     public void setFocus(Tile tileToFocus) {
         this.mapViewer.getMapViewerBounds().setFocus(tileToFocus);
+        repaint();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setFocusMapPoint(Point pointToFocus) {
+        this.mapViewer.getMapViewerBounds().setFocusMapPoint(pointToFocus);
         repaint();
     }
 
@@ -1116,9 +1168,11 @@ public class SwingGUI extends GUI {
      */
     @Override
     public void miniMapToggleViewControls() {
-        if (this.mapControls == null) return;
+        if (this.mapControls == null) {
+            return;
+        }
         getFreeColClient().toggleClientOption(ClientOptions.MINIMAP_TOGGLE_BORDERS);
-        this.mapControls.repaint();
+        this.mapControls.updateMinimap();
     }
 
     /**
@@ -1126,9 +1180,11 @@ public class SwingGUI extends GUI {
      */
     @Override
     public void miniMapToggleFogOfWarControls() {
-        if (this.mapControls == null) return;
+        if (this.mapControls == null) {
+            return;
+        }
         getFreeColClient().toggleClientOption(ClientOptions.MINIMAP_TOGGLE_FOG_OF_WAR);
-        this.mapControls.repaint();
+        this.mapControls.updateMinimap();
     }
 
     /**
@@ -1336,7 +1392,19 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
-    public boolean scrollMap(Direction direction) {
+    public boolean scrollMap(Direction direction, boolean performRepaints) {
+        if (!performRepaints
+                || this.mapViewer.getMapViewerRepaintManager().isAllDirty()
+                || !getClientOptions().isTerrainAnimationsEnabled()) {
+            return this.mapViewer.getMapViewerBounds().scrollMap(direction);
+        }
+        
+        /*
+         * TODO: We can get better performance for diagonal scrolling, when terrain
+         *       animations are disabled, by updating the back buffer and removing the
+         *       terrain animation check above.
+         */
+        
         boolean scrolled = false;
         if (Direction.longSides.contains(direction)) {
             final List<Direction> directions = toNonDiagonalDirections(direction);
@@ -1344,7 +1412,7 @@ public class SwingGUI extends GUI {
             if (scrolled) {
                 this.mapViewer.paintImmediatelyToBuffersOnly();
             }
-            scrolled |=this.mapViewer.getMapViewerBounds().scrollMap(directions.get(1));
+            scrolled |= this.mapViewer.getMapViewerBounds().scrollMap(directions.get(1));
         } else {
             scrolled |= this.mapViewer.getMapViewerBounds().scrollMap(direction);
         }
@@ -1354,6 +1422,14 @@ public class SwingGUI extends GUI {
         }
         
         return scrolled;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void resetScrollSpeed() {
+        this.mapViewer.getMapViewerBounds().resetScrollSpeed();
     }
     
     private static List<Direction> toNonDiagonalDirections(Direction d) {
@@ -1524,6 +1600,9 @@ public class SwingGUI extends GUI {
         imageCache.clear();
         if (this.mapViewer != null) {
             this.mapViewer.changeScale(newScale);
+        }
+        if (this.mapControls != null) {
+            this.mapControls.updateMinimap();
         }
         if (this.canvas != null) {
             refresh();
@@ -1712,6 +1791,9 @@ public class SwingGUI extends GUI {
         if (this.mapViewer != null) {
             this.mapViewer.getMapViewerRepaintManager().markAsDirty();
         }
+        if (this.mapControls != null) {
+            this.mapControls.updateMinimap();
+        }
         if (this.canvas != null) {
             this.canvas.repaint(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
         }
@@ -1892,7 +1974,15 @@ public class SwingGUI extends GUI {
         FreeColImageBorder.setScaleFactor(scaleFactor);
         
         ResourceManager.setMods(getClientOptions().getActiveMods());
-        prepareResources();
+        if (getClientOptions().getRange(ClientOptions.GRAPHICS_QUALITY) == ClientOptions.GRAPHICS_QUALITY_LOWEST) {
+            ImageResource.forceLowestQuality(true);
+            reloadResources();
+        } else if (ImageResource.isForceLowestQuality()) {
+            ImageResource.forceLowestQuality(false);
+            reloadResources();
+        } else {
+            prepareResources();
+        }
         
         final int fontSize = determineMainFontSizeUsingClientOptions(dpi);
         FontLibrary.setMainFontSize(fontSize);

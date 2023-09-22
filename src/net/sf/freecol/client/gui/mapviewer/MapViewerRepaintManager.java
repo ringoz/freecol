@@ -84,9 +84,7 @@ public class MapViewerRepaintManager {
         
         updateDirtyRegionWithDirtyTiles(mapViewerBounds);
         
-        if (!oldFocus.equals(focus)) {
-            reuseNonDirtyAreasIfPossible(mapViewerBounds, oldFocus, oldFocusPoint);
-        }
+        reuseNonDirtyAreasIfPossible(mapViewerBounds, oldFocus, oldFocusPoint);
         
         return false;
     }
@@ -118,7 +116,7 @@ public class MapViewerRepaintManager {
      * @return {@code true} if no part of the buffer can be reused the next
      *      time the map gets painted.
      */
-    boolean isAllDirty() {
+    public boolean isAllDirty() {
         assert SwingUtilities.isEventDispatchThread();
         
         return backBufferImage == null

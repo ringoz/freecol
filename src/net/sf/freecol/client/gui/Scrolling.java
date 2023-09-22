@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.control.FreeColClientHolder;
+import net.sf.freecol.client.gui.mapviewer.MapAsyncPainter;
 import net.sf.freecol.common.model.Direction;
 
 /**
@@ -18,7 +19,7 @@ import net.sf.freecol.common.model.Direction;
 public final class Scrolling extends FreeColClientHolder {
 
     /** Space to auto-scroll. */
-    protected static final int AUTO_SCROLL_SPACE = 4;
+    protected static final int AUTO_SCROLL_SPACE = 6;
 
     /** Space to drag-scroll. */
     private static final int DRAG_SCROLL_SPACE = 100;
@@ -68,13 +69,16 @@ public final class Scrolling extends FreeColClientHolder {
     /**
      * Stop scrolling.
      */
-    private void stopScrollIfScrollIsActive() {
+    public void stopScrollIfScrollIsActive() {
         if (scrollThread != null) {
             synchronized (scrollThreadLock) {
-                scrollThread.abort();
+                if (scrollThread != null) {
+                    scrollThread.abort();
+                }
                 scrollThread = null;
             }
         }
+        getGUI().stopMapAsyncPainter();
     }
 
     /**
@@ -86,8 +90,16 @@ public final class Scrolling extends FreeColClientHolder {
     private void scroll(MouseEvent e, int scrollSpace) {
         final Point panePoint = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getRootComponent());
         final Direction direction = getScrollDirection(panePoint.x, panePoint.y, scrollSpace);
+        
         if (direction == null) {
             stopScrollIfScrollIsActive();
+            return;
+        }
+        
+        if (isAsyncPainterEnabled()) {
+            final MapAsyncPainter mapAsyncPainter = getGUI().useMapAsyncPainter();
+            mapAsyncPainter.setScrollDirection(direction);
+            return;
         }
         
         synchronized (scrollThreadLock) {
@@ -101,6 +113,10 @@ public final class Scrolling extends FreeColClientHolder {
             scrollThread.setDirection(direction);
             scrollThread.start();
         }
+    }
+    
+    private boolean isAsyncPainterEnabled() {
+        return true;
     }
     
     /**
