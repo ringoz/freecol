@@ -90,7 +90,7 @@ public class SetNationMessage extends AttributeMessage {
             player.setNation(nation);
             
             if (!freeColClient.isInGame()) {
-                pgc(freeColClient).addPlayerHandler(net.ringoz.GwtCompat.List_of(player));
+                pgc(freeColClient).addPlayerHandler(List.of(player));
             }
         }
     }

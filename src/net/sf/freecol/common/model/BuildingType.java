@@ -379,9 +379,9 @@ public final class BuildingType extends BuildableType
         
         final ProductionInfo pi = bpc.getAdjustedProductionInfo(this,
                 turn,
-                net.ringoz.GwtCompat.List_of(new WorkerAssignment(unitType, productionType)),
+                List.of(new WorkerAssignment(unitType, productionType)),
                 inputGoods,
-                net.ringoz.GwtCompat.List_of(),
+                List.of(),
                 MORE_THAN_ENOUGH_WAREHOUSE_CAPACITY);
         
         return pi.getProduction().stream()

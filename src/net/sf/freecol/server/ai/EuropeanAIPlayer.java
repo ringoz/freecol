@@ -1162,7 +1162,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
          * return urgent.subList(0, Math.min(urgent.size(), urgentNumber));
          */
         
-        return net.ringoz.GwtCompat.List_of();
+        return List.of();
     }
 
     /**
@@ -2504,7 +2504,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         }
         
         getPlayer().modifyGold(-purchasePrice);
-        final List<Unit> createdUnit = ((ServerPlayer) getPlayer()).createUnits(net.ringoz.GwtCompat.List_of(au), getPlayer().getEurope(), getAIRandom());
+        final List<Unit> createdUnit = ((ServerPlayer) getPlayer()).createUnits(List.of(au), getPlayer().getEurope(), getAIRandom());
         return true;
     }
 
@@ -2559,7 +2559,7 @@ public class EuropeanAIPlayer extends MissionAIPlayer {
         
         final AbstractUnit auForCreation = new AbstractUnit(getSpecification().getDefaultUnitType(),
                 dragoonRole.getId(), 1);                
-        final List<Unit> createdUnit = ((ServerPlayer) player).createUnits(net.ringoz.GwtCompat.List_of(auForCreation), player.getEurope(), getAIRandom());
+        final List<Unit> createdUnit = ((ServerPlayer) player).createUnits(List.of(auForCreation), player.getEurope(), getAIRandom());
         if (createdUnit.isEmpty()) {
             return null;
         }

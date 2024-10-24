@@ -93,7 +93,7 @@ public final class RiverAnimationImageCreator {
     
     private List<Direction> determineMinorToMajorRiverTransitions(Tile tile, List<Direction> riverTransitions) {
         if (tile.getRiver().getMagnitude() > 1) {
-            return net.ringoz.GwtCompat.List_of();
+            return List.of();
         }
         final List<Direction> directionsWithRiverTransitions = riverTransitions.stream().filter(d -> {
             final Tile neighbour = tile.getNeighbourOrNull(d);
@@ -116,7 +116,7 @@ public final class RiverAnimationImageCreator {
     private List<Direction> determineRiverTransitionsUsingStyle(Tile tile) {
         final TileImprovement river = tile.getRiver();
         if (river == null) {
-            return net.ringoz.GwtCompat.List_of();
+            return List.of();
         }
         return river.getConnections().entrySet().stream().filter(e -> e.getValue() > 0).map(e -> e.getKey()).collect(Collectors.toList());
     }
